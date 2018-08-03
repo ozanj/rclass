@@ -4,16 +4,30 @@
 \usepackage{rotating}
 \usepackage{hyperref}
 
+\usepackage{tikz} % used for text highlighting, amongst others
 %title slide stuff
-\institute{Department of Education}
+%\institute{Department of Education}
 %\title{Managing and Manipulating Data Using R}
 
 %
-%\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{navigation symbols}{} % get rid of navigation icons:
 
-%\setbeamertemplate{section in toc}{\hspace*{1em}\inserttocsectionnumber.~\inserttocsection\par}
-%\setbeamertemplate{subsection in toc}{\hspace*{2em}\inserttocsectionnumber.\inserttocsubsectionnumber.~\inserttocsubsection\par}
-\setbeamertemplate{frametitle}{\thesection \hspace{0.2cm} \insertframetitle}
+%\setbeamertemplate{frametitle}{\thesection \hspace{0.2cm} \insertframetitle}
 \setbeamertemplate{section in toc}[sections numbered]
 \setbeamertemplate{subsection in toc}[subsections numbered]
+
+%define colors
+%\definecolor{uva_orange}{RGB}{216,141,42} % UVa orange (Rotunda orange)
+\definecolor{mygray}{rgb}{0.95, 0.95, 0.95} % for highlighted text
+	% grey is equal parts red, green, blue. higher values >> lighter grey
+	%\definecolor{lightgraybo}{rgb}{0.83, 0.83, 0.83}
+
 % new commands
+
+%highlight text with very light grey
+\newcommand*{\hlg}[1]{%
+	\tikz[baseline=(X.base)] \node[rectangle, fill=mygray] (X) {#1};%
+}
+%, inner sep=0.3mm
+%highlight text with very light grey and use font associated with code
+\newcommand*{\hlgc}[1]{\texttt{\hlg{#1}}}

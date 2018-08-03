@@ -1,0 +1,232 @@
+---
+title: R class, topics by week
+author: Ozan Jaquette and Patricia Martin
+date: 
+output: 
+  pdf_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+---
+
+# General
+
+## Stuff for students to do before class
+
+1. Install R
+1. Install RStudio
+1. Install MikTeX
+1. Knit following documents in RMarkdown
+    - html
+    - pdf_document
+    - beamer_presentation
+1. Watch videos on relative and absolute filepaths
+    - the general one
+    - the one in R
+1. Complete intro to R tutorials
+    - which ones
+
+# Topics by week
+
+## Class 1. Introduction and data types
+
+### Big topics
+
+- Course objectives
+    - Broad
+    - Specific topics we will learn
+    - Stuff you can do in R that we will not learn
+- What is R? What can R do?
+    - Base R
+    - R packages
+- Complements to R
+    - Rstudio
+    - RMarkdown
+- Introduction to R
+    - Open a dataset and print some observations
+    - Objects and assignment
+        - R is an object oriented programming language
+        - Objects in R
+        - Assignment
+        - Printing objects
+    - Functions and help
+        - basic syntax
+        - help files
+    - Data types
+    - Packages
+      - installing packages
+      - loading packages
+    - Filepaths    
+
+What Patricia says:
+
+2.	You might be planning to do this anyway, but I think it would be a good idea to explain what data management is during the first class meeting. Equally important, we should mention who this class is for. What I mean by this is that there may be folks who are experienced with R, but have no clue how to clean data or other folks who have experience with data management, but are new to R, or others who have no experience with either, etc. 
+3.	It would also be a good idea to discuss other uses for R during the first class meeting (graphing, mapping, web scraping, etc.) to introduce students to the various uses of R so they could potentially invest in learning more advanced methods in the future. 
+4.	I agree that strings require at least two weeks, but I also think we should briefly go over them if we can because they may be needed for the weeks on functions and iterations. 
+
+
+
+### Learning objectives
+
+- directories
+    - understand difference between absolute and relative filepaths
+    - can identify the current working directory
+    - change the working directory using absolute filepath
+    - change current working directory using relative filepath
+- data types
+    - Understand the different data types and how they fit into broader categories
+    - 
+
+### Data sources
+
+### Reading [after lecture]
+
+### Problem set ideas
+
+### What covered in Stata data mgt course
+
+### What covered in Christenson class
+
+1. What is data science
+1. Course goals
+1. Student introductions
+1. Course logistics
+    - course components
+    - course outline
+1. Tools for using R
+    - what is R; R packages; why R
+1. Complementary tools
+    - RStudio
+    - RMarkdown
+1. R basics [review of material from Try R tutorials]
+    - creating vectors
+    - reading help page
+    - indexing (e.g., grab row 3 and column 2)
+    - logical expressions
+    - Useful functions for data frames
+
+## Class X. Investigating data patterns
+
+### Big topics
+
+- printing data
+- selecting variables
+- sorting data
+- missing values
+- operators
+- filtering data
+- descriptive statistics
+
+### Learning objectives
+
+- Select desired observations, based on numeric and character variables
+    - skills: operators; filtering; character variables
+- Print desired desired variables and desired observations in desired order for a dataset
+    - skills: printing; selecting variables; filtering observations; sorting observations
+- Explicitly include or exclude missing observations
+    - skills: missing values in quant or character variables
+- Conduct basic descriptive statistics: one-way and two-way; categorical and continuous
+    - skills: 
+
+### Data sources
+
+### Reading [after lecture]
+
+### Problem set ideas
+
+### What covered in Stata data mgt course
+
+- isolating variables
+    - lookfor
+- Isolating specific observations
+    - tabulate command
+        - with missing option
+        - with numlabel
+    - isolating observations using “operators”
+    - isolating observations, string variables
+    - inlist() function
+    - missing values
+- sorting and listing observations
+    - list command [equivalent to print command]
+    - assert command
+    - combining _variables with bysort [I think save this topic until by-groups week]
+    - combining bysort variables and assert [I think save this topic until by-groups week]
+- checking variables and cleaning data [I think save this topic until week on data cleaning]
+    - assert to check double data entry
+    - checking categorical variables, one-way tabulation
+    - checking categorical variables, two-way tabulation
+    - checking continuous variables
+
+### What covered in Christenson class
+
+## Class X. Creating variables, factors, labeling variables
+
+### Big topics
+
+### Learning objectives
+
+### Reading [after lecture]
+
+### Data sources
+
+### Problem set ideas
+
+### What covered in Stata data mgt course
+
+- lecture 1:
+    - course objectives, why important
+    - syllabus and logistics
+        - core data manipulation skills you should know
+        - homework
+        - communication with instructor and classmates
+        - course etiquette
+    - understanding syntax of stata commands
+    - executing stata commands
+    - where to find resources and help
+    - Stata do-files
+    - changing directories
+    - Stata log-files
+    
+- lecture 2:
+
+### What covered in Christenson class
+
+- lecture 4 [manipulating data frames, 1]
+    - introduction to dplyr
+        - verbs
+            - subsetting: filter, select
+            - ordering: arrange
+            - transforming: mutate, summarize, group_by
+    - subsetting
+        - filtering
+        - select
+        - sample_n, sample_frac, slice
+    - ordering
+        - arrange
+    - transform
+        - mutate
+    
+- lecture 5 [manipulating data frames, 1]
+    - loading data [brief]
+    - transform data
+        - mutate to create new variables [using the pipe]
+        - group_by 
+        - summarize (aggregate and collapse)
+    - presenting summary statistics
+        - creating tables
+            - using summarize() function
+        - plot and aggregate data
+
+## Class X. Processing across rows
+
+## Class X. data quality/cleaning data
+
+## Class X. tidying/reshaping data
+
+## Class X. acquiring data
+
+## Class X. relational data
+
+## Class X. functions
+
+## Class X. iteration

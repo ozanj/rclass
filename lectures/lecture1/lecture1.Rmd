@@ -3,39 +3,472 @@ title: Managing and Manipulating Data Using R # potentially push to header
 subtitle:  Introduction
 author: Ozan Jaquette
 date: 
-#fontsize: 10pt
+fontsize: 10pt
 output:
   beamer_presentation:
     keep_tex: true
     toc: true
-    slide_level: 3
+    slide_level: 4
     theme: default # AnnArbor # push to header?
     #colortheme: "dolphin" # push to header?
     #fonttheme: "structurebold"
-    highlight: tango # Supported styles include "default", "tango", "pygments", "kate", "monochrome", "espresso", "zenburn", and "haddock" (specify null to prevent syntax highlighting); push to header
+    highlight: default # Supported styles include "default", "tango", "pygments", "kate", "monochrome", "espresso", "zenburn", and "haddock" (specify null to prevent syntax highlighting); push to header
     df_print: tibble # push to header?    
+    latex_engine: xelatex #  Available engines are pdflatex [default], xelatex, and lualatex; The main reasons you may want to use xelatex or lualatex are: (1) They support Unicode better; (2) It is easier to make use of system fonts.
     includes:
       in_header: ../beamer_header.tex
       #after_body: table-of-contents.txt 
 ---
 
-# Pop Songs and Political Science
-## Morning Train
 
-### Sheena Easton and Game Theory
+```{r, echo=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
+#knitr::opts_chunk$set(collapse = TRUE, highlight = TRUE)
+#knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
+  #comment = "#>" makes it so results from a code chunk start with "#>"; default is "##"
+```
 
-got this document here:
-- http://svmiller.com/blog/2015/02/moving-from-beamer-to-r-markdown/
+# Course overview
 
-\medskip Sheena Easton describes the following scenario for her baby:
+# Introduction to R
 
-1. Takes the morning train
-2. Works from nine 'til five
-3. Takes another train home again
-4. Finds Sheena Easton waiting for him
+#### R as a calculator
 
-\bigskip Sheena Easton and her baby are playing a game
+```{r}
+5
+5+2
+10*3
+```
 
-- Akin to Holmes-Moriarty game (see: von Neumann and Morgenstern)
-- Solution: mixed strategy
+#### Executing commands in R
 
+```{r}
+5
+5+2
+10*3
+```
+
+Three ways to execute commands in R
+
+1. Type/copy commands directly into the "console"
+1. `code chunks' in RMarkdown (.Rmd files)
+    - Can execute one command at a time, one chunk at a time, or "knit" the entire document
+1. R scripts (.R files)
+    - This is just a text file full of R commands
+    - Can execute one command at a time, several commands at a time, or the entire script
+
+#### Shortcuts you should learn for executing commands
+
+```{r}
+5+2
+10*3
+```
+
+Three ways to execute commands in R
+
+1. Type/copy commands directly into the "console"
+1. `code chunks' in RMarkdown (.Rmd files)
+    - __Cmd/Ctrl + Enter__: execute highlighted line(s) within chunk
+    - __Cmd/Ctrl + Shift + k__: "knit" entire document
+1. R scripts (.R files)
+    - __Cmd/Ctrl + Enter__: execute highlighted line(s)
+    - __Cmd/Ctrl + Shift + Enter__ (without highlighting any lines): run entire script
+
+
+#### Assignment
+
+__Assignment__ means creating a variable -- or more generally, an "object" -- and assigning values to it
+
+- \hlgc{<-} is the assignment operator
+    - in other languages \hlgc{=} is the assignment operator
+- good practice to put a space before and after assignment operator
+
+```{r}
+# Create an object and assign value
+a <- 5
+a
+
+b <- "yay!"
+b
+```
+
+
+#### Objects
+
+Most statistics software (e.g., SPSS, Stata) operates on datasets, which consist of rows of observations and columns of variables
+
+- Usually, these packages can open only one dataset at a time
+
+R is an "object-oriented" programming language
+
+- "Objects are like boxes in which we can put things: data, functions, and even other objects." - Ben Skinner
+- There are several different "types" of objects in R
+    - A dataset is just one type of object in R
+    - There is no limit to the number of objects R can hold (except memory)
+    - R "functions" do different things to different types of objects
+
+
+#### Vectors
+
+The fundamental object in R is the "vector"
+
+- A vector is a collection of values
+- The individual values within a vector are called "elements"
+- The values in a vector can be numeric, character (e.g., "Apple"), or any other type
+
+Create a numeric vector that contains three elements
+```{r}
+x <- c(4, 7, 9)
+x
+# examine help file for c() function
+```
+
+Vector where the elements are characters
+```{r}
+animals <- c("lions", "tigers", "bears", "oh my")
+animals
+```
+
+#### Formal classification of vectors in R
+
+More formally, there are two broad types of vectors
+
+1. __Atomic vectors__. There are six types: 
+    - __logical__, __integer__, __double__, __character__, __complex__, and __raw__. 
+        - __Integer__ and __double__ vectors are collectively known as __numeric__ vectors.
+
+2. __Lists__, which are sometimes called recursive vectors because lists can contain other lists.
+
+Difference between atomic vectors and lists
+
+* atomic vectors are __homogeneous__: all elements within atomic vector must be of the same type
+* lists can be __heterogeneous__: e.g., one element can be an integer and another element can be character
+
+#### Formal classification of vectors in R
+
+PUT PIC ON WEBSITE AND PROVIDE LINK
+![From Wickham, chapter 20](data-structures-overview.png)
+
+#### Let's develop an intuitive understanding of vector types
+
+Technically, __lists__ are a type of __vector__, but most people think of __atomic vectors__ and __lists__ as fundamentally different things
+
+\medskip From now on, I'll use the term __vector__ to refer to atomic vectors
+
+\medskip Rule for (atomic) vectors:
+
+- all elements within a vector must have the same data "type"
+- data types we will focus on in class:
+    - numeric (integer and double)
+    - character
+    - logical
+
+
+#### "Length" of a vector is the number of elements
+
+Use `length()` function to examine vector length
+
+```{r}
+x
+length(x)
+
+animals
+length(animals)
+```
+A single number [or string] is a vector of length=1
+
+```{r}
+z <- 5
+length(z)
+length("Tommy")
+```
+
+#### Aside: Sequences
+
+A vector that contains a "sequence" of numbers (e.g., 1, 2, 3, 4) can be created with the notation `start:end`
+
+```{r}
+0:4
+99:104
+w <- c(10:15)
+w
+length(w)
+```
+
+<!-- A more versatile way to make sequences is to call the seq function.
+
+```{r}
+  seq(5,9)
+```
+-->
+
+#### Data type of a vector
+
+Three "types" of vectors, where type refers to the elements within the vector
+
+- numeric: can be "integer" (e.g., 5) or "double" (e.g., 5.5)
+- character (e.g., "ozan")
+- logical: TRUE or FALSE; more on this later
+
+Use `typeof()` function to examine vector type
+```{r}
+x
+typeof(x)
+
+p <- c(1.5, 1.6)
+p
+typeof(p)
+
+animals
+typeof(animals)
+```
+
+#### Data type of a vector, numeric
+
+Numeric vectors can be "integer" (e.g., 5) or "double" (e.g., 5.5)
+
+
+```{r}
+typeof(1.5)
+```
+
+R stores numbers as doubles by default.
+```{r}
+x
+typeof(x)
+
+```
+
+To make an integer, place an \hlgc{L} after the number:
+```{r}
+typeof(5)
+typeof(5L)
+```
+
+#### Vector math
+
+Most mathematical operations operate on each element of the vector
+
+- e.g., add a single value to a vector and that value added to each element of the vector
+```{r}
+1:3
+1:3+.5
+(1:3)*2
+```
+Mathematical operations involving two vectors have the same length
+
+- DESCRIBE IN WORDS
+```{r}
+c(1,1,1)+c(1,0,2)
+c(1,1,1)*c(1,0,2)
+```
+
+
+
+#### All elements in (atomic) vector must have same data type.
+
+"When you try and create a vector containing multiple types with \hlgc{c()}: the most complex type always wins" - Wickham
+
+```{r}
+1:3
+typeof(1:3)
+
+mix <- c(1:3, "hi!")
+mix
+typeof(mix)
+```
+
+#### Data type of a vector, logical
+
+Logical vectors can take three possible values: \hlgc{TRUE}, \hlgc{FALSE}, \hlgc{NA}
+
+- \hlgc{TRUE}, \hlgc{FALSE}, \hlgc{NA} are special keywords, different from the character strings \hlgc{"TRUE"}, \hlgc{"FALSE"}, \hlgc{"NA"}
+- Don't worry about \hlgc{"NA"} for now
+
+```{r}
+typeof(TRUE)
+typeof("TRUE")
+
+typeof(c(TRUE,FALSE,NA))
+typeof(c(TRUE,FALSE,NA,"FALSE"))
+```
+We'll learn more about logical vectors later
+
+
+#### Lists
+
+What is a __list__?
+
+- Like (atomic) vectors, a list is an object that contains __elements__
+- Unlike vectors, data types can differ across elements within a list
+- An element within a list can be another list
+    - this characteristic makes lists more complicated than vectors
+    - suitable for representing hierarchical data
+
+Lists are more complicated than vectors; today we'll just provide a basic introduction
+
+#### Create lists using \hlgc{list()} function
+
+Review: a vector
+```{r}
+a <- c(1,2,3)
+typeof(a)
+length(a)
+```
+A list
+```{r}
+b <- list(1,2,3)
+typeof(b)
+length(b)
+b # print list is awkward
+```
+
+#### Investigate structure of lists using \hlgc{str()} function
+
+```{r}
+b <- list(1,2,3)
+typeof(b)
+length(b)
+str(b)
+```
+
+Can also apply \hlgc{str()} to vectors
+```{r}
+a
+str(a)
+```
+
+#### Elements within list can have different data types
+
+```{r}
+b <- list(1,2,"apple")
+typeof(b)
+str(b)
+```
+Vector
+```{r}
+a <- c(1,2,"apple")
+typeof(a)
+str(a)
+```
+
+#### Lists can contain other lists
+
+```{r}
+x1 <- list(1, list("apple", "orange"), list(1, 2, 3))
+
+typeof(x1)
+
+str(x1)
+```
+
+#### You can name each element in the list
+
+```{r}
+x2 <- list(a=1, b=list("apple", "orange"), c=list(1, 2, 3))
+
+str(x2)
+```
+
+\hlgc{names()} function shows names of elements in the list
+```{r}
+names(x2) # has names
+names(x1) # no names
+```
+
+#### Access individual elements in a "named" list
+
+Syntax: `list_name$element_name`
+```{r}
+x2 <- list(a=1, b=list("apple", "orange"), c=list(1, 2, 3))
+typeof(x2$a)
+length(x2$a)
+
+typeof(x2$b)
+length(x2$b)
+
+typeof(x2$c)
+length(x2$c)
+```
+Note: length can differ across elements within a list
+
+#### Compare structure of list to structure of element within a list
+
+```{r}
+str(x2)
+
+str(x2$c)
+```
+
+
+#### A dataset is just a list!
+
+\medskip A data frame is a list with the following characteristics:
+
+- Data type can differ across elements (like all lists)
+- Each __element__ in data frame must be a __vector__, not a __list__
+    - Each element (column) is a variable
+- Each __element__ in a data frame must have the same length
+    - The length of an element is the number of observations (rows)
+    - so each variable in data frame must have same number of observations
+
+```{r, include=FALSE}
+library(tidyverse)
+df <- select(mtcars,mpg,cyl,hp)
+```
+```{r}
+names(df)
+head(df, n=5) # print first 5 rows
+```
+#### A data frame is a named list
+
+```{r}
+typeof(df)
+names(df)
+length(df) # length=number of variables
+str(df)
+```
+Like any named list, can examine the elements
+```{r}
+typeof(df$mpg)
+length(df$mpg) # length=number of rows/obs
+str(df$mpg)
+```
+
+
+
+#### Main takeaways on types of objects -- vectors and lists
+
+Basic data stuctures
+
+1. __(Atomic) vectors__: __logical__, __integer__, __double__, __character__. 
+    - each element in vector must have same data type
+2. __Lists__: 
+    - Data type can differ across elements
+
+Takeaways
+
+- These concepts are difficult; ok to feel confused
+- I will reinforce these concepts throughout the course
+- Good practice: run simple diagnostics on any new object
+    - \hlgc{length()} : how many __elements__ in the object
+    - \hlgc{typeof()} : what __type__ of data is the object
+    - \hlgc{str()} : hierarchical structure of the object
+
+#### Main takeaways on types of objects -- vectors and lists
+
+Basic data stuctures
+
+1. __(Atomic) vectors__: __logical__, __integer__, __double__, __character__. 
+    - each element in vector must have same data type
+2. __Lists__: 
+    - Data type can differ across elements
+
+Takeaways
+
+- These data structures (vectors, lists) and data types (e.g., character, numeric, logical) are the basic building blocks of all object oriented programming languages
+- Application to statistical analysis
+    - Datasets are just lists
+    - The individual elements -- columns/variables -- within a dataset are just vectors
+- These structures and data types are foundational for all ``data science'' applications, e.g.,:
+    - maapping, webscraping, network analysis, etc.
