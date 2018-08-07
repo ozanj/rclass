@@ -1,0 +1,1443 @@
+\documentclass[8pt,ignorenonframetext,]{beamer}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\newif\ifbibliography
+\hypersetup{
+            pdftitle={Managing and Manipulating Data Using R},
+            pdfauthor={Ozan Jaquette},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{longtable,booktabs}
+\usepackage{caption}
+% These lines are needed to make table captions work with longtable:
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight0.8\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+
+% Prevent slide breaks in the middle of a paragraph:
+\widowpenalties 1 10000
+\raggedbottom
+
+\AtBeginPart{
+  \let\insertpartnumber\relax
+  \let\partname\relax
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \let\insertsectionnumber\relax
+    \let\sectionname\relax
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \let\insertsubsectionnumber\relax
+  \let\subsectionname\relax
+  \frame{\subsectionpage}
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+
+%packages
+\usepackage{graphicx}
+\usepackage{rotating}
+\usepackage{hyperref}
+
+\usepackage{tikz} % used for text highlighting, amongst others
+%title slide stuff
+%\institute{Department of Education}
+%\title{Managing and Manipulating Data Using R}
+
+%
+\setbeamertemplate{navigation symbols}{} % get rid of navigation icons:
+
+%\setbeamertemplate{frametitle}{\thesection \hspace{0.2cm} \insertframetitle}
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{subsection in toc}[subsections numbered]
+
+%define colors
+%\definecolor{uva_orange}{RGB}{216,141,42} % UVa orange (Rotunda orange)
+\definecolor{mygray}{rgb}{0.95, 0.95, 0.95} % for highlighted text
+	% grey is equal parts red, green, blue. higher values >> lighter grey
+	%\definecolor{lightgraybo}{rgb}{0.83, 0.83, 0.83}
+
+% new commands
+
+%highlight text with very light grey
+\newcommand*{\hlg}[1]{%
+	\tikz[baseline=(X.base)] \node[rectangle, fill=mygray] (X) {#1};%
+}
+%, inner sep=0.3mm
+%highlight text with very light grey and use font associated with code
+\newcommand*{\hlgc}[1]{\texttt{\hlg{#1}}}
+
+\title{Managing and Manipulating Data Using R}
+\subtitle{Lecture 2}
+\author{Ozan Jaquette}
+\date{}
+
+\begin{document}
+\frame{\titlepage}
+
+\begin{frame}
+\tableofcontents[hideallsubsections]
+\end{frame}
+
+\begin{frame}
+
+\end{frame}
+
+\begin{frame}[fragile]{Libraries we will use today}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\CommentTok{#> -- Attaching packages --------------------------------------------------------------------------------------------- tidyverse 1.2.1 --}
+\CommentTok{#> v ggplot2 3.0.0     v purrr   0.2.5}
+\CommentTok{#> v tibble  1.4.2     v dplyr   0.7.6}
+\CommentTok{#> v tidyr   0.8.1     v stringr 1.3.1}
+\CommentTok{#> v readr   1.1.1     v forcats 0.3.0}
+\CommentTok{#> -- Conflicts ------------------------------------------------------------------------------------------------ tidyverse_conflicts() --}
+\CommentTok{#> x dplyr::filter() masks stats::filter()}
+\CommentTok{#> x dplyr::lag()    masks stats::lag()}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\section{Directories and filepaths {[}?lec1 or
+lec2?{]}}\label{directories-and-filepaths-lec1-or-lec2}
+
+\begin{frame}[fragile]{Working directory}
+
+\textbf{(Current) Working directory}
+
+\begin{itemize}
+\tightlist
+\item
+  the folder/directory in which you are currently working
+\item
+  this is where R looks for files
+\item
+  Files located in your current working directory can be accessed
+  without specifying a filepath because R automatically looks in this
+  folder
+\end{itemize}
+
+Function \hlgc{getwd()} shows current working directory
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{getwd}\NormalTok{()}
+\CommentTok{#> [1] "C:/Users/ozanj/Documents/rclass/lectures/lecture2"}
+\end{Highlighting}
+\end{Shaded}
+
+Command \hlgc{list.files()} lists all files located in working directory
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{getwd}\NormalTok{()}
+\CommentTok{#> [1] "C:/Users/ozanj/Documents/rclass/lectures/lecture2"}
+\KeywordTok{list.files}\NormalTok{()}
+\CommentTok{#> [1] "lecture2.pdf"          "lecture2.Rmd"          "lecture2.tex"         }
+\CommentTok{#> [4] "text"                  "transform-logical.png"}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Working directory, ``Code chunks'' vs.
+``console'' and ``R scripts''}
+
+When you run \textbf{code chunks} in RMarkdown files (.Rmd), the working
+directory is set to the filepath where the .Rmd file is stored
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{getwd}\NormalTok{()}
+\CommentTok{#> [1] "C:/Users/ozanj/Documents/rclass/lectures/lecture2"}
+\KeywordTok{list.files}\NormalTok{()}
+\CommentTok{#> [1] "lecture2.pdf"          "lecture2.Rmd"          "lecture2.tex"         }
+\CommentTok{#> [4] "text"                  "transform-logical.png"}
+\end{Highlighting}
+\end{Shaded}
+
+When you run code from the \textbf{R Console} or an \textbf{R Script},
+the working directory is\ldots{}.
+
+\medskip I find this very annoying
+
+Command \hlgc{getwd()} shows current working directory
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{getwd}\NormalTok{()}
+\CommentTok{#> [1] "C:/Users/ozanj/Documents/rclass/lectures/lecture2"}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}{Absolute vs.~relative filepath}
+
+\end{frame}
+
+\section{Investigating objects}\label{investigating-objects}
+
+\begin{frame}[fragile]{Data on off-campus recruiting events by public
+universities}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rm}\NormalTok{(}\DataTypeTok{list =} \KeywordTok{ls}\NormalTok{()) }\CommentTok{# remove all objects}
+\KeywordTok{getwd}\NormalTok{()}
+\CommentTok{#> [1] "C:/Users/ozanj/Documents/rclass/lectures/lecture2"}
+
+\CommentTok{#load dataset with one obs per recruiting event}
+\KeywordTok{load}\NormalTok{(}\StringTok{"../../data/recruiting/recruit_event_somevars.Rdata"}\NormalTok{)}
+
+\CommentTok{#load dataset with one obs per high school}
+\KeywordTok{load}\NormalTok{(}\StringTok{"../../data/recruiting/recruit_school_somevars.Rdata"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Object \textbackslash{}hlgc\{df\_event\}
+
+\begin{itemize}
+\tightlist
+\item
+  One observation per university, recruiting event
+\end{itemize}
+
+Object \textbackslash{}hlgc\{df\_event\}
+
+\begin{itemize}
+\tightlist
+\item
+  One observation per high school (visited and non-visited)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Listing objects}
+
+\hlgc{ls()} function lists objects currently open in R
+
+\begin{itemize}
+\tightlist
+\item
+  This is different from files in current working directory
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x <-}\StringTok{ "hello!"}
+\KeywordTok{ls}\NormalTok{() }\CommentTok{# Objects open in R}
+\CommentTok{#> [1] "df_event"  "df_school" "x"}
+\KeywordTok{list.files}\NormalTok{() }\CommentTok{# files in working directory}
+\CommentTok{#> [1] "lecture2.pdf"          "lecture2.Rmd"          "lecture2.tex"         }
+\CommentTok{#> [4] "text"                  "transform-logical.png"}
+\end{Highlighting}
+\end{Shaded}
+
+\hlgc{rm()} function removes specified objects open in R
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rm}\NormalTok{(x)}
+\KeywordTok{ls}\NormalTok{()}
+\CommentTok{#> [1] "df_event"  "df_school"}
+\end{Highlighting}
+\end{Shaded}
+
+Command to remove all objects open in R (I don't run it)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rm}\NormalTok{(}\DataTypeTok{list =} \KeywordTok{ls}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Describing objects, focus on \textbf{data
+frames}}
+
+Object \textbf{type} and \textbf{length}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{typeof}\NormalTok{(df_event)}
+\CommentTok{#> [1] "list"}
+\KeywordTok{length}\NormalTok{(df_event) }\CommentTok{# = num elements = num columns}
+\CommentTok{#> [1] 28}
+\end{Highlighting}
+\end{Shaded}
+
+Number of \textbf{rows} and \textbf{columns}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{nrow}\NormalTok{(df_event) }\CommentTok{# num rows = num observations}
+\CommentTok{#> [1] 17976}
+\KeywordTok{ncol}\NormalTok{(df_event) }\CommentTok{# num columns = num variables}
+\CommentTok{#> [1] 28}
+\KeywordTok{dim}\NormalTok{(df_event) }\CommentTok{# shows number rows by columns}
+\CommentTok{#> [1] 17976    28}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\section{Variables names}\label{variables-names}
+
+\begin{frame}{Introduction to the \hlgc{dplyr} library}
+
+\hlgc{dplyr}, a package within the \hlgc{tidyverse} suite of packages,
+provide tools for manipulating data frames
+
+\begin{itemize}
+\tightlist
+\item
+  Wickham describes functions within \hlgc{dplyr} as a set of ``verbs''
+  that fall in the broader categories of \textbf{subsetting},
+  \textbf{sorting}, and \textbf{transforming}
+\end{itemize}
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+Today & Next two weeks\tabularnewline
+\midrule
+\endhead
+\textbf{Subsetting data} & \textbf{Transforming data}\tabularnewline
+- \hlgc{select()} variables & - \hlgc{mutate()} creates new
+variables\tabularnewline
+- \hlgc{filter()} observations & - \hlgc{summarize()} calculates across
+rows\tabularnewline
+\textbf{Sorting data} & - \hlgc{group\_by()} to calculate across rows
+within groups\tabularnewline
+- \hlgc{arrange()} &\tabularnewline
+\bottomrule
+\end{longtable}
+
+All \hlgc{dplyr} verbs (i.e., functions) work as follows
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  first argument is a data frame"
+\item
+  subsequent arguments describe what to do with variables and
+  observations in data frame
+
+  \begin{itemize}
+  \tightlist
+  \item
+    refer to variable names without quotes
+  \end{itemize}
+\item
+  result of the function is a new data frame
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]{Variable names}
+
+\hlgc{names()} function lists names of elements in an object
+
+\begin{itemize}
+\tightlist
+\item
+  when object is a data frame, each element name is a variable name
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Output omitted}
+\KeywordTok{names}\NormalTok{(df_event)}
+\end{Highlighting}
+\end{Shaded}
+
+Refer to named elements in object using
+\texttt{obj\_name\$element\_name}
+
+\begin{itemize}
+\tightlist
+\item
+  when object is a dataframe: \texttt{obj\_name\$varname}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{typeof}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{instnm)}
+\CommentTok{#> [1] "character"}
+\KeywordTok{typeof}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{avgmedian_inc_}\DecValTok{2564}\NormalTok{)}
+\CommentTok{#> Warning: Unknown or uninitialised column: 'avgmedian_inc_2564'.}
+\CommentTok{#> [1] "NULL"}
+\end{Highlighting}
+\end{Shaded}
+
+This approach to isolating variables is very useful for investigating
+and manipulating data
+
+\end{frame}
+
+\begin{frame}[fragile]{Rename variables}
+
+\hlgc{rename()} function renames variables within a data frame object
+
+\medskip Syntax:
+
+\begin{itemize}
+\tightlist
+\item
+  \hlgc{rename(obj\_name, new\_name = old\_name,\ldots)} \medskip
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rename}\NormalTok{(df_event, }\DataTypeTok{zip =}\NormalTok{ determined_zip, }\DataTypeTok{titlei =}\NormalTok{ titlei_status_pub)}
+\KeywordTok{names}\NormalTok{(df_event)}
+\end{Highlighting}
+\end{Shaded}
+
+Variable names do not change permanently unless we combine rename with
+assignment \medskip
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{rename_event <-}\StringTok{ }\KeywordTok{rename}\NormalTok{(df_event, }\DataTypeTok{zip =}\NormalTok{ determined_zip, }\DataTypeTok{titlei =}\NormalTok{ titlei_status_pub)}
+\KeywordTok{names}\NormalTok{(rename_event)}
+\KeywordTok{rm}\NormalTok{(rename_event)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\section{Selecting variables and printing
+data}\label{selecting-variables-and-printing-data}
+
+\begin{frame}[fragile]{Select variables using \hlgc{select()} function}
+
+Printing observations is key to investigating data, but datasets often
+have hundreds, thousands of variables
+
+\hlgc{select()} function selects \textbf{columns} of data (i.e.,
+variables) you specify
+
+\begin{itemize}
+\tightlist
+\item
+  See syntax in help file
+\end{itemize}
+
+Select \textbf{without assignment} simply prints data for selected
+variables
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{select}\NormalTok{(df_event,instnm,event_date,eventtype,event_state,med_inc)}
+\CommentTok{#> # A tibble: 17,976 x 5}
+\CommentTok{#>    instnm      event_date eventtype  event_state med_inc}
+\CommentTok{#>  * <chr>       <fct>      <chr>      <fct>         <dbl>}
+\CommentTok{#>  1 Stony Brook 2017-05-08 other      MA          149193 }
+\CommentTok{#>  2 Stony Brook 2017-05-08 other      RI           33412 }
+\CommentTok{#>  3 Stony Brook 2017-03-01 public hs  NJ          126918.}
+\CommentTok{#>  4 Stony Brook 2017-03-15 public hs  NY          140832.}
+\CommentTok{#>  5 Stony Brook 2017-01-26 public hs  NY          138843 }
+\CommentTok{#>  6 Stony Brook 2017-04-06 private hs NJ          139421 }
+\CommentTok{#>  7 Stony Brook 2017-03-08 private hs CT          135033 }
+\CommentTok{#>  8 Stony Brook 2017-03-08 public hs  NY          117548 }
+\CommentTok{#>  9 Stony Brook 2017-03-01 public hs  NY          122307 }
+\CommentTok{#> 10 Stony Brook 2017-01-10 public hs  NY          159504.}
+\CommentTok{#> # ... with 17,966 more rows}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Select variables using \hlgc{select()} function}
+
+Select \textbf{with assignment} creates a new object containing only the
+variables you specify
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{event_small <-}\StringTok{ }\KeywordTok{select}\NormalTok{(df_event,instnm,event_date,eventtype,event_state,med_inc)}
+\NormalTok{event_small}
+\CommentTok{#> # A tibble: 17,976 x 5}
+\CommentTok{#>    instnm      event_date eventtype  event_state med_inc}
+\CommentTok{#>  * <chr>       <fct>      <chr>      <fct>         <dbl>}
+\CommentTok{#>  1 Stony Brook 2017-05-08 other      MA          149193 }
+\CommentTok{#>  2 Stony Brook 2017-05-08 other      RI           33412 }
+\CommentTok{#>  3 Stony Brook 2017-03-01 public hs  NJ          126918.}
+\CommentTok{#>  4 Stony Brook 2017-03-15 public hs  NY          140832.}
+\CommentTok{#>  5 Stony Brook 2017-01-26 public hs  NY          138843 }
+\CommentTok{#>  6 Stony Brook 2017-04-06 private hs NJ          139421 }
+\CommentTok{#>  7 Stony Brook 2017-03-08 private hs CT          135033 }
+\CommentTok{#>  8 Stony Brook 2017-03-08 public hs  NY          117548 }
+\CommentTok{#>  9 Stony Brook 2017-03-01 public hs  NY          122307 }
+\CommentTok{#> 10 Stony Brook 2017-01-10 public hs  NY          159504.}
+\CommentTok{#> # ... with 17,966 more rows}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Select}
+
+We can also use ``helper functions'' \hlgc{starts\_with()},
+\hlgc{contains()}, and \hlgc{ends\_with()} to choose columns
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{names}\NormalTok{(df_event)}
+\CommentTok{#>  [1] "instnm"               "univ_id"              "instst"              }
+\CommentTok{#>  [4] "pid"                  "event_date"           "eventtype"           }
+\CommentTok{#>  [7] "determined_zip"       "school_id"            "ipeds_id"            }
+\CommentTok{#> [10] "event_state"          "event_inst"           "med_inc"             }
+\CommentTok{#> [13] "pop_total"            "pct_white_zip"        "pct_black_zip"       }
+\CommentTok{#> [16] "pct_asian_zip"        "pct_hispanic_zip"     "pct_amerindian_zip"  }
+\CommentTok{#> [19] "pct_nativehawaii_zip" "pct_tworaces_zip"     "pct_otherrace_zip"   }
+\CommentTok{#> [22] "fr_lunch"             "titlei_status_pub"    "total_12"            }
+\CommentTok{#> [25] "school_type_pri"      "school_type_pub"      "g12offered"          }
+\CommentTok{#> [28] "g12"}
+\KeywordTok{select}\NormalTok{(df_event,instnm,}\KeywordTok{starts_with}\NormalTok{(}\StringTok{"event"}\NormalTok{))}
+\CommentTok{#> # A tibble: 17,976 x 5}
+\CommentTok{#>    instnm      event_date eventtype  event_state event_inst}
+\CommentTok{#>  * <chr>       <fct>      <chr>      <fct>       <chr>     }
+\CommentTok{#>  1 Stony Brook 2017-05-08 other      MA          Out-State }
+\CommentTok{#>  2 Stony Brook 2017-05-08 other      RI          Out-State }
+\CommentTok{#>  3 Stony Brook 2017-03-01 public hs  NJ          Out-State }
+\CommentTok{#>  4 Stony Brook 2017-03-15 public hs  NY          In-State  }
+\CommentTok{#>  5 Stony Brook 2017-01-26 public hs  NY          In-State  }
+\CommentTok{#>  6 Stony Brook 2017-04-06 private hs NJ          Out-State }
+\CommentTok{#>  7 Stony Brook 2017-03-08 private hs CT          Out-State }
+\CommentTok{#>  8 Stony Brook 2017-03-08 public hs  NY          In-State  }
+\CommentTok{#>  9 Stony Brook 2017-03-01 public hs  NY          In-State  }
+\CommentTok{#> 10 Stony Brook 2017-01-10 public hs  NY          In-State  }
+\CommentTok{#> # ... with 17,966 more rows}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Exercise}
+
+The data frame ``df\_school'' has one observation for each high school
+and indicators for whether the high school received a recruiting visit.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{names}\NormalTok{(df_school)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Use \hlgc{select()} to familiarize yourself with the data frame
+\item
+  Practice using the \hlgc{contains()} and \hlgc{ends\_with()} helper
+  functions to to choose variables
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]{Viewing and printing data}
+
+\begin{itemize}
+\tightlist
+\item
+  Use the \hlgc{View()} function to view data in a browser
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{View}\NormalTok{(df_event)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  \hlgc{head()} to show the first \emph{n} rows
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{head}\NormalTok{(df_event, }\DataTypeTok{n=}\DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Viewing and printing data}
+
+Use
+\texttt{\{obj\_name{[}\textless{}rows\textgreater{},\textless{}cols\textgreater{}{]}}
+to print specific rows and columns of a data frame
+
+\begin{itemize}
+\tightlist
+\item
+  particularly powerful when combined with sequences (e.g., \hlgc{1:10})
+\end{itemize}
+
+\medskip Examples:
+
+\begin{itemize}
+\tightlist
+\item
+  Print first five rows
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df_event[}\DecValTok{1}\OperatorTok{:}\DecValTok{5}\NormalTok{, ]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Print first five rows and first three columns
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df_event[}\DecValTok{1}\OperatorTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Print first three columns of the 100th observation
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df_event[}\DecValTok{100}\NormalTok{, }\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+Print the 50th observation, all variables
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df_event[}\DecValTok{50}\NormalTok{,]}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Viewing and printing data}
+
+\begin{itemize}
+\tightlist
+\item
+  type \hlgc{obj\_name\textdollar var\_name} to print obs for a variable
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df_event}\OperatorTok{$}\NormalTok{event_state}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  can be combined with sequences
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df_event}\OperatorTok{$}\NormalTok{event_state[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{]}
+\CommentTok{#>  [1] MA RI NJ NY NY NJ CT NY NY NY}
+\CommentTok{#> 48 Levels: AL AR AZ CA CO CT DC DE FL GA HI IA ID IL IN KS KY LA MA ... WV}
+\NormalTok{df_event}\OperatorTok{$}\NormalTok{eventtype[}\DecValTok{6}\OperatorTok{:}\DecValTok{10}\NormalTok{]}
+\CommentTok{#> [1] "private hs" "private hs" "public hs"  "public hs"  "public hs"}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  can also print multiple variables using \hlgc{combine()} function
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{c}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{event_state[}\DecValTok{1}\OperatorTok{:}\DecValTok{5}\NormalTok{],df_event}\OperatorTok{$}\NormalTok{eventtype[}\DecValTok{1}\OperatorTok{:}\DecValTok{5}\NormalTok{])}
+\CommentTok{#>  [1] "19"        "38"        "30"        "33"        "33"       }
+\CommentTok{#>  [6] "other"     "other"     "public hs" "public hs" "public hs"}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}{Exercise}
+
+Create a printing exercise using the df\_school
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Use head() to print first 5 observations
+\item
+  Use select to print observations of variables of your choosing
+\item
+  Use \hlgc{obj\_name\textdollar var\_name[1:10]} to print the first 10
+  observations of a variable
+\item
+  use combine()
+\end{enumerate}
+
+\end{frame}
+
+\section{Filtering data}\label{filtering-data}
+
+\begin{frame}[fragile]{Filter}
+
+filter() allows you to select observations based on values of variables
+
+\begin{itemize}
+\tightlist
+\item
+  Arguments
+
+  \begin{itemize}
+  \tightlist
+  \item
+    first argument is name of data frame
+  \item
+    subsequent arguments are \emph{expressions} to filter the data frame
+  \end{itemize}
+\item
+  What is the result of a \hlgc{filter()} command?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \hlgc{filter()} returns the rows where the condition is \hlgc{TRUE}
+  \end{itemize}
+\end{itemize}
+
+\medskip Example using data frame object \hlgc{df\_school}, where each
+observation is a high school
+
+\begin{itemize}
+\tightlist
+\item
+  Show all obs where the high school received 1 visit from UC Berkeley
+  (110635) {[}output omitted{]}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{filter}\NormalTok{(df_school,visits_by_}\DecValTok{110635} \OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Must \textbf{assign} to create new object based on filter
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{berk_boulder <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(df_school,visits_by_}\DecValTok{110635} \OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{, visits_by_}\DecValTok{126614}\OperatorTok{==}\DecValTok{1}\NormalTok{)}
+\NormalTok{berk_boulder}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Filter, character variables}
+
+\begin{itemize}
+\tightlist
+\item
+  Use quotes \hlgc{''} or \hlgc{""} to refer to character variables
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Berkeley}
+\KeywordTok{filter}\NormalTok{(df_school,visits_by_}\DecValTok{110635} \OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{, school_type }\OperatorTok{==}\StringTok{ "private"}\NormalTok{, state_code }\OperatorTok{==}\StringTok{ "CA"}\NormalTok{)}
+\CommentTok{#Bama}
+\KeywordTok{filter}\NormalTok{(df_school,visits_by_}\DecValTok{100751} \OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{, school_type }\OperatorTok{==}\StringTok{ "private"}\NormalTok{, state_code }\OperatorTok{==}\StringTok{ "CA"}\NormalTok{) }
+
+\CommentTok{#Berkeley and Bama}
+\KeywordTok{filter}\NormalTok{(df_school,visits_by_}\DecValTok{100751} \OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{, visits_by_}\DecValTok{110635} \OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{, school_type }\OperatorTok{==}\StringTok{ "private"}\NormalTok{, state_code }\OperatorTok{==}\StringTok{ "CA"}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Logical operators for comparisons}
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Logical operators}\tabularnewline
+\toprule
+Symbol & Meaning\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Symbol & Meaning\tabularnewline
+\midrule
+\endhead
+\texttt{==} & Equal to\tabularnewline
+\texttt{!=} & Not equal to\tabularnewline
+\texttt{\textgreater{}} & greater than\tabularnewline
+\texttt{\textgreater{}=} & greater than or equal to\tabularnewline
+\texttt{\textless{}} & less than\tabularnewline
+\texttt{\textless{}=} & less than or equal to\tabularnewline
+\texttt{\&} & AND\tabularnewline
+\texttt{\textbar{}} & OR\tabularnewline
+\texttt{\%in} & includes\tabularnewline
+\bottomrule
+\end{longtable}
+
+\medskip 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.50000\textwidth]{transform-logical.png}
+\caption{``Boolean'' operations, x=left circle, y=right circle, from
+Wichkam (2018)}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}[fragile]{Filters and comparisons}
+
+Schools visited by Bama (100751) and/or Berkeley (110635)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#berkeley and bama}
+\KeywordTok{filter}\NormalTok{(df_school,visits_by_}\DecValTok{100751} \OperatorTok{>=}\StringTok{ }\DecValTok{1}\NormalTok{, visits_by_}\DecValTok{110635} \OperatorTok{>=}\StringTok{ }\DecValTok{1}\NormalTok{) }
+\KeywordTok{filter}\NormalTok{(df_school,visits_by_}\DecValTok{100751} \OperatorTok{>=}\StringTok{ }\DecValTok{1} \OperatorTok{&}\StringTok{ }\NormalTok{visits_by_}\DecValTok{110635} \OperatorTok{>=}\StringTok{ }\DecValTok{1}\NormalTok{) }\CommentTok{# same same}
+\CommentTok{#berkeley or bama}
+\KeywordTok{filter}\NormalTok{(df_school,visits_by_}\DecValTok{100751} \OperatorTok{>=}\StringTok{ }\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{visits_by_}\DecValTok{110635} \OperatorTok{>=}\StringTok{ }\DecValTok{1}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+Apply \hlgc{count()} function on top of \hlgc{filter()} function to
+count the number of observations that satisfy criteria
+
+\begin{itemize}
+\tightlist
+\item
+  Avoids printing individual observations
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_school,visits_by_}\DecValTok{100751} \OperatorTok{>=}\StringTok{ }\DecValTok{1} \OperatorTok{&}\StringTok{ }\NormalTok{visits_by_}\DecValTok{110635} \OperatorTok{>=}\StringTok{ }\DecValTok{1}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1   247}
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_school,visits_by_}\DecValTok{100751} \OperatorTok{>=}\StringTok{ }\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{visits_by_}\DecValTok{110635} \OperatorTok{>=}\StringTok{ }\DecValTok{1}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1  2763}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Filters and comparisons, \textgreater{}=}
+
+Number of public high schools that are at least 50\% Black in Alabama
+compared to number of schools that received visit by Bama
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#at least 50% black}
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_school, school_type }\OperatorTok{==}\StringTok{ "public"}\NormalTok{, pct_black }\OperatorTok{>=}\StringTok{ }\DecValTok{50}\NormalTok{, state_code }\OperatorTok{==}\StringTok{ "AL"}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1    86}
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_school, school_type }\OperatorTok{==}\StringTok{ "public"}\NormalTok{, pct_black }\OperatorTok{>=}\StringTok{ }\DecValTok{50}\NormalTok{, state_code }\OperatorTok{==}\StringTok{ "AL"}\NormalTok{, visits_by_}\DecValTok{100751} \OperatorTok{>=}\StringTok{ }\DecValTok{1}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1    21}
+
+\CommentTok{#at least 50% white}
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_school, school_type }\OperatorTok{==}\StringTok{ "public"}\NormalTok{, pct_white }\OperatorTok{>=}\StringTok{ }\DecValTok{50}\NormalTok{, state_code }\OperatorTok{==}\StringTok{ "AL"}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1   238}
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_school, school_type }\OperatorTok{==}\StringTok{ "public"}\NormalTok{, pct_white }\OperatorTok{>=}\StringTok{ }\DecValTok{50}\NormalTok{, state_code }\OperatorTok{==}\StringTok{ "AL"}\NormalTok{, visits_by_}\DecValTok{100751} \OperatorTok{>=}\StringTok{ }\DecValTok{1}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1    82}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Filters and comparisons, not equals (\hlgc{!=})}
+
+Number of high schools visited by University of Colorado (126614) that
+are not located in CO
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\CommentTok{#number of high schools visited by U Colorado}
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_school, visits_by_}\DecValTok{126614} \OperatorTok{>=}\StringTok{ }\DecValTok{1}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1  1056}
+
+\CommentTok{#number of high schools visited by U Colorado not located in CO}
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_school, visits_by_}\DecValTok{126614} \OperatorTok{>=}\StringTok{ }\DecValTok{1}\NormalTok{, state_code }\OperatorTok{!=}\StringTok{ "CO"}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1   873}
+\CommentTok{#number of high schools visited by U Colorado located in CO}
+\CommentTok{#count(filter(df_school, visits_by_126614 >= 1, state_code == "CO"))}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Filters and comparisons, \%in\% operator}
+
+What if you wanted to count the number of schools visited by Bama
+(100751) in a group of states?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_school,visits_by_}\DecValTok{100751} \OperatorTok{>=}\StringTok{ }\DecValTok{1}\NormalTok{, state_code }\OperatorTok{==}\StringTok{ "MA"} \OperatorTok{|}\StringTok{ }\NormalTok{state_code }\OperatorTok{==}\StringTok{ "VT"} \OperatorTok{|}\StringTok{ }\NormalTok{state_code }\OperatorTok{==}\StringTok{ "ME"}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1   108}
+\end{Highlighting}
+\end{Shaded}
+
+Easier way to do this is with \texttt{\%in\%} operator
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_school,visits_by_}\DecValTok{100751} \OperatorTok{>=}\StringTok{ }\DecValTok{1}\NormalTok{, state_code }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"MA"}\NormalTok{,}\StringTok{"ME"}\NormalTok{,}\StringTok{"VT"}\NormalTok{)))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1   108}
+\end{Highlighting}
+\end{Shaded}
+
+Select the private high schools that got either 2 or 3 visits from Bama
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_school, visits_by_}\DecValTok{100751} \OperatorTok{%in%}\StringTok{ }\DecValTok{2}\OperatorTok{:}\DecValTok{3}\NormalTok{, school_type }\OperatorTok{==}\StringTok{ "private"}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1   183}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Identifying data type and possible values of
+variable is helpful for filtering}
+
+\begin{itemize}
+\tightlist
+\item
+  \hlgc{class()} and \hlgc{str()} shows data type of a variable
+\item
+  \hlgc{table()} to show potential values of categorical variables
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{eventtype)}
+\CommentTok{#> [1] "character"}
+\KeywordTok{str}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{eventtype)}
+\CommentTok{#>  chr [1:17976] "other" "other" "public hs" "public hs" "public hs" ...}
+\KeywordTok{table}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{eventtype)}
+\CommentTok{#> }
+\CommentTok{#>              other other college/univ       PNP 4yr univ }
+\CommentTok{#>               2107                 42                183 }
+\CommentTok{#>         private hs         pub 2yr cc       pub 4yr univ }
+\CommentTok{#>               3644                769                206 }
+\CommentTok{#>          public hs }
+\CommentTok{#>              11025}
+
+\KeywordTok{class}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{event_state)}
+\CommentTok{#> [1] "factor"}
+\KeywordTok{str}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{event_state) }\CommentTok{# double quotes indicate character}
+\CommentTok{#>  Factor w/ 48 levels "AL","AR","AZ",..: 19 38 30 33 33 30 6 33 33 33 ...}
+
+\KeywordTok{class}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{med_inc)}
+\CommentTok{#> [1] "numeric"}
+\KeywordTok{str}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{med_inc)}
+\CommentTok{#>  num [1:17976] 149193 33412 126919 140833 138843 ...}
+\end{Highlighting}
+\end{Shaded}
+
+Now that we know \hlgc{eventtype} is a character, we can filter values
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_event, eventtype }\OperatorTok{==}\StringTok{ "public hs"}\NormalTok{, event_state }\OperatorTok{==}\StringTok{"CA"}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1  1057}
+\CommentTok{#below code would return an error because variables are character}
+\CommentTok{#count(filter(df_event, eventtype == public hs, event_state ==CA))}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}{Exercises}
+
+Use the data from df\_event, which has one observation for each
+off-campus recruiting event a university attends
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Count the number of events attended by the University of Pittsburgh
+  (Pitt) \hlgc{univ\_id == 215293}
+\item
+  Count the number of recruiting events by Pitt at public or private
+  high schools
+\item
+  Count the number of recruiting events by Pitt at public or private
+  high schools located in the state of PA
+\item
+  Count the number of recruiting events by Pitt at public high schools
+  not located in PA where median income is less than 100,000
+\item
+  Count the number of recruiting events by Pitt at public high schools
+  not located in PA where median income is greater than or equal to
+  100,000
+\item
+  Count the number of out-of-state recruiting events by Pitt at private
+  high schools or public high schools with median income of at least
+  100,000
+\end{enumerate}
+
+\end{frame}
+
+\section{Missing values}\label{missing-values}
+
+\begin{frame}[fragile]{Missing values}
+
+Missing values have the value \hlgc{NA}
+
+\begin{itemize}
+\tightlist
+\item
+  \hlgc{NA} is a special keyword, not the same as the character string
+  \hlgc{"NA"}
+\item
+  use \hlgc{is.(na)} function to determine if a value is missing
+\end{itemize}
+
+\medskip
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{is.na}\NormalTok{(}\DecValTok{5}\NormalTok{)}
+\CommentTok{#> [1] FALSE}
+\KeywordTok{is.na}\NormalTok{(}\OtherTok{NA}\NormalTok{)}
+\CommentTok{#> [1] TRUE}
+\KeywordTok{is.na}\NormalTok{(}\StringTok{"NA"}\NormalTok{)}
+\CommentTok{#> [1] FALSE}
+
+\NormalTok{nvector <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{10}\NormalTok{,}\DecValTok{5}\NormalTok{,}\OtherTok{NA}\NormalTok{)}
+\NormalTok{nvector}
+\CommentTok{#> [1] 10  5 NA}
+\KeywordTok{is.na}\NormalTok{(nvector)}
+\CommentTok{#> [1] FALSE FALSE  TRUE}
+
+\NormalTok{svector <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"e"}\NormalTok{,}\StringTok{"f"}\NormalTok{,}\OtherTok{NA}\NormalTok{,}\StringTok{"NA"}\NormalTok{)}
+\NormalTok{svector}
+\CommentTok{#> [1] "e"  "f"  NA   "NA"}
+\KeywordTok{is.na}\NormalTok{(svector)}
+\CommentTok{#> [1] FALSE FALSE  TRUE FALSE}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Missing values are ``contageous''}
+
+What does ``contageous'' mean?
+
+\begin{itemize}
+\tightlist
+\item
+  operations involving a missing value will yield a missing value
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{7}\OperatorTok{>}\DecValTok{5}
+\CommentTok{#> [1] TRUE}
+\DecValTok{7}\OperatorTok{>}\OtherTok{NA}
+\CommentTok{#> [1] NA}
+\DecValTok{0}\OperatorTok{==}\OtherTok{NA}
+\CommentTok{#> [1] NA}
+\DecValTok{2}\OperatorTok{*}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\OtherTok{NA}\NormalTok{)}
+\CommentTok{#> [1]  0  2  4 NA}
+\OtherTok{NA}\OperatorTok{*}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\OtherTok{NA}\NormalTok{)}
+\CommentTok{#> [1] NA NA NA NA}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Function and missing values, the \hlgc{table()}
+function}
+
+Tip: command \hlgc{str(df\_event)} shows which variables have missing
+values
+
+\hlgc{table()} function useful for investigating categorical variables
+
+\begin{itemize}
+\tightlist
+\item
+  by default \hlgc{table()} ignores \hlgc{NA} values
+\item
+  the \hlgc{useNA} argument to include \hlgc{NA} values
+
+  \begin{itemize}
+  \tightlist
+  \item
+    from help file: ``useNA controls if the table includes counts of NA
+    values: the allowed values correspond to never (''no``), only if the
+    count is positive (''ifany``) and even for zero counts
+    (''always``)''
+  \end{itemize}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{g12offered)}
+\CommentTok{#> }
+\CommentTok{#>     1 }
+\CommentTok{#> 11025}
+\KeywordTok{nrow}\NormalTok{(df_event)}
+\CommentTok{#> [1] 17976}
+\KeywordTok{table}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{g12offered, }\DataTypeTok{useNA=}\StringTok{"always"}\NormalTok{)}
+\CommentTok{#> }
+\CommentTok{#>     1  <NA> }
+\CommentTok{#> 11025  6951}
+\end{Highlighting}
+\end{Shaded}
+
+Broader point:
+
+\begin{itemize}
+\tightlist
+\item
+  Most functions in R ignor missing values by default, but have the
+  option to include missing values
+\item
+  When investigating data, generally a good idea to always include
+  missing values
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Filtering and missing values}
+
+Wickham (2018) states:
+
+\begin{itemize}
+\tightlist
+\item
+  ``\hlgc{filter()} only includes rows where condition is TRUE; it
+  excludes both \hlgc{FALSE} and \hlgc{NA} values. To preserve missing
+  values, ask for them explicitly:''
+\end{itemize}
+
+\medskip Investigate var \hlgc{df\_event\textdollar fr\_lunch}, number
+of free/reduced lunch students
+
+\begin{itemize}
+\tightlist
+\item
+  only available for visits to public high schools
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#visits to public HS with less than 50 students on free/reduced lunch}
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_event,eventtype }\OperatorTok{==}\StringTok{ "public hs"}\NormalTok{, fr_lunch}\OperatorTok{<}\DecValTok{50}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1   890}
+\CommentTok{#visits to public HS, where free/reduced lunch missing}
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_event,eventtype }\OperatorTok{==}\StringTok{ "public hs"}\NormalTok{, }\KeywordTok{is.na}\NormalTok{(fr_lunch)))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1    26}
+\CommentTok{#visits to public HS, where free/reduced is less than 50 OR is missing}
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_event,eventtype }\OperatorTok{==}\StringTok{ "public hs"}\NormalTok{, fr_lunch}\OperatorTok{<}\DecValTok{50} \OperatorTok{|}\StringTok{ }\KeywordTok{is.na}\NormalTok{(fr_lunch)))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1   916}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}{Exercises, missing values}
+
+\end{frame}
+
+\section{Arrange rows}\label{arrange-rows}
+
+\begin{frame}[fragile]{\hlgc{arrange()} function}
+
+\hlgc{arrange()} function ``arranges'' rows in a data frame; said
+different, it sorts observations
+
+\medskip
+Syntax: \hlgc{arrange(x,\ldots)}
+
+\begin{itemize}
+\tightlist
+\item
+  First argument, \hlgc{x}, is a data frame
+\item
+  Subsequent arguments are a ``comma separated list of unquoted variable
+  names''
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{arrange}\NormalTok{(df_event, event_date)}
+\end{Highlighting}
+\end{Shaded}
+
+Data frame goes back to previous order unless you \textbf{assign} the
+new order
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df_event}
+\NormalTok{df_event <-}\StringTok{ }\KeywordTok{arrange}\NormalTok{(df_event, event_date)}
+\NormalTok{df_event}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{\hlgc{arrange()} function}
+
+Ascending and descending order
+
+\begin{itemize}
+\tightlist
+\item
+  \hlgc{arrange()} sorts in \textbf{ascending} order by default
+\item
+  use \hlgc{desc()} to sort a column by descending order
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{arrange}\NormalTok{(df_event, }\KeywordTok{desc}\NormalTok{(event_date))}
+\end{Highlighting}
+\end{Shaded}
+
+Can sort by multiple variables
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{arrange}\NormalTok{(df_event, univ_id, }\KeywordTok{desc}\NormalTok{(event_date), }\KeywordTok{desc}\NormalTok{(med_inc))}
+
+\CommentTok{#sort by university and descending by size of 12th grade class; combine with select}
+\KeywordTok{select}\NormalTok{(}\KeywordTok{arrange}\NormalTok{(df_event, univ_id, }\KeywordTok{desc}\NormalTok{(g12)),instnm,eventtype,event_date,g12)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{\hlgc{arrange()}, missing values sorted at the
+end}
+
+Missing values automatically sorted at the end, regardless of whether
+you sort ascending or descending
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#by university, date, ascending school id}
+\KeywordTok{select}\NormalTok{(}\KeywordTok{arrange}\NormalTok{(df_event, univ_id, }\KeywordTok{desc}\NormalTok{(event_date), school_id),instnm,event_date,eventtype,school_id)}
+\CommentTok{#> # A tibble: 17,976 x 4}
+\CommentTok{#>    instnm event_date eventtype  school_id   }
+\CommentTok{#>    <chr>  <fct>      <chr>      <fct>       }
+\CommentTok{#>  1 Bama   2017-12-18 private hs A9106483    }
+\CommentTok{#>  2 Bama   2017-12-18 other      <NA>        }
+\CommentTok{#>  3 Bama   2017-12-15 public hs  062927004516}
+\CommentTok{#>  4 Bama   2017-12-15 public hs  484473005095}
+\CommentTok{#>  5 Bama   2017-12-15 other      <NA>        }
+\CommentTok{#>  6 Bama   2017-12-14 other      <NA>        }
+\CommentTok{#>  7 Bama   2017-12-13 private hs 00071151    }
+\CommentTok{#>  8 Bama   2017-12-13 public hs  063386005296}
+\CommentTok{#>  9 Bama   2017-12-13 public hs  130387001439}
+\CommentTok{#> 10 Bama   2017-12-13 other      <NA>        }
+\CommentTok{#> # ... with 17,966 more rows}
+
+\CommentTok{#by university, date, descending school id}
+\KeywordTok{select}\NormalTok{(}\KeywordTok{arrange}\NormalTok{(df_event, univ_id, }\KeywordTok{desc}\NormalTok{(event_date), }\KeywordTok{desc}\NormalTok{(school_id)),instnm,event_date,eventtype,school_id)}
+\CommentTok{#> # A tibble: 17,976 x 4}
+\CommentTok{#>    instnm event_date eventtype  school_id   }
+\CommentTok{#>    <chr>  <fct>      <chr>      <fct>       }
+\CommentTok{#>  1 Bama   2017-12-18 private hs A9106483    }
+\CommentTok{#>  2 Bama   2017-12-18 other      <NA>        }
+\CommentTok{#>  3 Bama   2017-12-15 public hs  484473005095}
+\CommentTok{#>  4 Bama   2017-12-15 public hs  062927004516}
+\CommentTok{#>  5 Bama   2017-12-15 other      <NA>        }
+\CommentTok{#>  6 Bama   2017-12-14 other      <NA>        }
+\CommentTok{#>  7 Bama   2017-12-13 public hs  130387001439}
+\CommentTok{#>  8 Bama   2017-12-13 public hs  063386005296}
+\CommentTok{#>  9 Bama   2017-12-13 private hs 00071151    }
+\CommentTok{#> 10 Bama   2017-12-13 other      <NA>        }
+\CommentTok{#> # ... with 17,966 more rows}
+\end{Highlighting}
+\end{Shaded}
+
+Can sort by \hlgc{is.na} to put missing values first
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{select}\NormalTok{(}\KeywordTok{arrange}\NormalTok{(df_event, univ_id, }\KeywordTok{desc}\NormalTok{(event_date), }\KeywordTok{desc}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(school_id))),instnm,event_date,eventtype,school_id)}
+\CommentTok{#> # A tibble: 17,976 x 4}
+\CommentTok{#>    instnm event_date eventtype  school_id   }
+\CommentTok{#>    <chr>  <fct>      <chr>      <fct>       }
+\CommentTok{#>  1 Bama   2017-12-18 other      <NA>        }
+\CommentTok{#>  2 Bama   2017-12-18 private hs A9106483    }
+\CommentTok{#>  3 Bama   2017-12-15 other      <NA>        }
+\CommentTok{#>  4 Bama   2017-12-15 public hs  062927004516}
+\CommentTok{#>  5 Bama   2017-12-15 public hs  484473005095}
+\CommentTok{#>  6 Bama   2017-12-14 other      <NA>        }
+\CommentTok{#>  7 Bama   2017-12-13 other      <NA>        }
+\CommentTok{#>  8 Bama   2017-12-13 private hs 00071151    }
+\CommentTok{#>  9 Bama   2017-12-13 public hs  063386005296}
+\CommentTok{#> 10 Bama   2017-12-13 public hs  130387001439}
+\CommentTok{#> # ... with 17,966 more rows}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}{Exercises, arranging}
+
+\end{frame}
+
+\end{document}

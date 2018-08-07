@@ -11,6 +11,13 @@ output:
 
 # General
 
+## wish list for beamer slides
+
+- when I run a code chunk RMarkdown that includes a print of data, the printout below the chunk looks the way printing data from console looks as opposed to having the df_print: paged style (HTML tables with support for pagination over rows and columns)
+- smaller font-size; similar to fontsize from Christenson slides
+- code in code chunks wraps to next row rather then bleeds off right margin
+- reduce horizontal space between line of text and first item of list below that line of text
+
 ## Stuff for students to do before class
 
 1. Install R
@@ -109,13 +116,15 @@ What Patricia says:
 
 ### Big topics
 
+- ?directories and filepaths?
+- investigating objects
 - printing data
 - selecting variables
 - sorting data
 - missing values
 - operators
 - filtering data
-- descriptive statistics
+- descriptive statistics [cut? move to later week?]
 
 ### Learning objectives
 
