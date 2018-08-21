@@ -18,6 +18,8 @@ wwlist<-read_csv("data/prospect_list/western_washington_college_board_list.csv",
 
 str(wwlist)
 
+#https://bookdown.org/rdpeng/rprogdatascience/using-the-readr-package.html
+
 wwlist<-read_csv("data/prospect_list/western_washington_college_board_list.csv", 
   col_names=c("receive_date", "psat_range", "sat_range", "ap_range", "gpa_b_aplus", "gpa_b_aplus_null","gpa_bplus_aplus","state","zip","for_country","sex","hs_ceeb_code","hs_name","hs_city","hs_state","hs_grad_date","ethn_code","homeschool","firstgen"), 
   skip=1,
@@ -49,7 +51,7 @@ wwlist<-read_csv("data/prospect_list/western_washington_college_board_list.csv",
                  col_names=c("receive_date", "psat_range", "sat_range", "ap_range", "gpa_b_aplus", "gpa_b_aplus_null","gpa_bplus_aplus","state","zip","for_country","sex","hs_ceeb_code","hs_name","hs_city","hs_state","hs_grad_date","ethn_code","homeschool","firstgen"), 
                  skip=1,
                  col_types = cols(
-                   receive_date = col_character(),
+                   receive_date = col_integer(),
                    psat_range = col_character(),
                    sat_range = col_character(),
                    ap_range = col_character(),
@@ -91,9 +93,9 @@ head(wwlist)
 
 names(wwlist)
 
-wwlist<-read.csv("data/prospect_list/western_washington_college_board_list.csv", col_types= cols(RECEIVE_DATE = col_double()))
-
-wwlist<-read.csv("data/prospect_list/western_washington_college_board_list.csv", na.strings = "", col_types= cols(RECEIVE_DATE = col_double()))
+wwlist<-read.csv("data/prospect_list/western_washington_college_board_list.csv", na.strings = "")
+names(wwlist)
+str(wwlist)
 
 names(wwlist)
 

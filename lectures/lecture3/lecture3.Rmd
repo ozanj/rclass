@@ -199,6 +199,7 @@ attributes(vector2)
 typeof(vector2)
 class(vector2)
 
+
 ```
 
 # FACTORS
@@ -217,7 +218,15 @@ typeof(wwlist$ethn_code)
 class(wwlist$ethn_code)
 attributes(wwlist$ethn_code)
 
+count(filter(wwlist,ethn_code==11))
 
+count(filter(wwlist,ethn_code=="White"))
+
+str(df_event)
+str(df_event$school_id)
+typeof(df_event$school_id)
+class(df_event$school_id)
+attributes(df_event$school_id)
 ```
 
 
