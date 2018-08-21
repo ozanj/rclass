@@ -3,7 +3,8 @@ title: Managing and Manipulating Data Using R # potentially push to header
 subtitle:  Introduction
 author: Ozan Jaquette
 date: 
-fontsize: 10pt
+classoption: dvipsnames  # for colors
+fontsize: 8pt
 output:
   beamer_presentation:
     keep_tex: true
