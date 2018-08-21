@@ -1,0 +1,244 @@
+---
+title: Managing and Manipulating Data Using R # potentially push to header
+subtitle:  Lecture 3
+author: Ozan Jaquette
+date: 
+fontsize: 8pt
+output:
+  beamer_presentation:
+    keep_tex: true
+    toc: true
+    slide_level: 3
+    theme: default # AnnArbor # push to header?
+    #colortheme: "dolphin" # push to header?
+    #fonttheme: "structurebold"
+    highlight: tango # Supported styles include "default", "tango", "pygments", "kate", "monochrome", "espresso", "zenburn", and "haddock" (specify null to prevent syntax highlighting); push to header
+    df_print: tibble #default # tibble # push to header?    
+    latex_engine: xelatex #  Available engines are pdflatex [default], xelatex, and lualatex; The main reasons you may want to use xelatex or lualatex are: (1) They support Unicode better; (2) It is easier to make use of system fonts.
+    includes:
+      in_header: ../beamer_header.tex
+      #after_body: table-of-contents.txt 
+---
+
+<!-- CAN THIS BE MOVED TO SOME KIND OF HEADER FILE? --> 
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
+#knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
+  #comment = "#>" makes it so results from a code chunk start with "#>"; default is "##"
+```
+
+# Introduction/logistics
+
+### Libraries we will use today
+
+```{r}
+library(tidyverse)
+```
+
+### Data we will use today
+
+Data on off-campus recruiting events by public universities
+
+```{r}
+#load dataset with one obs per recruiting event
+load("../../data/recruiting/recruit_event_somevars.Rdata")
+
+#load dataset with one obs per high school
+load("../../data/recruiting/recruit_school_somevars.Rdata")
+```
+Object \hlgc{df\_event\}
+
+- One observation per university, recruiting event
+
+Object \hlgc{df\_event\}
+
+- One observation per high school (visited and non-visited)
+
+# Factors
+
+## Review data types and structures
+
+### Review data types
+
+Primary __data types__ in R:
+
+- numeric (integer & double)
+- character
+- logical
+
+R CODE CHUNK WITH EXAMPLES
+
+### Review data structures: vectors
+
+Primary __data structures__ in R are __vectors__ and __lists__
+
+\medskip A __vector__ is a collection of values
+
+- each value in a vector is an __element__
+- all elements within vector must have same __data type__
+
+```{r}
+a <- c(1,2,3)
+a
+str(a)
+```
+
+You can assign __names__ to elements of a vector, thereby creating a __named vector__
+
+```{r}
+b <- c(v1=1,v2=2,v3=3)
+b
+str(b)
+```
+
+### Review data structures: lists
+
+Like vectors, __lists__ are objects that contain __elements__; However, __data type__ can differ across elements within a list; an element of a list can be another list
+
+
+Examples of lists:
+```{r}
+list_a <- list(1,2,"apple")
+str(list_a)
+list_b <- list(1, c("apple", "orange"), list(1, 2, 3))
+str(list_b)
+```
+### Review data structures: lists
+
+Like vectors, elements within a list can be named, thereby creating a __named list__
+
+```{r}
+str(list_b) # not named
+
+list_c <- list(v1=1, v2=c("apple", "orange"), v3=list(1, 2, 3))
+str(list_c) # named
+```
+
+### Review data structures: a data frame is a list
+
+A __data frame__ is a list with the following characteristics:
+
+- All the elements must be __vectors__ with the same __length__
+- Data frames are __augmented lists__ because they have additional __attributes__ [described later]
+
+```{r}
+list_d <- list(col_a = c(1,2,3), col_b = c(4,5,6), col_c = c(7,8,9))
+typeof(list_d)
+str(list_d)
+
+df_a <- data.frame(col_a = c(1,2,3), col_b = c(4,5,6), col_c = c(7,8,9))
+typeof(df_a)
+str(df_a)
+```
+## Attributes and augmented vectors
+
+### Atomic vectors versus augmented vectors
+
+__Atomic vectors__ [our focus so far]
+- [(See figure)](http://r4ds.had.co.nz/diagrams/data-structures-overview.png)
+- I think of atomic vectors as "just the data"
+- Atomic vectors are the building blocks for augmented vectors
+
+Augmented vectors
+
+- __Augmented vectors__ are atomic vectors with additional __atributes__ attached
+
+__Attributes__
+
+- __Attributes__ are additional "metadata" that can be attached to any object (e.g., vector or list)
+- Important attributes in R:
+    - __Names__: name the elements of a vector (e.g., variable names)
+    - __Class__: How object should be treated by object oriented programming language [discussed below]
+
+Main takaway:
+
+- Augmented vectors are atomic vectors (just the data) with additional attributes attached
+
+### Attributes in vectors
+
+```{r}
+vector1 <- c(1,2,3,4)
+vector1
+attributes(vector1)
+
+vector2 <- c(a = 1, b= 2, c= 3, d = 4)
+vector2
+attributes(vector2)
+```
+
+
+### Attributes in lists
+
+```{r}
+list1 <- list(c(1,2,3), c(4,5,6))
+str(list1)
+attributes(list1)
+
+list2 <- list(col_a = c(1,2,3), col_b = c(4,5,6))
+str(list2)
+attributes(list2)
+
+list3 <- data.frame(col_a = c(1,2,3), col_b = c(4,5,6))
+str(list3)
+attributes(list3)
+
+```
+### Object class
+
+```{r}
+vector1 <- c(1,2,3,4)
+vector1
+typeof(vector1)
+class(vector1)
+attributes(vector1)
+
+vector2 <- c(a = 1, b= 2, c= 3, d = 4)
+vector2
+attributes(vector2)
+typeof(vector2)
+class(vector2)
+
+```
+
+# FACTORS
+
+### Factors
+
+What are __factors__?
+
+- Factors are one type of augmented vector
+- Wickham: "Factors are designed to represent categorical data that can take a fixed set of possible values. Factors are built on top of integers, and have a levels attribute:"
+
+```{r}
+str(wwlist)
+str(wwlist$ethn_code)
+typeof(wwlist$ethn_code)
+class(wwlist$ethn_code)
+attributes(wwlist$ethn_code)
+
+
+```
+
+
+
+# Labeling variables
+
+
+# Pipes
+
+### What are "pipes", %>%
+
+What are __pipes__?
+
+- Pipes are a means of perfoming multiple steps in a single line of code
+- Pipes are part of __tidyverse__ suite of packages, not __base R__
+- When writing code, the pipe symbol is \hlgc{\%>\%}
+- Basic flow of using pipes in code:
+    - \hlgc{object \%>\% some\_function \%>\% some\_function, \ldots}    
+- How pipes work [from left to right]:
+    - The object/result from left of \hlgc{\%>\%} pipe symbol is the input of function to the right of the \hlgc{\%>\%} pipe symbol 
+    - In turn, the resulting output becomes the input of the function to the right of the next \hlgc{\%>\%} pipe symbol 
+
+# Creating variables
+

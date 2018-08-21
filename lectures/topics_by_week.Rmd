@@ -13,10 +13,10 @@ output:
 
 ## wish list for beamer slides
 
-- when I run a code chunk RMarkdown that includes a print of data, the printout below the chunk looks the way printing data from console looks as opposed to having the df_print: paged style (HTML tables with support for pagination over rows and columns)
 - smaller font-size; similar to fontsize from Christenson slides
 - code in code chunks wraps to next row rather then bleeds off right margin
 - reduce horizontal space between line of text and first item of list below that line of text
+- when I run a code chunk RMarkdown that includes a print of data, the printout below the chunk looks the way printing data from console looks as opposed to having the df_print: paged style (HTML tables with support for pagination over rows and columns)
 
 ## Stuff for students to do before class
 
@@ -91,6 +91,20 @@ What Patricia says:
 ### Problem set ideas
 
 ### What covered in Stata data mgt course
+
+- lecture 1:
+    - course objectives, why important
+    - syllabus and logistics
+        - core data manipulation skills you should know
+        - homework
+        - communication with instructor and classmates
+        - course etiquette
+    - understanding syntax of stata commands
+    - executing stata commands
+    - where to find resources and help
+    - Stata do-files
+    - changing directories
+    - Stata log-files
 
 ### What covered in Christenson class
 
@@ -172,7 +186,28 @@ What Patricia says:
 
 ### Big topics
 
+- Pipes
+* Creating variables
+* Factors
+* labeling variables
+
+
 ### Learning objectives
+
+* gain intuitive understanding of how "pipes" work
+* Create variables that are based on calculations across observations and within rows
+* be able to add labels to variables
+* be able to add value labels to factor variables
+* be able to turn string categorical variables into numeric factor variables
+
+### questions [for Ben/Crystal]
+
+* How to introduce data types and data structures
+    - Skinner introduces concept of data types (logical, numeric, character) and data structures (vectors, lists, etc.); 
+    - by contrast, Wickham introduces vectors [atomic vectors vs. lists] and then the data types as different types of atomic vectors
+        - [LINK TO FIGURE](http://r4ds.had.co.nz/diagrams/data-structures-overview.png)
+    - which is correct?
+* class vs. type
 
 ### Reading [after lecture]
 
@@ -182,21 +217,22 @@ What Patricia says:
 
 ### What covered in Stata data mgt course
 
-- lecture 1:
-    - course objectives, why important
-    - syllabus and logistics
-        - core data manipulation skills you should know
-        - homework
-        - communication with instructor and classmates
-        - course etiquette
-    - understanding syntax of stata commands
-    - executing stata commands
-    - where to find resources and help
-    - Stata do-files
-    - changing directories
-    - Stata log-files
     
-- lecture 2:
+- lecture 4:
+    * label variables
+        * add variable labels
+        * add value labels
+            * add num labels to value labels
+        * view value labels
+        * add notes to variables
+    * variable storage type and display format
+        * internal storage type
+        * display format
+    * create variables (part 1)
+        * principles of variable creation [e.g., don't change input var]
+        * Creating variables using different commands
+            * introducing egen
+        * other
 
 ### What covered in Christenson class
 
