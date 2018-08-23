@@ -4,6 +4,7 @@ subtitle:  Lecture 3
 author: Ozan Jaquette
 date: 
 fontsize: 8pt
+classoption: dvipsnames  # for colors
 output:
   beamer_presentation:
     keep_tex: true
@@ -12,7 +13,7 @@ output:
     theme: default # AnnArbor # push to header?
     #colortheme: "dolphin" # push to header?
     #fonttheme: "structurebold"
-    highlight: tango # Supported styles include "default", "tango", "pygments", "kate", "monochrome", "espresso", "zenburn", and "haddock" (specify null to prevent syntax highlighting); push to header
+    highlight: default # Supported styles include "default", "tango", "pygments", "kate", "monochrome", "espresso", "zenburn", and "haddock" (specify null to prevent syntax highlighting); push to header
     df_print: tibble #default # tibble # push to header?    
     latex_engine: xelatex #  Available engines are pdflatex [default], xelatex, and lualatex; The main reasons you may want to use xelatex or lualatex are: (1) They support Unicode better; (2) It is easier to make use of system fonts.
     includes:
@@ -41,11 +42,16 @@ library(tidyverse)
 Data on off-campus recruiting events by public universities
 
 ```{r}
+rm(list = ls()) # remove all objects
+
 #load dataset with one obs per recruiting event
 load("../../data/recruiting/recruit_event_somevars.Rdata")
 
 #load dataset with one obs per high school
 load("../../data/recruiting/recruit_school_somevars.Rdata")
+
+load("../../data/prospect_list/western_washington_college_board_list.RData")
+
 ```
 Object \hlgc{df\_event\}
 
@@ -206,29 +212,156 @@ class(vector2)
 
 ### Factors
 
-What are __factors__?
+__Factors__ are used to display categorical data (e.g., marital status)
 
-- Factors are one type of augmented vector
-- Wickham: "Factors are designed to represent categorical data that can take a fixed set of possible values. Factors are built on top of integers, and have a levels attribute:"
+- A factor is an __augmented vector__ built by attaching a "levels" attribute to an (atomic) integer vectors
+
+The \hlgc{str()} function is useful for identifying which variables are factors. Let's examine the factor variable \hlgc{ethn\_code}
 
 ```{r}
-str(wwlist)
-str(wwlist$ethn_code)
 typeof(wwlist$ethn_code)
 class(wwlist$ethn_code)
-attributes(wwlist$ethn_code)
+str(wwlist$ethn_code)
+```
+Note that \hlgc{ethn\_code} has \hlgc{type=integer} and \hlgc{class=factor} because the variable has a "levels" attribute
 
+```{r, results='hide'}
+attributes(wwlist$ethn_code)
+```
+
+Main takeaway:
+
+- The underlying data are integers but the levels attribute is used to display the data.
+
+
+
+### Working with factor variables
+
+```{r, results='hide'}
+attributes(wwlist$ethn_code)
+```
+Refer to categories of a factor by the values of the level attribute rather than the underlying values of the variable
+
+```{r}
 count(filter(wwlist,ethn_code==11))
 
 count(filter(wwlist,ethn_code=="White"))
-
-str(df_event)
-str(df_event$school_id)
-typeof(df_event$school_id)
-class(df_event$school_id)
-attributes(df_event$school_id)
 ```
 
+If you want to refer to underlying values, then apply \hlgc{as.integer()} function to the factor variable
+```{r}
+count(filter(wwlist,as.integer(ethn_code)==11))
+```
+### How to identify the variable values associated with factor levels
+
+MAYBE CUT THIS SLIDE IF YOU CAN'T DO THIS WITHOUT PIPES
+```{r}
+
+wwlist %>% count(psat_range) %>% as_factor()
+```
+```{r}
+count(filter(wwlist,as.integer(psat_range)==4))
+count(filter(wwlist,psat_range=="1270-1520"))
+```
+
+
+### Some in-class exercise involving factors
+
+```{r}
+str(wwlist)
+```
+### Creating factors [from integer vectors]
+
+Factors are just integer vectors with level attributes attached to them. So, to create a factor:
+
+1. create a vector for the underlying data
+1. create a vector that has level attributes
+3. Attach levels to the data using the \hlgc{factor()} function
+
+```{r}
+a1 <- c(1,1,1,0,1,1,0) #a vector of data
+a2 <- c("zero","one") #a vector of labels
+
+#attach labels to values
+a3 <- factor(a1, labels = a2)
+a3
+str(a3)
+
+```
+
+Note: By default, \hlgc{factor()} function attached "zero" to the lowest value of vector \hlgc{a1} because "zero" was the first element of vector \hlgc{a2}
+
+### Creating factors [from integer vectors]
+
+Let's turn an integer variable into a factor variable in the \hlgc{wwlist} data frame
+
+Create integer version of \hlgc{sex}
+```{r}
+wwlist$sex_int <- as.integer(wwlist$sex)
+str(wwlist$sex_int)
+#wwlist %>% count(sex) %>% as_factor()
+```
+Assume we know that 1=female, 2=male, 3=unknown
+
+Assign levels to values of integer variable
+```{r}
+wwlist$sex_int <- factor(wwlist$sex_int, labels=c("female","male","unknown"))
+str(wwlist$sex_int)
+str(wwlist$sex)
+```
+
+### Create factors [from string variables]
+
+To create a factor variable from string variable
+
+1. create a character vector containing underlying data
+1. create a vector containing valid levels
+3. Attach levels to the data using the \hlgc{factor()} function
+
+```{r}
+#underlying data: months my fam is born
+x1 <- c("Jan", "Aug", "Apr", "Mar")
+#create vector with valid levels
+month_levels <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+#attach levels to data
+x2 <- factor(x1, levels = month_levels)
+```
+Note how attributes differ
+```{r}
+str(x1)
+str(x2)
+```
+Sorting differs
+```{r}
+sort(x1)
+sort(x2)
+```
+
+### Create factors [from string variables]
+
+Let's create a character version of variable \hlgc{sex} and then turn it into a factor
+
+```{r}
+#Create character version of sex
+wwlist$sex_char <- as.character(wwlist$sex)
+
+#investigate character variable
+str(wwlist$sex_char)
+table(wwlist$sex_char)
+
+#create new variable that assigns levels
+sex_fac <- factor(wwlist$sex_char, levels = c("F","M","U"))
+str(wwlist$sex_char)
+```
+How the \hlgc{levels} argument works when underlying data is character
+
+- Matches value of underlying data to value of the level attribute
+- Converts underlying data to integer, with level attribute attached
+
+\medskip See chapter 15 of Wickham for more on factors (e.g., modifying factor order, modifying factor levels)
+
+### Substantial exercise on using/creating factors, using either df_school or df_event datasets
 
 
 # Labeling variables
@@ -238,16 +371,254 @@ attributes(df_event$school_id)
 
 ### What are "pipes", %>%
 
-What are __pipes__?
+__Pipes__ are a means of perfoming multiple steps in a single line of code
 
-- Pipes are a means of perfoming multiple steps in a single line of code
 - Pipes are part of __tidyverse__ suite of packages, not __base R__
 - When writing code, the pipe symbol is \hlgc{\%>\%}
 - Basic flow of using pipes in code:
     - \hlgc{object \%>\% some\_function \%>\% some\_function, \ldots}    
-- How pipes work [from left to right]:
+- Pipes work from left to right:
     - The object/result from left of \hlgc{\%>\%} pipe symbol is the input of function to the right of the \hlgc{\%>\%} pipe symbol 
     - In turn, the resulting output becomes the input of the function to the right of the next \hlgc{\%>\%} pipe symbol 
 
-# Creating variables
+### Do some tasks with and without pipes
+
+Print data for "first-generation" prospects
+```{r, results='hide'}
+filter(wwlist, firstgen == "Y")
+wwlist %>% filter(firstgen == "Y")
+```
+Comparing the two approaches:
+
+- In the "without pipes" approach, the object is the first argument \hlgc{filter()} function
+- In the "pipes" approach, you don't specify the object as the first argument of \hlgc{filter()}
+    - Why? Because \hlgc{\%>\%} "pipes" the object to the left of the \hlgc{\%>\%} operator into the function to the right of the \hlgc{\%>\%} operator
+    
+Main takeaway:
+
+- Whenever you write code using pipes, functions to the right of a \hlgc{\%>\%} pipe operator should not explicitly name the object that is the input to that function. Rather, the object to the left of the \hlgc{\%>\%} pipe operator is automatically the input.
+    
+### Do some tasks with and without pipes
+
+Print data for "first-generation" prospects for selected variables [output omitted]
+
+```{r, results='hide'}
+select(filter(wwlist, firstgen == "Y"), state, hs_city, ethn_code)
+
+wwlist %>% filter(firstgen == "Y") %>% select(state, hs_city, ethn_code)
+```
+Comparing the two approaches:
+
+- In the "without pipes" approach, code is written "inside out"
+    - The first step in the task -- identifying the object -- is the innermost part of code
+    - The last step in task -- selecting variables to print -- is the outermost part of code
+- In "pipes" approach the left-to-right order of code matches how we think about the task
+    - First, we start with an object __*and then*__ (\hlgc{\%>\%}) we use \hlgc{filter()} to isolate first-gen students __*and then*__ (\hlgc{\%>\%}) we select which  variables to print
+
+### Do some tasks with and without pipes
+
+Count the number "first-generation" prospects from the state of Washington
+
+```{r}
+count(filter(wwlist, firstgen == "Y", state == "WA"))
+
+wwlist %>% filter(firstgen == "Y", state == "WA") %>% count()
+```
+
+### Do some tasks with and without pipes [last example]
+
+Create frequency table of \hlgc{sex} for "first-generation" prospects from WA
+```{r}
+wwlist_temp <- filter(wwlist, firstgen == "Y", state == "WA")
+table(wwlist_temp$sex, useNA = "ifany")
+
+wwlist %>% filter(firstgen == "Y", state == "WA") %>% count(sex)
+```
+Comparison of two approaches
+
+- without pipes, task requires multiple lines of code; this is quite common
+    - first line creates object; second line analyzes object
+- with pipes, task can be completed in one line of code and you aren't left with objects you don't care about
+
+Note: the pipes approach above is a useful way to show the __values__ associated with each __factor level__ for factor variables
+
+### Student exercises with pipes
+
+CREATE STUDENT EXERCISES
+
+# Creating variables using mutate
+
+### Our plan for learning how to create new variables
+
+Recall that the \hlgc{dplyr} package within the \hlgc{tidyverse} provide a set of functions that can be described as "verbs":
+
+- __subsetting__, __sorting__, and __transforming__
+
+What we've done | Where we're going
+------------- | -------------
+__Subsetting data__ | __Transforming data__
+- \hlgc{select()} variables  | - \hlgc{mutate()} creates new variables
+- \hlgc{filter()} observations | - \hlgc{summarize()} calculates across rows
+__Sorting data__ | - \hlgc{group\_by()} to calculate across rows within groups
+- \hlgc{arrange()} | 
+
+__Today__
+
+- we'll use \hlgc{mutate()} to create new variables based on calculations across columns within a row
+
+__Next week__
+
+- we'll combine \hlgc{mutate()} with \hlgc{summarize()} and \hlgc{group\_by()} to create variables based on calculations across rows
+
+### Introduce \hlgc{mutate()} function
+
+\hlgc{mutate()} creates new columns (variblaes) that are functions of existing columns
+
+- \hlgc{mutate() is the __tidyverse__ approach to creating variables, not the __Base R__ approach
+- \hlgc{mutate() works best with pipes \hlgc{\%>\%}
+
+We'll create variables from data frame \hlgc{df\_school} which has one observation for each high school
+
+- Task: create pct of students on free/reduced lunch (output omitted)
+
+```{r, results='hide'}
+school_sml <- df_school %>% filter(school_type == "public") %>% 
+    select(ncessch, num_fr_lunch, total_students)
+
+school_sml %>% mutate(pct_fr_lunch = num_fr_lunch/total_students)
+```
+
+Can combine \hlgc{(select())} with pipes \hlgc{\%>\%} to control which columns printed, so no need to create dataset with fewer columns. But let's create data frame with public high schools only
+
+```{r}
+school_pub <- df_school %>% filter(school_type == "public")
+```
+
+### Introduce \hlgc{mutate()} function
+
+New variable not retained unless we __assign__ \hlgc{<-} it to an object (existing or new)
+
+```{r, results='hide'}
+school_pub %>% mutate(pct_fr_lunch = num_fr_lunch/total_students)
+names(school_pub)
+
+school_pub_temp <- school_pub %>% 
+  mutate(pct_fr_lunch = num_fr_lunch/total_students) 
+names(school_pub_temp)
+```
+
+How to create percent free/reduced lunch in __Base R__
+
+```{r}
+school_pub$pct_fr_lunch <- school_pub$num_fr_lunch/school_pub$total_students
+```
+\hlgc{mutate()} can create multiple variables at once
+
+```{r, results='hide'}
+school_pub %>% 
+  mutate(pct_fr_lunch = num_fr_lunch/total_students,
+         pct_prof_math= num_prof_math/num_took_math) %>%
+  select(num_fr_lunch, total_students, pct_fr_lunch, 
+         num_prof_math, num_took_math, pct_prof_math)
+```
+
+### Student exercise using mutate()
+
+
+### Mutate to create indicator variables
+
+We often create dichotomous (0/1) indicator variables of whether something happened (or whether something is TRUE)
+
+- Variables that are of substantive interest to project
+    - e.g., did student graduate from college
+- Variables that help you investigate data, check quality
+    - e.g., indicator of whether an observation is missing/non-missing for a particular variable
+
+Let's conduct some investigations of \hlgc{df\_school}, which has one observation for each high school
+
+Rename some variables (output omitted)
+```{r, results='hide'}
+str(df_school)
+df_schoolv2 <- df_school %>% 
+  rename(
+    visits_berkeley = visits_by_110635,
+    visits_boulder = visits_by_126614,
+    visits_bama = visits_by_100751,
+    state_berkeley = inst_110635,
+    state_boulder = inst_126614,
+    state_bama = inst_100751)
+
+names(df_schoolv2)
+```
+
+
+### Creating indicators for \hlgc{df\_schoolv2} data frame
+
+Create TRUE/FALSE indicator that median household income greater than $50,000
+```{r}
+df_schoolv2_temp <- df_schoolv2 %>% mutate(incgt50k = avgmedian_inc_2564>50000)
+
+df_schoolv2_temp %>% select(avgmedian_inc_2564, incgt50k) %>% head(n=3)
+
+df_schoolv2_temp %>% filter(is.na(avgmedian_inc_2564)) %>% count(incgt50k)
+```
+Important takeaway:
+
+- Variable created by \hlgc{mutate()} equals \hlgc{NA} for obs if input variable to \hlgc{mutate()} is missing for that obs. This is a good thing!
+
+### Creating indicators for \hlgc{df\_schoolv2} data frame
+
+Create TRUE/FALSE indicator that school is less than 50 percent white
+
+```{r}
+df_schoolv2_temp <- df_schoolv2 %>% mutate(lt50pctwhite = pct_white<50)
+df_schoolv2_temp %>% select(pct_white,lt50pctwhite) %>% head(n=3)
+str(df_schoolv2_temp$lt50pctwhite)
+```
+Create 0/1 integer indicator rather than logical indicator 
+```{r}
+df_schoolv2_temp <- df_schoolv2 %>% mutate(lt50pctwhite = as.integer(pct_white<50))
+df_schoolv2_temp %>% select(pct_white,lt50pctwhite) %>% head(n=3)
+str(df_schoolv2_temp$lt50pctwhite)
+```
+
+### Student exercises
+
+0/1 indicators of whether school received visit from each university
+```{r}
+df_schoolv2 %>% count(visits_berkeley)
+df_schoolv2_temp <- df_schoolv2 %>% mutate(yesvis_berkeley = visits_berkeley>0)
+
+df_schoolv2_temp %>% filter(visits_berkeley>0) %>% select(visits_berkeley,yesvis_berkeley)
+df_schoolv2_temp %>% filter(visits_berkeley==0) %>% select(visits_berkeley,yesvis_berkeley)
+
+```
+
+
+### Investigating \hlgc{wwlist} data frame
+
+?MAYBE CUT UNTIL NEXT LECTURE AND HAVE SECTION ON USING DESCRIPTIVE STATS TO INVESTIGATE DATA?
+
+\medskip Let's conduct some investigations of \hlgc{wwlist}, which is frankly a pretty weird dataset!
+
+- When conducting investigations, really important to be careful about missing values
+
+```{r, results='hide'}
+str(wwlist)
+```
+
+Variable \hlgc{receive\_date} indicates date prospect list data received from College Board
+
+```{r}
+wwlist %>% count(receive_date)
+```
+
+
+### other 
+
+```{r}
+#num_took_math, num_prof_math
+ww_narrow <- wwlist %>% select(psat_range, contains("gpa"), state, zip, for_country, ethn_code, homeschool, firstgen)
+load("../../data/recruiting/recruit_event_somevars.Rdata")
+```
 

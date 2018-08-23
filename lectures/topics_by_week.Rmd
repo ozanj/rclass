@@ -186,10 +186,10 @@ What Patricia says:
 
 ### Big topics
 
-- Pipes
-* Creating variables
-* Factors
-* labeling variables
+- Pipes [DONE]
+* Creating variables [DONE]
+* Factors [DONE]
+* labeling variables [NEED TO ADD VARIABLE LABELS]
 
 
 ### Learning objectives
@@ -214,6 +214,8 @@ What Patricia says:
 ### Data sources
 
 ### Problem set ideas
+
+- Create variables and add value labels
 
 ### What covered in Stata data mgt course
 
@@ -262,7 +264,44 @@ What Patricia says:
             - using summarize() function
         - plot and aggregate data
 
-## Class X. Processing across rows
+## Class X. Processing across rows; exploratory data analysis for data quality
+
+### Big topics
+
+  - Processing across rows with summarize() and group by
+  - Exploratory data analysis for data quality
+
+### Learning objectives
+
+### Order of lecture
+
+1. Processing across obs
+    1. introduce group_by() and summarize()
+    1. How missing values handled
+    1. Means, counts, and sum
+    1. Other summary functions [5.6.4]
+        - measures of position e.g., first(x) x[1]
+    1. combining processing across obs with filtering
+    1. grouping by multiple variables
+    1. appears that you can skip 5.7 grouped/mutates and filters
+    
+    
+    
+1. EDA for data quality
+
+### Reading [after lecture]
+
+- Wickham 5.6 Grouped summaries with summarise()
+- Wickham 5.7 Grouped mutates (and filters)
+
+
+### Data sources
+
+### Problem set ideas
+
+### What covered in Stata data mgt course
+
+### What covered in Christenson class
 
 ## Class X. data quality/cleaning data
 
