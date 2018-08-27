@@ -397,7 +397,7 @@ be a missing value. Fortunately, all aggregation functions have an na.rm argumen
 
 ### Order of lecture
 
-  - EDA for data quality [focus on what commands to use] [from skinner EDA1]
+  - EDA for data quality [focus on what commands to use], the tidyverse way [ignore Base R]
       - Investigate objects
       - investigate variable labels/value labels
       - summary stats for continuous vars
@@ -416,6 +416,44 @@ be a missing value. Fortunately, all aggregation functions have an na.rm argumen
 ### Problem set ideas
 
 - create GPA from NLS data
+
+### What Ben skinner covers
+
+- EDA 1
+    - reading in data from Stata using read_dta
+    - labels
+        - variable labels
+        - value labels
+    - summary statistics for continuous variables
+        - Base R
+            - mean() and sd() functions…
+        - tidyverse
+            - summarise_at()
+    - One-way Discrete/categorical variables
+        - "as_factor()"
+        - base R
+            - table() function
+        - tidyverse
+            - using count() to create a table; 
+                - benefit is that it automatically includes NAs
+    - Two-way table
+        - base R
+            - table(as_factor(df$bypared), as_factor(df$bysex))
+        - tidyverse
+            - 
+            - df %>% group_by(bysex) %>% count(bypared) %>% as_factor()
+            - to have one variable as columns and one variable as rows
+                - df %>% group_by(bysex) %>% count(bypared) %>% as_factor() %>% spread(bysex, n)
+    - conditional mean [good for categorical by continuous]
+        - tidyverse
+            - mean of continuous var for each value of categorical
+                - df %>% group_by(bypared) %>% summarise_at(.vars = vars(bynels2m), .funs = funs(mean, .args = list(na.rm = TRUE))) %>% as_factor()            
+            - mean of continuous var for each value of categorical by categorical
+            - use "spread" to make it look like published table
+            
+        
+    
+    
 
 ### What covered in Stata data mgt course
 
