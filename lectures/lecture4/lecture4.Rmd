@@ -1,0 +1,493 @@
+---
+title: Managing and Manipulating Data Using R # potentially push to header
+subtitle:  Lecture 4
+author: Ozan Jaquette
+date: 
+fontsize: 8pt
+classoption: dvipsnames  # for colors
+output:
+  beamer_presentation:
+    keep_tex: true
+    toc: true
+    slide_level: 3
+    theme: default # AnnArbor # push to header?
+    #colortheme: "dolphin" # push to header?
+    #fonttheme: "structurebold"
+    highlight: default # Supported styles include "default", "tango", "pygments", "kate", "monochrome", "espresso", "zenburn", and "haddock" (specify null to prevent syntax highlighting); push to header
+    df_print: tibble #default # tibble # push to header?    
+    latex_engine: xelatex #  Available engines are pdflatex [default], xelatex, and lualatex; The main reasons you may want to use xelatex or lualatex are: (1) They support Unicode better; (2) It is easier to make use of system fonts.
+    includes:
+      in_header: ../beamer_header.tex
+      #after_body: table-of-contents.txt 
+---
+
+<!-- CAN THIS BE MOVED TO SOME KIND OF HEADER FILE? --> 
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
+#knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
+  #comment = "#>" makes it so results from a code chunk start with "#>"; default is "##"
+```
+
+# Introduction
+
+### Libraries we will use today
+
+```{r}
+library(tidyverse)
+```
+
+### Data we will use today
+
+Data on off-campus recruiting events by public universities
+
+- Object \hlgc{df\_event}
+    - One observation per university, recruiting event
+- Object \hlgc{df\_event}
+    - One observation per high school (visited and non-visited)
+
+```{r}
+rm(list = ls()) # remove all objects
+
+#load dataset with one obs per recruiting event
+load("../../data/recruiting/recruit_event_somevars.Rdata")
+
+#load dataset with one obs per high school
+load("../../data/recruiting/recruit_school_somevars.Rdata")
+
+load("../../data/prospect_list/western_washington_college_board_list.RData")
+
+```
+
+### Processing across observations, introduction
+
+Creation of analysis datasets often requires calculations across obs
+
+Examples:
+
+- You have a dataset with one observation per student-term and want to create a variable of credits attempted per term
+- You have a dataset with one observation per student-term and want to create a variable of GPA for the semester or cumulative GPA for all semesters
+- Number of off-campus recruiting events university makes to each state
+- Average household income at visited versus non-visited high schools
+
+### Processing across variables vs. processing across observations
+
+Visits by UC Berkely to public high schools
+```{r, echo=FALSE}
+#df_event %>% count(event_type)
+df_event %>% filter(event_type == "public hs", univ_id == 110635) %>% 
+  mutate(pct_fr_lunch = fr_lunch/total_students_pub) %>% 
+  rename(tot_stu_pub = total_students_pub, state= event_state) %>%
+  select(school_id, state, tot_stu_pub, fr_lunch, pct_fr_lunch, med_inc) %>%
+  slice(1:5)
+```
+
+
+- So far, we have focused on ``processing across variables''
+    - Performing calculations across columns (i.e., vars), typically within a row (i.e., observation)
+    - Example: percent free-reduced lunch
+- Processing across obs (focus of today's lecture)
+    - Performing calculations across rows (i.e., obs), often within a column (i.e., variable)
+    - Example: Average household income of visited high schools, by state
+    
+# `group_by()` and `summarise()`
+
+### group_by()
+
+\hlgc{group\_by()} converts a data frame object into groups. After grouping, functions performed on  data frame are performed "by group"
+
+- part of __dplyr__ package within __tidyverse__; not part of __Base R__
+- works best with pipes \hlgc{\%>\%} and \hlgc{summarise()} function [described below]
+
+Basic syntax:
+
+- \hlgc{group\_by(object, vars to group by separated by commas)}
+
+\medskip Typically, "group_by" variables are character, factor, or integer variables
+
+\medskip Possible "group by" variables in \hlgc{df\_event} data
+
+- university
+- event type (e.g., public HS, private HS, hotel)
+- state
+
+### `group_by()`
+
+Group \hlgc{df\_event} data by university, event type, and event state
+
+- group_by doesn't do much by itself; just prints data
+```{r, results="hide"}
+group_by(df_event, univ_id, event_type, event_state)
+
+df_event %>% group_by(univ_id, event_type, event_state) # using pipes
+```
+
+Grouping is not retained unless you __assign__ it
+```{r}
+class(df_event)
+df_event_grp <- df_event %>% group_by(univ_id, event_type, event_state) # using pipes
+class(df_event_grp)
+```
+Use \hlgc{ungroup(object)} to un-group grouped data
+```{r}
+df_event_grp <- ungroup(df_event_grp)
+class(df_event_grp)
+rm(df_event_grp)
+```
+
+
+### `summarise()`
+
+\hlgc{summarise()} function performs calculations across rows of a data frame and then collapses the data frame to a single row
+
+
+Basic syntax [see documentation]:
+
+- \hlgc{summarise(object, summarise functions separated by commas)}
+- summarise functions include: `n()`, `mean()`, `first()`, etc.
+
+Simple example (output omitted)
+```{r, results="hide"}
+summarise(df_event, num_events=n())
+df_event %>% summarise(num_events=n()) # using pipes
+```
+Object created by summarise() not retained unless you __assign__ it
+```{r}
+event_temp <- df_event %>% summarise(num_events=n(), 
+  mean_inc=mean(med_inc, na.rm = TRUE))
+
+event_temp
+rm(event_temp)
+```
+I'll explain `na.rm = TRUE` later
+
+### Combining `summarise()` and `group_by`
+
+`summarise()` on ungrouped vs. grouped data:
+
+- By itself, \hlgc{summarise()} performs calculations across all rows of data frame then collapses the data frame to a single row
+- When data frame is grouped, \hlgc{summarise()} performs calculations across rows within a group and then collapses to a single row for each group
+
+Number of recruiting events for each university
+```{r, results="hide"}
+df_event %>% group_by(instnm) %>% summarise(num_events=n())
+```
+
+Number of recruiting events by event_type for each university
+```{r, results="hide"}
+df_event %>% group_by(instnm, event_type) %>% summarise(num_events=n())
+```
+Number of events and avg. pct White by event_type for each university
+```{r, results="hide"}
+df_event %>% group_by(instnm, event_type) %>% 
+  summarise(num_events=n(),
+    mean_pct_white=mean(pct_white_zip, na.rm = TRUE)
+  )
+```
+
+### Combining `summarise()` and `group_by`
+
+Recruiting events by UC Berkeley
+```{r, results="hide"}
+df_event %>% filter(univ_id == 110635) %>% 
+  group_by(event_type) %>% summarise(num_events=n())
+```
+
+Let's create a dataset of recruiting events at UC Berkeley
+```{r, results="hide", include="FALSE"}
+attributes(df_event$event_type)
+#pubhs_berk <- df_event %>% filter(univ_id == 110635, event_type == "public hs")
+#rm(pubhs_berk)
+event_berk <- df_event %>% filter(univ_id == 110635)
+
+event_berk %>% count(event_type)
+event_berk %>% count(school_type_pub)
+
+```
+
+The 0/1 variable `event_inst` equals 1 if event is in same state as the university
+```{r}
+#event_berk %>% group_by(event_type, event_inst) %>% select(pid, event_date, event_type, event_state, event_inst)
+event_berk %>% arrange(event_date) %>% select(pid, event_date, event_type, event_state, event_inst) %>% slice(1:8)
+
+```
+### `summarise()`: Counts
+
+The count function `n()` takes no arguments and returns the size of the current group
+```{r, results="hide"}
+event_berk %>% group_by(event_type, event_inst) %>% 
+  summarise(num_events=n())
+```
+
+Object not retained unless we __assign__
+```{r, results="hide"}
+berk_temp <- event_berk %>% group_by(event_type, event_inst) %>% 
+  summarise(num_events=n())
+berk_temp
+typeof(berk_temp)
+str(berk_temp)
+```
+Because counts are so important, `dplyr` package includes separate `count()` function that can be called outside `summarise()` function
+```{r, results="hide"}
+event_berk %>% group_by(event_type, event_inst) %>% count()
+event_berk %>% group_by(event_type) %>% count(event_inst) # same
+
+berk_temp2 <- event_berk %>% group_by(event_type, event_inst) %>% count()
+berk_temp == berk_temp2
+rm(berk_temp,berk_temp2)
+```
+
+### `summarise()`: count with logical vectors and `sum()`
+
+Logical vectors have values `TRUE` and `FALSE`. 
+
+- When used with numeric functions, `TRUE` converted to 1 and `FALSE` to 0.
+
+`sum()` is a numeric function that returns the sum of values
+```{r}
+sum(c(5,10))
+sum(c(TRUE,TRUE,FALSE,FALSE))
+```
+`is.na()` returns `TRUE` if value is `NA` and otherwise returns `FALSE`
+```{r}
+is.na(c(5,NA,4,NA))
+```
+Application: How many missing/non-missing obs in variable [__very important__]
+```{r, results="hide"}
+event_berk %>% group_by(event_type) %>% 
+  summarise(
+    n_events = n(),
+    n_miss_inc = sum(is.na(med_inc)),
+    n_nonmiss_inc = sum(!is.na(med_inc)),
+    n_nonmiss_fr_lunch = sum(!is.na(fr_lunch))
+  )
+```
+### `summarise()`: means 
+
+The `mean()` function within `summarise()` calculates means, separately for each group
+
+```{r}
+event_berk %>% group_by(event_inst, event_type) %>% summarise(
+  n_events=n(),
+  mean_inc=mean(med_inc, na.rm = TRUE),
+  mean_pct_white=mean(pct_white_zip, na.rm = TRUE)) %>% head(5)
+```
+
+I'll talk about `na.rm = TRUE` on next slide
+
+### `summarise()`: means and `NA` values
+
+The default behavior of "aggregation functions" (e.g., `summarise()`) is if the __input__ has any missing value (`NA`) than the output will be missing.
+
+`na.rm` (in words "remove `NA`") is an option available in many functions.
+
+- `na.rm = FALSE` [the default for `mean()`]
+    - Do not remove missing values from input before calculating
+    - Therefore, missing values in input will cause output to be missing
+- `na.rm = TRUE`
+    - Remove missing values from input before calculating
+    - Therefore, missing values in input will not cause output to be missing
+
+```{r, results="hide"}
+#na.rm = FALSE; the default setting
+event_berk %>% group_by(event_inst, event_type) %>% summarise(
+  n_events=n(),
+  n_miss_inc = sum(is.na(med_inc)),
+  mean_inc=mean(med_inc, na.rm = FALSE),
+  n_miss_frlunch = sum(is.na(fr_lunch)),
+  mean_fr_lunch=mean(fr_lunch, na.rm = FALSE))
+#na.rm = TRUE
+event_berk %>% group_by(event_inst, event_type) %>% summarise(
+  n_events=n(),
+  n_miss_inc = sum(is.na(med_inc)),
+  mean_inc=mean(med_inc, na.rm = TRUE),
+  n_miss_frlunch = sum(is.na(fr_lunch)),
+  mean_fr_lunch=mean(fr_lunch, na.rm = TRUE))
+```
+
+### Student exercise
+
+### `summarise()`: counts with logical vectors, part II
+
+Application: count number in a group that satisfy some condition
+
+Task: For each combination of `event_type` and `event_inst`, how many visits to communities that are majority Latinx or Black?
+
+```{r}
+#event_berk %>% select(pct_black_zip, pct_hispanic_zip)
+event_berk %>% group_by (event_inst, event_type) %>% summarise(
+  n_events=n(), # number of events by group
+  n_nonmiss_latbl = sum(!is.na(pct_black_zip) & !is.na(pct_hispanic_zip)), # w/ nonmissings values for pct_black and pct latinx
+  n_majority_latbl= sum(pct_black_zip+ pct_hispanic_zip>50, na.rm = TRUE)) # number of events at majority black/latino communities
+```
+### `summarise()`: proportions with logical values
+
+Application: count proportion of obs in group that satisfy some condition
+
+- Synatx: `group_by(vars) %>% summarise(prop = mean(TRUE/FALSE conditon))`
+
+Task: 
+
+- separately for in-state/out-of-state, what proportion of visits to public high schools are to communities with median income greater than $100,000?
+
+Steps:
+
+1. Filter public HS visits
+2. group by in-state vs. out-of-state
+3. Create measure
+```{r}
+event_berk %>% filter(event_type == "public hs") %>% # filter public hs visits
+  group_by (event_inst) %>% # group by in-state vs. out-of-state
+  summarise(
+    n_events=n(), # number of events by group
+    n_nonmiss_inc = sum(!is.na(med_inc)), # w/ nonmissings values median inc,
+    p_incgt100k = mean(med_inc>100000, na.rm=TRUE)) # proportion visits to $100K+ commmunities 
+```
+What if we forgot to put `na.rm=TRUE`?
+```{r, include=FALSE}
+event_berk %>% filter(event_type == "public hs") %>% # filter public hs visits
+  group_by (event_inst) %>% # group by in-state vs. out-of-state
+  summarise(
+    n_events=n(), # number of events by group
+    n_nonmiss_inc = sum(!is.na(med_inc)), # w/ nonmissings values median inc,
+    p_incgt100k = mean(med_inc>100000)) # proportion visits to $100K+ commmunities 
+```
+
+
+### Student exercise
+
+### `summarise()`: Other functions
+
+Common functions to use with `summarise`:
+
+| Function | Description |
+|----------|-------------|
+| `n`  |    count   |
+| `n_distinct`  |   count unique values    |
+| `mean`  | mean      |
+| `median`  |   median    |
+| `max` | largest value |
+| `min` | smallest value |
+| `sd`  | standard deviation |
+| `sum`  |  sum of values    |
+| `first` | first value |
+| `last` | last value |
+| `nth`  |  nth value     |
+| `any`  |  condition true for at least one value? |
+
+*Note: These functions can also be used on their own or with `mutate()`*
+
+### `summarise()`: Other functions
+
+Maximum value in a group
+```{r}
+max(c(10,50,8))
+```
+Task: For each combination of in-state/out-of-state and event type, what is the maximum value of `med_inc`?
+
+```{r}
+event_berk %>% group_by(event_type, event_inst) %>% 
+  summarise(max_inc = max(med_inc))
+```
+What did we do wrong here?
+
+### `summarise()`: Other functions
+
+Isolate first/last/nth observation in a group
+```{r, results="hide"}
+x <- c(10,15,20,25,30)
+first(x)
+last(x)
+nth(x,1)
+nth(x,3)
+nth(x,10)
+```
+Task: after sorting `event_berk` by [`arrange()`] by `event_type` and `event_datetime_start`, what is the value of `event_date` for:
+
+- first event for each event type?
+- the last eventfor each event type?
+- the 10th event for each event type?
+
+```{r, results="hide"}
+event_berk %>% arrange(event_type, event_datetime_start) %>%
+  group_by(event_type) %>%
+  summarise(
+    n_events = n(),
+    date_first= first(event_date),
+    date_last= last(event_date),
+    date_50th= nth(event_date, 50)
+  )
+```
+
+
+### Student exercise
+
+something that involves whether visits adhered to a certain pattern? e.g., visited org of type 1 and then org of type 2 in succession?
+
+### Attach aggregate measures to your data frame
+
+We can attach aggregate measures to a data frame by using group_by without summarise()
+
+Example task:
+
+- Using `event_berk` data frame, create (1) a measure of average income across all events and (2) a measure of average income for each event type
+
+Create measure of average income across all events
+```{r, results="hide"}
+event_berk_temp <- event_berk %>% 
+  arrange(event_date) %>% # sort by event_date (optional)
+  select(event_date, event_type,med_inc) %>% # select vars to be retained (optioanl) 
+  mutate(avg_inc = mean(med_inc, na.rm=TRUE)) # create avg. inc measure
+
+dim(event_berk_temp)
+event_berk_temp %>% head(5)
+```
+Create measure of average income by event type
+```{r, results="hide"}
+event_berk_temp <- event_berk_temp %>% 
+  group_by(event_type) %>% # grouping by event type
+  mutate(avg_inc_type = mean(med_inc, na.rm=TRUE)) # create avg. inc measure
+  
+event_berk_temp %>% head(5)
+```
+
+
+### Attach aggregate measures to your data frame
+
+Task: Create a measure that identifies whether `med_inc` associated with the event is higher/lower than average income for all events of that type 
+
+Steps:
+
+1. Create measure of average income for each event type [already done]
+1. Create measure that compares income to average income for event type
+
+```{r, results="hide"}
+# average income at recruiting events across all universities
+event_berk_tempv2 <- event_berk_temp %>% 
+  mutate(gt_avg_inc_type = med_inc > avg_inc_type) %>% 
+  select(-(avg_inc)) # drop avg_inc (optional)
+event_berk_tempv2 # note how med_ic = NA are treated
+```
+
+create integer indicator rather than logical
+```{r}
+event_berk_tempv2 <- event_berk_tempv2 %>% 
+  mutate(gt_avg_inc_type = as.integer(med_inc > avg_inc_type)) 
+event_berk_tempv2  %>% head(4)
+```
+
+### Student exercise
+
+Task: is `pct_white_zip` at a particular event higher or lower than the average pct_white_zip for that `event_type`?
+
+- Note: all events attached to a particular zip_code
+- `pct_white_zip`: pct of people in that zip_code who identify as white
+
+
+Steps in task:
+
+- Create measure of average pct white for each event_type
+- Compare whether pct_white_zup is higher or lower than this average
+
+
+

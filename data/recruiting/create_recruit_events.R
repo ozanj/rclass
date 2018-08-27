@@ -25,7 +25,25 @@ getwd()
 #setwd("/Users/Karina/Dropbox/recruiting-m1/analysis/data")
 
 #load in csv
-all<-read.csv("data/recruiting/events_data.csv", na.strings = "")
+#all<-read.csv("data/recruiting/events_data.csv", na.strings = "")
+all <-read.csv("data/recruiting/events_data.csv", 
+  na.strings = "",
+  colClasses=c(school_id="character",
+    determined_zip="character",
+    event_date="Date",
+    event_datetime_start="POSIXct",
+    event_datetime_end="POSIXct",
+    event_address="character",
+    event_name="character",
+    event_location_name="character",
+    event_state="character",
+    event_city="character"
+  )
+)
+#    g09offered="factor"
+str(all)
+
+
 
 #add univ names
 all$instnm[all$univ_id==196097]<-"Stony Brook" #checking
@@ -85,18 +103,22 @@ count(all$univ_id==all$ipeds_id) #none currently on-campus
 #merge in level of urbanicity
 
 #setwd("/Users/Karina/Dropbox/acs/data")
+getwd()
+
+zip <-read.csv("../../Dropbox/acs_new/data/urbantozip.csv", colClasses=c('numeric', 'factor', 'factor'))
+
 #zip<-read.csv("urbantozip.csv", colClasses=c('numeric', 'factor', 'factor'))
 
 
 #some zips belong to more than one area, keep area with largest % of zip population
-#zip <- zip[order(zip$ZCTA5, -abs(zip$UAPOPPCT) ), ] #sort by id and reverse of abs(value) of pop
-#zip<- zip[ !duplicated(zip$ZCTA5), ]              # take the first row within each id
+zip <- zip[order(zip$ZCTA5, -abs(zip$UAPOPPCT) ), ] #sort by id and reverse of abs(value) of pop
+zip<- zip[ !duplicated(zip$ZCTA5), ]              # take the first row within each id
 
-#names(all)[names(all) == 'determined_zip'] <- 'zip'
-#names(zip)[names(zip) == 'ZCTA5'] <- 'zip'
+names(all)[names(all) == 'determined_zip'] <- 'zip'
+names(zip)[names(zip) == 'ZCTA5'] <- 'zip'
 
-#df <- merge(x = all, y = zip[ , c("UANAME", "zip")], by="zip", all.x=TRUE)
-df <- all
+df <- merge(x = all, y = zip[ , c("UANAME", "zip")], by="zip", all.x=TRUE)
+#df <- all
 
 ######## DIMENSIONS BY VISITS ##########
 
@@ -120,6 +142,12 @@ df$eventtype[df$sector=="Public, 2-year"]<-"pub 2yr cc"
 df$eventtype[df$sector=="Public, 4-year or above"]<-"pub 4yr univ"
 df$eventtype[df$sector=="Private not-for-profit, 4-year or above"]<-"PNP 4yr univ"
 df$eventtype[is.na(df$eventtype) & !is.na(df$sector)]<-"other college/univ"
+
+
+df$eventtype <- factor(df$eventtype) # convert to factor variable
+str(df$eventtype)
+
+df %>% dplyr::count(eventtype)
 
 count(df$eventtype)
 counts<-table(df$eventtype, df$instnm)
@@ -187,95 +215,35 @@ for (i in unique(obs$Var3)) {
 df <- as.tibble(df)
 attributes(df)
 save(df, file = "data/recruiting/recruit_event_allvars.RData")
-#rm(list = ls()) # remove all objects
+rm(list = ls()) # remove all objects
 
 load("data/recruiting/recruit_event_allvars.Rdata")
 df <- as.tibble(df)
 
-#Create version of dataset that has selected variables
-names(df)
-str(df)
+#Modify order/name of factor associated with event_type
+df %>% count(eventtype)
 
-nrow(df)
-table(df$g12offered)
+df <- df %>% mutate(event_type = recode_factor(as.integer(eventtype), 
+  `7` = "public hs", `4` = "private hs", `5` = "2yr college", `2` = "4yr college", `3` = "4yr college", `6` = "4yr college", `1` = "other"))
+
+#Create version of dataset that has selected variables
 
 
 table(df$g12offered, useNA="ifany")
 
 table(df$school_type_pri, useNA="ifany")
 
+select(df, instnm, univ_id, instst, pid, event_date, eventtype, zip, school_id, ipeds_id, event_state, event_inst, avgmedian_inc_2564,pop_total,pct_white_zip,pct_black_zip,pct_asian_zip,pct_hispanic_zip,pct_amerindian_zip,pct_nativehawaii_zip,pct_tworaces_zip,pct_otherrace_zip,free_reduced_lunch,titlei_status_pub,total_12)
+#avgmedian_inc_2564
+df_event <- select(df, instnm, univ_id, instst, pid, event_date, event_type, zip, school_id, ipeds_id, event_state, event_inst, avgmedian_inc_2564,pop_total,pct_white_zip,pct_black_zip,pct_asian_zip,pct_hispanic_zip,pct_amerindian_zip,pct_nativehawaii_zip,pct_tworaces_zip,pct_otherrace_zip,free_reduced_lunch,titlei_status_pub,total_12,school_type_pri,school_type_pub,g12offered,g12,total_students_pub,total_students_pri,event_name,event_location_name, event_datetime_start)
 
-select(df, instnm, univ_id, instst, pid, event_date, eventtype, determined_zip, school_id, ipeds_id, event_state, event_inst, avgmedian_inc_2564,pop_total,pct_white_zip,pct_black_zip,pct_asian_zip,pct_hispanic_zip,pct_amerindian_zip,pct_nativehawaii_zip,pct_tworaces_zip,pct_otherrace_zip,free_reduced_lunch,titlei_status_pub,total_12)
-
-df_event <- select(df, instnm, univ_id, instst, pid, event_date, eventtype, determined_zip, school_id, ipeds_id, event_state, event_inst, avgmedian_inc_2564,pop_total,pct_white_zip,pct_black_zip,pct_asian_zip,pct_hispanic_zip,pct_amerindian_zip,pct_nativehawaii_zip,pct_tworaces_zip,pct_otherrace_zip,free_reduced_lunch,titlei_status_pub,total_12,school_type_pri,school_type_pub,g12offered,g12)
-attributes(df_event)
 
 #shorten variable names
 df_event <- dplyr::rename(df_event, med_inc = avgmedian_inc_2564, fr_lunch = free_reduced_lunch)
-names(df_event)
+attributes(df_event$event_type)
+
 
 save(df_event, file = "data/recruiting/recruit_event_somevars.RData")
-rm(list = ls()) # remove all objects
+#rm(list = ls()) # remove all objects
 load("data/recruiting/recruit_event_somevars.Rdata")
 names(df_event)
-########
-######## CREATE CLASS DATASET FOR DATA WITH ONE OBSERVATION PER HIGH SCHOOL
-########
-
-rm(list = ls()) # remove all objects
-
-#use all school data
-#setwd("/Users/Karina/Dropbox/recruiting-m1/analysis/data")
-all<-read.csv("data/recruiting/data_hs.csv", na.strings = "")
-names(all)
-all <- as.tibble(all)
-
-
-#set INST state
-all$inst_196097<-"NY"
-all$inst_186380<-"NJ"
-all$inst_215293<-"PA"
-all$inst_201885<-"OH"
-all$inst_181464<-"NE"
-all$inst_139959<-"GA"
-all$inst_218663<-"SC"
-all$inst_100751<-"AL"
-all$inst_199193<-"NC"
-all$inst_110635<-"CA"
-all$inst_110653<-"CA"
-all$inst_126614<-"CO"
-all$inst_155317<-"KS"
-all$inst_106397<-"AR"
-all$inst_149222<-"IL"
-all$inst_166629<-"MA"
-
-names(all)
-table(all$school_type)
-
-#"110635"="UC Berkeley",
-#"126614"="CU Boulder" ,
-#"100751"="Bama",
-
-table(all$visits_by_110635) # berkeley
-table(all$visits_by_126614) # Boulder
-table(all$visits_by_100751) # Bama
-
-#these vars are just always equal to the state of the university
-table(all$inst_110635) # berkeley
-table(all$inst_126614) # Boulder
-table(all$inst_100751) # Bama
-
-names(all)
-
-select(all,state_code,school_type,ncessch,name,address,city,zip_code,pct_white,pct_black,pct_hispanic,pct_asian,pct_amerindian,pct_other,num_fr_lunch,total_students,num_took_math,num_prof_math,num_took_rla,num_prof_rla,avgmedian_inc_2564,visits_by_110635,visits_by_126614,visits_by_100751,inst_110635,inst_126614,inst_100751)
-
-df_school <- select(all,state_code,school_type,ncessch,name,address,city,zip_code,pct_white,pct_black,pct_hispanic,pct_asian,pct_amerindian,pct_other,num_fr_lunch,total_students,num_took_math,num_prof_math,num_took_rla,num_prof_rla,avgmedian_inc_2564,visits_by_110635,visits_by_126614,visits_by_100751,inst_110635,inst_126614,inst_100751)
-
-names(df_school)
-
-attributes(df_school)
-
-save(df_school, file = "data/recruiting/recruit_school_somevars.RData")
-rm(list = ls()) # remove all objects
-load("data/recruiting/recruit_school_somevars.Rdata")
-

@@ -269,7 +269,7 @@ What Patricia says:
 ### Big topics
 
   - Processing across rows with summarize() and group by
-  - Exploratory data analysis for data quality
+
 
 ### Learning objectives
 
@@ -277,17 +277,22 @@ What Patricia says:
 
 1. Processing across obs
     1. introduce group_by() and summarize()
-    1. How missing values handled
+        - Introduce each command on its own and then together
+        - ? INTRODUCE SUMMARISE() OR GROUP_BY() FIRST?
+        - Common functions to use with summarize (e.g., n _, mean, median, sum, nth)
+    1. How missing values handled by summarize
+be a missing value. Fortunately, all aggregation functions have an na.rm argument which removes the missing values prior to computation:"
     1. Means, counts, and sum
+        - counts: n(), which takes no arguments, and returns the size of the current group. 
+            - talk about n() vs. count() function
+          - Counts and proportions of logical values: sum(x > 10), mean(y == 0). When used with numeric functions, TRUE is converted to 1 and FALSE to 0. This makes sum() and mean() very useful: sum(x) gives the number of TRUEs in x, and mean(x) gives the proportion.            
     1. Other summary functions [5.6.4]
         - measures of position e.g., first(x) x[1]
+            - "Measures of position: first(x), nth(x, 2), last(x). These work similarly to x[1], x[2], and x[length(x)] but let you set a default value if that position does not exist (i.e. you’re trying to get the 3rd element from a group that only has two elements). For example, we can find the first and last departure for each day:"
     1. combining processing across obs with filtering
-    1. grouping by multiple variables
+    1. grouping by multiple variables [I haven't re-read this section of wickham yet]
     1. appears that you can skip 5.7 grouped/mutates and filters
     
-    
-    
-1. EDA for data quality
 
 ### Reading [after lecture]
 
@@ -297,13 +302,126 @@ What Patricia says:
 
 ### Data sources
 
+- decision
+    - start with df_event
+    - then do some stuff with df_school
+- df_event [focus: how characteristics of visited places [and number of visits] differ by group]
+    - one obs per university*recruiting_event
+    - potential group_by vars
+        - university
+        - event type
+        - state
+        - zip-code
+        - in-state vs. out-of-state visits
+    - potential things to calculate using summarize() and group_by()
+        - number of visits by event_type
+        - number of visits in each by_group [in_stae vs. out-of-state, public vs. private]
+        - mean income for in-state vs. out-of-state visits
+- df_school [focus: how characteristics of visited places differ from non-visited places]
+    - one obs per high school [both visted and non-visited]
+    - potential group_by vars
+        - visited vs. non-visited schools
+        - in-state vs. out-of-state
+        - public vs. private
+        - state
+    - potential things to calculate using summarize() and group_by()
+        - mean enrollment at visited schools vs. non-visited [and state]
+        - mean income at visited vs. non-visited 
+        - number of visited, number of non-visited
+        - mean race at visited vs. non-visited schools
+        - academic achievement at visited vs. non-visited
+        
+- wwlist [not that many things to calculate besides counts]
+    - one obs per prospect
+    - potential group_by vars
+        - state
+        - high school
+        - zip code
+        - gender
+        - race
+    - potential things to calculate using summarize() and group_by()
+        - number of prospects purchased by:
+            - state, high school, zip-code, country
+
 ### Problem set ideas
 
 ### What covered in Stata data mgt course
 
+- Lecture 8: processing across observations, part 1
+    - processing across observations using egen command
+        - egen to count number of obs in a group; to add all obs in a group for a variable
+        - going through some of the sub-commands for egen; count(var) total(var) mean(var)
+        - combine processing across obs w/ bysort and egen
+    - processing across obs by combining bysort with  _variables
+        - introduce _n _N
+        - introduce sum() function
+    - collapsing obs using _variables
+        - bysort id: keep if n== N
+        - Collapsing obs using variables, then merging
+- Lecture 9: processing across observations, part 2 [lots of student exercises]
+    - Processing across obs using _variables
+        - table of _variables. column 1= _variable (e.g., _n, _n-1, 1, 2, _N); column 2=meaning of _var
+        - calculations within subgroups using _vars
+        - various student exercises
+    - Filling down obs using _variables
+        - filling down using _vars and doing same thing using egen
+        - filling down to create imputation vars
+    - time series operators for lag and lead obs
+
 ### What covered in Christenson class
 
-## Class X. data quality/cleaning data
+- lecture 5 [manipulating data frames, 1]
+    - transform data
+        - mutate to create new variables [using the pipe]
+        - group_by 
+            - identifies potential groups in stop-and-frisk data
+            - group_by example: is an individual above or below the average age in their borough
+        - summarize (aggregate and collapse)
+    - presenting summary statistics
+        - creating tables
+            - using summarize() function
+        - plot and aggregate data
+
+## Class X. Exploratory data analysis for data quality; survey data
+
+### Big topics
+
+  - EDA for data quality [focus on what commands to use]
+  - Rules for investigating data, creating variables, checking variables
+      - How to be a good RA/researcher  
+  - Dealing with skip patterns in survey data
+  - Brain-storming how to attack create_gpa assignment
+
+### Learning objectives
+
+
+### Order of lecture
+
+  - EDA for data quality [focus on what commands to use] [from skinner EDA1]
+      - Investigate objects
+      - investigate variable labels/value labels
+      - summary stats for continuous vars
+      - summary stats for vars w/ discrete values
+      - two-way table when both vars have discrete values
+  
+  
+### Data sources for lecture
+
+- one of the recruiting datasets for basics of EDA for data quality analysis?
+- maybe use NLS data for everything?
+- NLS dataset for
+    - skip patterns
+    - brain_storming how to tackle problem set
+
+### Problem set ideas
+
+- create GPA from NLS data
+
+### What covered in Stata data mgt course
+
+### Reading [after lecture]
+
+
 
 ## Class X. tidying/reshaping data
 

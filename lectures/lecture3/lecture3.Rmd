@@ -470,12 +470,20 @@ __Next week__
 
 - we'll combine \hlgc{mutate()} with \hlgc{summarize()} and \hlgc{group\_by()} to create variables based on calculations across rows
 
+### Potential stuff to add to mutate lecture
+
+- take some time to go through syntax of help file?
+- go through using recode() function with mutate?
+
 ### Introduce \hlgc{mutate()} function
 
 \hlgc{mutate()} creates new columns (variblaes) that are functions of existing columns
 
-- \hlgc{mutate() is the __tidyverse__ approach to creating variables, not the __Base R__ approach
-- \hlgc{mutate() works best with pipes \hlgc{\%>\%}
+Description of \hlgc{mutate()}
+
+- Every row of data is retained
+- Is the __tidyverse__ approach to creating variables, not the __Base R__ approach
+- Works best with pipes \hlgc{\%>\%}
 
 We'll create variables from data frame \hlgc{df\_school} which has one observation for each high school
 
