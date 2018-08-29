@@ -33,6 +33,58 @@ output:
 1. Complete intro to R tutorials
     - which ones
 
+# Alternative approaches
+
+- current
+    - class 1: objects
+    - class 2: investigating data patterns
+        - investigating objects
+        - printing data
+        - selecting variables
+        - sorting data
+        - missing values
+        - operators
+        - filtering data
+        - descriptive statistics [cut? move to later week?]
+    - class 3:
+        - review data structures
+        - attributes and augmented vectors
+        - factors
+        - labeling varoiables
+        - pipes
+        - creating variables
+        - creating variables using mutate
+    - class 4: 
+        - group_by
+        - summarise()
+        - combining group_by and summarise()
+            - counts
+            - means
+            - logical vectors
+            - na.rm
+        - attach aggregate measures to data frame
+    - class 5: 
+        - EDA for data quality
+        - preparing for creation of GPA 
+- alternative
+    - class 1: objects
+    - class 2: 
+        - pipes
+        - selecting variables
+        - sorting data
+        - filtering data
+        - creating variables
+    - class 3
+        - group_by and summarise()
+    - class 4: factors and investigating data patterns/EDA?4
+        - data structures and factors
+          - review data structures
+          - attributes and augmented vectors
+          - factors
+          - labeling variables
+        - EDA for data quality
+    - class 5: review of core stuff?
+
 # Topics by week
 
 ## Class 1. Introduction and data types
@@ -188,8 +240,10 @@ What Patricia says:
 
 - Pipes [DONE]
 * Creating variables [DONE]
-* Factors [DONE]
-* labeling variables [NEED TO ADD VARIABLE LABELS]
+* class=Factors [DONE]
+* class=labelled [or put this in EDA section]
+    - labelling variables
+    - labelling values
 
 
 ### Learning objectives
@@ -382,15 +436,47 @@ be a missing value. Fortunately, all aggregation functions have an na.rm argumen
             - using summarize() function
         - plot and aggregate data
 
-## Class X. Exploratory data analysis for data quality; survey data
+## Class X. Survey data and Exploratory data analysis [for data quality]
 
 ### Big topics
 
+  - read in survey data from _dta format
+  - explaining labelled package
+  - difference between class=labelled vs. class=factors
   - EDA for data quality [focus on what commands to use]
   - Rules for investigating data, creating variables, checking variables
       - How to be a good RA/researcher  
   - Dealing with skip patterns in survey data
   - Brain-storming how to attack create_gpa assignment
+
+### to do [8/29/2018]
+
+  - make slides for reading in data from other formats/labelled package [wait until you hear back from Crystal?]
+      - slides for labelled package; difference between class=labelled vs. class=factors
+  - Go through steps in EDA for data quality
+      - first, go through all the different checks; 
+      - second, rules for investigating and creating variables
+          - focus on missing values for input variables
+          - do some examples where analysis variable has only one input variable [and you can do simple recode]
+  - skip patterns: 
+      - make slides for rules/explanations
+      - make slides for example
+  - Brain-storming how to attack the create_gpa assignment
+      - you walk them through EDA to investigate data
+      - they brain-storm about how to attack the problem
+  
+
+### to do [8/28/2018]
+
+- create hsls dataset: [use layout file; try to find survey questionnaire for S4]
+    - has variables that are good candidates for skip-patterns
+    - has both quantitative and categorical variables that are good candidates for one-way and two-way stats as discussed from Ben Skinner
+    - make sure you can tabulate between universe indicators for s4 and the s4 ever attend PSE type questions
+- make sure that task to create NLS course-level data can be done
+- make sure you can recode nls variables (crscred=999) using mutate
+- start making lecture
+
+
 
 ### Learning objectives
 

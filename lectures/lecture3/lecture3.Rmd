@@ -470,9 +470,12 @@ __Next week__
 
 - we'll combine \hlgc{mutate()} with \hlgc{summarize()} and \hlgc{group\_by()} to create variables based on calculations across rows
 
-### Potential stuff to add to mutate lecture
+### STUFF TO ADD TO MUTATE
 
-- take some time to go through syntax of help file?
+- take some time to go through syntax of help file
+- ifelse() function
+- recode() function
+- case_when() function
 - go through using recode() function with mutate?
 
 ### Introduce \hlgc{mutate()} function

@@ -1,0 +1,387 @@
+---
+title: Managing and Manipulating Data Using R # potentially push to header
+subtitle:  Lecture 5, Survey data and exploratory data analysis (for data quality)
+author: Ozan Jaquette
+date: 
+fontsize: 8pt
+classoption: dvipsnames  # for colors
+output:
+  beamer_presentation:
+    keep_tex: true
+    toc: true
+    slide_level: 3
+    theme: default # AnnArbor # push to header?
+    #colortheme: "dolphin" # push to header?
+    #fonttheme: "structurebold"
+    highlight: default # Supported styles include "default", "tango", "pygments", "kate", "monochrome", "espresso", "zenburn", and "haddock" (specify null to prevent syntax highlighting); push to header
+    df_print: default #default # tibble # push to header?    
+    latex_engine: xelatex #  Available engines are pdflatex [default], xelatex, and lualatex; The main reasons you may want to use xelatex or lualatex are: (1) They support Unicode better; (2) It is easier to make use of system fonts.
+    includes:
+      in_header: ../beamer_header.tex
+      #after_body: table-of-contents.txt 
+---
+
+<!-- CAN THIS BE MOVED TO SOME KIND OF HEADER FILE? --> 
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
+#knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
+  #comment = "#>" makes it so results from a code chunk start with "#>"; default is "##"
+```
+
+# Introduction
+
+### Libraries we will use today [install if you don't have them]
+
+```{r}
+library(tidyverse)
+library(haven)
+library(labelled)
+```
+
+### Data we will use today
+
+High school longitudinal surveys from National Center for Education Statistics (NCES)
+
+- Follow U.S. students from high school through college, labor market
+
+We will be working with:
+
+- [High School Longitudinal Study of 2009 (HSLS:09)](https://nces.ed.gov/surveys/hsls09/index.asp)
+    - Follows 9th graders from 2009
+    - Data collection waves
+        - Base Year (2009)
+        - First Follow-up (2012)
+        - 2013 Update (2013)
+        - High School Transcripts (2013-2014)
+        - Second Follow-up (2016)    
+- [National Longitudinal Study of 1972 (NLS72)](https://nces.ed.gov/surveys/nls72/)
+    - Follows 12th graders from 1972
+    - Data collection waves
+        - Base Year (1972)
+        - First Follow-up (1973)
+        - Second Follow-up (1974)
+        - Third Follow-up (1976)
+        - Fourth Follow-up (1979)
+        - Postsecondary Transcripts (1984)
+        - Fifth Follow-up (1986)
+ 
+```{r}
+#LOAD DATA
+```
+        
+# `haven` and `labelled` package
+
+### `haven` package
+
+[`haven`](https://haven.tidyverse.org/), which is part of __tidyverse__, "enables R to read and write various data formats" from the following statistical packages: 
+
+- SAS
+- SPSS
+- Stata
+
+When using `haven` to read data, resulting R objects have these characteristics:
+
+- Are __tibbles__, a particular type of data frame we discuss future weeks
+- Transform variables with "value labels" into the `labelled()` class [our focus today]
+    - Helpful description [HERE](https://haven.tidyverse.org/articles/semantics.html)
+- Dates and times converted to R date/time classes
+- Character vectors not converted to factors
+
+### `haven` package
+
+Use `read_dta()` function from `haven` to import Stata dataset into R
+```{r, results="hide"}
+hsls <- read_dta(file="../../data/hsls/hsls_stu_small.dta")
+```
+
+Let's examine the data
+```{r, results="hide"}
+names(hsls)
+names(hsls) <- tolower(names(hsls)) # convert names to lowercase
+str(hsls)
+str(hsls$s3classes)
+```
+
+### `labelled` package
+
+`labelled` package is to work with data imported from SPSS/Stata/SAS using the `haven` package. 
+
+- Specifically, "The purpose of the `labelled` package is to provide functions to manipulate _metadata_ as variable labels, value labels and defined missing values using the `labelled class` and the `label` attribute introduced in `haven` package. [LINK](https://cran.r-project.org/web/packages/labelled/vignettes/intro_labelled.html)
+
+Functions in `labelled` package
+
+- [Full list](https://www.rdocumentation.org/packages/labelled/versions/1.1.0)
+- A couple relevant functions
+    - `val_labels`: get or set variable _value labels_
+    - `var_label`: get or set a _variable label_
+
+```{r, results="hide"}
+hsls %>% select(s3classes) %>% var_label
+hsls %>% select(s3classes) %>% val_labels
+```
+### Understanding `labelled` data
+
+First, let's review core concepts:
+
+__atomic vectors (and lists)__ the underlying data
+
+- data structures: vector or list
+- data type: numeric (integer or double); character; logical
+```{r}
+typeof(hsls$s3classes)
+```
+
+__augmented vectors__ are atomic vectors with __attributes__ attached
+
+__attributes__ are "metadata" attached to an object. Examples
+
+- __names__: names of elements of a vector or list (e.g., variable names)
+- __levels__: display output associated with values of a factor variable
+- __class__: e.g., factor, labelled
+
+```{r, results="hide"}
+attributes(hsls$s3classes)
+```
+__class__ is an object oriented programming concept. The `class` of an object determines which functions can be applied to the object and what those functions do
+
+- e.g., can't apply `sum()` to an object where `class=character`
+
+### Understanding `labelled` data
+
+Let's investigate the attributes of `hsls$s3classes`
+
+```{r, results="hide"}
+typeof(hsls$s3classes)
+class(hsls$s3classes)
+
+str(hsls$s3classes)
+attributes(hsls$s3classes)
+
+#use attr(object_name,"attribute_name") to refer to each attribute
+attr(hsls$s3classes,"label")
+attr(hsls$s3classes,"labels")
+attr(hsls$s3classes,"class")
+attr(hsls$s3classes,"format.stata")
+```
+
+### Understanding `labelled` data
+
+What is `class==labelled`?
+
+- An object class created by the `haven` package for importing variables from SAS/SPSS/Stata that have __value labels__
+- __value labels__ [in Stata] are labels attached to specific values of a variable:
+    - e.g., variable value `1` attached to value label "married", `2`="single", `3`="divorced"
+- Variables in an R data frame with `class==labelled`:
+    - data `type` can be numeric(double) or character
+    - The `value labels` associated with each value:
+        `attr(data_frame_name$variable_name,"labels")`
+    - In `filter()` refer to variable value, not the value label
+    
+Working with `class==labelled` variables
+```{r, results="hide"}
+#show variable label
+hsls %>% select(s3classes,s3clglvl) %>% var_label
+#show value labels
+hsls %>% select(s3classes,s3clglvl) %>% val_labels
+#Frequency table
+hsls %>% select(s3classes) %>% count(s3classes)
+#Frequency table, value labels instead of variable values
+hsls %>% select(s3classes) %>% count(s3classes) %>% as_factor()
+#in filters, refer to variable value, not value label
+hsls %>% select(s3classes) %>% filter(s3classes==-8) %>% count(s3classes)
+```
+
+### Converting `class==labelled` to `class==factor`
+
+The `as_factor()` function from `haven` package converts variables with `class==labelled` to `class==factor`
+
+- Can be used for descriptive statistics
+```{r, results="hide"}
+hsls %>% select(s3classes) %>% count(s3classes) %>% as_factor()
+```
+
+- Can create object with some or all `labelled` vars converted to `factor`
+```{r}
+hsls_f <- as_factor(hsls,only_labelled = TRUE)
+```
+
+Let's examine this object
+```{r, results="hide"}
+glimpse(hsls_f)
+hsls_f %>% select(s3classes,s3clglvl) %>% str()
+typeof(hsls_f$s3classes)
+class(hsls_f$s3classes)
+attributes(hsls_f$s3classes)
+
+hsls_f %>% select(s3classes) %>% var_label()
+hsls_f %>% select(s3classes) %>% val_labels()
+```
+
+### Working with `class==factor` data
+
+Showing values associated with factor levels
+```{r}
+hsls_f %>% select(s3classes) %>% count(s3classes)
+```
+
+In code, refer `level` attribute not variable value
+```{r}
+hsls_f %>% select(s3classes) %>% filter(s3classes=="Yes") %>% count(s3classes)
+```
+
+### Comparing `class==labelled` to `class==factor`
+
+|  | `class==labelled` | `class==factor`
+|---|----------|-------------|
+| data type  |    numeric or character   | integer |
+| name of value label attribute | labels | levels |
+| refer to data using | variable values | levels attribute |
+
+
+# Exploratory data analysis (EDA)
+
+## Tools for EDA
+
+### What is exploratory data analysis (EDA)?
+
+The [Towards Data Science](https://towardsdatascience.com/exploratory-data-analysis-8fc1cb20fd15) website has a nice definition of EDA:
+
+> "Exploratory Data Analysis refers to the critical process of performing initial investigations on data so as to discover patterns,to spot anomalies,to test hypothesis and to check assumptions with the help of summary statistics and graphical representations." 
+
+This course focuses on "data management": 
+
+- investigating and cleaning data for the purpose of creating analysis variables
+- Basically, everything that happens before you conduct analyses
+
+I think about "Exploratory data analysis for data quality"
+
+- Investigating values and patterns of variables from "input data"
+- Identifying and cleaning errors or values that need to be changed
+- Creating analysis variables
+- Checking values of analysis variables agains values of input variables
+
+### Tools of EDA
+
+To do EDA for data quality, must master the following tools:
+
+- \medskip Select, sort, filter, and print
+    - Select and sort particular values of particular variables
+    - Print particular values of particular variables
+- One-way descriptive analyses (i.e,. focus on one variable)
+    - Descriptive analyses for continuous variables
+    - Descriptive analyses for discreet/categorical variables
+- Two-way descriptive analyses (relationship between two variables)
+    - Categorical by categorical
+    - Categorical by continuous
+    - Continuous by continuous
+
+Whenever using any of these tools, __pay close attention to missing values and how they are coded__
+
+I'll focus on the __tidyverse__ approach rather than __base R__
+
+### Tools of EDA: select, sort, filter, and print
+
+Let's create a smaller version of the HSLS:09 dataset
+```{r}
+hsls %>% var_label()
+hsls_small <- hsls %>% select(stu_id,x3univ1,x3sqstat,x4univ1,x4sqstat,s3classes,s3work,s3focus,
+  s3clgft,s3workft,s3clgid,s3clgcntrl,s3clglvl,s3clgsel,s3clgstate,s3proglevel,
+  x4evrappclg,x4evratndclg,x4atndclg16fb,x4ps1sector,x4ps1level,x4ps1ctrl,x4ps1select,
+  x4refsector,x4reflevel,x4refctrl,x4refselect,
+  x2sex,x2race,x2paredu,x2txmtscor,x4x2ses,x4x2sesq5)
+```
+
+### Tools of EDA: select, sort, filter, and print
+
+We've already know `select()`, `arrange()`, `filter()` 
+
+\medskip Select, sort, and print specific vars
+```{r, results="hide"}
+hsls_small %>% arrange(desc(stu_id)) %>% 
+  select(stu_id,x3univ1,x3sqstat,s3classes,s3clglvl)
+
+#print value labels
+hsls_small %>% arrange(desc(stu_id)) %>% 
+  select(stu_id,x3univ1,x3sqstat,s3classes,s3clglvl) %>% as_factor()
+```
+Sometimes helpful to increase the number of observations printed
+```{r, results="hide"}
+class(hsls_small) #it's a tibble
+options(tibble.print_min=50) 
+# execute this in console
+hsls_small %>% arrange(desc(stu_id)) %>% select(stu_id,x3univ1,x3sqstat,s3classes,s3clglvl)
+options(tibble.print_min=10) # set default printing back to 10 lines
+```
+
+### Tools of EDA: One-way descriptives stats, continuous variables
+
+Base R approach
+
+```{r, results="hide"}
+mean(hsls_small$x2txmtscor)
+sd(hsls_small$x2txmtscor)
+
+#Careful: summary stats include value of -8!
+min(hsls_small$x2txmtscor)
+max(hsls_small$x2txmtscor)
+```
+Be careful with `NA` values
+```{r, results="hide"}
+#Create variable replacing -8 with NA
+hsls_small_temp <- hsls_small %>% 
+  mutate(x2txmtscorv2=ifelse(x2txmtscor==-8,NA,x2txmtscor))
+hsls_small_temp %>% filter(is.na(x2txmtscorv2)) %>% count(x2txmtscorv2)
+
+mean(hsls_small_temp$x2txmtscorv2)
+mean(hsls_small_temp$x2txmtscorv2, na.rm=TRUE)
+rm(hsls_small_temp)
+```
+### Tools of EDA: One-way descriptives stats, continuous variables
+
+Tidyverse approach
+
+- uses `summarise_at` which is a variation of `summarise()`
+
+```{r}
+?summarise_at
+hsls_small %>% 
+  summarise_at(
+    .vars = vars(x2txmtscor),
+    .funs = funs(mean, sd, min, max, .args=list(na.rm=TRUE))
+  )
+```
+Generally, `count()` is for discreet/categorical variables but sometimes I find `count()` combined with `filter()` helpful for looking at specific values of continuous variables
+
+```{r, results="hide"}
+  hsls_small %>% filter(x2txmtscor<0) %>% count(x2txmtscor)
+  hsls_small %>% filter(s3clglvl<0) %>% count(s3clglvl)
+
+```
+
+### Student exercise
+
+
+
+## Steps in EDA
+
+### Understand unit of analysis
+
+```{r}
+hsls_small %>% group_by(stu_id) %>% mutate(n_per_id=n()) %>% ungroup() %>% count(n_per_id==1)
+
+hsls_small %>% count(x3sqstat)
+#hsls_small$s3classes==-8 if hsls_small$x3sqstat==8
+hsls_small %>% filter(x3sqstat==8) %>% count(s3classes==-8)
+```
+
+
+## Skip patterns
+
+## Rules for data quality
+
+# Brainstorm next assignment: create GPA from course-level data
+
+
+    
+    
