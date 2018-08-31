@@ -563,6 +563,31 @@ be a missing value. Fortunately, all aggregation functions have an na.rm argumen
 
 - Wickham chapter 12
 
+## Class 8 [or 7?]. relational data
+
+- Maybe put class on relational data before class on acquiring data? Why:
+    - the earlier we put merging in quarter, the more practice students can get merging in subsequent weeks
+    - this way in relational data class can just focus on merging data sources. 
+    - then in acquiring data class, can do problem sets that read in data and towards the end of problem set have questions that ask them to merge data
+    
+### Big topics
+
+### Learning objectives
+
+### Order of lecture
+
+### Data sources for lecture
+
+### Problem set ideas
+
+### What Ben skinner covers
+
+### What covered in Stata data mgt course
+
+### What covered in Christenson course
+
+### Reading [after lecture]
+
 ## Class 7 [or 8?]. acquiring data
 
 ### Big topics
@@ -583,25 +608,6 @@ be a missing value. Fortunately, all aggregation functions have an na.rm argumen
 
 ### Reading [after lecture]
 
-## Class 8 [or 7?]. relational data
-
-### Big topics
-
-### Learning objectives
-
-### Order of lecture
-
-### Data sources for lecture
-
-### Problem set ideas
-
-### What Ben skinner covers
-
-### What covered in Stata data mgt course
-
-### What covered in Christenson course
-
-### Reading [after lecture]
 
 ## Class 9. functions
 
