@@ -526,44 +526,132 @@ be a missing value. Fortunately, all aggregation functions have an na.rm argumen
 ### Reading [after lecture]
 
 
-
-
-
 ## Class 6. tidying/reshaping data
+
 
 ### Big topics
 
-- tibbles [brief]
 - what is tidy data; 
     - key concepts/vocabulary
+    - rules of tidy data
     - how to diagnose tidy data
+    - steps in tidying data
+        - figure out what the variables and observations are
+        - resolve problems (via spreading+gathering; via separating+uniting:
 - spreading and gathering
 - Separating and uniting
 - missing values
+- tibbles [put this last because tidying is main event?]
+    
 
 ### Learning objectives
 
+- understand concepts of unit of analysis, variable, etc.
+- understand rules of tidy data
+- how to diagnose whether data is tidy and what principle the data violates
+
 ### Order of lecture
+
+- what is tidy data and why we want tidy data?
 
 ### Data sources for lecture
 
-- IPEDS data?
+- will have to figure out data sources for each type of untidy data covered by wickham chapter 9
 
 ### Problem set ideas
 
 - IPEDS data task? look at tast from Stata data mgt class
 
-### What Ben skinner covers
-
 ### What covered in Stata data mgt course
 
-### What covered in Christenson course
+- stuff from stata data mgt course that could go here
+    - slide title: Reshaping: Changing the organizational structure of data
+        - Creating analysis datasets often require changing the organizational structure of data
+        - Examples:
+            - You want analysis dataset to have one obs per student, but your data has one obs per student-course
+            - You want analysis dataset to have one obs per institution, but enrollment data has one obs per institution-enrollment level
+        - Two common ways to change organizational structure of data
+            - Perform calcs across obs and then, keep if n== N
+            - We did this in previous lecture
+            - Use the reshape command
+    - what is "long" form data
+        - defines conceptually
+        - shows what it looks like
+    - what is "wide" form data
+        - defines conceptually
+        - shows what it looks like
+    - why reshape?
+        - Statistical methods often require the data to be in specific form 
+            - For example, most longitudinal regression models require data to have one obs per each combination of unit and time-period (e.g., one obs per each organization-year)      - reshaping from long to wide:
+        - important step is to write it out conceptually; what form of data do you have? what form of data do you want?
+        - Step 1: conceptualize current and desired data structure
+            - First, have a conceptual understanding of what you have and what you want
+            - What is the current organizational structure of your (long) data?
+            - Investigate organizational structure in Stata
+            - Draw a simplified picture
+            - What is the desired organizational structure of your (wide) data?
+            - Draw a simplified picture        
+        - i skipped discussion of reshape command
+    - reshaping from wide to long
+    - final comments on reshaping
+        - Reshaping is conceptually challenging; takes practice to feel comfortable
+        - On scrap paper, draw how dataset currently organized and draw how you want the reshaped data to be organized
+        - Often takes trial and error to get reshape to work correctly
+        - Often dataset is not purely "wide" or "long"; important thing is that you know who data are currently structured and how you want it to be structured    
+
+### What is in Wickham book?
+
+ - no need to take detailed notes because basically you are going to work through this chapter
+
+### What Ben skinner covers
+
+- nothing that is not covered in wickham
+
+### What covered in Christenson course [lecture 7, tidy data]
+
+- What is tidy data?
+    - qualities of tidy data [from wickham]
+    - example of tidy data [from wickham]
+    - examples of untidy data [several slides]
+    - note that he mentions "wide" vs. "long" data
+    - why tidy data? [this is good, and do ths slide after you define tidy vs. untidy]
+        1. Consistency & Efficiency: 
+        > If you have a consistent data structure, it’s easier to learn the tools that work with it because they have an underlying uniformity.
+        
+        2. Optimized for R: Both `dplyr` and base R functions work with vectors of values.  
+        In a tidy dataset, each column is the vector of values for a given variable.
+    - real world examples of untidy data [now he uses his own data, performance metrics for LA city departments]
+- how do we create tidy data?
+    - sketching tidy data [does this in two separate slides; one with questions and one with answers]
+        - In our recipe for visualization, we started by sketching the figure we wanted to create.  
+        - I find it useful to do the same for cleaning data. 
+        
+        * What makes `untidy_df` untidy (i.e., what principle(s) is violated)?
+        
+        * What would a tidy version of this data look like? 
+- cleaning data with tidyr: gather and spread
+    - first goes over gather for his real world example
+    - then goes over spread for his real world example
+    - shows the benefit of tidy data: do some task with untidy data; now do this task with tidy data
+    - student task: practice gathering, spreading
+- cleaning data with tidyr: separate and unite
+    - separate: a column sometimes contains two pieces of information
+        - A column sometimes contains two pieces of information. 
+        - The `country_year` column includes both the country and year for a given observation. 
+        - These are separate variables and, as such, deserve their own columns.
+    - unite
+        - You won't often have a use for `unite`, but you can use it combine multiple columns.
+- task: more practice tidying data:
+    * What principle of tidy data does each table violate?
+    * What is the unit of analysis? What are the variables?
+    * Use the functions in `tidyr` to tidy these datasets.
+
 
 ### Reading [after lecture]
 
 - Wickham chapter 12
 
-## Class 8 [or 7?]. relational data
+## Class 7. relational data
 
 - Maybe put class on relational data before class on acquiring data? Why:
     - the earlier we put merging in quarter, the more practice students can get merging in subsequent weeks
@@ -572,23 +660,129 @@ be a missing value. Fortunately, all aggregation functions have an na.rm argumen
     
 ### Big topics
 
+- concepts/terminology of (SQL) merging
+- investigate data structure of both tables prior to merging
+
+- appending data [at the end]
+
 ### Learning objectives
 
 ### Order of lecture
 
+- introduction
+- introduce NLS datasets we are working with
+- keys
+    - primary key
+    - foreign key
+    - "relation"
+    - surrogate key
+      - when a table doesn't have a primary key, create one. called surrogate key
+    - exercise
+        - identify the primary and foreign keys for each dataset
+- mutating joins
+- filtering joins [? cover this?]
+- appending data [at the end]
+
+
 ### Data sources for lecture
+
+- NLS and datasets created on the fly for simple examples
 
 ### Problem set ideas
 
+### Wickham chapter [13: relational data]
+
+- Intro
+    - Mutating joins, which add new variables to one data frame from matching observations in another.
+    - Filtering joins, which filter observations from one data frame based on whether or not they match an observation in the other table.
+    - Set operations, which treat observations as if they were set elements.
+- Keys
+    - primary key
+    - foreign key
+- mutating joins
+    - understanding joins [shows visual representation]
+    - inner join [An inner join matches pairs of observations whenever their keys are equal:]
+    - outer join: 
+        - An inner join keeps observations that appear in both tables. An outer join keeps observations that appear in at least one of the tables. There are three types of outer joins:
+        - three types of outer joins
+            - A left join keeps all observations in x.
+            - A right join keeps all observations in y.
+            - A full join keeps all observations in x and y.
+    - duplicate keys
+        - So far all the diagrams have assumed that the keys are unique. But that’s not always the case. This section explains what happens when the keys are not unique. There are two possibilities:
+        - first, One table has duplicate keys. This is useful when you want to add in additional information as there is typically a one-to-many relationship.
+        - second, Both tables have duplicate keys. This is usually an error because in neither table do the keys uniquely identify an observation
+    - defining the key columns
+        - So far, the pairs of tables have always been joined by a single variable, and that variable has the same name in both tables. That constraint was encoded by by = "key". You can use other values for by to connect the tables in other ways:
+- filtering joins
+    - Filtering joins match observations in the same way as mutating joins, but affect the observations, not the variables. 
+    - There are two types:
+        - semi_join(x, y) keeps all observations in x that have a match in y.
+        - anti_join(x, y) drops all observations in x that have a match in y.
+    - Basic difference between filtering joins and mutating joins
+        - in filtering joins, only the existence of a match is important; it doesn’t matter which observation is matched. This means that filtering joins never duplicate rows like mutating joins do:
+    - anti-joins useful for diagnosing mismatches in mutating joins
+- join problems [IMPORTANT]
+    - 3 things to do to make sure your join goes smoothly
+- set operations [skip]
+
+
 ### What Ben skinner covers
 
-### What covered in Stata data mgt course
+- not really covered
 
-### What covered in Christenson course
+### What covered in Stata data mgt course [lecture 7]
 
+- uniquely identify observations in the dataset
+- Jargon of merging
+    - master
+    - using
+    - key
+    - rule: "key" variable(s) must uniquely identify observations in the "master" dataset or the "using" dataset
+- one-to-one merges
+    - investigate data structure
+    - merge
+- one-to-many merges
+- merges with more than one "key" variable
+- recommendations for merging 
+    - Can do "one-to-one," "one-to-many," or "many-to-one" merge, but Never do a "many-to-many" merge
+    - Investigate data structure of "master" and "using" datasets before merging
+    - Make sure to change directories prior to merging; or specify filepath of "using" dataset within the merge statement
+    - Investigate observations that don't merge
+        - Sort and list specific observations
+- common merging problems
+    - Same variables across datasets
+        - Except for the "key" variable(s), all variable names should be different across datasets
+        - If "master" and "using" datasets have same non-key variables, merged dataset retains values of "master"
+    - Conflicts in "key" variable(s)
+        - "key" variable (e.g., id) should have same name across datasets
+        - "key" variable cannot be numeric in "master" dataset but string in "using," and vice versa
+        - Use tostring, destring, and/or string functions (e.g.,substr) to modify "key" variables
+
+### What covered in Christenson course [lecture 10]
+
+- keys:
+    - primary key
+    - foreign key
+- types of joins
+    - inner
+    - left
+    - full
+    - right
+- what can go wrong
+    - columns w/ same name but different info
+    - observations with missing keys
+    - 
+- how do you know if a merge worked correctly?
+    - does your data have correct dimensions? if you have no missing observations, then an inner_ and left_ join should return the same thing
+    - print out results for a sample of your data
+- Appending 
+    - note: he uses `bind_rows()` function, which is in dplyr package
+
+    
 ### Reading [after lecture]
 
-## Class 7 [or 8?]. acquiring data
+## Class 8. acquiring data
 
 ### Big topics
 
@@ -597,6 +791,8 @@ be a missing value. Fortunately, all aggregation functions have an na.rm argumen
 ### Order of lecture
 
 ### Data sources for lecture
+
+- NLS datasets
 
 ### Problem set ideas
 
