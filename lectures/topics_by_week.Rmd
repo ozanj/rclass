@@ -782,7 +782,7 @@ be a missing value. Fortunately, all aggregation functions have an na.rm argumen
     
 ### Reading [after lecture]
 
-## Class 8. acquiring data
+## Class 8. acquiring data [Patricia writes]
 
 ### Big topics
 
@@ -805,25 +805,174 @@ be a missing value. Fortunately, all aggregation functions have an na.rm argumen
 ### Reading [after lecture]
 
 
-## Class 9. functions
+## Class 9. functions 
 
 ### Big topics
 
-### Learning objectives
+- 
 
 ### Order of lecture
 
+- what are functions
+- when to write a function vs. not
+- basics of how writing functions
+    - how to write a function; how to improve a function
+          - basics of functional arguments (19.5); put stuff from 19.5 function arguments here
+    - non-practical example (e.g., namage)
+    - practical exampless
+- conditional execution [19.4]
+    - how to
+    - practical examples
+- [more advanced] functional arguments, more advanced part of 19.5; [OMIT SOME OF THIS STUFF]
+    - how to [don't need to show everything]
+        - default values
+        - choosing names
+        - checking values
+        - dot-dot-dot
+        - pipeable functions?
+    - practical examples
+    
+
+potential practical examples
+- reading in the admissions data for 2014-15 to 2016-17? [very simple one]
+- functions for the recruiting research data
+    - [as of 9/10/2018] functions available here: C:\Users\ozanj\Dropbox\recruiting-m1\analysis\scripts\recruit_m1.R
+- from skinner: https://www.btskinner.me/rworkshop/modules/programming_one.html 
+    - Moving to a more realistic example, we could make a function that filled in missing values, a common task we’ve had. First, we’ll generate some fake data with missing values.
+
+### Questions:
+
+- ? include stuff about vectors from chapter 20?
+
+### Learning objectives
+
+
 ### Data sources for lecture
 
-### Problem set ideas
+  - recruiting data for functions [from Karina]
+  - IPES for reading in data
+  - IPEDS/HLS/recruiting for fixing missing values
+  - 
 
-### What Ben skinner covers
+### What covered in Wickham chapter
 
-### What covered in Stata data mgt course
+- from chapter 17 [intro to the "programming" unit of the book]
+    - stuff they say about purpose of programming is helpful
+    - also second paragraph about revising; 
+    - overview of chapter 19: functions
+        - Copy-and-paste is a powerful tool, but you should avoid doing it more than twice. Repeating yourself in code is dangerous because it can easily lead to errors and inconsistencies. Instead, in functions, you’ll learn how to write functions which let you extract out repeated code so that it can be easily reused    
+    - overview of chapter 20: vectors
+        - As you start to write more powerful functions, you’ll need a solid grounding in R’s data structures, provided by vectors. You must master the four common atomic vectors, the three important S3 classes built on top of them, and understand the mysteries of the list and data frame
+
+
+chapter 19: functions
+- 19.2 When you should write a function
+    - whenever you've copied and pasted a block of code more than twice
+    - steps in writing a function:
+        1. name
+        2. arguments
+        3. body
+- 19.3 functions are humans and computers
+    - writing functions that humans can understand
+    - names should be verbs generally
+- 19.4 conditional execution
+```{r, eval=FALSE}
+if (condition) {
+  # code executed when condition is TRUE
+} else {
+  # code executed when condition is FALSE
+}
+```
+    - conditions must evaluate to TRUE or FALSE
+    - multiple conditions using this:
+```{r, eval=FALSE}
+if (this) {
+  # do that
+} else if (that) {
+  # do something else
+} else {
+  # 
+}
+```
+    - style guidelines for writing code
+- 19.5 function arguments 
+    - skip dot-dot-dot?
+    - skip lazy evaluation
+- 19.6 return values
+    - explicit return statements [skip? omit?]
+    - writing pipeable functions [skip? omit?]
+        - this is important; but may feel a little too advanced
+- 19.7 environment [skip]
+
+
+### What covered in Stata data mgt course [lecture 12]
+
+lecture 12: creating user-defined programs
+
+- Introduction to user-defined programs
+    - difference between user defined programs and loops; when to use one vs. the other
+    - think of built in functions like sum() as user-defined programs written by creators of Stata; 
+    - you write functions to do something you want to do
+    - basic steps of user-defined programs
+        - define
+        - load
+        - call
+        - Show in Stata do-file, create "Hello" program
+    - Core concept of programs: parameters and arguments
+        - Most programs (not the "hello" program) perform some task based on one or more "inputs" supplied by you in program call statement
+        - What program does depends on values you assign to inputs Parameters
+        - A parameter is a name for an input taken in by the program
+        - A parameter is a name used inside the program definition to refer to the value passed into the program
+        - Arguments: An argument is the value (or contents) we assign to the
+        - parameter name
+    - lecture writes a namage function that takes input as name and takes date of birth as name
+    - discusses using macro list and trace commands to understand program parameters
+We specify this value in the program call statement    
+- Practical example: write exible program to read in data
+    - Practical example: create program to import IPEDS enrollment data
+    
+- Practical example: write "utility" program to rename all variables to uppercase or lowercase
+- Practical example: write program to run regression models using different model specifications
 
 ### What covered in Christenson course
 
+- why write functions
+    - DRY: do not repeat yourself
+- example of doing something without and with a function
+- three components of a function
+    - name
+    - arguments
+    - body
+- recipe for writing a function
+    - perform the operation without function
+    - get operation to work on a separate set of inputs
+    - write function
+    - perform (quick) tests
+- demonstrates functions:
+    - write percentage change function
+    - renaming columns
+- student exercises: tasks from wickham text and wickham exercises
+    - function that calculates mean and sd
+    - function calculates proportion missing
+    - function converts Fahrenheit to celsius
+    - function extracts initials from a name
+    - function counts how often X greater than some constant
+- conditional execution
+    - basics
+    - example
+    - conditional execution: multiple conditions
+
+
+### What Ben skinner covers
+
+- module on programming 1 has functions at the end
+    - https://www.btskinner.me/rworkshop/modules/programming_one.html 
+
+
+
 ### Reading [after lecture]
+
+### Problem set ideas
 
 ## Class 10. iteration
 
@@ -839,8 +988,16 @@ be a missing value. Fortunately, all aggregation functions have an na.rm argumen
 
 ### What Ben skinner covers
 
-### What covered in Stata data mgt course
+### What covered in Stata data mgt course [lecture 11]
 
-### What covered in Christenson course
+lecture 11: macros and looping
+
+- 
+
+### What covered in Christenson course [lecture 11]
+
+Lecture 11: functions
+
+- why write functions [from wickham ]
 
 ### Reading [after lecture]

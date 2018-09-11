@@ -1,0 +1,1776 @@
+\documentclass[8pt,ignorenonframetext,dvipsnames]{beamer}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\newif\ifbibliography
+\hypersetup{
+            pdftitle={Managing and Manipulating Data Using R},
+            pdfauthor={Ozan Jaquette},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{longtable,booktabs}
+\usepackage{caption}
+% These lines are needed to make table captions work with longtable:
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+
+% Prevent slide breaks in the middle of a paragraph:
+\widowpenalties 1 10000
+\raggedbottom
+
+\AtBeginPart{
+  \let\insertpartnumber\relax
+  \let\partname\relax
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \let\insertsectionnumber\relax
+    \let\sectionname\relax
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \let\insertsubsectionnumber\relax
+  \let\subsectionname\relax
+  \frame{\subsectionpage}
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+
+%packages
+\usepackage{graphicx}
+\usepackage{rotating}
+\usepackage{hyperref}
+
+\usepackage{tikz} % used for text highlighting, amongst others
+%title slide stuff
+%\institute{Department of Education}
+%\title{Managing and Manipulating Data Using R}
+
+%
+\setbeamertemplate{navigation symbols}{} % get rid of navigation icons:
+
+%\setbeamertemplate{frametitle}{\thesection \hspace{0.2cm} \insertframetitle}
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{subsection in toc}[subsections numbered]
+
+%define colors
+%\definecolor{uva_orange}{RGB}{216,141,42} % UVa orange (Rotunda orange)
+\definecolor{mygray}{rgb}{0.95, 0.95, 0.95} % for highlighted text
+	% grey is equal parts red, green, blue. higher values >> lighter grey
+	%\definecolor{lightgraybo}{rgb}{0.83, 0.83, 0.83}
+
+% new commands
+
+%highlight text with very light grey
+\newcommand*{\hlg}[1]{%
+	\tikz[baseline=(X.base)] \node[rectangle, fill=mygray] (X) {#1};%
+}
+%, inner sep=0.3mm
+%highlight text with very light grey and use font associated with code
+\newcommand*{\hlgc}[1]{\texttt{\hlg{#1}}}
+
+% Font
+\usepackage[defaultfam,light,tabular,lining]{montserrat}
+\usepackage[T1]{fontenc}
+\renewcommand*\oldstylenums[1]{{\fontfamily{Montserrat-TOsF}\selectfont #1}}
+
+% Change color of boldface text to darkgray
+\renewcommand{\textbf}[1]{{\color{darkgray}\bfseries\fontfamily{Montserrat-TOsF}#1}}
+
+% Bullet points
+\setbeamertemplate{itemize item}{\color{BlueViolet}$\circ$}
+\setbeamertemplate{itemize subitem}{\color{BrickRed}$\triangleright$}
+\setbeamertemplate{itemize subsubitem}{$-$}
+
+% Reduce space before lists
+\addtobeamertemplate{itemize/enumerate body begin}{}{\vspace*{-8pt}}
+
+\title{Managing and Manipulating Data Using R}
+\subtitle{Lecture 5, Survey data and exploratory data analysis (for data quality)}
+\author{Ozan Jaquette}
+\date{}
+
+\begin{document}
+\frame{\titlepage}
+
+\begin{frame}
+\tableofcontents[hideallsubsections]
+\end{frame}
+
+\begin{frame}
+
+\end{frame}
+
+\section{Introduction}\label{introduction}
+
+\begin{frame}[fragile]{Libraries we will use today {[}install if you
+don't have them{]}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\CommentTok{#> -- Attaching packages ------------------------------------------------------------------------------------ tidyverse 1.2.1 --}
+\CommentTok{#> v ggplot2 3.0.0     v purrr   0.2.5}
+\CommentTok{#> v tibble  1.4.2     v dplyr   0.7.6}
+\CommentTok{#> v tidyr   0.8.1     v stringr 1.3.1}
+\CommentTok{#> v readr   1.1.1     v forcats 0.3.0}
+\CommentTok{#> -- Conflicts --------------------------------------------------------------------------------------- tidyverse_conflicts() --}
+\CommentTok{#> x dplyr::filter() masks stats::filter()}
+\CommentTok{#> x dplyr::lag()    masks stats::lag()}
+\KeywordTok{library}\NormalTok{(haven)}
+\KeywordTok{library}\NormalTok{(labelled)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}{Data we will use today}
+
+High school longitudinal surveys from National Center for Education
+Statistics (NCES)
+
+\begin{itemize}
+\tightlist
+\item
+  Follow U.S. students from high school through college, labor market
+\end{itemize}
+
+We will be working with
+\href{https://nces.ed.gov/surveys/hsls09/index.asp}{High School
+Longitudinal Study of 2009 (HSLS:09)}
+
+\begin{itemize}
+\tightlist
+\item
+  Follows 9th graders from 2009
+\item
+  Data collection waves
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Base Year (2009)
+  \item
+    First Follow-up (2012)
+  \item
+    2013 Update (2013)
+  \item
+    High School Transcripts (2013-2014)
+  \item
+    Second Follow-up (2016)
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\section{\texorpdfstring{\texttt{haven} and \texttt{labelled}
+package}{haven and labelled package}}\label{haven-and-labelled-package}
+
+\begin{frame}[fragile]{\texttt{haven} package}
+
+\href{https://haven.tidyverse.org/}{\texttt{haven}}, which is part of
+\textbf{tidyverse}, ``enables R to read and write various data formats''
+from the following statistical packages:
+
+\begin{itemize}
+\tightlist
+\item
+  SAS
+\item
+  SPSS
+\item
+  Stata
+\end{itemize}
+
+When using \texttt{haven} to read data, resulting R objects have these
+characteristics:
+
+\begin{itemize}
+\tightlist
+\item
+  Are \textbf{tibbles}, a particular type of data frame we discuss
+  future weeks
+\item
+  Transform variables with ``value labels'' into the \texttt{labelled()}
+  class {[}our focus today{]}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Helpful description
+    \href{https://haven.tidyverse.org/articles/semantics.html}{HERE}
+  \end{itemize}
+\item
+  Dates and times converted to R date/time classes
+\item
+  Character vectors not converted to factors
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{\texttt{haven} package}
+
+Use \texttt{read\_dta()} function from \texttt{haven} to import Stata
+dataset into R
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls <-}\StringTok{ }\KeywordTok{read_dta}\NormalTok{(}\DataTypeTok{file=}\StringTok{"../../data/hsls/hsls_stu_small.dta"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Let's examine the data
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{names}\NormalTok{(hsls)}
+\KeywordTok{names}\NormalTok{(hsls) <-}\StringTok{ }\KeywordTok{tolower}\NormalTok{(}\KeywordTok{names}\NormalTok{(hsls)) }\CommentTok{# convert names to lowercase}
+\KeywordTok{str}\NormalTok{(hsls)}
+\KeywordTok{str}\NormalTok{(hsls}\OperatorTok{$}\NormalTok{s3classes)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{\texttt{labelled} package}
+
+\texttt{labelled} package is to work with data imported from
+SPSS/Stata/SAS using the \texttt{haven} package.
+
+\begin{itemize}
+\tightlist
+\item
+  Specifically, ``The purpose of the \texttt{labelled} package is to
+  provide functions to manipulate \emph{metadata} as variable labels,
+  value labels and defined missing values using the
+  \texttt{labelled\ class} and the \texttt{label} attribute introduced
+  in \texttt{haven} package.
+  \href{https://cran.r-project.org/web/packages/labelled/vignettes/intro_labelled.html}{LINK}
+\end{itemize}
+
+Functions in \texttt{labelled} package
+
+\begin{itemize}
+\tightlist
+\item
+  \href{https://www.rdocumentation.org/packages/labelled/versions/1.1.0}{Full
+  list}
+\item
+  A couple relevant functions
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{val\_labels}: get or set variable \emph{value labels}
+  \item
+    \texttt{var\_label}: get or set a \emph{variable label}
+  \end{itemize}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\NormalTok{var_label}
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\NormalTok{val_labels}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Understanding \texttt{labelled} data}
+
+First, let's review core concepts:
+
+\textbf{atomic vectors (and lists)} the underlying data
+
+\begin{itemize}
+\tightlist
+\item
+  data structures: vector or list
+\item
+  data type: numeric (integer or double); character; logical
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{typeof}\NormalTok{(hsls}\OperatorTok{$}\NormalTok{s3classes)}
+\CommentTok{#> [1] "double"}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{augmented vectors} are atomic vectors with \textbf{attributes}
+attached
+
+\textbf{attributes} are ``metadata'' attached to an object. Examples
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{names}: names of elements of a vector or list (e.g., variable
+  names)
+\item
+  \textbf{levels}: display output associated with values of a factor
+  variable
+\item
+  \textbf{class}: e.g., factor, labelled
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{attributes}\NormalTok{(hsls}\OperatorTok{$}\NormalTok{s3classes)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{class} is an object oriented programming concept. The
+\texttt{class} of an object determines which functions can be applied to
+the object and what those functions do
+
+\begin{itemize}
+\tightlist
+\item
+  e.g., can't apply \texttt{sum()} to an object where
+  \texttt{class=character}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Understanding \texttt{labelled} data}
+
+Let's investigate the attributes of \texttt{hsls\$s3classes}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{typeof}\NormalTok{(hsls}\OperatorTok{$}\NormalTok{s3classes)}
+\KeywordTok{class}\NormalTok{(hsls}\OperatorTok{$}\NormalTok{s3classes)}
+
+\KeywordTok{str}\NormalTok{(hsls}\OperatorTok{$}\NormalTok{s3classes)}
+\KeywordTok{attributes}\NormalTok{(hsls}\OperatorTok{$}\NormalTok{s3classes)}
+
+\CommentTok{#use attr(object_name,"attribute_name") to refer to each attribute}
+\KeywordTok{attr}\NormalTok{(hsls}\OperatorTok{$}\NormalTok{s3classes,}\StringTok{"label"}\NormalTok{)}
+\KeywordTok{attr}\NormalTok{(hsls}\OperatorTok{$}\NormalTok{s3classes,}\StringTok{"labels"}\NormalTok{)}
+\KeywordTok{attr}\NormalTok{(hsls}\OperatorTok{$}\NormalTok{s3classes,}\StringTok{"class"}\NormalTok{)}
+\KeywordTok{attr}\NormalTok{(hsls}\OperatorTok{$}\NormalTok{s3classes,}\StringTok{"format.stata"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Understanding \texttt{labelled} data}
+
+What is \texttt{class==labelled}?
+
+\begin{itemize}
+\tightlist
+\item
+  An object class created by the \texttt{haven} package for importing
+  variables from SAS/SPSS/Stata that have \textbf{value labels}
+\item
+  \textbf{value labels} {[}in Stata{]} are labels attached to specific
+  values of a variable:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    e.g., variable value \texttt{1} attached to value label ``married'',
+    \texttt{2}=``single'', \texttt{3}=``divorced''
+  \end{itemize}
+\item
+  Variables in an R data frame with \texttt{class==labelled}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    data \texttt{type} can be numeric(double) or character
+  \item
+    The \texttt{value\ labels} associated with each value:
+    \texttt{attr(data\_frame\_name\$variable\_name,"labels")}
+  \item
+    In \texttt{filter()} refer to variable value, not the value label
+  \end{itemize}
+\end{itemize}
+
+Working with \texttt{class==labelled} variables
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#show variable label}
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes,s3clglvl) }\OperatorTok{%>%}\StringTok{ }\NormalTok{var_label}
+\CommentTok{#show value labels}
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes,s3clglvl) }\OperatorTok{%>%}\StringTok{ }\NormalTok{val_labels}
+\CommentTok{#Frequency table}
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes)}
+\CommentTok{#Frequency table, value labels instead of variable values}
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
+\CommentTok{#in filters, refer to variable value, not value label}
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(s3classes}\OperatorTok{==-}\DecValTok{8}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Converting \texttt{class==labelled} to
+\texttt{class==factor}}
+
+The \texttt{as\_factor()} function from \texttt{haven} package converts
+variables with \texttt{class==labelled} to \texttt{class==factor}
+
+\begin{itemize}
+\tightlist
+\item
+  Can be used for descriptive statistics
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Can create object with some or all \texttt{labelled} vars converted to
+  \texttt{factor}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls_f <-}\StringTok{ }\KeywordTok{as_factor}\NormalTok{(hsls,}\DataTypeTok{only_labelled =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Let's examine this object
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{glimpse}\NormalTok{(hsls_f)}
+\NormalTok{hsls_f }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes,s3clglvl) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{str}\NormalTok{()}
+\KeywordTok{typeof}\NormalTok{(hsls_f}\OperatorTok{$}\NormalTok{s3classes)}
+\KeywordTok{class}\NormalTok{(hsls_f}\OperatorTok{$}\NormalTok{s3classes)}
+\KeywordTok{attributes}\NormalTok{(hsls_f}\OperatorTok{$}\NormalTok{s3classes)}
+
+\NormalTok{hsls_f }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{var_label}\NormalTok{()}
+\NormalTok{hsls_f }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{val_labels}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Working with \texttt{class==factor} data}
+
+Showing values associated with factor levels
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls_f }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes)}
+\CommentTok{#> # A tibble: 5 x 2}
+\CommentTok{#>   s3classes             n}
+\CommentTok{#>   <fct>             <int>}
+\CommentTok{#> 1 Missing              59}
+\CommentTok{#> 2 Unit non-response  4945}
+\CommentTok{#> 3 Yes               13477}
+\CommentTok{#> 4 No                 3401}
+\CommentTok{#> 5 Don't know         1621}
+\end{Highlighting}
+\end{Shaded}
+
+In code, refer \texttt{level} attribute not variable value
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls_f }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(s3classes}\OperatorTok{==}\StringTok{"Yes"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes)}
+\CommentTok{#> # A tibble: 1 x 2}
+\CommentTok{#>   s3classes     n}
+\CommentTok{#>   <fct>     <int>}
+\CommentTok{#> 1 Yes       13477}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Comparing \texttt{class==labelled} to
+\texttt{class==factor}}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule
+& \texttt{class==labelled} & \texttt{class==factor}\tabularnewline
+\midrule
+\endhead
+data type & numeric or character & integer\tabularnewline
+name of value label attribute & labels & levels\tabularnewline
+refer to data using & variable values & levels attribute\tabularnewline
+\bottomrule
+\end{longtable}
+
+\end{frame}
+
+\section{Exploratory data analysis
+(EDA)}\label{exploratory-data-analysis-eda}
+
+\subsection{Tools for EDA}\label{tools-for-eda}
+
+\begin{frame}{What is exploratory data analysis (EDA)?}
+
+The
+\href{https://towardsdatascience.com/exploratory-data-analysis-8fc1cb20fd15}{Towards
+Data Science} website has a nice definition of EDA:
+
+\begin{quote}
+``Exploratory Data Analysis refers to the critical process of performing
+initial investigations on data so as to discover patterns,to spot
+anomalies,to test hypothesis and to check assumptions with the help of
+summary statistics and graphical representations.''
+\end{quote}
+
+This course focuses on ``data management'':
+
+\begin{itemize}
+\tightlist
+\item
+  investigating and cleaning data for the purpose of creating analysis
+  variables
+\item
+  Basically, everything that happens before you conduct analyses
+\end{itemize}
+
+I think about ``Exploratory data analysis for data quality''
+
+\begin{itemize}
+\tightlist
+\item
+  Investigating values and patterns of variables from ``input data''
+\item
+  Identifying and cleaning errors or values that need to be changed
+\item
+  Creating analysis variables
+\item
+  Checking values of analysis variables agains values of input variables
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Tools of EDA}
+
+To do EDA for data quality, must master the following tools:
+
+\begin{itemize}
+\tightlist
+\item
+  \medskip Select, sort, filter, and print
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Select and sort particular values of particular variables
+  \item
+    Print particular values of particular variables
+  \end{itemize}
+\item
+  One-way descriptive analyses (i.e,. focus on one variable)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Descriptive analyses for continuous variables
+  \item
+    Descriptive analyses for discreet/categorical variables
+  \end{itemize}
+\item
+  Two-way descriptive analyses (relationship between two variables)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Categorical by categorical
+  \item
+    Categorical by continuous
+  \item
+    Continuous by continuous
+  \end{itemize}
+\end{itemize}
+
+Whenever using any of these tools, \textbf{pay close attention to
+missing values and how they are coded}
+
+I'll focus on the \textbf{tidyverse} approach rather than \textbf{base
+R}
+
+\end{frame}
+
+\begin{frame}[fragile]{Tools of EDA: select, sort, filter, and print}
+
+Let's create a smaller version of the HSLS:09 dataset
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{var_label}\NormalTok{()}
+\CommentTok{#> $stu_id}
+\CommentTok{#> [1] "Student ID"}
+\CommentTok{#> }
+\CommentTok{#> $sch_id}
+\CommentTok{#> [1] "School ID"}
+\CommentTok{#> }
+\CommentTok{#> $x2univ1}
+\CommentTok{#> [1] "X2 Sample member status in BY and F1 rounds"}
+\CommentTok{#> }
+\CommentTok{#> $x2univ2a}
+\CommentTok{#> [1] "X2 Base year status and how sample member entered F1 sample"}
+\CommentTok{#> }
+\CommentTok{#> $x2univ2b}
+\CommentTok{#> [1] "X2 Sample member F1 status"}
+\CommentTok{#> }
+\CommentTok{#> $x3univ1}
+\CommentTok{#> [1] "X3 Sample member status in BY, F1, U13, and HS transcript rounds"}
+\CommentTok{#> }
+\CommentTok{#> $x4univ1}
+\CommentTok{#> [1] "X4 Sample member status in BY, F1, U13,  HS transcript, and F2 rounds"}
+\CommentTok{#> }
+\CommentTok{#> $s3classes}
+\CommentTok{#> [1] "S3 B01A Taking postsecondary classes as of Nov 1 2013"}
+\CommentTok{#> }
+\CommentTok{#> $s3apprentice}
+\CommentTok{#> [1] "S3 B01B Apprenticing as of Nov 1 2013"}
+\CommentTok{#> }
+\CommentTok{#> $s3work}
+\CommentTok{#> [1] "S3 B01C Working for pay as of Nov 1 2013"}
+\CommentTok{#> }
+\CommentTok{#> $s3military}
+\CommentTok{#> [1] "S3 B01D Serving in the military as of Nov 1 2013"}
+\CommentTok{#> }
+\CommentTok{#> $s3family}
+\CommentTok{#> [1] "S3 B01E Starting family/taking care of children as of Nov 1 2013"}
+\CommentTok{#> }
+\CommentTok{#> $s3hs}
+\CommentTok{#> [1] "S3 B01F Attending high school or homeschool as of Nov 1 2013"}
+\CommentTok{#> }
+\CommentTok{#> $s3gedcourse}
+\CommentTok{#> [1] "S3 B01G In a course to prepare for GED as of Nov 1 2013"}
+\CommentTok{#> }
+\CommentTok{#> $s3focus}
+\CommentTok{#> [1] "S3 B02 Main focus as of Nov 1 2013"}
+\CommentTok{#> }
+\CommentTok{#> $s3clgft}
+\CommentTok{#> [1] "S3 B03 Attending college full-time or part-time as of Nov 1 2013"}
+\CommentTok{#> }
+\CommentTok{#> $s3workft}
+\CommentTok{#> [1] "S3 B04 Working full-time as of Nov 1 2013"}
+\CommentTok{#> }
+\CommentTok{#> $s3milbranch}
+\CommentTok{#> [1] "S3 B05 Branch of the military will be serving in as of Nov 1 2013"}
+\CommentTok{#> }
+\CommentTok{#> $s3clgid}
+\CommentTok{#> [1] "S3 C01 Postsecondary institution attending as of Nov 1 2013 - IPEDS ID"}
+\CommentTok{#> }
+\CommentTok{#> $s3clgcntrl}
+\CommentTok{#> [1] "S3 Enrolled college IPEDS control"}
+\CommentTok{#> }
+\CommentTok{#> $s3clglvl}
+\CommentTok{#> [1] "S3 Enrolled college IPEDS level"}
+\CommentTok{#> }
+\CommentTok{#> $s3clgsel}
+\CommentTok{#> [1] "S3 Enrolled college IPEDS selectivity code"}
+\CommentTok{#> }
+\CommentTok{#> $s3clgstate}
+\CommentTok{#> [1] "S3 Enrolled college IPEDS state code"}
+\CommentTok{#> }
+\CommentTok{#> $s3proglevel}
+\CommentTok{#> [1] "S3 C02 Level of program enrolled in as of Nov 1 2013"}
+\CommentTok{#> }
+\CommentTok{#> $x3sqstat}
+\CommentTok{#> [1] "X3 Student questionnaire status"}
+\CommentTok{#> }
+\CommentTok{#> $x2sex}
+\CommentTok{#> [1] "X2 Student's sex"}
+\CommentTok{#> }
+\CommentTok{#> $x2race}
+\CommentTok{#> [1] "X2 Student's race/ethnicity-composite"}
+\CommentTok{#> }
+\CommentTok{#> $x2paredu}
+\CommentTok{#> [1] "X2 Parents'/guardians' highest level of education"}
+\CommentTok{#> }
+\CommentTok{#> $x2txmtscor}
+\CommentTok{#> [1] "X2 Mathematics standardized theta score"}
+\CommentTok{#> }
+\CommentTok{#> $x4evrappclg}
+\CommentTok{#> [1] "X4 Whether applied to or registered at a college"}
+\CommentTok{#> }
+\CommentTok{#> $x4clgappnum}
+\CommentTok{#> [1] "X4 Number of colleges applied to when first applied"}
+\CommentTok{#> }
+\CommentTok{#> $x4evratndclg}
+\CommentTok{#> [1] "X4 Imputed version of S4EVRATNDCLG"}
+\CommentTok{#> }
+\CommentTok{#> $x4evr2ypub}
+\CommentTok{#> [1] "X4 Ever attended 2-year public institution after high school"}
+\CommentTok{#> }
+\CommentTok{#> $x4atndclg16fb}
+\CommentTok{#> [1] "X4 Whether respondent was enrolled in postsecondary education in February 2016"}
+\CommentTok{#> }
+\CommentTok{#> $x4choiceappid}
+\CommentTok{#> [1] "X4 First choice among colleges applied to"}
+\CommentTok{#> }
+\CommentTok{#> $x4choiceaccid}
+\CommentTok{#> [1] "X4 First choice among colleges accepted to"}
+\CommentTok{#> }
+\CommentTok{#> $x4atndappinst}
+\CommentTok{#> [1] "X4 Institution ended up attending as result of first applications"}
+\CommentTok{#> }
+\CommentTok{#> $x4hs2psmos}
+\CommentTok{#> [1] "X4 Months between high school and postsecondary education"}
+\CommentTok{#> }
+\CommentTok{#> $x4psend}
+\CommentTok{#> [1] "X4 Month and year of last postsecondary enrollment anywhere"}
+\CommentTok{#> }
+\CommentTok{#> $x4ps1}
+\CommentTok{#> [1] "X4 First post-high school postsecondary institution"}
+\CommentTok{#> }
+\CommentTok{#> $x4ps1start}
+\CommentTok{#> [1] "X4 Month and year of enrollment at first postsecondary institution"}
+\CommentTok{#> }
+\CommentTok{#> $x4ps1sector}
+\CommentTok{#> [1] "X4 First postsecondary institution sector"}
+\CommentTok{#> }
+\CommentTok{#> $x4ps1level}
+\CommentTok{#> [1] "X4 First postsecondary institution level"}
+\CommentTok{#> }
+\CommentTok{#> $x4ps1ctrl}
+\CommentTok{#> [1] "X4 First postsecondary institution control"}
+\CommentTok{#> }
+\CommentTok{#> $x4ps1select}
+\CommentTok{#> [1] "X4 First postsecondary institution selectivity"}
+\CommentTok{#> }
+\CommentTok{#> $x4refinst}
+\CommentTok{#> [1] "X4 Reference institution ID"}
+\CommentTok{#> }
+\CommentTok{#> $x4refsector}
+\CommentTok{#> [1] "X4 Sector of reference institution"}
+\CommentTok{#> }
+\CommentTok{#> $x4reflevel}
+\CommentTok{#> [1] "X4 Level of reference institution"}
+\CommentTok{#> }
+\CommentTok{#> $x4refctrl}
+\CommentTok{#> [1] "X4 Control of reference institution"}
+\CommentTok{#> }
+\CommentTok{#> $x4refselect}
+\CommentTok{#> [1] "X4 Selectivity of reference institution"}
+\CommentTok{#> }
+\CommentTok{#> $x4x2ses}
+\CommentTok{#> [1] "X4 Revised X2 Socio-economic status composite"}
+\CommentTok{#> }
+\CommentTok{#> $x4x2sesq5}
+\CommentTok{#> [1] "X4 Revised X2 Quintile coding of X2SES composite"}
+\CommentTok{#> }
+\CommentTok{#> $x4sqstat}
+\CommentTok{#> [1] "X4 Student questionnaire status"}
+\NormalTok{hsls_small <-}\StringTok{ }\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(stu_id,x3univ1,x3sqstat,x4univ1,x4sqstat,s3classes,s3work,s3focus,}
+\NormalTok{  s3clgft,s3workft,s3clgid,s3clgcntrl,s3clglvl,s3clgsel,s3clgstate,s3proglevel,}
+\NormalTok{  x4evrappclg,x4evratndclg,x4atndclg16fb,x4ps1sector,x4ps1level,x4ps1ctrl,x4ps1select,}
+\NormalTok{  x4refsector,x4reflevel,x4refctrl,x4refselect,}
+\NormalTok{  x2sex,x2race,x2paredu,x2txmtscor,x4x2ses,x4x2sesq5)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Tools of EDA: select, sort, filter, and print}
+
+We've already know \texttt{select()}, \texttt{arrange()},
+\texttt{filter()}
+
+\medskip Select, sort, and print specific vars
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(stu_id)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{select}\NormalTok{(stu_id,x3univ1,x3sqstat,s3classes,s3clglvl)}
+
+\CommentTok{#print value labels}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(stu_id)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{select}\NormalTok{(stu_id,x3univ1,x3sqstat,s3classes,s3clglvl) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+Sometimes helpful to increase the number of observations printed
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class}\NormalTok{(hsls_small) }\CommentTok{#it's a tibble}
+\KeywordTok{options}\NormalTok{(}\DataTypeTok{tibble.print_min=}\DecValTok{50}\NormalTok{) }
+\CommentTok{# execute this in console}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(stu_id)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(stu_id,x3univ1,x3sqstat,s3classes,s3clglvl)}
+\KeywordTok{options}\NormalTok{(}\DataTypeTok{tibble.print_min=}\DecValTok{10}\NormalTok{) }\CommentTok{# set default printing back to 10 lines}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{One-way descriptive stats for continuous vars,
+Base R approach {[}SKIP{]}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{mean}\NormalTok{(hsls_small}\OperatorTok{$}\NormalTok{x2txmtscor)}
+\KeywordTok{sd}\NormalTok{(hsls_small}\OperatorTok{$}\NormalTok{x2txmtscor)}
+
+\CommentTok{#Careful: summary stats include value of -8!}
+\KeywordTok{min}\NormalTok{(hsls_small}\OperatorTok{$}\NormalTok{x2txmtscor)}
+\KeywordTok{max}\NormalTok{(hsls_small}\OperatorTok{$}\NormalTok{x2txmtscor)}
+\end{Highlighting}
+\end{Shaded}
+
+Be careful with \texttt{NA} values
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Create variable replacing -8 with NA}
+\NormalTok{hsls_small_temp <-}\StringTok{ }\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{x2txmtscorv2=}\KeywordTok{ifelse}\NormalTok{(x2txmtscor}\OperatorTok{==-}\DecValTok{8}\NormalTok{,}\OtherTok{NA}\NormalTok{,x2txmtscor))}
+\NormalTok{hsls_small_temp }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(x2txmtscorv2)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(x2txmtscorv2)}
+
+\KeywordTok{mean}\NormalTok{(hsls_small_temp}\OperatorTok{$}\NormalTok{x2txmtscorv2)}
+\KeywordTok{mean}\NormalTok{(hsls_small_temp}\OperatorTok{$}\NormalTok{x2txmtscorv2, }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{rm}\NormalTok{(hsls_small_temp)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{One-way descriptive stats for continuous vars,
+Tidyverse approach}
+
+Use \texttt{summarise\_at()} which is a variation of
+\texttt{summarise()} to calculate descriptive stats
+
+\begin{itemize}
+\tightlist
+\item
+  explain \texttt{.args=list(na.rm=TRUE)} on next slide
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{?summarise_at}
+\CommentTok{#> starting httpd help server ... done}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{summarise_at}\NormalTok{(}
+    \DataTypeTok{.vars =} \KeywordTok{vars}\NormalTok{(x2txmtscor),}
+    \DataTypeTok{.funs =} \KeywordTok{funs}\NormalTok{(mean, sd, min, max, }\DataTypeTok{.args=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{))}
+\NormalTok{  )}
+\CommentTok{#> # A tibble: 1 x 4}
+\CommentTok{#>    mean    sd   min   max}
+\CommentTok{#>   <dbl> <dbl> <dbl> <dbl>}
+\CommentTok{#> 1  44.1  21.8    -8  84.9}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{One-way descriptive stats for continuous vars,
+Tidyverse approach}
+
+``Input vars'' in survey data often have negative values for
+missing/skips
+
+\begin{itemize}
+\tightlist
+\item
+  R includes those negative values when calculating statistics, which
+  you probably don't want
+\end{itemize}
+
+Solution: create version of variable that replaces negative values with
+NAs
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{x2txmtscor_na=}\KeywordTok{ifelse}\NormalTok{(x2txmtscor}\OperatorTok{<}\DecValTok{0}\NormalTok{,}\OtherTok{NA}\NormalTok{,x2txmtscor)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise_at}\NormalTok{(}
+    \DataTypeTok{.vars =} \KeywordTok{vars}\NormalTok{(x2txmtscor_na),}
+    \DataTypeTok{.funs =} \KeywordTok{funs}\NormalTok{(mean, sd, min, max, }\DataTypeTok{.args=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{))}
+\NormalTok{  )}
+\CommentTok{#> # A tibble: 1 x 4}
+\CommentTok{#>    mean    sd   min   max}
+\CommentTok{#>   <dbl> <dbl> <dbl> <dbl>}
+\CommentTok{#> 1  51.5  10.2  22.2  84.9}
+\end{Highlighting}
+\end{Shaded}
+
+What if you didn't include \texttt{.args=list(na.rm=TRUE)}?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{x2txmtscor_na=}\KeywordTok{ifelse}\NormalTok{(x2txmtscor}\OperatorTok{<}\DecValTok{0}\NormalTok{,}\OtherTok{NA}\NormalTok{,x2txmtscor)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise_at}\NormalTok{(}
+    \DataTypeTok{.vars =} \KeywordTok{vars}\NormalTok{(x2txmtscor_na),}
+    \DataTypeTok{.funs =} \KeywordTok{funs}\NormalTok{(mean, sd, min, max)}
+\NormalTok{  )}
+\CommentTok{#> # A tibble: 1 x 4}
+\CommentTok{#>    mean    sd   min   max}
+\CommentTok{#>   <dbl> <dbl> <dbl> <dbl>}
+\CommentTok{#> 1    NA   NaN    NA    NA}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{One-way descriptive stats for continuous vars,
+Tidyverse approach}
+
+How to identify these missing/skip values if you don't have a codebook?
+
+\texttt{count()} combined with \texttt{filter()} helpful for finding
+extreme values of continuous vars, which are often associated with
+missing or skip
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x2txmtscor}\OperatorTok{<}\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(x2txmtscor)}
+\CommentTok{#> # A tibble: 1 x 2}
+\CommentTok{#>   x2txmtscor     n}
+\CommentTok{#>        <dbl> <int>}
+\CommentTok{#> 1         -8  2909}
+
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(s3clglvl}\OperatorTok{<}\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl)}
+\CommentTok{#> # A tibble: 3 x 2}
+\CommentTok{#>   s3clglvl      n}
+\CommentTok{#>   <dbl+lbl> <int>}
+\CommentTok{#> 1 -9          487}
+\CommentTok{#> 2 -8         4945}
+\CommentTok{#> 3 -7         5022}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}{Student exercise}
+
+\end{frame}
+
+\begin{frame}[fragile]{One-way descriptive stats for
+discrete/categorical vars, Tidyverse approach}
+
+Use \texttt{count()} to investigate values of discreet or categorical
+variables
+
+For variables where \texttt{class==labelled}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class}\NormalTok{(hsls_small}\OperatorTok{$}\NormalTok{s3classes)}
+\CommentTok{#show counts of variable values}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes)}
+\CommentTok{#show counts of value labels}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  I like \texttt{count()} because the default setting is to show
+  \texttt{NA} values too!
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{s3classes_na=}\KeywordTok{ifelse}\NormalTok{(s3classes}\OperatorTok{<}\DecValTok{0}\NormalTok{,}\OtherTok{NA}\NormalTok{,s3classes)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{count}\NormalTok{(s3classes_na)}
+\end{Highlighting}
+\end{Shaded}
+
+Show both values and value labels on count tables for
+\texttt{class==labelled}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#CRYSTAL'S SOLUTION}
+\NormalTok{x <-}\StringTok{ }\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes)}
+\NormalTok{y <-}\StringTok{ }\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
+\KeywordTok{bind_cols}\NormalTok{(x[,}\DecValTok{1}\NormalTok{], y)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{One-way descriptive stats for
+discrete/categorical vars, Tidyverse approach}
+
+For variables where \texttt{class==factor} {[}PROBLEM: HOW TO RETAIN
+FACTOR LEVELS AFTER MUTATE{]}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#use variable from the hsls data frame where vars are factors}
+\KeywordTok{class}\NormalTok{(hsls_f}\OperatorTok{$}\NormalTok{s3classes)}
+\KeywordTok{attributes}\NormalTok{(hsls_f}\OperatorTok{$}\NormalTok{s3classes)}
+
+\CommentTok{#show frequency table}
+\NormalTok{hsls_f }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes)}
+\CommentTok{#frequency table with NAs}
+  \CommentTok{#note: within ifelse() used levels(s3classes)[s3classes]) rather than s3classes  to show attribute levels not values}
+\NormalTok{hsls_f }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{s3classes_f=}\KeywordTok{ifelse}\NormalTok{(s3classes }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Missing"}\NormalTok{,}\StringTok{"Unit non-response"}\NormalTok{),}\OtherTok{NA}\NormalTok{,}\KeywordTok{levels}\NormalTok{(s3classes)[s3classes])) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{count}\NormalTok{(s3classes_f)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Relationship between variables, categorical by
+categorical}
+
+Two-way frequency table, sometimes called ``Cross tabulation'', is
+important for checking data quality - When you create categorical
+analysis var from single categorical ``input'' var - Two-way tables show
+us whether we did this correctly - Two-way tables helpful for
+understanding skip patterns in surveys
+
+Task: Create a two-way table between \texttt{s3classes} and
+\texttt{s3clglvl}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes,s3clglvl) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{var_label}\NormalTok{()}
+
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl)}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+What if one of the variables has \texttt{NAs}?
+
+\begin{itemize}
+\tightlist
+\item
+  Table created by \texttt{group\_by()} and \texttt{count()} shows
+  \texttt{NAs}!
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes,s3clglvl) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{s3classes_na=}\KeywordTok{ifelse}\NormalTok{(s3classes}\OperatorTok{<}\DecValTok{0}\NormalTok{,}\OtherTok{NA}\NormalTok{,s3classes)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(s3classes_na) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl)}
+
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes,s3clglvl) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{s3classes_na=}\KeywordTok{ifelse}\NormalTok{(s3classes}\OperatorTok{<}\DecValTok{0}\NormalTok{,}\OtherTok{NA}\NormalTok{,s3classes),}
+         \DataTypeTok{s3clglvl_na=}\KeywordTok{ifelse}\NormalTok{(s3clglvl}\OperatorTok{==-}\DecValTok{7}\NormalTok{,}\OtherTok{NA}\NormalTok{,s3clglvl)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(s3classes_na) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl_na)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Relationship between variables, categorical by
+categorical}
+
+Tables above are pretty ugly
+
+Use the \texttt{spread()} function from \texttt{tidyr} package to create
+table with one variable as columns and the other variable as rows
+
+\begin{itemize}
+\tightlist
+\item
+  The variable you place in \texttt{spread()} will be columns
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{spread}\NormalTok{(s3classes, n)}
+
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{as_factor}\NormalTok{() }\OperatorTok{%>%}\StringTok{  }\KeywordTok{spread}\NormalTok{(s3classes, n)}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{as_factor}\NormalTok{() }\OperatorTok{%>%}\StringTok{  }\KeywordTok{spread}\NormalTok{(s3clglvl, n)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Relationship between variables, categorical by
+continuous}
+
+Investigating relationship between multiple variables is a little
+tougher when at least one of the variables is continuous
+
+One approach is the \textbf{conditional mean}:
+
+\begin{itemize}
+\tightlist
+\item
+  Shows average values of continous variables within groups
+\item
+  Groups are defined by your categorical variable(s)
+\end{itemize}
+
+Relationship to regression
+
+\begin{itemize}
+\tightlist
+\item
+  Conditional mean is similar to regression with a continuous dependent
+  variable and a categorical X variable
+\end{itemize}
+
+Task:
+
+\begin{itemize}
+\tightlist
+\item
+  Investigate the relationship between math test score,
+  \texttt{x2txmtscor}, and parental education, \texttt{x2paredu}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#first, investigate parental education}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(x2paredu)}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(x2paredu) }\OperatorTok{%>%}\StringTok{ }\NormalTok{as_factor}
+
+\NormalTok{## using dplyr to get average math score by parental education level}
+\NormalTok{hsls_small }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{group_by}\NormalTok{(x2paredu) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{summarise_at}\NormalTok{(}\DataTypeTok{.vars =} \KeywordTok{vars}\NormalTok{(x2txmtscor),}
+                 \DataTypeTok{.funs =} \KeywordTok{funs}\NormalTok{(mean, }\DataTypeTok{.args =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{))) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{as_factor}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Relationship between variables, categorical by
+continuous}
+
+Task: Investigate the relationship between math test score,
+\texttt{x2txmtscor}, and parental education, \texttt{x2paredu}
+
+For checking data quality, helpful to calculate other stats besides mean
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(x2paredu) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{summarise_at}\NormalTok{(}\DataTypeTok{.vars =} \KeywordTok{vars}\NormalTok{(x2txmtscor),}
+                 \DataTypeTok{.funs =} \KeywordTok{funs}\NormalTok{(mean, min, max, }\DataTypeTok{.args =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{))) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{as_factor}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+Always Investigate presence of missing/skip values
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x2paredu}\OperatorTok{<}\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(x2paredu)}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x2txmtscor}\OperatorTok{<}\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(x2txmtscor)}
+\end{Highlighting}
+\end{Shaded}
+
+Replace \texttt{-8} with \texttt{NA} and re-calculate conditional stats
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(x2paredu,x2txmtscor) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{x2paredu_na=}\KeywordTok{ifelse}\NormalTok{(x2paredu}\OperatorTok{<}\DecValTok{0}\NormalTok{,}\OtherTok{NA}\NormalTok{,x2paredu),}
+         \DataTypeTok{x2txmtscor_na=}\KeywordTok{ifelse}\NormalTok{(x2txmtscor}\OperatorTok{<}\DecValTok{0}\NormalTok{,}\OtherTok{NA}\NormalTok{,x2txmtscor)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(x2paredu_na) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise_at}\NormalTok{(}\DataTypeTok{.vars =} \KeywordTok{vars}\NormalTok{(x2txmtscor_na),}
+               \DataTypeTok{.funs =} \KeywordTok{funs}\NormalTok{(mean, min, max, }\DataTypeTok{.args =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{))) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{as_factor}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Relationship between variables, categorical by
+continuous}
+
+{[}MAKE THIS A STUDENT EXERCISE?{]}
+
+Can use same approach to calculate conditional mean by multiple
+\texttt{group\_by()} variables
+
+\begin{itemize}
+\tightlist
+\item
+  Just add additional variables within \texttt{group\_by()}
+\end{itemize}
+
+Task: Calculate mean math test score (\texttt{x2txmtscor}), for each
+combination of parental education (\texttt{x2paredu}) and sex
+(\texttt{x2sex})
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls_small }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{group_by}\NormalTok{(x2paredu,x2sex) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{summarise_at}\NormalTok{(}\DataTypeTok{.vars =} \KeywordTok{vars}\NormalTok{(x2txmtscor),}
+                 \DataTypeTok{.funs =} \KeywordTok{funs}\NormalTok{(mean, }\DataTypeTok{.args =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{))) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{as_factor}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\subsection{Guidelines for EDA}\label{guidelines-for-eda}
+
+\begin{frame}{Guidelines for ``EDA for data quality''}
+
+Assme that your goal in ``EDA for data quality'' is to investigate
+``input'' data sources and create ``analysis variables''
+
+\begin{itemize}
+\tightlist
+\item
+  Usually, your analysis dataset will incorporate multiple sources of
+  input data, including data you collect (primary data) and/or data
+  collected by others (secondary data)
+\end{itemize}
+
+While this is not a linear process, these are the broad steps I follow
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Understand how inout data sources were created
+
+  \begin{itemize}
+  \tightlist
+  \item
+    e.g., when working with survey data, have survey questionnaire and
+    codebooks on hand
+  \end{itemize}
+\item
+  For each input data source, identify the ``unit of analysis'' and
+  which combination of variables uniquely identify observations
+\item
+  Investigate patterns in input variables
+\item
+  Create analysis variable from input variable(s)
+\item
+  Verify that analysis variable is created correctly through descriptive
+  statistics that compare values of input variable(s) against values of
+  the analysis variable
+\end{enumerate}
+
+\textbf{Always be aware of missing values}
+
+\end{frame}
+
+\begin{frame}{``Unit of analysis'' and which variables uniquely identify
+observations}
+
+``Unit of analysis'' refers to ``what does each observation represent''
+in an input data source
+
+\begin{itemize}
+\tightlist
+\item
+  If each obs represents a student, you have ``student level data''
+\item
+  If each obs represents a student-course, you have ``student-course
+  level data''
+\item
+  If each obs represents a school, you have ``school-level data''
+\item
+  If each obs represents a school-year, you have ``school-year level
+  data''
+\end{itemize}
+
+How to identify unit of analysis
+
+\begin{itemize}
+\tightlist
+\item
+  data documentation
+\item
+  investigating the data set
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{``Unit of analysis'' and which variables uniquely
+identify observations}
+
+Identify the variable -- or group of vars -- that ``uniquely
+identifies'' observations
+
+\begin{itemize}
+\tightlist
+\item
+  ``uniquely identifies observations'': each value of the var has a
+  frequency count of \texttt{1}
+\end{itemize}
+
+This is important for many data management tasks
+
+\begin{itemize}
+\tightlist
+\item
+  e.g., merging data sources, ``tidying'' data
+\end{itemize}
+
+How to identify which variable(s) uniquely identify observations
+
+\begin{itemize}
+\tightlist
+\item
+  data documentation
+\item
+  investigating the data set
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(stu_id) }\OperatorTok{%>%}\StringTok{ }\CommentTok{# group_by our candidate}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{n_per_id=}\KeywordTok{n}\NormalTok{()) }\OperatorTok{%>%}\StringTok{ }\CommentTok{# calculate number of obs per group}
+\StringTok{  }\KeywordTok{ungroup}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\CommentTok{# ungroup the data}
+\StringTok{  }\KeywordTok{count}\NormalTok{(n_per_id}\OperatorTok{==}\DecValTok{1}\NormalTok{) }\CommentTok{# count "true that only one obs per group"}
+\CommentTok{#> # A tibble: 1 x 2}
+\CommentTok{#>   `n_per_id == 1`     n}
+\CommentTok{#>   <lgl>           <int>}
+\CommentTok{#> 1 TRUE            23503}
+
+\CommentTok{#hsls_small %>% count(stu_id) %>% filter(n> 1) ## Patricia's approach}
+\CommentTok{#Karina approaches using asserthat package}
+\CommentTok{#library(assertthat)}
+\CommentTok{#stopifnot(length(unique(uga_pub$ncessch))==nrow(uga_pub))}
+\CommentTok{#assert_that(any(duplicated(uga_pub, by=c("ncessch", "var2")))==FALSE)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}{Rules for variable creation}
+
+Rules I follow for variable creation
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \medskip Never modify ``input variable''; instead create new variable
+  based on input variable(s)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Always keep input variables used to create new variables
+  \end{itemize}
+\item
+  Investigate input variable(s) and relationship between input variables
+\item
+  Developing a plan for creation of analysis variable
+
+  \begin{itemize}
+  \tightlist
+  \item
+    e.g., for each possible value of input variables, what should value
+    of analysis variable be?
+  \end{itemize}
+\item
+  Write code to create analysis variable
+\item
+  Run descriptive checks to verify new variables are constructed
+  correctly
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Can ``comment out'' these checks, but don't delete them
+  \end{itemize}
+\item
+  Document new variables with notes and labels
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]{Rules for variable creation}
+
+Task: Create analysis fir ses qunitile called \texttt{sesq5} based on
+\texttt{x4x2sesq5}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#investigate input variable}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(x4x2sesq5) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{var_label}\NormalTok{()}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(x4x2sesq5) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{val_labels}\NormalTok{()}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(x4x2sesq5) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(x4x2sesq5)}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(x4x2sesq5) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(x4x2sesq5) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
+
+\CommentTok{#create analysis variable}
+\NormalTok{hsls_small_temp <-}\StringTok{ }\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{sesq5=}\KeywordTok{ifelse}\NormalTok{(x4x2sesq5}\OperatorTok{==-}\DecValTok{8}\NormalTok{,}\OtherTok{NA}\NormalTok{,x4x2sesq5)) }\CommentTok{# approach 1}
+\NormalTok{hsls_small_temp <-}\StringTok{ }\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{sesq5=}\KeywordTok{ifelse}\NormalTok{(x4x2sesq5}\OperatorTok{<}\DecValTok{0}\NormalTok{,}\OtherTok{NA}\NormalTok{,x4x2sesq5)) }\CommentTok{# approach 1}
+
+\CommentTok{#verify}
+\NormalTok{hsls_small_temp }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(x4x2sesq5) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(sesq5)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}{How to be a good researcher, good research assistant (RA)
+{[}CUT?{]}}
+
+{[}keep or cut this section?{]}{[}hidden curriculum stuff; look at notes
+from last time you taught Stata data mgt{]}
+
+\begin{itemize}
+\tightlist
+\item
+  Your advisor/PI getting \$ to support students depends on previous RAs
+  doing a good job
+\item
+  Must master certain skills, but beyond that it is mindset and approach
+  that matters
+\end{itemize}
+
+\end{frame}
+
+\subsection{Skip patterns}\label{skip-patterns}
+
+\begin{frame}[fragile]{What are skip patterns}
+
+Pretty easy to create an analysis variable based on a single input
+variable
+
+Harder to create analysis variables based on multiple input variables
+
+\begin{itemize}
+\tightlist
+\item
+  When working with survey data, even seemingly simple analysis
+  variables require multiple input variables due to ``skip patterns''
+\end{itemize}
+
+What are ``skip patterns''? {[}students answer{]}
+
+\begin{itemize}
+\tightlist
+\item
+  {[}?DELETE OR DELAY?{]} Response on a particular survey item
+  determines whether respondent answers some set of subsequent questions
+\item
+  What are some examples of this?
+\end{itemize}
+
+Key to working with skip patterns
+
+\begin{itemize}
+\tightlist
+\item
+  Have the survey questionnaire on hand
+\item
+  Sometimes it appears that analysis variable requires only one input
+  variable, but really depends on several input variables because of
+  skip patterns
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Don't just blindly turn ``missing'' and ``skips'' from survey data
+    to \texttt{NAs} in your analysis variable
+  \item
+    Rahter, trace why these ``missing'' and ``skips'' appear and decide
+    how they should be coded in your analysis variable
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Creating analysis variables in the presence of
+skip patterns}
+
+Task: Create a measure of ``level'' of postsecondary institution
+attended in 2013 from HSLS:09 survey data
+
+\begin{itemize}
+\tightlist
+\item
+  ``level'' is highest award-level of the postsecondary institution
+
+  \begin{itemize}
+  \tightlist
+  \item
+    e.g., if highest award is associate's degree (a two-year degree),
+    then `level==2'
+  \end{itemize}
+\item
+  The measure, \texttt{pselev2013}, should have following
+  {[}non-missing{]} values:
+
+  \begin{enumerate}
+  \def\labelenumi{\arabic{enumi}.}
+  \tightlist
+  \item
+    Not attending postsecondary education institution
+  \item
+    Attending a 2-year or less-than-2-year institution
+  \item
+    Attending 4-year or greater-than-4year institution
+  \end{enumerate}
+\end{itemize}
+
+Background info:
+
+\begin{itemize}
+\tightlist
+\item
+  In ``2013 Update'' of HSLS:09, students asked about college attendance
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Variables from student responses to ``2013 Update'' have prefix
+    \texttt{s3}
+  \end{itemize}
+\item
+  Survey questionnaire for 2013 update can be found
+  \href{https://nces.ed.gov/surveys/hsls09/pdf/2013_Student_Parent_Questionnaire.pdf}{HERE}
+\item
+  The ``online codebook'' website
+  \href{https://nces.ed.gov/onlinecodebook}{HERE} has info about
+  specific variables
+\item
+  Measure has 3 input variables {[}usually must figure this out
+  yourself{]}:
+
+  \begin{enumerate}
+  \def\labelenumi{\arabic{enumi}.}
+  \tightlist
+  \item
+    \texttt{x3sqstat}: ``X3 Student questionnaire status''
+  \item
+    \texttt{s3classes}: ``S3 B01A Taking postsecondary classes as of Nov
+    1 2013''
+  \item
+    \texttt{s3clglvl}: ``S3 Enrolled college IPEDS level''
+  \end{enumerate}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(x3sqstat,s3classes,s3clglvl) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{var_label}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+You won't have time to complete this task, but develop a plan for the
+task and get as far as you can
+
+\end{frame}
+
+\begin{frame}[fragile]{Creating analysis variables in the presence of
+skip patterns}
+
+Step 1a: Investigate each input variable separately
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#variable labels}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(x3sqstat,s3classes,s3clglvl) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{var_label}\NormalTok{()}
+
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(x3sqstat)}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(x3sqstat) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
+
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes)}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
+
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl)}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Creating analysis variables in the presence of
+skip patterns}
+
+Step 1b: Investigate relationship between input variables
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#x3sqstate and s3classes}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(x3sqstat) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes) }
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(x3sqstat) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
+
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat}\OperatorTok{==}\DecValTok{8}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes)}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat}\OperatorTok{==}\DecValTok{8}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes}\OperatorTok{==-}\DecValTok{8}\NormalTok{)}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat }\OperatorTok{!=}\DecValTok{8}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes)}
+
+\CommentTok{#x3sqstate, s3classes and s3clglvl}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl) }
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
+
+\CommentTok{#add filter for whether student did not respond to X3 questionnaire}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat}\OperatorTok{==}\DecValTok{8}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl) }
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat }\OperatorTok{!=}\DecValTok{8}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl)}
+
+\CommentTok{#add filter for s3classes is "missing" [-9]}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat }\OperatorTok{!=}\DecValTok{8}\NormalTok{,s3classes}\OperatorTok{==-}\DecValTok{9}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl)}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat }\OperatorTok{!=}\DecValTok{8}\NormalTok{,s3classes}\OperatorTok{!=-}\DecValTok{9}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl)}
+
+\CommentTok{#add filter for s3classes equal to "no" or "don't know"}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat }\OperatorTok{!=}\DecValTok{8}\NormalTok{,s3classes}\OperatorTok{!=-}\DecValTok{9}\NormalTok{, s3classes }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl)}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat }\OperatorTok{!=}\DecValTok{8}\NormalTok{,s3classes}\OperatorTok{!=-}\DecValTok{9}\NormalTok{, s3classes }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
+
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat }\OperatorTok{!=}\DecValTok{8}\NormalTok{,s3classes}\OperatorTok{!=-}\DecValTok{9}\NormalTok{, s3classes}\OperatorTok{==}\DecValTok{1}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl)}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat }\OperatorTok{!=}\DecValTok{8}\NormalTok{,s3classes}\OperatorTok{!=-}\DecValTok{9}\NormalTok{, s3classes}\OperatorTok{==}\DecValTok{1}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\section{Brainstorm next assignment: create GPA from course-level
+data}\label{brainstorm-next-assignment-create-gpa-from-course-level-data}
+
+\begin{frame}[fragile]{Brainstorm in your homework groups for next
+assignment}
+
+Assignment: create GPA variables from student-course level data
+
+\begin{itemize}
+\tightlist
+\item
+  Link to assignment HERE
+\end{itemize}
+
+Data source: \href{https://nces.ed.gov/surveys/nls72/}{National
+Longitudinal Study of 1972 (NLS72)}
+
+\begin{itemize}
+\tightlist
+\item
+  Follows 12th graders from 1972
+\item
+  Data collection waves
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Base year: 1972
+  \item
+    Follow-up surveys in: 1973, 1974, 1976, 1979, 1986
+  \item
+    Postsecondary transcripts collected in 1984
+  \end{itemize}
+\item
+  Why use such an old survey for this assignment?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    NLS72 predates data privacy agreements so postsecondary transcript
+    data are publicly available
+  \end{itemize}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#LOAD DATA}
+\end{Highlighting}
+\end{Shaded}
+
+Work on the following in your homework groups:
+
+\begin{itemize}
+\tightlist
+\item
+  Read assignment
+\item
+  Conduct EDA investigations of input data
+
+  \begin{itemize}
+  \tightlist
+  \item
+    For homework assignment, you only need to focus on these variables
+    {[}and can ignore the others{]}
+  \end{itemize}
+\item
+  Develop a plan for how you will go about creating GPA variables
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Brainstorm in your homework groups for next assignment}
+
+PUT CODE FOR EDA INVESTIGATIONS OF NLS72 HERE? OR PUT LINK TO .R SCRIPT
+W/ NLS EDA INVESTIGATIONS HERE?
+
+\end{frame}
+
+\end{document}

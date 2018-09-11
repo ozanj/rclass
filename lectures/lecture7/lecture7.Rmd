@@ -705,3 +705,65 @@ Example:
 - IPEDS collects annual survey data from colleges/universities
 - I create longitudinal data about university characteristics by appending/staking annual data
 
+Load annual IPEDS data on admissions characteristics
+```{r}
+
+admit16_17 <- read_dta(file="../../data/ipeds/ic/ic16-17_admit.dta") %>%
+  select(unitid,endyear,sector,contains("admcon"),contains("numapply"),contains("numadmit"))
+
+glimpse(admit16_17)
+admit16_17 %>% var_label()
+admit16_17 %>% val_labels()
+
+#read in previous two years of data
+admit15_16 <- read_dta(file="../../data/ipeds/ic/ic15-16_admit.dta") %>%
+  select(unitid,endyear,sector,contains("admcon"),contains("numapply"),contains("numadmit"))
+
+admit14_15 <- read_dta(file="../../data/ipeds/ic/ic14-15_admit.dta") %>%
+  select(unitid,endyear,sector,contains("admcon"),contains("numapply"),contains("numadmit"))
+
+```
+
+We append data using the `bind_rows()` function, which is from the _dplyr_ package
+```{r}
+#?bind_rows
+
+time1 <- tribble(
+  ~id, ~year, ~income,
+     1, 2017, 50,
+     2, 2017, 100,
+     3, 2017, 200
+)
+time2 <- tribble(
+  ~id, ~year, ~income,
+     1, 2018, 70,
+     2, 2018, 120,
+     3, 2018, 220
+)
+
+time1
+time2
+
+append_time <- bind_rows(time1,time2)
+append_time
+
+append_time %>% arrange(id,year)
+```
+
+Example using IPEDS data
+```{r, include=FALSE}
+admit_append <- bind_rows(admit16_17,admit15_16,admit14_15)
+#note that R complains about preserving "labelled" data; does not retain labels
+str(admit_append)
+```
+
+Investigate structure
+```{r}
+admit_append %>% select(unitid,endyear,admcon1,admcon2,numapplytot,numadmittot) %>%
+  arrange(unitid,endyear) %>% head(n=10)
+
+#investigate data structure: one obs per unitid-endyear
+admit_append %>% group_by(unitid,endyear) %>% summarise(n_per_key=n()) %>% ungroup %>% count(n_per_key)
+```
+
+QUESTION FOR PATRICIA/CRYSTAL: EASY WAY TO RETAIN ATTRIBUTES/CLASS FROM LABELLED DATA?

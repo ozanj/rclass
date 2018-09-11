@@ -1,0 +1,48 @@
+---
+title: Managing and Manipulating Data Using R # potentially push to header
+subtitle:  Lecture 9, Writing functions
+author: Ozan Jaquette
+date: 
+fontsize: 8pt
+classoption: dvipsnames  # for colors
+output:
+  beamer_presentation:
+    keep_tex: true
+    toc: true
+    slide_level: 3
+    theme: default # AnnArbor # push to header?
+    #colortheme: "dolphin" # push to header?
+    #fonttheme: "structurebold"
+    highlight: default # Supported styles include "default", "tango", "pygments", "kate", "monochrome", "espresso", "zenburn", and "haddock" (specify null to prevent syntax highlighting); push to header
+    df_print: default #default # tibble # push to header?    
+    latex_engine: xelatex #  Available engines are pdflatex [default], xelatex, and lualatex; The main reasons you may want to use xelatex or lualatex are: (1) They support Unicode better; (2) It is easier to make use of system fonts.
+    includes:
+      in_header: ../beamer_header.tex
+      #after_body: table-of-contents.txt 
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
+```
+
+# Introduction
+
+# Why and when to write a function
+
+### Example with recruiting data
+
+- perform some task without a function
+- perform repeat/variation of this task without a function
+
+- show this task done with a function
+- [can show the function but don't need to explain how it works; just show its utility]
+
+# Function basics
+
+## how to write a function
+
+- first example could be hello: then hell with argument name; then hello with argument for calculating age based in input dob;
+
+# Conditional execution
+
+# Functional arguments

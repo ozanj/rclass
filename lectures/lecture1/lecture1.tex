@@ -1,4 +1,4 @@
-\documentclass[10pt,ignorenonframetext,]{beamer}
+\documentclass[8pt,ignorenonframetext,dvipsnames]{beamer}
 \setbeamertemplate{caption}[numbered]
 \setbeamertemplate{caption label separator}{: }
 \setbeamercolor{caption name}{fg=normal text.fg}
@@ -144,6 +144,22 @@
 %, inner sep=0.3mm
 %highlight text with very light grey and use font associated with code
 \newcommand*{\hlgc}[1]{\texttt{\hlg{#1}}}
+
+% Font
+\usepackage[defaultfam,light,tabular,lining]{montserrat}
+\usepackage[T1]{fontenc}
+\renewcommand*\oldstylenums[1]{{\fontfamily{Montserrat-TOsF}\selectfont #1}}
+
+% Change color of boldface text to darkgray
+\renewcommand{\textbf}[1]{{\color{darkgray}\bfseries\fontfamily{Montserrat-TOsF}#1}}
+
+% Bullet points
+\setbeamertemplate{itemize item}{\color{BlueViolet}$\circ$}
+\setbeamertemplate{itemize subitem}{\color{BrickRed}$\triangleright$}
+\setbeamertemplate{itemize subsubitem}{$-$}
+
+% Reduce space before lists
+\addtobeamertemplate{itemize/enumerate body begin}{}{\vspace*{-8pt}}
 
 \title{Managing and Manipulating Data Using R}
 \subtitle{Introduction}

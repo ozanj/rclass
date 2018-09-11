@@ -1,0 +1,1446 @@
+\documentclass[8pt,ignorenonframetext,dvipsnames]{beamer}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\newif\ifbibliography
+\hypersetup{
+            pdftitle={Managing and Manipulating Data Using R},
+            pdfauthor={Ozan Jaquette},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{longtable,booktabs}
+\usepackage{caption}
+% These lines are needed to make table captions work with longtable:
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+
+% Prevent slide breaks in the middle of a paragraph:
+\widowpenalties 1 10000
+\raggedbottom
+
+\AtBeginPart{
+  \let\insertpartnumber\relax
+  \let\partname\relax
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \let\insertsectionnumber\relax
+    \let\sectionname\relax
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \let\insertsubsectionnumber\relax
+  \let\subsectionname\relax
+  \frame{\subsectionpage}
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+
+%packages
+\usepackage{graphicx}
+\usepackage{rotating}
+\usepackage{hyperref}
+
+\usepackage{tikz} % used for text highlighting, amongst others
+%title slide stuff
+%\institute{Department of Education}
+%\title{Managing and Manipulating Data Using R}
+
+%
+\setbeamertemplate{navigation symbols}{} % get rid of navigation icons:
+
+%\setbeamertemplate{frametitle}{\thesection \hspace{0.2cm} \insertframetitle}
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{subsection in toc}[subsections numbered]
+
+%define colors
+%\definecolor{uva_orange}{RGB}{216,141,42} % UVa orange (Rotunda orange)
+\definecolor{mygray}{rgb}{0.95, 0.95, 0.95} % for highlighted text
+	% grey is equal parts red, green, blue. higher values >> lighter grey
+	%\definecolor{lightgraybo}{rgb}{0.83, 0.83, 0.83}
+
+% new commands
+
+%highlight text with very light grey
+\newcommand*{\hlg}[1]{%
+	\tikz[baseline=(X.base)] \node[rectangle, fill=mygray] (X) {#1};%
+}
+%, inner sep=0.3mm
+%highlight text with very light grey and use font associated with code
+\newcommand*{\hlgc}[1]{\texttt{\hlg{#1}}}
+
+% Font
+\usepackage[defaultfam,light,tabular,lining]{montserrat}
+\usepackage[T1]{fontenc}
+\renewcommand*\oldstylenums[1]{{\fontfamily{Montserrat-TOsF}\selectfont #1}}
+
+% Change color of boldface text to darkgray
+\renewcommand{\textbf}[1]{{\color{darkgray}\bfseries\fontfamily{Montserrat-TOsF}#1}}
+
+% Bullet points
+\setbeamertemplate{itemize item}{\color{BlueViolet}$\circ$}
+\setbeamertemplate{itemize subitem}{\color{BrickRed}$\triangleright$}
+\setbeamertemplate{itemize subsubitem}{$-$}
+
+% Reduce space before lists
+\addtobeamertemplate{itemize/enumerate body begin}{}{\vspace*{-8pt}}
+
+\title{Managing and Manipulating Data Using R}
+\subtitle{Lecture 3}
+\author{Ozan Jaquette}
+\date{}
+
+\begin{document}
+\frame{\titlepage}
+
+\begin{frame}
+\tableofcontents[hideallsubsections]
+\end{frame}
+
+\begin{frame}
+
+\end{frame}
+
+\section{Introduction/logistics}\label{introductionlogistics}
+
+\begin{frame}[fragile]{Libraries we will use today}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\CommentTok{#> -- Attaching packages ------------------------------------------------------------------ tidyverse 1.2.1 --}
+\CommentTok{#> v ggplot2 3.0.0     v purrr   0.2.5}
+\CommentTok{#> v tibble  1.4.2     v dplyr   0.7.6}
+\CommentTok{#> v tidyr   0.8.1     v stringr 1.3.1}
+\CommentTok{#> v readr   1.1.1     v forcats 0.3.0}
+\CommentTok{#> -- Conflicts --------------------------------------------------------------------- tidyverse_conflicts() --}
+\CommentTok{#> x dplyr::filter() masks stats::filter()}
+\CommentTok{#> x dplyr::lag()    masks stats::lag()}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Data we will use today}
+
+Data on off-campus recruiting events by public universities
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rm}\NormalTok{(}\DataTypeTok{list =} \KeywordTok{ls}\NormalTok{()) }\CommentTok{# remove all objects}
+
+\CommentTok{#load dataset with one obs per recruiting event}
+\KeywordTok{load}\NormalTok{(}\StringTok{"../../data/recruiting/recruit_event_somevars.Rdata"}\NormalTok{)}
+
+\CommentTok{#load dataset with one obs per high school}
+\KeywordTok{load}\NormalTok{(}\StringTok{"../../data/recruiting/recruit_school_somevars.Rdata"}\NormalTok{)}
+
+\KeywordTok{load}\NormalTok{(}\StringTok{"../../data/prospect_list/western_washington_college_board_list.RData"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Object \textbackslash{}hlgc\{df\_event\}
+
+\begin{itemize}
+\tightlist
+\item
+  One observation per university, recruiting event
+\end{itemize}
+
+Object \textbackslash{}hlgc\{df\_event\}
+
+\begin{itemize}
+\tightlist
+\item
+  One observation per high school (visited and non-visited)
+\end{itemize}
+
+\end{frame}
+
+\section{Factors}\label{factors}
+
+\subsection{Review data types and
+structures}\label{review-data-types-and-structures}
+
+\begin{frame}{Review data types}
+
+Primary \textbf{data types} in R:
+
+\begin{itemize}
+\tightlist
+\item
+  numeric (integer \& double)
+\item
+  character
+\item
+  logical
+\end{itemize}
+
+R CODE CHUNK WITH EXAMPLES
+
+\end{frame}
+
+\begin{frame}[fragile]{Review data structures: vectors}
+
+Primary \textbf{data structures} in R are \textbf{vectors} and
+\textbf{lists}
+
+\medskip A \textbf{vector} is a collection of values
+
+\begin{itemize}
+\tightlist
+\item
+  each value in a vector is an \textbf{element}
+\item
+  all elements within vector must have same \textbf{data type}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{a <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{)}
+\NormalTok{a}
+\CommentTok{#> [1] 1 2 3}
+\KeywordTok{str}\NormalTok{(a)}
+\CommentTok{#>  num [1:3] 1 2 3}
+\end{Highlighting}
+\end{Shaded}
+
+You can assign \textbf{names} to elements of a vector, thereby creating
+a \textbf{named vector}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{b <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DataTypeTok{v1=}\DecValTok{1}\NormalTok{,}\DataTypeTok{v2=}\DecValTok{2}\NormalTok{,}\DataTypeTok{v3=}\DecValTok{3}\NormalTok{)}
+\NormalTok{b}
+\CommentTok{#> v1 v2 v3 }
+\CommentTok{#>  1  2  3}
+\KeywordTok{str}\NormalTok{(b)}
+\CommentTok{#>  Named num [1:3] 1 2 3}
+\CommentTok{#>  - attr(*, "names")= chr [1:3] "v1" "v2" "v3"}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Review data structures: lists}
+
+Like vectors, \textbf{lists} are objects that contain \textbf{elements};
+However, \textbf{data type} can differ across elements within a list; an
+element of a list can be another list
+
+Examples of lists:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{list_a <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\StringTok{"apple"}\NormalTok{)}
+\KeywordTok{str}\NormalTok{(list_a)}
+\CommentTok{#> List of 3}
+\CommentTok{#>  $ : num 1}
+\CommentTok{#>  $ : num 2}
+\CommentTok{#>  $ : chr "apple"}
+\NormalTok{list_b <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{c}\NormalTok{(}\StringTok{"apple"}\NormalTok{, }\StringTok{"orange"}\NormalTok{), }\KeywordTok{list}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{))}
+\KeywordTok{str}\NormalTok{(list_b)}
+\CommentTok{#> List of 3}
+\CommentTok{#>  $ : num 1}
+\CommentTok{#>  $ : chr [1:2] "apple" "orange"}
+\CommentTok{#>  $ :List of 3}
+\CommentTok{#>   ..$ : num 1}
+\CommentTok{#>   ..$ : num 2}
+\CommentTok{#>   ..$ : num 3}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Review data structures: lists}
+
+Like vectors, elements within a list can be named, thereby creating a
+\textbf{named list}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(list_b) }\CommentTok{# not named}
+\CommentTok{#> List of 3}
+\CommentTok{#>  $ : num 1}
+\CommentTok{#>  $ : chr [1:2] "apple" "orange"}
+\CommentTok{#>  $ :List of 3}
+\CommentTok{#>   ..$ : num 1}
+\CommentTok{#>   ..$ : num 2}
+\CommentTok{#>   ..$ : num 3}
+
+\NormalTok{list_c <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{v1=}\DecValTok{1}\NormalTok{, }\DataTypeTok{v2=}\KeywordTok{c}\NormalTok{(}\StringTok{"apple"}\NormalTok{, }\StringTok{"orange"}\NormalTok{), }\DataTypeTok{v3=}\KeywordTok{list}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{))}
+\KeywordTok{str}\NormalTok{(list_c) }\CommentTok{# named}
+\CommentTok{#> List of 3}
+\CommentTok{#>  $ v1: num 1}
+\CommentTok{#>  $ v2: chr [1:2] "apple" "orange"}
+\CommentTok{#>  $ v3:List of 3}
+\CommentTok{#>   ..$ : num 1}
+\CommentTok{#>   ..$ : num 2}
+\CommentTok{#>   ..$ : num 3}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Review data structures: a data frame is a list}
+
+A \textbf{data frame} is a list with the following characteristics:
+
+\begin{itemize}
+\tightlist
+\item
+  All the elements must be \textbf{vectors} with the same
+  \textbf{length}
+\item
+  Data frames are \textbf{augmented lists} because they have additional
+  \textbf{attributes} {[}described later{]}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{list_d <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{col_a =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{), }\DataTypeTok{col_b =} \KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{), }\DataTypeTok{col_c =} \KeywordTok{c}\NormalTok{(}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{))}
+\KeywordTok{typeof}\NormalTok{(list_d)}
+\CommentTok{#> [1] "list"}
+\KeywordTok{str}\NormalTok{(list_d)}
+\CommentTok{#> List of 3}
+\CommentTok{#>  $ col_a: num [1:3] 1 2 3}
+\CommentTok{#>  $ col_b: num [1:3] 4 5 6}
+\CommentTok{#>  $ col_c: num [1:3] 7 8 9}
+
+\NormalTok{df_a <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{col_a =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{), }\DataTypeTok{col_b =} \KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{), }\DataTypeTok{col_c =} \KeywordTok{c}\NormalTok{(}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{))}
+\KeywordTok{typeof}\NormalTok{(df_a)}
+\CommentTok{#> [1] "list"}
+\KeywordTok{str}\NormalTok{(df_a)}
+\CommentTok{#> 'data.frame':    3 obs. of  3 variables:}
+\CommentTok{#>  $ col_a: num  1 2 3}
+\CommentTok{#>  $ col_b: num  4 5 6}
+\CommentTok{#>  $ col_c: num  7 8 9}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\subsection{Attributes and augmented
+vectors}\label{attributes-and-augmented-vectors}
+
+\begin{frame}{Atomic vectors versus augmented vectors}
+
+\textbf{Atomic vectors} {[}our focus so far{]} -
+\href{http://r4ds.had.co.nz/diagrams/data-structures-overview.png}{(See
+figure)} - I think of atomic vectors as ``just the data'' - Atomic
+vectors are the building blocks for augmented vectors
+
+Augmented vectors
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Augmented vectors} are atomic vectors with additional
+  \textbf{atributes} attached
+\end{itemize}
+
+\textbf{Attributes}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Attributes} are additional ``metadata'' that can be attached
+  to any object (e.g., vector or list)
+\item
+  Important attributes in R:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{Names}: name the elements of a vector (e.g., variable names)
+  \item
+    \textbf{Class}: How object should be treated by object oriented
+    programming language {[}discussed below{]}
+  \end{itemize}
+\end{itemize}
+
+Main takaway:
+
+\begin{itemize}
+\tightlist
+\item
+  Augmented vectors are atomic vectors (just the data) with additional
+  attributes attached
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Attributes in vectors}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vector1 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{)}
+\NormalTok{vector1}
+\CommentTok{#> [1] 1 2 3 4}
+\KeywordTok{attributes}\NormalTok{(vector1)}
+\CommentTok{#> NULL}
+
+\NormalTok{vector2 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DataTypeTok{a =} \DecValTok{1}\NormalTok{, }\DataTypeTok{b=} \DecValTok{2}\NormalTok{, }\DataTypeTok{c=} \DecValTok{3}\NormalTok{, }\DataTypeTok{d =} \DecValTok{4}\NormalTok{)}
+\NormalTok{vector2}
+\CommentTok{#> a b c d }
+\CommentTok{#> 1 2 3 4}
+\KeywordTok{attributes}\NormalTok{(vector2)}
+\CommentTok{#> $names}
+\CommentTok{#> [1] "a" "b" "c" "d"}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Attributes in lists}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{list1 <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{), }\KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{))}
+\KeywordTok{str}\NormalTok{(list1)}
+\CommentTok{#> List of 2}
+\CommentTok{#>  $ : num [1:3] 1 2 3}
+\CommentTok{#>  $ : num [1:3] 4 5 6}
+\KeywordTok{attributes}\NormalTok{(list1)}
+\CommentTok{#> NULL}
+
+\NormalTok{list2 <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{col_a =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{), }\DataTypeTok{col_b =} \KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{))}
+\KeywordTok{str}\NormalTok{(list2)}
+\CommentTok{#> List of 2}
+\CommentTok{#>  $ col_a: num [1:3] 1 2 3}
+\CommentTok{#>  $ col_b: num [1:3] 4 5 6}
+\KeywordTok{attributes}\NormalTok{(list2)}
+\CommentTok{#> $names}
+\CommentTok{#> [1] "col_a" "col_b"}
+
+\NormalTok{list3 <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{col_a =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{), }\DataTypeTok{col_b =} \KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{))}
+\KeywordTok{str}\NormalTok{(list3)}
+\CommentTok{#> 'data.frame':    3 obs. of  2 variables:}
+\CommentTok{#>  $ col_a: num  1 2 3}
+\CommentTok{#>  $ col_b: num  4 5 6}
+\KeywordTok{attributes}\NormalTok{(list3)}
+\CommentTok{#> $names}
+\CommentTok{#> [1] "col_a" "col_b"}
+\CommentTok{#> }
+\CommentTok{#> $class}
+\CommentTok{#> [1] "data.frame"}
+\CommentTok{#> }
+\CommentTok{#> $row.names}
+\CommentTok{#> [1] 1 2 3}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Object class}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vector1 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{)}
+\NormalTok{vector1}
+\CommentTok{#> [1] 1 2 3 4}
+\KeywordTok{typeof}\NormalTok{(vector1)}
+\CommentTok{#> [1] "double"}
+\KeywordTok{class}\NormalTok{(vector1)}
+\CommentTok{#> [1] "numeric"}
+\KeywordTok{attributes}\NormalTok{(vector1)}
+\CommentTok{#> NULL}
+
+\NormalTok{vector2 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DataTypeTok{a =} \DecValTok{1}\NormalTok{, }\DataTypeTok{b=} \DecValTok{2}\NormalTok{, }\DataTypeTok{c=} \DecValTok{3}\NormalTok{, }\DataTypeTok{d =} \DecValTok{4}\NormalTok{)}
+\NormalTok{vector2}
+\CommentTok{#> a b c d }
+\CommentTok{#> 1 2 3 4}
+\KeywordTok{attributes}\NormalTok{(vector2)}
+\CommentTok{#> $names}
+\CommentTok{#> [1] "a" "b" "c" "d"}
+\KeywordTok{typeof}\NormalTok{(vector2)}
+\CommentTok{#> [1] "double"}
+\KeywordTok{class}\NormalTok{(vector2)}
+\CommentTok{#> [1] "numeric"}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\section{FACTORS}\label{factors-1}
+
+\begin{frame}[fragile]{Factors}
+
+\textbf{Factors} are used to display categorical data (e.g., marital
+status)
+
+\begin{itemize}
+\tightlist
+\item
+  A factor is an \textbf{augmented vector} built by attaching a
+  ``levels'' attribute to an (atomic) integer vectors
+\end{itemize}
+
+The \hlgc{str()} function is useful for identifying which variables are
+factors. Let's examine the factor variable \hlgc{ethn\_code}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{typeof}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{ethn_code)}
+\CommentTok{#> [1] "integer"}
+\KeywordTok{class}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{ethn_code)}
+\CommentTok{#> [1] "factor"}
+\KeywordTok{str}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{ethn_code)}
+\CommentTok{#>  Factor w/ 11 levels "American Indian or Alaska Native",..: 8 11 11 8 11 8 8 8 8 11 ...}
+\end{Highlighting}
+\end{Shaded}
+
+Note that \hlgc{ethn\_code} has \hlgc{type=integer} and
+\hlgc{class=factor} because the variable has a ``levels'' attribute
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{attributes}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{ethn_code)}
+\end{Highlighting}
+\end{Shaded}
+
+Main takeaway:
+
+\begin{itemize}
+\tightlist
+\item
+  The underlying data are integers but the levels attribute is used to
+  display the data.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Working with factor variables}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{attributes}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{ethn_code)}
+\end{Highlighting}
+\end{Shaded}
+
+Refer to categories of a factor by the values of the level attribute
+rather than the underlying values of the variable
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(wwlist,ethn_code}\OperatorTok{==}\DecValTok{11}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1     0}
+
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(wwlist,ethn_code}\OperatorTok{==}\StringTok{"White"}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>        n}
+\CommentTok{#>    <int>}
+\CommentTok{#> 1 159680}
+\end{Highlighting}
+\end{Shaded}
+
+If you want to refer to underlying values, then apply
+\hlgc{as.integer()} function to the factor variable
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(wwlist,}\KeywordTok{as.integer}\NormalTok{(ethn_code)}\OperatorTok{==}\DecValTok{11}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>        n}
+\CommentTok{#>    <int>}
+\CommentTok{#> 1 159680}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{How to identify the variable values associated
+with factor levels}
+
+MAYBE CUT THIS SLIDE IF YOU CAN'T DO THIS WITHOUT PIPES
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\NormalTok{wwlist }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(psat_range) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
+\CommentTok{#> # A tibble: 8 x 2}
+\CommentTok{#>   psat_range     n}
+\CommentTok{#>   <fct>      <int>}
+\CommentTok{#> 1 1030-1160  45708}
+\CommentTok{#> 2 1030-1520  67192}
+\CommentTok{#> 3 1170-1520  48982}
+\CommentTok{#> 4 1270-1520   8348}
+\CommentTok{#> 5 930-1160   17387}
+\CommentTok{#> 6 930-1260   15660}
+\CommentTok{#> 7 990-1260   27628}
+\CommentTok{#> 8 <NA>       37491}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(wwlist,}\KeywordTok{as.integer}\NormalTok{(psat_range)}\OperatorTok{==}\DecValTok{4}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1  8348}
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(wwlist,psat_range}\OperatorTok{==}\StringTok{"1270-1520"}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1  8348}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Some in-class exercise involving factors}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(wwlist)}
+\CommentTok{#> Classes 'tbl_df', 'tbl' and 'data.frame':    268396 obs. of  19 variables:}
+\CommentTok{#>  $ receive_date    : Date, format: "2016-05-31" "2016-05-31" ...}
+\CommentTok{#>  $ psat_range      : Factor w/ 7 levels "1030-1160","1030-1520",..: 5 4 7 3 7 3 3 3 5 1 ...}
+\CommentTok{#>  $ sat_range       : Factor w/ 3 levels "1030-1600","930-1600",..: NA NA NA NA NA NA NA NA NA NA ...}
+\CommentTok{#>  $ ap_range        : Factor w/ 2 levels "1 or higher",..: NA NA NA NA NA NA NA NA NA NA ...}
+\CommentTok{#>  $ gpa_b_aplus     : Factor w/ 1 level "x": 1 1 1 1 1 1 1 1 1 NA ...}
+\CommentTok{#>  $ gpa_b_aplus_null: Factor w/ 1 level "x": NA NA NA NA NA NA NA NA NA NA ...}
+\CommentTok{#>  $ gpa_bplus_aplus : Factor w/ 1 level "x": NA NA NA NA NA NA NA NA NA 1 ...}
+\CommentTok{#>  $ state           : chr  "WA" "WA" "WA" "WA" ...}
+\CommentTok{#>  $ zip             : chr  "98103-3528" "98030-7964" "98290-8659" "98105-0002" ...}
+\CommentTok{#>  $ for_country     : chr  NA NA NA NA ...}
+\CommentTok{#>  $ sex             : Factor w/ 3 levels "F","M","U": 2 1 2 1 1 2 2 1 2 2 ...}
+\CommentTok{#>  $ hs_ceeb_code    : int  481112 480539 480391 481115 480585 481080 480118 481128 481335 130595 ...}
+\CommentTok{#>  $ hs_name         : chr  "Ingraham High School" "Kentwood Senior High School" "Archbishop Thomas J Murphy HS" "Garfield High School" ...}
+\CommentTok{#>  $ hs_city         : chr  "Seattle" "Covington" "Everett" "Seattle" ...}
+\CommentTok{#>  $ hs_state        : chr  "WA" "WA" "WA" "WA" ...}
+\CommentTok{#>  $ hs_grad_date    : Date, format: "2018-06-01" "2017-06-01" ...}
+\CommentTok{#>  $ ethn_code       : Factor w/ 11 levels "American Indian or Alaska Native",..: 8 11 11 8 11 8 8 8 8 11 ...}
+\CommentTok{#>  $ homeschool      : Factor w/ 2 levels "N","Y": 1 1 1 1 1 1 1 1 1 1 ...}
+\CommentTok{#>  $ firstgen        : Factor w/ 2 levels "N","Y": NA 1 1 1 NA 1 1 2 2 1 ...}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Creating factors {[}from integer vectors{]}}
+
+Factors are just integer vectors with level attributes attached to them.
+So, to create a factor:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  create a vector for the underlying data
+\item
+  create a vector that has level attributes
+\item
+  Attach levels to the data using the \hlgc{factor()} function
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{a1 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{) }\CommentTok{#a vector of data}
+\NormalTok{a2 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"zero"}\NormalTok{,}\StringTok{"one"}\NormalTok{) }\CommentTok{#a vector of labels}
+
+\CommentTok{#attach labels to values}
+\NormalTok{a3 <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(a1, }\DataTypeTok{labels =}\NormalTok{ a2)}
+\NormalTok{a3}
+\CommentTok{#> [1] one  one  one  zero one  one  zero}
+\CommentTok{#> Levels: zero one}
+\KeywordTok{str}\NormalTok{(a3)}
+\CommentTok{#>  Factor w/ 2 levels "zero","one": 2 2 2 1 2 2 1}
+\end{Highlighting}
+\end{Shaded}
+
+Note: By default, \hlgc{factor()} function attached ``zero'' to the
+lowest value of vector \hlgc{a1} because ``zero'' was the first element
+of vector \hlgc{a2}
+
+\end{frame}
+
+\begin{frame}[fragile]{Creating factors {[}from integer vectors{]}}
+
+Let's turn an integer variable into a factor variable in the
+\hlgc{wwlist} data frame
+
+Create integer version of \hlgc{sex}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{wwlist}\OperatorTok{$}\NormalTok{sex_int <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{sex)}
+\KeywordTok{str}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{sex_int)}
+\CommentTok{#>  int [1:268396] 2 1 2 1 1 2 2 1 2 2 ...}
+\CommentTok{#wwlist %>% count(sex) %>% as_factor()}
+\end{Highlighting}
+\end{Shaded}
+
+Assume we know that 1=female, 2=male, 3=unknown
+
+Assign levels to values of integer variable
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{wwlist}\OperatorTok{$}\NormalTok{sex_int <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{sex_int, }\DataTypeTok{labels=}\KeywordTok{c}\NormalTok{(}\StringTok{"female"}\NormalTok{,}\StringTok{"male"}\NormalTok{,}\StringTok{"unknown"}\NormalTok{))}
+\KeywordTok{str}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{sex_int)}
+\CommentTok{#>  Factor w/ 3 levels "female","male",..: 2 1 2 1 1 2 2 1 2 2 ...}
+\KeywordTok{str}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{sex)}
+\CommentTok{#>  Factor w/ 3 levels "F","M","U": 2 1 2 1 1 2 2 1 2 2 ...}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Create factors {[}from string variables{]}}
+
+To create a factor variable from string variable
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  create a character vector containing underlying data
+\item
+  create a vector containing valid levels
+\item
+  Attach levels to the data using the \hlgc{factor()} function
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#underlying data: months my fam is born}
+\NormalTok{x1 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Jan"}\NormalTok{, }\StringTok{"Aug"}\NormalTok{, }\StringTok{"Apr"}\NormalTok{, }\StringTok{"Mar"}\NormalTok{)}
+\CommentTok{#create vector with valid levels}
+\NormalTok{month_levels <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Jan"}\NormalTok{, }\StringTok{"Feb"}\NormalTok{, }\StringTok{"Mar"}\NormalTok{, }\StringTok{"Apr"}\NormalTok{, }\StringTok{"May"}\NormalTok{, }\StringTok{"Jun"}\NormalTok{, }
+  \StringTok{"Jul"}\NormalTok{, }\StringTok{"Aug"}\NormalTok{, }\StringTok{"Sep"}\NormalTok{, }\StringTok{"Oct"}\NormalTok{, }\StringTok{"Nov"}\NormalTok{, }\StringTok{"Dec"}\NormalTok{)}
+\CommentTok{#attach levels to data}
+\NormalTok{x2 <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(x1, }\DataTypeTok{levels =}\NormalTok{ month_levels)}
+\end{Highlighting}
+\end{Shaded}
+
+Note how attributes differ
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(x1)}
+\CommentTok{#>  chr [1:4] "Jan" "Aug" "Apr" "Mar"}
+\KeywordTok{str}\NormalTok{(x2)}
+\CommentTok{#>  Factor w/ 12 levels "Jan","Feb","Mar",..: 1 8 4 3}
+\end{Highlighting}
+\end{Shaded}
+
+Sorting differs
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{sort}\NormalTok{(x1)}
+\CommentTok{#> [1] "Apr" "Aug" "Jan" "Mar"}
+\KeywordTok{sort}\NormalTok{(x2)}
+\CommentTok{#> [1] Jan Mar Apr Aug}
+\CommentTok{#> Levels: Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Create factors {[}from string variables{]}}
+
+Let's create a character version of variable \hlgc{sex} and then turn it
+into a factor
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Create character version of sex}
+\NormalTok{wwlist}\OperatorTok{$}\NormalTok{sex_char <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{sex)}
+
+\CommentTok{#investigate character variable}
+\KeywordTok{str}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{sex_char)}
+\CommentTok{#>  chr [1:268396] "M" "F" "M" "F" "F" "M" "M" "F" "M" "M" "M" "F" "M" ...}
+\KeywordTok{table}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{sex_char)}
+\CommentTok{#> }
+\CommentTok{#>      F      M      U }
+\CommentTok{#> 147434 120470    492}
+
+\CommentTok{#create new variable that assigns levels}
+\NormalTok{sex_fac <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{sex_char, }\DataTypeTok{levels =} \KeywordTok{c}\NormalTok{(}\StringTok{"F"}\NormalTok{,}\StringTok{"M"}\NormalTok{,}\StringTok{"U"}\NormalTok{))}
+\KeywordTok{str}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{sex_char)}
+\CommentTok{#>  chr [1:268396] "M" "F" "M" "F" "F" "M" "M" "F" "M" "M" "M" "F" "M" ...}
+\end{Highlighting}
+\end{Shaded}
+
+How the \hlgc{levels} argument works when underlying data is character
+
+\begin{itemize}
+\tightlist
+\item
+  Matches value of underlying data to value of the level attribute
+\item
+  Converts underlying data to integer, with level attribute attached
+\end{itemize}
+
+\medskip See chapter 15 of Wickham for more on factors (e.g., modifying
+factor order, modifying factor levels)
+
+\end{frame}
+
+\begin{frame}{Substantial exercise on using/creating factors, using
+either df\_school or df\_event datasets}
+
+\end{frame}
+
+\section{Labeling variables}\label{labeling-variables}
+
+\section{Pipes}\label{pipes}
+
+\begin{frame}{What are ``pipes'', \%\textgreater{}\%}
+
+\textbf{Pipes} are a means of perfoming multiple steps in a single line
+of code
+
+\begin{itemize}
+\tightlist
+\item
+  Pipes are part of \textbf{tidyverse} suite of packages, not
+  \textbf{base R}
+\item
+  When writing code, the pipe symbol is \hlgc{\%>\%}
+\item
+  Basic flow of using pipes in code:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \hlgc{object \%>\% some\_function \%>\% some\_function, \ldots}\\
+  \end{itemize}
+\item
+  Pipes work from left to right:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The object/result from left of \hlgc{\%>\%} pipe symbol is the input
+    of function to the right of the \hlgc{\%>\%} pipe symbol
+  \item
+    In turn, the resulting output becomes the input of the function to
+    the right of the next \hlgc{\%>\%} pipe symbol
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Do some tasks with and without pipes}
+
+Print data for ``first-generation'' prospects
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{filter}\NormalTok{(wwlist, firstgen }\OperatorTok{==}\StringTok{ "Y"}\NormalTok{)}
+\NormalTok{wwlist }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(firstgen }\OperatorTok{==}\StringTok{ "Y"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Comparing the two approaches:
+
+\begin{itemize}
+\tightlist
+\item
+  In the ``without pipes'' approach, the object is the first argument
+  \hlgc{filter()} function
+\item
+  In the ``pipes'' approach, you don't specify the object as the first
+  argument of \hlgc{filter()}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Why? Because \hlgc{\%>\%} ``pipes'' the object to the left of the
+    \hlgc{\%>\%} operator into the function to the right of the
+    \hlgc{\%>\%} operator
+  \end{itemize}
+\end{itemize}
+
+Main takeaway:
+
+\begin{itemize}
+\tightlist
+\item
+  Whenever you write code using pipes, functions to the right of a
+  \hlgc{\%>\%} pipe operator should not explicitly name the object that
+  is the input to that function. Rather, the object to the left of the
+  \hlgc{\%>\%} pipe operator is automatically the input.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Do some tasks with and without pipes}
+
+Print data for ``first-generation'' prospects for selected variables
+{[}output omitted{]}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{select}\NormalTok{(}\KeywordTok{filter}\NormalTok{(wwlist, firstgen }\OperatorTok{==}\StringTok{ "Y"}\NormalTok{), state, hs_city, ethn_code)}
+
+\NormalTok{wwlist }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(firstgen }\OperatorTok{==}\StringTok{ "Y"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(state, hs_city, ethn_code)}
+\end{Highlighting}
+\end{Shaded}
+
+Comparing the two approaches:
+
+\begin{itemize}
+\tightlist
+\item
+  In the ``without pipes'' approach, code is written ``inside out''
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The first step in the task -- identifying the object -- is the
+    innermost part of code
+  \item
+    The last step in task -- selecting variables to print -- is the
+    outermost part of code
+  \end{itemize}
+\item
+  In ``pipes'' approach the left-to-right order of code matches how we
+  think about the task
+
+  \begin{itemize}
+  \tightlist
+  \item
+    First, we start with an object \textbf{\emph{and then}}
+    (\hlgc{\%>\%}) we use \hlgc{filter()} to isolate first-gen students
+    \textbf{\emph{and then}} (\hlgc{\%>\%}) we select which variables to
+    print
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Do some tasks with and without pipes}
+
+Count the number ``first-generation'' prospects from the state of
+Washington
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(wwlist, firstgen }\OperatorTok{==}\StringTok{ "Y"}\NormalTok{, state }\OperatorTok{==}\StringTok{ "WA"}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1 32428}
+
+\NormalTok{wwlist }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(firstgen }\OperatorTok{==}\StringTok{ "Y"}\NormalTok{, state }\OperatorTok{==}\StringTok{ "WA"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{()}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1 32428}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Do some tasks with and without pipes {[}last
+example{]}}
+
+Create frequency table of \hlgc{sex} for ``first-generation'' prospects
+from WA
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{wwlist_temp <-}\StringTok{ }\KeywordTok{filter}\NormalTok{(wwlist, firstgen }\OperatorTok{==}\StringTok{ "Y"}\NormalTok{, state }\OperatorTok{==}\StringTok{ "WA"}\NormalTok{)}
+\KeywordTok{table}\NormalTok{(wwlist_temp}\OperatorTok{$}\NormalTok{sex, }\DataTypeTok{useNA =} \StringTok{"ifany"}\NormalTok{)}
+\CommentTok{#> }
+\CommentTok{#>     F     M     U }
+\CommentTok{#> 19080 13282    66}
+
+\NormalTok{wwlist }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(firstgen }\OperatorTok{==}\StringTok{ "Y"}\NormalTok{, state }\OperatorTok{==}\StringTok{ "WA"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(sex)}
+\CommentTok{#> # A tibble: 3 x 2}
+\CommentTok{#>   sex       n}
+\CommentTok{#>   <fct> <int>}
+\CommentTok{#> 1 F     19080}
+\CommentTok{#> 2 M     13282}
+\CommentTok{#> 3 U        66}
+\end{Highlighting}
+\end{Shaded}
+
+Comparison of two approaches
+
+\begin{itemize}
+\tightlist
+\item
+  without pipes, task requires multiple lines of code; this is quite
+  common
+
+  \begin{itemize}
+  \tightlist
+  \item
+    first line creates object; second line analyzes object
+  \end{itemize}
+\item
+  with pipes, task can be completed in one line of code and you aren't
+  left with objects you don't care about
+\end{itemize}
+
+Note: the pipes approach above is a useful way to show the
+\textbf{values} associated with each \textbf{factor level} for factor
+variables
+
+\end{frame}
+
+\begin{frame}{Student exercises with pipes}
+
+CREATE STUDENT EXERCISES
+
+\end{frame}
+
+\section{Creating variables using
+mutate}\label{creating-variables-using-mutate}
+
+\begin{frame}{Our plan for learning how to create new variables}
+
+Recall that the \hlgc{dplyr} package within the \hlgc{tidyverse} provide
+a set of functions that can be described as ``verbs'':
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{subsetting}, \textbf{sorting}, and \textbf{transforming}
+\end{itemize}
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+What we've done & Where we're going\tabularnewline
+\midrule
+\endhead
+\textbf{Subsetting data} & \textbf{Transforming data}\tabularnewline
+- \hlgc{select()} variables & - \hlgc{mutate()} creates new
+variables\tabularnewline
+- \hlgc{filter()} observations & - \hlgc{summarize()} calculates across
+rows\tabularnewline
+\textbf{Sorting data} & - \hlgc{group\_by()} to calculate across rows
+within groups\tabularnewline
+- \hlgc{arrange()} &\tabularnewline
+\bottomrule
+\end{longtable}
+
+\textbf{Today}
+
+\begin{itemize}
+\tightlist
+\item
+  we'll use \hlgc{mutate()} to create new variables based on
+  calculations across columns within a row
+\end{itemize}
+
+\textbf{Next week}
+
+\begin{itemize}
+\tightlist
+\item
+  we'll combine \hlgc{mutate()} with \hlgc{summarize()} and
+  \hlgc{group\_by()} to create variables based on calculations across
+  rows
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Introduce \hlgc{mutate()} function}
+
+\hlgc{mutate()} creates new columns (variblaes) that are functions of
+existing columns
+
+\begin{itemize}
+\tightlist
+\item
+  \textbackslash{}hlgc\{mutate() is the \textbf{tidyverse} approach to
+  creating variables, not the \textbf{Base R} approach
+\item
+  \textbackslash{}hlgc\{mutate() works best with pipes \hlgc{\%>\%}
+\end{itemize}
+
+We'll create variables from data frame \hlgc{df\_school} which has one
+observation for each high school
+
+\begin{itemize}
+\tightlist
+\item
+  Task: create pct of students on free/reduced lunch (output omitted)
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{school_sml <-}\StringTok{ }\NormalTok{df_school }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(school_type }\OperatorTok{==}\StringTok{ "public"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{select}\NormalTok{(ncessch, num_fr_lunch, total_students)}
+
+\NormalTok{school_sml }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{pct_fr_lunch =}\NormalTok{ num_fr_lunch}\OperatorTok{/}\NormalTok{total_students)}
+\end{Highlighting}
+\end{Shaded}
+
+Can combine \hlgc{(select())} with pipes \hlgc{\%>\%} to control which
+columns printed, so no need to create dataset with fewer columns. But
+let's create data frame with public high schools only
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{school_pub <-}\StringTok{ }\NormalTok{df_school }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(school_type }\OperatorTok{==}\StringTok{ "public"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Introduce \hlgc{mutate()} function}
+
+New variable not retained unless we \textbf{assign} \hlgc{<-} it to an
+object (existing or new)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{school_pub }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{pct_fr_lunch =}\NormalTok{ num_fr_lunch}\OperatorTok{/}\NormalTok{total_students)}
+\KeywordTok{names}\NormalTok{(school_pub)}
+
+\NormalTok{school_pub_temp <-}\StringTok{ }\NormalTok{school_pub }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{pct_fr_lunch =}\NormalTok{ num_fr_lunch}\OperatorTok{/}\NormalTok{total_students) }
+\KeywordTok{names}\NormalTok{(school_pub_temp)}
+\end{Highlighting}
+\end{Shaded}
+
+How to create percent free/reduced lunch in \textbf{Base R}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{school_pub}\OperatorTok{$}\NormalTok{pct_fr_lunch <-}\StringTok{ }\NormalTok{school_pub}\OperatorTok{$}\NormalTok{num_fr_lunch}\OperatorTok{/}\NormalTok{school_pub}\OperatorTok{$}\NormalTok{total_students}
+\end{Highlighting}
+\end{Shaded}
+
+\hlgc{mutate()} can create multiple variables at once
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{school_pub }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{pct_fr_lunch =}\NormalTok{ num_fr_lunch}\OperatorTok{/}\NormalTok{total_students,}
+         \DataTypeTok{pct_prof_math=}\NormalTok{ num_prof_math}\OperatorTok{/}\NormalTok{num_took_math) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(num_fr_lunch, total_students, pct_fr_lunch, }
+\NormalTok{         num_prof_math, num_took_math, pct_prof_math)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}{Student exercise using mutate()}
+
+\end{frame}
+
+\begin{frame}[fragile]{Mutate to create indicator variables}
+
+We often create dichotomous (0/1) indicator variables of whether
+something happened (or whether something is TRUE)
+
+\begin{itemize}
+\tightlist
+\item
+  Variables that are of substantive interest to project
+
+  \begin{itemize}
+  \tightlist
+  \item
+    e.g., did student graduate from college
+  \end{itemize}
+\item
+  Variables that help you investigate data, check quality
+
+  \begin{itemize}
+  \tightlist
+  \item
+    e.g., indicator of whether an observation is missing/non-missing for
+    a particular variable
+  \end{itemize}
+\end{itemize}
+
+Let's conduct some investigations of \hlgc{df\_school}, which has one
+observation for each high school
+
+Rename some variables (output omitted)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(df_school)}
+\NormalTok{df_schoolv2 <-}\StringTok{ }\NormalTok{df_school }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{rename}\NormalTok{(}
+    \DataTypeTok{visits_berkeley =}\NormalTok{ visits_by_}\DecValTok{110635}\NormalTok{,}
+    \DataTypeTok{visits_boulder =}\NormalTok{ visits_by_}\DecValTok{126614}\NormalTok{,}
+    \DataTypeTok{visits_bama =}\NormalTok{ visits_by_}\DecValTok{100751}\NormalTok{,}
+    \DataTypeTok{state_berkeley =}\NormalTok{ inst_}\DecValTok{110635}\NormalTok{,}
+    \DataTypeTok{state_boulder =}\NormalTok{ inst_}\DecValTok{126614}\NormalTok{,}
+    \DataTypeTok{state_bama =}\NormalTok{ inst_}\DecValTok{100751}\NormalTok{)}
+
+\KeywordTok{names}\NormalTok{(df_schoolv2)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Creating indicators for \hlgc{df\_schoolv2} data
+frame}
+
+Create TRUE/FALSE indicator that median household income greater than
+\$50,000
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df_schoolv2_temp <-}\StringTok{ }\NormalTok{df_schoolv2 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{incgt50k =}\NormalTok{ avgmedian_inc_}\DecValTok{2564}\OperatorTok{>}\DecValTok{50000}\NormalTok{)}
+
+\NormalTok{df_schoolv2_temp }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(avgmedian_inc_}\DecValTok{2564}\NormalTok{, incgt50k) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{head}\NormalTok{(}\DataTypeTok{n=}\DecValTok{3}\NormalTok{)}
+\CommentTok{#> # A tibble: 3 x 2}
+\CommentTok{#>   avgmedian_inc_2564 incgt50k}
+\CommentTok{#>                <dbl> <lgl>   }
+\CommentTok{#> 1              76160 TRUE    }
+\CommentTok{#> 2              76160 TRUE    }
+\CommentTok{#> 3                 NA NA}
+
+\NormalTok{df_schoolv2_temp }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(avgmedian_inc_}\DecValTok{2564}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(incgt50k)}
+\CommentTok{#> # A tibble: 1 x 2}
+\CommentTok{#>   incgt50k     n}
+\CommentTok{#>   <lgl>    <int>}
+\CommentTok{#> 1 NA         624}
+\end{Highlighting}
+\end{Shaded}
+
+Important takeaway:
+
+\begin{itemize}
+\tightlist
+\item
+  Variable created by \hlgc{mutate()} equals \hlgc{NA} for obs if input
+  variable to \hlgc{mutate()} is missing for that obs. This is a good
+  thing!
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Creating indicators for \hlgc{df\_schoolv2} data
+frame}
+
+Create TRUE/FALSE indicator that school is less than 50 percent white
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df_schoolv2_temp <-}\StringTok{ }\NormalTok{df_schoolv2 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{lt50pctwhite =}\NormalTok{ pct_white}\OperatorTok{<}\DecValTok{50}\NormalTok{)}
+\NormalTok{df_schoolv2_temp }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(pct_white,lt50pctwhite) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{head}\NormalTok{(}\DataTypeTok{n=}\DecValTok{3}\NormalTok{)}
+\CommentTok{#> # A tibble: 3 x 2}
+\CommentTok{#>   pct_white lt50pctwhite}
+\CommentTok{#>       <dbl> <lgl>       }
+\CommentTok{#> 1      11.8 TRUE        }
+\CommentTok{#> 2       0   TRUE        }
+\CommentTok{#> 3       0   TRUE}
+\KeywordTok{str}\NormalTok{(df_schoolv2_temp}\OperatorTok{$}\NormalTok{lt50pctwhite)}
+\CommentTok{#>  logi [1:21301] TRUE TRUE TRUE TRUE TRUE TRUE ...}
+\end{Highlighting}
+\end{Shaded}
+
+Create 0/1 integer indicator rather than logical indicator
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df_schoolv2_temp <-}\StringTok{ }\NormalTok{df_schoolv2 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{lt50pctwhite =} \KeywordTok{as.integer}\NormalTok{(pct_white}\OperatorTok{<}\DecValTok{50}\NormalTok{))}
+\NormalTok{df_schoolv2_temp }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(pct_white,lt50pctwhite) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{head}\NormalTok{(}\DataTypeTok{n=}\DecValTok{3}\NormalTok{)}
+\CommentTok{#> # A tibble: 3 x 2}
+\CommentTok{#>   pct_white lt50pctwhite}
+\CommentTok{#>       <dbl>        <int>}
+\CommentTok{#> 1      11.8            1}
+\CommentTok{#> 2       0              1}
+\CommentTok{#> 3       0              1}
+\KeywordTok{str}\NormalTok{(df_schoolv2_temp}\OperatorTok{$}\NormalTok{lt50pctwhite)}
+\CommentTok{#>  int [1:21301] 1 1 1 1 1 1 1 1 1 1 ...}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Student exercises}
+
+0/1 indicators of whether school received visit from each university
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df_schoolv2 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(visits_berkeley)}
+\CommentTok{#> # A tibble: 4 x 2}
+\CommentTok{#>   visits_berkeley     n}
+\CommentTok{#>             <int> <int>}
+\CommentTok{#> 1               0 20732}
+\CommentTok{#> 2               1   528}
+\CommentTok{#> 3               2    36}
+\CommentTok{#> 4               3     5}
+\NormalTok{df_schoolv2_temp <-}\StringTok{ }\NormalTok{df_schoolv2 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{yesvis_berkeley =}\NormalTok{ visits_berkeley}\OperatorTok{>}\DecValTok{0}\NormalTok{)}
+
+\NormalTok{df_schoolv2_temp }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(visits_berkeley}\OperatorTok{>}\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(visits_berkeley,yesvis_berkeley)}
+\CommentTok{#> # A tibble: 569 x 2}
+\CommentTok{#>    visits_berkeley yesvis_berkeley}
+\CommentTok{#>              <int> <lgl>          }
+\CommentTok{#>  1               2 TRUE           }
+\CommentTok{#>  2               2 TRUE           }
+\CommentTok{#>  3               2 TRUE           }
+\CommentTok{#>  4               1 TRUE           }
+\CommentTok{#>  5               1 TRUE           }
+\CommentTok{#>  6               1 TRUE           }
+\CommentTok{#>  7               1 TRUE           }
+\CommentTok{#>  8               1 TRUE           }
+\CommentTok{#>  9               1 TRUE           }
+\CommentTok{#> 10               1 TRUE           }
+\CommentTok{#> # ... with 559 more rows}
+\NormalTok{df_schoolv2_temp }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(visits_berkeley}\OperatorTok{==}\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(visits_berkeley,yesvis_berkeley)}
+\CommentTok{#> # A tibble: 20,732 x 2}
+\CommentTok{#>    visits_berkeley yesvis_berkeley}
+\CommentTok{#>              <int> <lgl>          }
+\CommentTok{#>  1               0 FALSE          }
+\CommentTok{#>  2               0 FALSE          }
+\CommentTok{#>  3               0 FALSE          }
+\CommentTok{#>  4               0 FALSE          }
+\CommentTok{#>  5               0 FALSE          }
+\CommentTok{#>  6               0 FALSE          }
+\CommentTok{#>  7               0 FALSE          }
+\CommentTok{#>  8               0 FALSE          }
+\CommentTok{#>  9               0 FALSE          }
+\CommentTok{#> 10               0 FALSE          }
+\CommentTok{#> # ... with 20,722 more rows}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Investigating \hlgc{wwlist} data frame}
+
+?MAYBE CUT UNTIL NEXT LECTURE AND HAVE SECTION ON USING DESCRIPTIVE
+STATS TO INVESTIGATE DATA?
+
+\medskip Let's conduct some investigations of \hlgc{wwlist}, which is
+frankly a pretty weird dataset!
+
+\begin{itemize}
+\tightlist
+\item
+  When conducting investigations, really important to be careful about
+  missing values
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(wwlist)}
+\end{Highlighting}
+\end{Shaded}
+
+Variable \hlgc{receive\_date} indicates date prospect list data received
+from College Board
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{wwlist }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(receive_date)}
+\CommentTok{#> # A tibble: 15 x 2}
+\CommentTok{#>    receive_date     n}
+\CommentTok{#>    <date>       <int>}
+\CommentTok{#>  1 2016-05-31   50975}
+\CommentTok{#>  2 2016-06-01   23195}
+\CommentTok{#>  3 2016-06-02    4710}
+\CommentTok{#>  4 2016-08-02    3929}
+\CommentTok{#>  5 2016-08-03    5650}
+\CommentTok{#>  6 2016-11-09    1178}
+\CommentTok{#>  7 2017-01-23    1105}
+\CommentTok{#>  8 2017-05-05   73430}
+\CommentTok{#>  9 2017-06-05    3058}
+\CommentTok{#> 10 2017-08-10   11396}
+\CommentTok{#> 11 2017-10-11     827}
+\CommentTok{#> 12 2018-01-17    2077}
+\CommentTok{#> 13 2018-05-24   29756}
+\CommentTok{#> 14 2018-06-20   53737}
+\CommentTok{#> 15 2018-07-10    3373}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{other}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#num_took_math, num_prof_math}
+\NormalTok{ww_narrow <-}\StringTok{ }\NormalTok{wwlist }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(psat_range, }\KeywordTok{contains}\NormalTok{(}\StringTok{"gpa"}\NormalTok{), state, zip, for_country, ethn_code, homeschool, firstgen)}
+\KeywordTok{load}\NormalTok{(}\StringTok{"../../data/recruiting/recruit_event_somevars.Rdata"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\end{document}
