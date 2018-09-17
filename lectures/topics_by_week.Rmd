@@ -813,8 +813,8 @@ be a missing value. Fortunately, all aggregation functions have an na.rm argumen
 
 ### Order of lecture
 
-- what are functions
-- when to write a function vs. not
+- what are functions [DONE]
+- when to write a function vs. not [DONE]
 - basics of how writing functions
     - how to write a function; how to improve a function
           - basics of functional arguments (19.5); put stuff from 19.5 function arguments here
@@ -831,7 +831,20 @@ be a missing value. Fortunately, all aggregation functions have an na.rm argumen
         - dot-dot-dot
         - pipeable functions?
     - practical examples
-    
+ 
+potential function examples
+
+- calculate mean
+- calculate the proportion missing
+- calculate z score for each observation [number of standard deviations from mean]
+    z = (x_i - xbar)/sd(x)
+- count the number of NAs; 
+- count the number of negative values    
+- create "v2" version of a variable that converts values you specify to NA
+- convert negative values to NA [from skinner]
+    - note: this requires you to return(x)
+
+
 
 potential practical examples
 - reading in the admissions data for 2014-15 to 2016-17? [very simple one]
@@ -939,6 +952,7 @@ We specify this value in the program call statement
 - why write functions
     - DRY: do not repeat yourself
 - example of doing something without and with a function
+    - center a set of variables: for each variable, subtract the mean from each observation
 - three components of a function
     - name
     - arguments
@@ -949,6 +963,7 @@ We specify this value in the program call statement
     - write function
     - perform (quick) tests
 - demonstrates functions:
+    - center a set of variables: for each variable, subtract the mean from each observation
     - write percentage change function
     - renaming columns
 - student exercises: tasks from wickham text and wickham exercises
