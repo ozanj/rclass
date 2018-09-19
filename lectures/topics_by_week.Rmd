@@ -849,7 +849,6 @@ potential function examples
 potential practical examples
 - reading in the admissions data for 2014-15 to 2016-17? [very simple one]
 - functions for the recruiting research data
-    - [as of 9/10/2018] functions available here: C:\Users\ozanj\Dropbox\recruiting-m1\analysis\scripts\recruit_m1.R
 - from skinner: https://www.btskinner.me/rworkshop/modules/programming_one.html 
     - Moving to a more realistic example, we could make a function that filled in missing values, a common task we’ve had. First, we’ll generate some fake data with missing values.
 
@@ -991,28 +990,329 @@ We specify this value in the program call statement
 
 ## Class 10. iteration
 
-### Big topics
-
 ### Learning objectives
 
-### Order of lecture
+### big topics/Order of lecture
+
+STUFF TO COVER FOR LOOPS; 9/18
+
+- intro to loops/components of a loop
+- ways to loop over a vector
+    1. looping over numeric indices
+    2. Loop over the elements [e.g., element1 of dataframe, element 2, etc.]. this is equivalent to forvalues in stata
+ efficiently.
+    3. loop over the names [e.g., of vars in a dataset] [equivalent to foreach in stata]
+- tasks achieved by body of loop
+    - create new object
+        - e.g., create a vector that is entirely separate from the object it is based on 
+    - modify existing object
+        - this would include adding new variable to existing object
+
+
+
+
+OLDER
+- review concepts that are relevant for loops
+    - vectors vs. lists
+    - accessing elements of vectors [subsetting]
+        - subsetting elements of vectors [un-named]
+        - subsetting named vectors
+    - accessing elements of lists
+        - [] to extract a sub-list; result will always be a list
+        - [[]] to extract a single component from a list; it removes level of hierarchy
+            - $ is a shorthand for extracting named elements of a list. It works similarly to [[ except that you don’t need to use quotes.
+                - remind students that we have seen this before
+        - "The distinction between [ and [[ is really important for lists, because [[ drills down into the list while [ returns a new, smaller list. "
+    - sequences
+    - length
+    - indices        
+    - in preparation for loops:
+        - Typically you’ll be modifying a list or data frame with this sort of loop, so remember to use [[, not [. You might have spotted that I used [[ in all my for loops: I think it’s better to use [[ even for atomic vectors because it makes it clear that I want to work with a single element.
+- ways to loop over a vector:
+    1. looping over numeric indices
+        - So far I’ve shown you the most general: looping over the numeric indices with for (i in seq_along(xs)), and extracting the value with x[[i]]    
+    2. Loop over the elements [e.g., element1 of dataframe, element 2, etc.]. this is equivalent to forvalues in stata
+        - for (x in xs). This is most useful if you only care about side-effects, like plotting or saving a file, because it’s difficult to save the output efficiently.
+        - own: I FORGET WHAT THIS IS
+    3. loop over the names [e.g., of vars in a dataset] [equivalent to foreach in stata]
+        - this gives you name, which you can use to access the value with x[[nm]]. This is useful if you want to use the name in a plot title or a file name. If you’re creating named output, make sure to name the results vector like so:
+```{r}
+results <- vector("list", length(x))
+names(results) <- names(x)
+```
+    - __iteration over numeric indices is most general form; because given the position you can extract both the name and the value__
+```{r}
+for (i in seq_along(x)) {
+  name <- names(x)[[i]]
+  value <- x[[i]]
+}
+```
+    
+- looping over values or names
+- looping over indices
+- explain Wickham approach to for loop [later]
 
 ### Data sources for lecture
 
 ### Problem set ideas
 
+### what Wickham covers [chapter 21, iteration]
+
+1. intro
+    - defines iteration: "Another tool for reducing duplication is iteration, which helps you when you need to do the same thing to multiple inputs: repeating the same operation on different columns, or on different datasets. "
+    - two different approaches to iteration
+        - "imperative programming" [loops]
+        - "functional programming" [mapping]
+2. for loops
+    - example:
+```{r}
+#Imagine we have this simple tibble:
+
+df <- tibble(
+  a = rnorm(10),
+  b = rnorm(10),
+  c = rnorm(10),
+  d = rnorm(10)
+)
+#We want to compute the median of each column. You could do with copy-and-paste:
+
+median(df$a)
+median(df$b)
+median(df$c)
+median(df$d)
+```
+    - loop approach
+```{r}
+output <- vector("double", ncol(df))  # 1. output
+for (i in seq_along(df)) {            # 2. sequence
+  output[[i]] <- median(df[[i]])      # 3. body
+}
+output
+```
+    - three components of a loop
+        - output
+        - sequence
+        - body
+    
+3. for loop variations [stop after this section]
+    - Modifying an existing object, instead of creating a new object
+    - overview of ways to loop over a vector:
+        1. looping over numeric indices
+            - So far I’ve shown you the most general: looping over the numeric indices with for (i in seq_along(xs)), and extracting the value with x[[i]]    
+        2. Loop over the elements [e.g., element1 of dataframe, element 2, etc.]. this is equivalent to forvalues in stata
+            - for (x in xs). This is most useful if you only care about side-effects, like plotting or saving a file, because it’s difficult to save the output efficiently.
+            - own: I FORGET WHAT THIS IS
+        3. loop over the names [e.g., of vars in a dataset] [equivalent to foreach in stata]
+            - this gives you name, which you can use to access the value with x[[nm]]. This is useful if you want to use the name in a plot title or a file name. If you’re creating named output, make sure to name the results vector like so:
+    ```{r}
+    results <- vector("list", length(x))
+    names(results) <- names(x)
+    ```
+        - __iteration over numeric indices is most general form; because given the position you can extract both the name and the value__
+    ```{r}
+    for (i in seq_along(x)) {
+      name <- names(x)[[i]]
+      value <- x[[i]]
+    }
+    ```
+
+- unknown output length [this is about efficiency]; SKIP/SKIM
+- unknown sequence length [while()]
+    - Sometimes you don’t even know how long the input sequence should run for. This is common when doing simulations. For example, you might want to loop until you get three heads in a row. You can’t do that sort of iteration with the for loop. Instead, you can use a while loop. A while loop is simpler than for loop because it only has two components, a condition and a body:
+```{r}
+while (condition) {
+  # body
+}
+```
+    
+    - A while loop is also more general than a for loop, because you can rewrite any for loop as a while loop, but you can’t rewrite every while loop as a for loop:
+```{r}
+for (i in seq_along(x)) {
+  # body
+}
+
+# Equivalent to
+i <- 1
+while (i <= length(x)) {
+  # body
+  i <- i + 1 
+}
+```
+- Here’s how we could use a while loop to find how many tries it takes to get three heads in a row:
+    
+4. for loops vs. functionals 
+5. map functions
+
 ### What Ben skinner covers
+
+(https://www.btskinner.me/rworkshop/modules/programming_one.html )
+
+- for() function allows you to build loops
+    - [like his approach] The for() function allows you to build loops. There are few ways to use for(), but its construction is the same: for(variable in sequence).
+    - Reading it backwards, the sequence is just the set of numbers or objects that we’re going to work through. The variable is a new variable that will temporarily hold a value from the sequence in each run through the loop. When the sequence is finished, so is the loop.
+    - First, let’s loop through a sequence of 10 numbers, printing each one at a time as we work through the loop.
+```{r}
+## make vector of numbers between 1 and 10
+num_sequence <- 1:10
+
+## loop through, printing each num_sequence value, one at a time
+for (i in num_sequence) {
+    print(i)
+}
+
+```
+    - Notice the braces {} that come after for(). This is the code in the loop that will be repeated as long as the loop is run. With each loop, i takes on the next value in the num_sequence. This is why we see 1 through 10 printed to the console.
+    - Let’s do it again, but this time with characters.
+
+```{r}
+## character vector using letters object from R base
+chr_sequence <- letters[1:10]
+
+## loop through, printing each chr_sequence value, one at a time
+for (i in chr_sequence) {
+    print(i)
+}
+```
+
+- loop that works through a vector by its indices
+    - explains how this code works:
+```{r}
+## for loop by indices
+for (i in 1:length(chr_sequence)) {
+    print(chr_sequence[i])
+}
+
+
+```
+    - Inside the for() parentheses, we have i in 1:length(chr_sequence). We know what i in means since it’s like what we’ve seen before. What’s 1:length(chr_sequence)? Starting at the end, we know that length() will return the number of items in the vector. Since we know that there are ten letters in chr_sequence, then we know that length(chr_sequence) == 10. That means that 1:length(chr_sequence) is the same thing as saying 1:10, which is what we’ve seen before. It’s just another, more flexible way, to get the end number of our sequence.
+
+    - Inside the braces ({}), we have print(chr_sequence[i]). From the first module, we know that brackets ([]) are way of pulling out specific values from a vector. We’ve only used numbers before, but we can also use variables that represent numbers. Since we know that i is going to take on values 1 through 10 in the loop, that means the print() function will get chr_sequence[1], chr_sequence[2], and so on. Because of the brackets, these will turn into…a, b, and so on. We should get the same thing as before!
+    
+- while() function
+    - The while() function is similar to for() except that it doesn’t have a predetermined stopping point. As long the expression inside the parentheses is TRUE, the loop will keep going. Only when it becomes FALSE will it stop.
+    - One way to use a while() loop is to set up a counter. When the counter reaches some value, the expression inside the while() parentheses is no longer true and the loop stops.
+```{r}
+## set up a counter
+i <- 1
+
+## with each loop, add one to i
+while(i < 11) {
+    print(i)
+    i <- i + 1
+}
+```
+    
+- conditional [if, else] stuff that is applied in functions lecture too
 
 ### What covered in Stata data mgt course [lecture 11]
 
 lecture 11: macros and looping
 
-- 
+- intro to automating your work
+- global macro vars
+- local macro vars
+- looping
+    - explanation of general concepts
+        - iteration
+        - explanation of how "hello" program works
+        - what happens at each iteration
+        - trace command
+    - first example is essentially, the "hello" program
+      - foreach y in 2013 2014 2015 {
+        2. display as result "My age in y was " y-1979
+        3. }
+    - task: write hello loop for people in your family
+    - practical example:
+        - import IPEDS 12-month enrollment for 2012,2013, and 2014
+        - 
+    - practical example: create new variables using loops
+        - use loops to create 0/1 versions of imputation variables
+    - Practical example 3: Creating counter variable and running regressions in a loop
+        - Show example of creating counter, without using dataset 
+        - Show example of running regression in loop and using counter to
+    save model results
+    - show forvalues [as opposed to foreach]
+    - debugging loops
+        - use "display" command to check whether macro variable contents are what you want them to be
+            - Long: "the first thing I do when I have a problem with a loop is to use display to show the value of the local
+created by foreach or forvalues"
+        - use trace command to see what loop is actually doing
+    
+### What covered in Christenson course [lecture 12]
 
-### What covered in Christenson course [lecture 11]
 
-Lecture 11: functions
+broad tips from Christenson about writing a loop
 
-- why write functions [from wickham ]
+1. write body of loop [ignoring the iteration]; get it to work for a single instance
+2. figure out what elements of the body need to change with each iteration
+3. determine the sequence
+4. [optional] identify an object to store the output
+5. construct the loop
+
+- overview of loop lecture [12]
+    - what a loop does
+    - when to write a loop
+    - lots of practice
+    - vectors & lists
+- what a loop does
+    - loop demo1
+```{r}
+for(i in 1:5) { # sequence
+  print(i) # body
+}
+```
+    - looop demo2
+```{r}
+vec <- c(3,5,7,9,11)
+for(j in seq_along(vec)) { # sequence
+  print(vec[j]/10) # body
+}
+```
+    - loop demo3: [create object to store output of loop]
+        - if we want to retain output of loop, we need to create a object to store it
+        - output can be vectors, dataframes, lists
+        - whenever possible, we want to __pre-allocate__ size of object
+```{r}
+new_vec <- vector("integer", length(vec)) # Output
+new_vec
+
+vec <- c(3,5,7,9,11)
+for(j in seq_along(vec)) { # sequence
+  print(vec[j]/10) # body
+  new_vec <- (vec[j]/10) # body
+}
+new_vec
+```        
+
+- when to write a loop
+    - goal: do not repeat yourself [DRY]
+    - same rationale for reducing duplicate code as functions
+    - modifying an existing object
+        - gives example of creating a z-score variable for each variable in dataset
+            - gives example of writing function to do this
+            - gives example of writing loop to do this (note that this example uses stuff like [[]], that I am unsure students grasp at this point)
+```{r}
+for(i in 1:ncol(df)) {
+  x <- df[[i]] # grab column i
+  z <- Zstat(x) # compute Z
+  df[[i]] <- z # overwrite column i
+}
+```
+    - gives tips for writing a loop [above]
+- practice with loops
+    - write loop that removes descriptors from variable name [we won't do this]
+    - write function that prints mean of each numeric column in a data frame, along with its name
+    - write a loop/function that checks if column is numeric or integer; if yes, recrord column name and compute mean; if no, skip [I LIKE THIS EXAMPLE; HE CARRIES IT THROUGH TO TEACH DIFFERENT THINGS]
+        - embed this in a function instead
+        - try on a different dataset
+        - write similar function for median instead of mean
+- vectors and lists
+    - two types of vectors: atomic vectors and lists
+        - atomic vectors [logical,]
+        - lists
+        - main diff between atomic vectors and lists is that atomic vectors are homgenous
+    - using lists
 
 ### Reading [after lecture]
+
+- chapter 20 [vectors], sections 20.1-20.5

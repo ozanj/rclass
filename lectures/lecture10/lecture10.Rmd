@@ -1,0 +1,790 @@
+---
+title: Managing and Manipulating Data Using R # potentially push to header
+subtitle:  Lecture 10, Looping
+author: Ozan Jaquette
+date: 
+fontsize: 8pt
+classoption: dvipsnames  # for colors
+output:
+  beamer_presentation:
+    keep_tex: true
+    toc: true
+    slide_level: 3
+    theme: default # AnnArbor # push to header?
+    #colortheme: "dolphin" # push to header?
+    #fonttheme: "structurebold"
+    highlight: default # Supported styles include "default", "tango", "pygments", "kate", "monochrome", "espresso", "zenburn", and "haddock" (specify null to prevent syntax highlighting); push to header
+    df_print: default #default # tibble # push to header?    
+    latex_engine: xelatex #  Available engines are pdflatex [default], xelatex, and lualatex; The main reasons you may want to use xelatex or lualatex are: (1) They support Unicode better; (2) It is easier to make use of system fonts.
+    includes:
+      in_header: ../beamer_header.tex
+      #after_body: table-of-contents.txt 
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
+```
+
+# Introduction
+
+### Libraries
+
+```{r}
+library(tidyverse)
+```
+
+# Accessing elements of vectors and lists
+
+## Accessing elements of (atomic) vectors
+
+### Types of vectors
+
+Recall that there are two broad types of vectors, __atomic vectors__ and __lists__
+
+1. __Atomic vectors__. There are six types:
+    - logical, integer, double, character, complex, and raw
+
+2. __lists__. "sometimes called recursive vectors lists can contain other lists"
+
+Main difference between atomic vectors and lists:
+
+- atomic vectors are "homogenous," meaning each element in vector must have same type (e.g., integer, logical, character)
+- lists are "heterogeneous," meaning that data type can differ across elements within a list
+
+Link to figure of data structures overview [HERE](http://r4ds.had.co.nz/diagrams/data-structures-overview.png)
+
+### Important Types of atomic vectors
+
+\medskip 1. logical. each element can be three potential values: `TRUE`, `FALSE`, `NA`
+```{r}
+typeof(c(TRUE,FALSE,NA))
+typeof(c(1==1,1==2))
+```
+2. Numeric (integer or double)
+```{r}
+typeof(c(1.5,2,1))
+typeof(c(1,2,1))
+```
+- Numbers are doubles by default. To make integer, place `L` after number:
+```{r}
+typeof(c(1L,2L,1L))
+```
+
+3. character
+```{r}
+typeof(c("element of character vector","another element"))
+length(c("element of character vector","another element"))
+```
+### functions that identify type of vector
+
+Function | logical | int | dbl | chr | list
+---------|---------|-----|-----|-----|-----
+`is_logical()` | X | | | |
+`is_integer()` |  |X | | |
+`is_double()` |  | |X | |
+`is_numeric()` |  |X |X | |
+`is_character()` |  | | |X |
+`is_atomic()` |X  |X |X |X |
+`is_list()` |  | | | | X
+`is_vector()` |X  |X |X |X |X
+
+Recall that elements of a vector must have the same type
+
+    - if vector contains elements of different type, the vector type will be the most "complex"
+    - from simplest to most complex: logical, integer, double, character
+
+```{r, results="hide"}
+is_logical(c(TRUE,TRUE,NA))
+is_logical(c(TRUE,TRUE,NA,1))
+
+typeof(c(TRUE,1L))
+is_integer(c(TRUE,1L))
+
+typeof(c(TRUE,1L,1.5,"b"))
+is_character(c(TRUE,1L,1.5,"b"))
+```
+### naming vectors
+
+All vectors can be "named" (i.e., you name individual elements within the vector)
+
+Unamed vector
+```{r}
+x <- c(1,2,3,"hi!")
+x
+str(x)
+```
+named vector
+```{r}
+y <- c(a=1,b=2,3,c="hi!")
+y
+str(y)
+```
+
+### Subsetting elements of vector, based on position number
+
+"Subsetting" a vector, refers to isolating particular elements of a vector
+
+- I sometimes refer to this as "accessing elements of a vector"
+- subsestting elements of a vector is similar to "filtering" rows of a data-frame
+
+`[]` is the subsetting function for vectors
+
+- contents inside `[]` can refer to element number (also called "position"). 
+    - e.g., `[3]` refers to contents of 3rd element (or position 3)
+- contents inside `[]` can also refer to name of element
+    - e.g., `["a"]` refers to contents inside an element named "a"
+    
+Referring to elements based on position
+```{r}
+x <- c("a","b","c","d","e")
+x[1]
+x[5]
+
+c(x[1],x[2],x[2])
+
+x[c(1,2,2)]
+```
+
+### Subsetting elements of vector, based on position number
+
+Referring to elements based on position, continued
+
+```{r}
+y <- c(4,5,10,29,15,12)
+length(y)
+
+y[c(1,3,6)]
+y[c(3,6,1)]
+```
+While subsetting with positive numbers keeps elements in those positions, subsetting with negative numbers drops elements at those positions
+```{r}
+y
+y[c(-3,-4,-5,-6)]
+```
+
+### Subsetting elements of vector, with a logical vector
+
+Grolemund and Wickham (chapter 20): "Subsetting with a logical vector keeps all values corresponding to a TRUE value"
+
+```{r}
+x <- c(10, 3, NA, 5, 8, 1, NA,"Hi!")
+
+typeof(x)
+
+x[is.na(x)]
+x[!is.na(x)]
+
+x[is.numeric(x)]
+x[is.character(x)]
+
+y <- c(10, 3, NA, 5, 8, 1, NA)
+typeof(y)
+y[is.numeric(y)]
+```
+### Subsetting elements of named vector, by element name
+
+If you have a named vector, you can subset it with a character vector:
+
+```{r}
+x <- c(abc = 1, def = 2, xyz = 5)
+x
+x[c("xyz", "def")]
+```
+
+## Accessing elements of lists
+
+### Lists
+
+Like atomic vectors, lists are objects that contain elements. However, the "type" of elements can very within a list and elements of a list can contain another list
+
+Examples:
+```{r}
+rm(list = ls())
+x1 <- list(c(1, 2), c(3, 4))
+x2 <- list(list(1, 2), list(3, 4))
+x3 <- list(1, list(2, list(3)))
+```
+
+`str()` function is helpful for understanding structure and contents of a list
+```{r}
+str(x1)
+str(x2)
+```
+
+### Lists and data frames
+
+Recall the relationship between "lists" and "data frames"
+
+- data frames have "type==list"
+- data frames are lists with these additional structure requirements
+    - each element of data frame must be a vector (not a list)
+    - each element (i.e., vector) in data frame must have the same length
+- data frames have additional attributes
+    - e.g., each vector is named
+
+```{r}
+(df <- tibble(x = 1:3, y = 3:1))
+typeof(df)
+str(df)
+
+load("../../data/recruiting/recruit_event_somevars.Rdata")
+typeof(df_event)
+```
+### Subsetting/accessing elements of a list
+
+Accessing elements of a list important for looping and many applications in R
+
+Will demonstrate accessing elements of a list using two lists:
+
+1. \medskip A list that has more complicated structure than a data frame (from Grolemund and Wickham example)
+```{r, results="hide"}
+list_a <- list(a = 1:3, b = "a string", c = pi, d = list(-1, -5))
+typeof(list_a)
+str(list_a)
+```
+
+2. \medskip List that is 7 variables and first 5 obs of `df_event`, corresponding to University of Alabama
+```{r, results="hide"}
+df_bama <- df_event %>% arrange(univ_id,event_date) %>% 
+  select(instnm,univ_id,event_date,event_type,event_state,zip,med_inc) %>% 
+  filter(row_number()<6)
+
+typeof(df_bama)
+str(df_bama)
+```
+### Subsetting/accessing elements of a list
+
+Three ways to "subset" (access elements of) a list (from http://r4ds.had.co.nz/vectors.html#subsetting-1):
+
+1. `[` "extracts a sub-list. The result will always be a list"
+    - like subsetting vectors, you can subset with a logical, integer, or character vector
+2. `[[]]` "extracts a single component from a list. It removes a level of hierarchy from the list"
+3. `$` "shorthand for extracting named elements of a list. It works similarly to [[ except that you don’t need to use quotes."
+
+### Subset a list using `[]`
+
+`[` "extracts a sub-list"
+
+    - contents of `[]` can be position number, name of element in list, logical vector, etc.
+
+```{r, results="hide"}
+str(list_a)
+length(list_a)
+
+str(list_a[1])
+str(list_a["a"])
+
+str(list_a[1:2])
+str(list_a[c(1,2)])
+
+str(list_a[c("a","c")])
+```
+
+Key takeaway about subsetting a list using `[]`: __The result will always be a list__
+
+- that is, `[` does not remove a level of hierarchy
+- structure and attributes of object you isolate using `[` will be the same as its structure and attributes in the list it is taken from
+
+### Subset a list using `[]`: Student task
+
+Applying `[]` to the object `df_bama`:
+
+- Isolate the 1st element of `df_bama`
+- Isolate the 3rd through 5th element of `df_bama`
+- Isolate the 3rd, 7th, and 1st element of `df_bama`
+- Isolate the element named `"event_type"`
+- Isolate the elements named `"event_type"` and `"med_inc`
+
+### Subset a list using `[]`: Student task [SOLUTIONS]
+
+Applying `[]` to the object `df_bama`:
+
+```{r, results="hide"}
+#- Isolate the 1st element of `df_bama`
+df_bama[1]
+str(df_bama[1])
+#- Isolate the 3rd through 5th element of `df_bama`
+df_bama[3:5]
+str(df_bama[3:5])
+#- Isolate the 3rd, 7th, and 1st element of `df_bama`
+df_bama[c(3,7,1)]
+#- Isolate the element named `"event_type"`
+df_bama["event_type"]
+str(df_bama["event_type"])
+#- Isolate the elements named `"event_type"` and `"med_inc`
+df_bama[c("event_type","med_inc")]
+```
+### Subset a list using `[[]]`
+
+[[ extracts a single component from a list. It removes a level of hierarchy from the list.
+
+```{r, results="hide"}
+str(list_a)
+
+str(list_a[1]) # []
+str(list_a[[1]]) # [[]]
+
+str(list_a["a"])
+str(list_a[["a"]])
+
+str(list_a[4]) # []
+str(list_a[[4]]) # [[]]
+```
+### Subset a list using `[[]]`, data frames
+
+Comparing `[]` to `[[]]` when working with lists that are data frames, `df`
+
+- The data frame object always has type=list; each element within the data frame is a vector
+- If you subset using `[]` the result will always have type==list
+- If you subset using `[[]]` the result will always have type==vector
+
+```{r, results="hide"}
+df_bama[1]
+df_bama[[1]]
+
+str(df_bama[1])
+str(df_bama[[1]])
+
+typeof(df_bama[1])
+typeof(df_bama[[1]])
+
+class(df_bama[1])
+class(df_bama[[1]])
+
+attributes(df_bama[3])
+attributes(df_bama[[3]])
+
+#can perform all of same above tasks with any element, accessed by position number or element name
+str(df_bama["event_type"])
+str(df_bama[["event_type"]])
+
+attributes(df_bama["event_type"])
+attributes(df_bama[["event_type"]])
+
+```
+
+### Subset a list using `$`
+
+`$` is a shorthand for extracting __named__ elements of a list. It works similarly to `[[` except that you don’t need to use quotes.
+
+- note: we have been using this method of subsetting variables in a data frame all quarter!
+- Like `[[]]`, subsetting using `$` removes a level of hierarchy
+
+```{r, results="hide"}
+str(list_a)
+
+list_a$a
+list_a[["a"]]
+```
+
+```{r}
+df_bama$med_inc
+df_bama[["med_inc"]]
+```
+## Key concepts for loops
+
+### Review Key concepts for loops
+
+
+### Sequences
+
+(Loose) definition
+
+- a sequence is a list of numbers in ascending or descending order
+
+Creating sequences using colon operator
+```{r}
+-5:5
+5:-5
+```
+Creating sequences using `seq()` function
+
+- basic syntax: 
+```{r, eval=FALSE}
+seq(from = 1, to = 1, by = ((to - from)/(length.out - 1)),
+    length.out = NULL, along.with = NULL, ...)
+```
+- examples:
+```{r}
+seq(10,15)
+seq(from=10,to=15,by=1)
+seq(from=100,to=150,by=10)
+```
+### Length, vectors
+
+\medskip The __length__ of an object is its number of elements
+
+Length of vectors, using `length()` function
+```{r}
+x <- c(1,2,3,4,"ha ha"); length(x)
+y <- seq(1,10); length(y)
+z <- c(seq(1,10),"ho ho"); length(z)
+```
+Once vector length known, isolate element contents based on position number using `[`
+```{r}
+x[5]
+z[1]
+```
+Applying `[[` to vector gives same result as applying `[`
+```{r}
+x[[5]]
+z[[1]]
+```
+### Length of lists
+
+The __length__ of an object is its number of elements
+
+```{r}
+typeof(df_bama); length(df_bama)
+```
+
+Once list length known, isolate element contents based on position number using `[]` or `[[]]`
+
+- subset one element of list with `[]` yields list w/ length==1
+```{r}
+typeof(df_bama[7]); length(df_bama[7])
+```
+- subset one element of list with `[[]]` yields vector w length==# rows
+```{r}
+df_bama[[7]]; typeof(df_bama[[7]]); length(df_bama[[7]])
+```
+
+subset one element of list with `$` is same as `[[]]`
+```{r}
+df_bama$med_inc; typeof(df_bama$med_inc); length(df_bama$med_inc)
+```
+
+### Combine sequences and length
+
+When writing loops, very common to create a sequence from 1 to the length (i.e., number of elements) of an object
+
+\medskip Here, we do this with a vector object
+```{r}
+(x <- c("a","b","c","d","e"))
+length(x)
+
+1:length(x)
+seq(from=1,to=length(x),by=1)
+```
+Can do same thing with list object
+```{r}
+length(df_bama)
+
+1:length(df_bama)
+seq(2,length(df_bama))
+```
+
+
+
+# Looping 1
+
+### Simple loop example
+
+__Loops__ execute some set of commands multiple times
+
+- we build loops using the `for()` function
+- each time the loop executes the set of commands is an __iteration__
+- the below loop iterates 4 times
+
+
+Create loop that prints each value of vector `c(1,2,3,4)`, one at a time
+```{r}
+c(1,2,3,4)
+
+for(i in c(1,2,3,4)) { # Loop sequence
+  print(i) # Loop body
+}
+```
+
+
+### Components of a loop
+
+```{r}
+for(i in c(1,2,3,4)) { # Loop sequence
+  print(i) # Loop body
+}
+```
+
+
+Components of a loop
+
+1. __Sequence__. Determines what to "loop over" (e.g., from 1 to 4 by 1)
+    - sequence in above loop is `for(i in c(1,2,3,4))`
+    - this creates a temporary object called `i`
+    - each iteration of loop will assign a different value to `i`
+    - c(1,2,3,4) is the set of values that will be assigned to `i` 
+          - in first iteration, value of `i` is `1`
+          - in second iteration, value of `i` is `2`, etc.
+2. __Body__. What commands to execute for each iteration through the loop
+    - Body in above loop is `print(i)`
+    - Each time (i.e., iteration) through the loop, body prints the value of object `i`
+
+### Components of a loop
+
+These three loops all do the same thing
+
+```{r}
+for(z in c(1,2,3,4)) { # Loop sequence
+  cat("object z=",z, fill=TRUE) # Loop body
+}
+for(z in 1:4) { # Loop sequence
+  cat("object z=",z, fill=TRUE) # Loop body
+}
+num_sequence <- 1:4
+for(z in num_sequence) { # Loop sequence
+  cat("object z=",z, fill=TRUE) # Loop body
+}
+```
+__When building loops, I always include a line like `cat("i=",i, fill=TRUE)` to help me understand what loop is doing__
+
+### Student task
+
+1. Create a numeric vector that has year of birth of members of your family (you decide who to include)
+    e.g., for my mom, dad, wife, son: `birth_years <- c(1944,1950,1981,2016)`
+2. Write a loop that calculates current year minus birth year and prints this number for each member of your family 
+
+### Student task [SOLUTION]
+
+1. Create a numeric vector that has year of birth of members of your family (you decide who to include)
+2. Write a loop that calculates current year minus birth year and prints this number for each member of your family 
+
+```{r}
+birth_years <- c(1944,1950,1981,2016)
+birth_years
+
+for(y in birth_years) { # Loop sequence
+  cat("object y=",y, fill=TRUE) # Loop body
+  z <- 2018-y
+  cat("value of",y,"minus",2018,"is",z, fill=TRUE)
+}
+```
+# Different ways to loop over a vector
+
+### Plan for learning more about loops
+
+Rest of lecture on loops will proceed as follows:
+
+1. Describe the three different ways to "loop over" a vector
+2. Describe the two broad sorts of tasks to accomplish within body of a loop
+    1. Modify an existing object (e.g., vector or list/data frame)
+    2. Create a new object
+    
+Throughout, I'll try to give you lots of examples and practice    
+
+### Three ways to loop over an object
+
+There are three ways to loop over elements of an object
+
+1. __Loop over the elements__ [approach we have used so far]
+2. __Loop over names of the elements__
+3. __Loop over numeric indices associated with element position__ [approach recommended by Grolemnund and Wickham]
+
+Will demonstrate these approaches on a named vector and list/data frame
+
+- Create named vector
+```{r}
+vec=c("a"=5,"b"=10,"c"=-5,"d"=30)
+vec
+```
+- Create data frame, with 4 columns of fictitious data
+```{r}
+set.seed(12345)
+df <- tibble(a = rnorm(10),b = rnorm(10),c = rnorm(10),d = rnorm(10))
+str(df)
+```
+### Approach 1: loop over elements of object
+
+- \medskip __sequence__ syntax: `for (i in object_name)`
+    - Sequence iterates through each element of the object
+    - that is, sequence iterates through _value_ of each element, rather than _name_ or _position_ of element
+- in __body__.
+    - value of `i` is equal to the contents of the `ith` element of the object
+    
+Example, object is a vector    
+```{r, results="hide"}
+vec
+for (i in vec) {
+  cat("\n","value of object i=",i, fill=TRUE)
+  cat("object type=",typeof(i),"; length=",length(i),"; class=",class(i),
+      "; attributes=",attributes(i),sep="",fill=TRUE)
+}
+```
+Example, object is a list/data frame
+```{r, results="hide"}
+for (i in df) {
+  cat("\n","value of object i=",i, fill=TRUE)
+  cat("object type=",typeof(i),"; length=",length(i),"; class=",class(i),
+      "; attributes=",attributes(i),sep="",fill=TRUE)
+}
+```
+### Approach 1: loop over elements of object
+
+Example task:
+
+- calculate mean value of each element of list object `df`
+
+```{r}
+for (i in df) { # sequence
+  
+  cat("\n","value of object i=",i, fill=TRUE)
+  cat("mean value of object i=",mean(i), fill=TRUE)
+}
+```
+
+### Approach 2: loop over names of elements in object
+
+To use this approach, elements in object must have name attributes
+
+- \medskip __sequence__ syntax: `for (i in names(object_name))`
+    - Sequence iterates through the _name_ of each element in object
+- in __body__, value of `i` is equal to _name_ of `ith` element in object
+    - Access element contents using `object_name[i]`
+        - same object type as `object_name`; retains attributes (e.g., _name_)
+    - Access element contents using `object_name[[i]]`
+        - removes level of hierarchy, thereby removing attributes
+        - Approach recommended by Wickham because isolates value of element
+
+Example, object is a vector    
+```{r, results="hide"}
+vec
+for (i in names(vec)) {
+  cat("\n","value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)
+  print(str(vec[i])) # "Access element contents using []"
+  print(str(vec[[i]])) # "Access element contents using [[]]"
+}
+```
+Example, object is a list
+```{r, results="hide"}
+for (i in names(df)) {
+  cat("\n","value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)
+  print(str(df[i])) # "Access element contents using []"
+  print(str(df[[i]])) # "Access element contents using [[]]"
+}
+```
+### Approach 2: loop over names of elements in object
+
+Example task:
+
+- calculate mean value of each element of list object `df`, using `[[]]` to access element contents
+
+```{r}
+for (i in names(df)) {
+  cat("mean of element named",i,"is",mean(df[[i]]),fill=TRUE)
+}
+```
+
+What happens if we try to complete task using , using `[]` to access element contents?
+```{r, eval=FALSE}
+for (i in names(df)) {
+  cat("mean of element named",i,"is",mean(df[i]),fill=TRUE)
+  #print(typeof(df[i]))
+  #print(class(df[i]))  
+}
+#?mean # mean function only works for particular *classes* of objects
+```
+
+### Approach 3: Loop over numeric indices of element position
+
+__sequence__ syntax: `for (i in 1:length(object_name))`
+    
+```{r, results="hide"}
+length(vec)
+1:length(vec)
+
+for (i in 1:length(vec)) {
+  cat("value of object i=",i,fill=TRUE)
+}
+```
+
+Wickham's preferred __sequence__ syntax: `for (i in seq_along(object_name))`
+
+- `seq_along(x)` returns a sequence from 1 value of `length(x)`
+```{r, results="hide"}
+length(vec)
+seq_along(vec)
+
+for (i in seq_along(vec)) {
+  cat("value of object i=",i,fill=TRUE)
+}
+```
+### Approach 3: Loop over numeric indices [SKIP/SKIM]
+
+Why Wickham prefers `seq_along(object_name)` over `1:length(object_name)`
+
+- `seq_along` handles zero-length vectors correctly, and is therefore the "safe" version of `1:length(object_name)`
+
+```{r}
+# create vector of length=0
+y <- vector("double", 0) 
+length(y)
+
+1:length(y)
+for (i in 1:length(y)) {
+  cat("value of object i=",i,fill=TRUE)
+}
+
+seq_along(y)
+for (i in seq_along(y)) {
+  cat("value of object i=",i,fill=TRUE)
+}
+```
+Personally, I find `1:length(object_name)` much more intuitive
+
+### Approach 3: Loop over numeric indices of element position
+
+- \medskip __sequence__ syntax: `for (i in 1:length(object_name))` OR `for (i in seq_along(object_name))`
+    - Sequence iterates through _position number_ of each element in the object
+- in __body__, value of `i` equals the _position number_ of `ith` element in object
+    - Access element contents using `object_name[i]`
+        - same object type as `object_name`; retains attributes (e.g., _name_)
+    - Access element contents using `object_name[[i]]` [RECOMMENDED]
+        - removes level of hierarchy, thereby removing attributes
+
+Example, object is a vector    
+```{r, results="hide"}
+vec
+for (i in 1:length(vec)) {
+  cat("\n","value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)
+  print(str(vec[i])) # "Access element contents using []"
+  print(str(vec[[i]])) # "Access element contents using [[]]"
+}
+```
+
+Example, object is a list
+```{r, results="hide"}
+for (i in 1:length(df)) {
+  cat("\n","value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)
+  print(str(df[i])) # "Access element contents using []"
+  print(str(df[[i]])) # "Access element contents using [[]]"
+}
+```
+
+### Approach 3: Loop over numeric indices of element position
+
+Example task:
+
+- calculate mean value of each element of list object `df`, using `for (i in seq_along(df))` to create sequence and using `[[]]` to access element contents
+
+```{r}
+for (i in seq_along(df)) {
+  cat("mean of element named",i,"is",mean(df[[i]]),fill=TRUE)
+}
+```
+
+What happens if we try to complete task using , using `[]` to access element contents?
+```{r, eval=FALSE}
+for (i in seq_along(df)) {
+  cat("mean of element named",i,"is",mean(df[i]),fill=TRUE)
+  #print(typeof(df[i]))
+  #print(class(df[i]))  
+}
+```
+
+### EXPLAIN THIS
+
+EXPLAIN WHAT WICKHAM MEANS WHEN HE SAYS YOU CAN USE INDEX APPROACH TO IDENTIFY ELEMENT VALUE AND ELEMENT NAME [THE OTHER TWO APPROACHES]
+
+
+# Different sorts of task to accomplish within body of loop
+
+
