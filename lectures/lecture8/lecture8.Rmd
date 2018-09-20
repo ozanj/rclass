@@ -39,13 +39,54 @@ library(readxl)
 library(labelled)
 ```
 
-### Data we will use today
+### Data we will use today  
 
-IPEDS or HSLS  
-Federal Student Aid  
-Chetty
+- Integrated Postsecondary Education Data System (IPEDS)  
+- High School Longitudinal Surveys (HSLS)  
+- Federal Student Aid Data  
+- Equality of Opportunity Project
 
-**Work on this**
+### Integrated Postsecondary Education Data System (IPEDS)
+
+- Postsecondary education data from NCES  
+- There are [12 survey components](https://nces.ed.gov/ipeds/resource/download/IPEDS_DataReleaseProcedures.pdf) and 3 collection periods  
+
+We will be working with [Institutional Characteristics data of 2017](https://nces.ed.gov/ipeds/datacenter/DataFiles.aspx)  
+
+
+### High school longitudinal surveys from National Center for Education Statistics (NCES)
+
+- Follow U.S. students from high school through college, labor market
+
+We will be working with [High School Longitudinal Study of 2009 (HSLS:09)](https://nces.ed.gov/surveys/hsls09/index.asp)
+
+- Follows 9th graders from 2009
+- Data collection waves
+      - Base Year (2009)
+      - First Follow-up (2012)
+      - 2013 Update (2013)
+      - High School Transcripts (2013-2014)
+      - Second Follow-up (2016) 
+      
+      
+### Federal Student Aid  
+
+- Federal Student Aid Data Center provides information for federal assistance programs and is divided into four categories: 
+      - Student Aid Data  
+      - School Data  
+      - Federal Family Education Loan (FFEL) Program  
+      - Business Information Resources  
+      
+We will be working with [School Data](https://studentaid.ed.gov/sa/node/105)  
+
+
+### Equality of Opportunity Project  
+
+- [Equality of Opportunity Project](http://www.equality-of-opportunity.org/papers/coll_mrc_paper.pdf) uses two data sources-- federal tax recoards and Department of Education records (1999-2013)-- to investigate intergenerational income mobility at colleges in the US.  
+
+We will use [Mobility Report Cards: The Role of Colleges in Intergenerational Mobility data](http://www.equality-of-opportunity.org/documents/)
+
+**Not sure if to simply list datasets. Lecture will go over acquiring data and not so much about manipulating data. Not sure if students need to know each dataset in detail?**
 
 
 # Common data formats  
@@ -69,7 +110,7 @@ The [`readr`](https://readr.tidyverse.org/index.html) package is part of tidyver
 \
 - We could load **library(tidyverse)** if we wanted to load all packages in tidyverse (e.g. ggplot2, dplyr, tidyr, stringr, readr, etc...)  
 
-![Caption for the picture.](~/Desktop/lecture8/tidyverse.png)
+![Caption for the picture.](~/Desktop/GitHub/rclass/lectures/lecture8/tidyverse.png)
 \
 - For the purpose of this lecture, we will just need to load **library(readr)**  
 
@@ -82,7 +123,7 @@ No matter the flat file format you are working with, there are two important ste
 
 (2) **column specification**  
 
-**Talk about readr (tidyverse), Notes from the reading, Notes from other sources**
+
 
 ### `readr functions`
 
@@ -98,7 +139,7 @@ No matter the flat file format you are working with, there are two important ste
 | Text-formated data (txt)    | `read_table` |
 | Web log files    | `read_log` |
 
-**What type of data could be read in**
+
 
 ### `readr column specification`
 
@@ -110,7 +151,7 @@ mtcars <- read_csv(readr_example("mtcars.csv"))
 
 
 ### `readr column specification`
-The output of the previous example shows us the column specification of the variables in the data. This is important because we could manually change column specification if we do not like readr's guess.
+The output of the previous example shows us the column specification readr gave us. However, we could manually change column specification if we do not like readr's guess.
 ```{r}
 mtcars <- read_csv(readr_example("mtcars.csv"), col_types = 
   cols(
@@ -130,9 +171,9 @@ mtcars <- read_csv(readr_example("mtcars.csv"), col_types =
 ```
 
 ### `readr` features
-**skip**:  
-**comment**:  
-**col_names**:  
+- **skip**:  `read_csv`(csv file, skip = n)  
+- **comment**: `read_csv`(csv file, comment = "#")  
+- **col_names**: `read_csv`(csv file, col_names = c("x", "y", "z"))
 
 ### `readr` demonstration csv
 
@@ -212,34 +253,116 @@ read_csv("1,2,3
 
 Use `read_csv()` function from `readr` to import csv dataset into R without column specification. Follow along on your computers.
 ```{r, results="hide"}
-#ipeds_ay <- read_csv(file="../ic2017ay_small.csv")
+ipeds <- read_csv(file="~/Desktop/GitHub/rclass/data/ipeds/ipeds_hd_2017_small.csv")
+# glimpse(ipeds)
 ```
 
-Notice tuition and fee columns are read in as character type. 
 
 ### `readr` demonstration csv
 
 Use `read_csv()` function from `readr` to import csv dataset into R with column specification
 **[Would it be better to change to integer or double?]** 
 ```{r, results='hide'}
-# {ipeds_ay <- read_csv("../ic2017ay_small.csv", col_types = 
-#  cols(
-#    unitid = col_integer(),
-#    tuition1 = col_integer(),
-#    fee1 = col_integer(),
- #   hrchg1 = col_integer(),
- #   tuition2 = col_integer(),
- #   fee2 = col_integer(),
- #   hrchg2 = col_integer(),
- #   tuition3 = col_integer(),
- #   fee3 = col_integer(),
- #   hrchg3 = col_integer()
- # )
-#) # }
+ipeds <- read_csv(file="~/Desktop/GitHub/rclass/data/ipeds/ipeds_hd_2017_small.csv",
+                  col_types =
+                    cols(
+                      unitid = col_number(), 
+                      instnm = col_character(),
+                      stabbr = col_character(),
+                      sector = col_integer(),
+                      iclevel = col_integer(),
+                      control = col_integer()
+  )
+)
+```
+We changed unitid to number, but could be left as is or changed to character type for example.  
+
+### `readr` variable and value labels
+
+Let's view variable and value labels
+```{r}
+ipeds %>% select(sector) %>% var_label()
+ipeds %>% select(sector) %>% val_labels()
+```
+
+There are no variable and value labels for this data. IPEDS has a separate do file with variable and value labels.  
+- Let's practice manually adding variable and value labels using the `labelled` package. 
+
+### `readr` labelled data
+- Open the data dictionary file for hd2017 data and select "Frequencies" sheet 
+- We are only working with these 6 variables (unitid, instnm, stabbr, sector, iclevel, control)  
+- We need to add variable labels for all 6 variables  
+- We need to add value labels for sector, iclevel, and control  
+
+```{r}
+# Lets view values for sector
+ipeds %>%
+  count(sector) 
 ```
 
 
-### `readr Running into errors`
+### `readr` manually add variable and value labels
+```{r}
+# Need to manually assign variable and value labels using labelled package 
+ipeds_labelled <- ipeds %>%
+  set_variable_labels(unitid = "Unit identification number", 
+                      instnm = "Institution name", 
+                      stabbr = "State abbreviation",
+                      sector = "Sector of institution",
+                      iclevel = "Level of institution",
+                      control = "Control of institution") %>%
+  set_value_labels(sector = c("Administrative Unit" = 0, 
+                              "Public, 4-year or above" = 1, 
+                              "Private not-for-profit, 4-year or above" = 2,
+                              "Private for-profit, 4-year or above" = 3, 
+                              "Public, 2-year" = 4, 
+                              "Private not-for-profit, 2-year" = 5, 
+                              "Private for-profit, 2-year" = 6,
+                              "Public, less-than 2-year" = 7, 
+                              "Private not-for-profit, less-than 2-year" = 8,
+                              "Private for-profit, less-than 2-year" = 9, 
+                              "Sector unknown (not active)" = 99), 
+                   iclevel = c("Four or more years" = 1, 
+                               "At least 2 but less than 4 years" = 2, 
+                               "Less than 2 years (below associate)" = 3,
+                               "{Not available}" = -3),
+                   control = c("Public" = 1, "Private not-for-profit" = 2, 
+                               "Private for-profit" = 3, 
+                               "{Not available}" = -3))
+
+```
+
+### `readr` Let's view new labelled data
+```{r}
+typeof(ipeds_labelled$iclevel)
+class(ipeds_labelled$iclevel)
+attributes(ipeds_labelled$iclevel)
+```
+
+Let's change class to factor
+
+### `readr` Class to factor
+
+Approach #1
+```{r}
+ipeds_factor <- as_factor(ipeds_labelled, only_labelled = TRUE)
+typeof(ipeds_factor$sector)
+class(ipeds_factor$sector)
+attributes(ipeds_factor$sector)
+```
+
+
+### `readr` Class to factor
+Approach #2
+```{r}
+ipeds_factor2 <- to_factor(ipeds_labelled, ordered = TRUE)
+typeof(ipeds_factor2$sector)
+class(ipeds_factor2$sector)
+attributes(ipeds_factor2$sector)
+```
+
+
+### 1. `readr Running into errors`
 1. Make sure you have downloaded and saved flat file  
 2. Make sure to know the file path of where data is downloaded or saved (~/Desktop/educ263/data)
 3. Make sure you set your working **`setwd()`** directory in R. To check your current working directory type **`getwd()`** in console. 
@@ -251,7 +374,8 @@ Use `read_csv()` function from `readr` to import csv dataset into R with column 
 
 ### `haven`
 
-Recap from lecture 5  
+Recap from lecture 5   
+    
 
 [`haven`](https://haven.tidyverse.org/) is part of **tidyverse**, which enables users to import and export data from the following statistical packages:  
 
@@ -280,20 +404,28 @@ For the purpose of this lecture, we will just need to load **library(haven)**.
 `write_data(data, path, version = 14)`  
 
 Arguments  
-- file: file path to data  
-- encoding: files prior to Stata 14 did not declare text encoding, files after Stata 14 do not need to declare encoding value  
-- data: data frame to save (write)  
-- path: file path to where data will be saved  
-- version: file version  
+- **file**: file path to data  
+- **encoding**: files prior to Stata 14 did not declare text encoding, files after Stata 14 do not need to declare encoding value  
+- **data**: data frame to save (write)  
+- **path**: file path to where data will be saved  
+- **version**: file version  
 
 [Link](https://haven.tidyverse.org/reference/read_dta.html)
 
 
-### `haven` read and write Stata example  
+### `haven` Student exercise
 
-Use `read_dta()` function from `haven` to import Stata dataset into R
+- Use `read_dta()` function from `haven` to import Stata dataset into R  
+- Use `write_dta()` funtction from `haven` to save Stata dataset  
+- If you have time, explore data (View, glimpse, head, etc.)  
+    - View variable and value labels  
+    - Change class == labelled to class == factor
+
+### `haven` Student exercise Solution
+
+Use `read_dta` function from `haven` to import State data
 ```{r, results="hide"}
-hsls <- read_dta("~/Desktop/lecture8/hsls_sch_small.dta", encoding=NULL)
+hsls <- read_dta("~/Desktop/GitHub/rclass/data/hsls/hsls_sch_small.dta", encoding=NULL)
 
 # View data
 head(hsls)
@@ -302,14 +434,31 @@ glimpse(hsls)
 
 Use `write_dta` function from `haven` to write State data
 ```{r}
-write_dta(hsls, path = "~/Desktop/lecture8/hsls_sch_small.dta")
+write_dta(hsls, path = "~/Desktop/GitHub/rclass/data/hsls/hsls_sch_small.dta")
 ```
 
-
-Student exercise
-Running into problems with variable/value labels?
+### `haven` Student exercise Solution cont...
+Variable and Value labels
 ```{r}
+# View variable labels
+hsls %>% var_label()
 
+```
+
+### `haven` Student exercise Solution cont...
+```{r}
+#View value label for x1locale
+hsls %>% select(x1locale) %>% val_labels()
+```
+
+### `haven` Student exercise Solution cont...
+```{r}
+# Change class == labelled to class == factor
+hsls <- as_factor(hsls, only_labelled = TRUE)
+
+typeof(hsls$x1region)
+class(hsls$x1region)
+attributes(hsls$x1region)
 ```
 
 
@@ -384,6 +533,29 @@ read_excel(excel_example, sheet = "quakes", na = "-20.42")
 - Set value "A" to missing (na) **note** : you need to investigate in detail before setting anything to missing
 
 
+### `readxl` Student exercise solution
+```{r}
+#Read in data using readxl function
+setwd("~/Desktop/GitHub/rclass/data/fsa")
+fsa <- read_excel("peps300.xlsx")
+```
+
+```{r}
+#Read in first four rows (n_max)
+read_excel("peps300.xlsx", n_max = 4)
+```
+
+### `readxl` Student exercise solution cont...
+```{r}
+#Read in column Names to column State
+head(read_excel("peps300.xlsx", range = cell_cols("B:E")))
+
+```
+
+```{r}
+read_excel("peps300.xlsx", n_max = 4,  na = "A")
+```
+
 ### `readxl` Running into problems
 1. Make sure you have downloaded and saved excel file  
 2. Make sure to know the file path of where data is downloaded or saved (~/Desktop/educ263/data)
@@ -397,8 +569,10 @@ read_excel(excel_example, sheet = "quakes", na = "-20.42")
 
 ### Downloading data from web
 
-Could save time and reduce the steps of downloading, saving, and reading in data, by reading in data directly from the web.  
-  - note that not all packages will work downloading data from web (read_excel)  
+- Save time  
+    - Reduce the steps of downloading, saving, and reading in data  
+    - Read in data directly from internet  
+    - **note** not all packages will working with downloading data from the web (read_excel)
  
 For example, rather than downloading ipeds data and saving it in a folder, we could download the data directly from the web.  
 
@@ -408,7 +582,7 @@ For example, rather than downloading ipeds data and saving it in a folder, we co
 2. Choose "Online Data Table 1" 
 3. Right click and copy link address for "Excel" (Note: it is actually a csv file)
 
-![mobility report cards](~/Desktop/lecture8/mrc_table1.png)\  
+![mobility report cards](~/Desktop/GitHub/rclass/lectures/lecture8/mrc_table1.png)\  
 
 ### Downloading data from web  
 [FIX OUTPUT (CUTTING OFF)]
@@ -431,6 +605,10 @@ Alternative approach
 #Download data and read in link directly using read_csv (readr)
 mrc <- read_csv("http://www.equality-of-opportunity.org/data/college/mrc_table1.csv")
 
+```
+
+### Downloading data from web
+```{r}
 #View first 4 rows and 4 columns 
 mrc[1:4, 1:4]
 ```
@@ -441,29 +619,26 @@ mrc[1:4, 1:4]
 2. Choose "All years" and "All surveys" and click continue  
 3. Right click and copy link address for "IC2017_AY" 
 
-![ipeds data center](~/Desktop/lecture8/ic2017_ay.png)\  
+![ipeds data center](~/Desktop/GitHub/rclass/lectures/lecture8/ic2017_ay.png)\  
 
 ### Downloading data (zip files) using IPEDS
-```{r}
-# Paste url and read in using read_csv
-# What happens when you try reading in this zip file? 
-#ic2017_ay <- read_csv("https://nces.ed.gov/ipeds/datacenter/data/IC2017_AY.zip")
 
-# Need to download file first to unzip
-
-```
+Paste url and read in using `read_csv`  
+What happens when you try reading in this zip file?  
+Need to download **and** unzip
 
 
 ### Downloading data (zip files) using IPEDS
 ```{r}
 #Set path to where data will be saved
-path <- "~/Desktop/lecture8/ic2017_ay.csv"
+setwd("~/Desktop/lecture8")
 #download file and pa
-download.file("https://nces.ed.gov/ipeds/datacenter/data/IC2017_AY.zip", destfile = path , mode = 'wb')
+download.file("https://nces.ed.gov/ipeds/datacenter/data/IC2017_AY.zip",
+              destfile = "ic2017_ay", mode = 'wb')
 #unzip zip file and keep original name
-#unzip(zipfile = "ic2017_ay" , unzip = "unzip")
+unzip(zipfile = "ic2017_ay" , unzip = "unzip")
 
-ic2017_ay <- read_csv(path)
+ic2017_ay <- read_csv("ic2017_ay.csv")
 ```
 
 
