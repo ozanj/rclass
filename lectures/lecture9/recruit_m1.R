@@ -1,3 +1,7 @@
+# CLEAR MEMORY
+rm(list = ls())
+
+
 #LOAD LIBRARIES 
     options(max.print=999999)
     library(tidyverse)
@@ -11,31 +15,37 @@
     library(mapdata)
     library(ggplot2)
     library(mapproj)
+    library(assertthat)
+    library(zipcode)
+    library(rgeos)
+    library(rgdal)
+    library(maptools)
     
+
     options(scipen=999)
 
 
 #LOAD RECRUITING DATA, MERGE IN URBANICITY, CREATE EVENT TYPE CATEGORIZATION
     
   ##load in data
-    getwd()
-    all<-read.csv("../Dropbox/recruiting-m1/analysis/data/events_data_latlong.csv")
-    
+    all<-read.csv("../data/events_data_latlong.csv", na.strings="")
+
+  #assert unitid and pid uniquely id obs
+    assert_that(any(duplicated(all, by=c("univ_id", "pid")))==FALSE)
     
   ##for now drop events w missing location
     count(all$event_state) #19 are missing 
     all[is.na(all$event_state), "univ_id"] #missing are across diff univs
     all<-all[!is.na(all$event_state),] 
-    count(all$event_state) #none are missing
+    all[is.na(all$event_state), "univ_id"] #now zero
     
   ##drop if ipeds_id of recruting event=ipeds_id of institution (on campus event)
-    count(is.na(all$ipeds_id)) #1,200 events are on a CC or univ campus
-    count(all$univ_id==all$ipeds_id) #none are "on-campus" events
+    count(is.na(all$ipeds_id)) #1,200 events are on a coll/univ campus
+    count(all$univ_id==all$ipeds_id) #Zero of 1,200 are on-campus
     
   ##load in urbanicity data
-    zip<-read.csv("../Dropbox/recruiting-m1/analysis/data/urbantozip.csv", colClasses=c('numeric', 'factor', 'factor'))
+    zip<-read.csv("../data/urbantozip.csv", colClasses=c('numeric', 'factor', 'factor'))  
     
-
   ##some zips belong to more than one area, keep area with largest % of zip population
     zip <- zip[order(zip$ZCTA5, -abs(zip$UAPOPPCT) ), ] #sort by id and reverse of abs(value) of pop
     zip<- zip[ !duplicated(zip$ZCTA5), ] # take the first row within each id
@@ -99,45 +109,65 @@
       geom_point(data=) +
       coord_fixed(1.3)
        
+    
 #MAPPING FUNCTION 
-    ##arguments: (1)
-    usa <- map_data("state")
-    usa$stateabb <- state.abb[match(usa$region, tolower(state.name))]
-    
-    states <- aggregate(cbind(long, lat) ~ stateabb, data=usa, 
-                        FUN=function(x)mean(range(x)))
+    ##arguments: (1) university id
     
     
-    #map function
-    #arguments: (1) unitid, 
+    ##populate map
     map<-function(unitid) {
+      
+        ##load USA map
+        usa <- map_data("state")
+        usa$stateabb <- state.abb[match(usa$region, tolower(state.name))]
+      
+        states <- aggregate(cbind(long, lat) ~ stateabb, data=usa, 
+                          FUN=function(x)mean(range(x)))
+        
+        
+        ##load in-state map
+        usa <- map_data("state")
+        usa$stateabb <- state.abb[match(usa$region, tolower(state.name))]
+        
+        states <- aggregate(cbind(long, lat) ~ stateabb, data=usa, 
+                            FUN=function(x)mean(range(x)))
       
         #create a tempdf based on unitid
         tempdf<-subset(df, df$univ_id==unitid)  
         
+        #print usa map
         print(ggplot() + geom_polygon(data = usa, aes(x=long, y = lat, group = group), fill="white", color="black") + 
-                geom_point(data = tempdf, aes(x = long, y = lat), color = eventtype, size = 0.5) +
+                geom_point(aes(x = long, y = lat, color = eventtype), data=tempdf, size = 0.5) +
                 geom_text(data=states, aes(long, lat, label=stateabb), size=3) +
                 coord_fixed(1.3) )
     }
     
     
-    map(196097)
- names(df)
- 
- tempdf<-subset(df, df$univ_id==196097)
- names(tempdf)
- 
- print(ggplot() + geom_polygon(data = usa, aes(x=long, y = lat, group = group), fill="white", color="black") + 
-         geom_point(data = tempdf, aes(x = long, y = lat), size = 0.5) +
-         geom_text(data=states, aes(long, lat, label=stateabb), size=3) +
-         coord_fixed(1.3) )
- 
- print(ggplot() + geom_polygon(data = usa, aes(x=long, y = lat, group = group), fill="white", color="black") + 
-         geom_point(data = tempdf, aes(x = long, y = lat), color = tempdf$eventtype, size = 0.5) +
-         geom_text(data=states, aes(long, lat, label=stateabb), size=3) +
-         coord_fixed(1.3) )
- 
+    # Prepare the zip poly data for US
+    mydata <- readOGR(dsn = "../data/zip_geodata", layer = "cb_2017_us_zcta510_500k")
+    
+    # Get polygon data for TX only
+    mypoly <- subset(mydata, ZCTA5CE10 %in% zip$zip)
+  
+
+    
+    #merge by zipcode for characteristics data
+    mypoly <- merge(mypoly, zip, by.x="ZCTA5CE10", by.y="zip", all.x = TRUE)
+    
+    # Create a new group with the first three digit.
+    # Drop unnecessary factor levels.
+    mypoly$group <- substr(mypoly$ZCTA5CE10, 1,3)
+    mypoly$ZCTA5CE10 <- droplevels(mypoly$ZCTA5CE10)
+    
+    # Merge polygons using the group variable
+    # Create a data frame for ggplot.
+    mypoly.union <- unionSpatialPolygons(mypoly, mypoly$group)
+    
+    mymap <- fortify(mypoly.union)
+    plot(mypoly)
+    plot(mypoly.union, add = T, border = "red", lwd = 1)
+    
+  
 #CALL FUNCTIONS 
     
     ##freq arguments: (1) university unitid (2) university name (3) in-state abbreviation

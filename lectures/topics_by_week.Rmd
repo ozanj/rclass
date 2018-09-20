@@ -996,19 +996,30 @@ We specify this value in the program call statement
 
 STUFF TO COVER FOR LOOPS; 9/18
 
-- intro to loops/components of a loop
-- ways to loop over a vector
+- accessing elements of objects [DONE]
+- intro to loops/components of a loop  [DONE]
+- ways to loop over a vector  [DONE]
     1. looping over numeric indices
     2. Loop over the elements [e.g., element1 of dataframe, element 2, etc.]. this is equivalent to forvalues in stata
  efficiently.
     3. loop over the names [e.g., of vars in a dataset] [equivalent to foreach in stata]
+- when and how to write a loop 
 - tasks achieved by body of loop
-    - create new object
-        - e.g., create a vector that is entirely separate from the object it is based on 
     - modify existing object
         - this would include adding new variable to existing object
+        
+        - potential practical examples
+            - create new variables or modify existing variables [replace negative values with missing]
+            - 
+    - create new object
+        - e.g., create a vector that is entirely separate from the object it is based on 
+        
+        
 
-
+    - other [don't know where it fits]
+        - read in multiple datasets
+        - create frequency table for each institution
+        - 
 
 
 OLDER

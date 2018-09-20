@@ -23,7 +23,7 @@ list.files("../../Dropbox/teaching-data/hsls/data/by_f2")
 
 #OPEN DATA BY LOADING R DATASET
   #PROBLEM: variable attributes are not attached to the individual variables
-#load("../../Dropbox/teaching-data/hsls/data/by_f2/hsls_16_student_v1_0.RData")
+load("../../Dropbox/teaching-data/hsls/data/by_f2/hsls_16_student_v1_0.RData")
 #stur <- hsls_16_student_v1_0
 #names(stur) <- tolower(names(stur))
 #stur <- as_tibble(stur)

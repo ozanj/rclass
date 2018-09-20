@@ -476,7 +476,7 @@ seq(2,length(df_bama))
 
 
 
-# Looping 1
+# Loop basics
 
 ### Simple loop example
 
@@ -592,6 +592,9 @@ set.seed(12345)
 df <- tibble(a = rnorm(10),b = rnorm(10),c = rnorm(10),d = rnorm(10))
 str(df)
 ```
+
+## Loop over elements
+
 ### Approach 1: loop over elements of object
 
 - \medskip __sequence__ syntax: `for (i in object_name)`
@@ -630,6 +633,7 @@ for (i in df) { # sequence
   cat("mean value of object i=",mean(i), fill=TRUE)
 }
 ```
+## Loop over element names
 
 ### Approach 2: loop over names of elements in object
 
@@ -682,6 +686,7 @@ for (i in names(df)) {
 }
 #?mean # mean function only works for particular *classes* of objects
 ```
+## Loop over element position number
 
 ### Approach 3: Loop over numeric indices of element position
 
@@ -779,12 +784,370 @@ for (i in seq_along(df)) {
   #print(class(df[i]))  
 }
 ```
+### Approach 3: Loop over numeric indices of element position
 
-### EXPLAIN THIS
+\medskip When looping over numeric indices, you can extract element names based on element position
 
-EXPLAIN WHAT WICKHAM MEANS WHEN HE SAYS YOU CAN USE INDEX APPROACH TO IDENTIFY ELEMENT VALUE AND ELEMENT NAME [THE OTHER TWO APPROACHES]
+- First, let's experiment w/ `names()` function
+```{r, results="hide"}
+attributes(df)
+attributes(df[1])
+attributes(df[[1]]) # null because removing level of hierarchy removes attributes
+
+names(df)
+names(df[1])
+names(df[[1]]) # null because object df[[1]] has no attributes
+
+names(df)[[1]] # not null because we extract names of object df and then select only first element
+```
+- Next, apply what we learned to the loop
+```{r}
+for (i in seq_along(df)) {
+  #print(names(df)[[i]])
+  cat("i=",i,"; names=",names(df)[[i]],sep="",fill=TRUE)
+}
+```
 
 
-# Different sorts of task to accomplish within body of loop
+### Summary: Three ways to loop over object
 
+1. Loop over elements
+1. Loop over element names
+1. Loop over numeric indices of element position
+
+Grolemund and Wickham prefer "loop over numeric indices" approach. Why?
+
+> "Iteration over the numeric indices is the most general form, because given the position you can extract both the name [approach 2] and the value [approach 1"
+
+
+```{r, results="hide"}
+for (i in seq_along(df)) {
+  cat("\n","i=",i,sep="",fill=TRUE)
+  
+  name <- names(df)[[i]] # value of object "name" is what we loop over in approach 2
+  cat("name=",name,sep="",fill=TRUE)
+  
+  value <- df[[i]] # value of object "value" is what we loop over in approach 1
+  cat("value=",value,sep="",fill=TRUE)
+}
+```
+
+# Loop tips
+
+### When to write a loop
+
+Broadly, the rationale for writing a loop is the same as rationale for writing a function:
+
+- do not duplicate code
+- can make changes to code in one place rather than many
+
+When to write a loop:
+
+- Grolemund and Wickham say __don't copy and paste more than twice__; if you find yourself doing this, consider writing a loop or a function
+
+
+Don't worry about knowing all the situations you should write a loop
+
+- rather, You'll be creating analysis dataset or analyzing data and you will notice there is some task that you are repeting over and over, and then you'll say "oh, I should write a loop or function for this"
+
+### When to write a loop vs a functions
+
+Usually it is obvious when you are duplicating, but unclear whether you should write a loop or a whether you should write a function.
+
+- Often, a repeated task can be completed with a loop or a function
+
+In my experience, loops are better for repeated tasks when the invidual tasks are __very__ similar to one another
+
+- e.g., a loop that reads in data sets from individual years; each dataset you read in differs only by directory and name
+- e.g., a loop that converts negative values to `NA` for a set of variables
+
+Because functions can have many arguments, functions are better when the individual tasks differ substantially from one another 
+
+- e.g., a function that runs a regression and spits out a nice table and allows you to specify the dependent variable, the independent variables, what model to run, etc. as function arguments
+
+__Note__
+
+- you can embed loops within functions; and you can call functions within loops
+- But for now, just try to understand basics of functions and loops, and then these things will not seem overwhelming
+
+
+
+### Recipe for how to write loop
+
+The general recipe for how to write a loop is very similar to the recipe for writing a function:
+
+1. Complete the task for one instance outside a loop (this is akin to writing the __body__ of the loop)
+
+2. Write the __sequence__ 
+
+3. Which parts of the body need to change with each iteration
+
+4. _if_ you are creating a new object store output of the loop, create this outside of the loop
+
+5. Construct the loop
+
+# Modfifying object vs. creating new object
+
+### Modify object or create new object
+
+Loops can be used to complete all sorts of data manipulation tasks (e.g., read-in data, tidy data, create variables) and data analysis tasks (e.g., run regressions, create plots)
+
+Grolemund and Wickham differentiate between two types of tasks that loops accomplish: Modify an existing object; and create a new object
+
+1. __Modify an existing object__
+    - examples: looping through a set of variables in a data frame and modifying these variables or creating new ones
+    - When writing loops in Stata/SAS/SPSS, we are usually modifying an existing object because Stata/SAS/SPSS typically only has one object - a dataset - open at a time)    
+2. Create a new object
+    - Example: Create an object that has summary statistics for each variable; this object will be the basis for a table or graph
+    - Often the new object will be a vector of results based on looping through elements of a data frame
+    - In R (as opposed to Stata/SAS/SPSS) creating a new object is very common because R can hold many objects at the same time
+
+### Creating a new object
+
+So far our loops have two components: sequence and body
+
+
+When we create a new object to store the results of a loop, our loops have three components
+
+1. sequence
+2. body
+3. output
+    - this is the new object that will store results created from your loop
+
+Grolemund and Wickham recommend creating this new object __prior__ to writing the loop (rather than creating the new object within the loop)
+
+> "Before you start the loop, you must always allocate sufficient space for the output. This is very important for efficiency: if you grow the for loop at each iteration using c() (for example), your for loop will be very slow."
+
+### Creating a new object
+
+Task: 
+
+- Using the data frame `df`, which contained data on four numeric variables, create a new object that contains the mean value of each variable
+
+```{r}
+set.seed(12345)
+df <- tibble(a = rnorm(10),b = rnorm(10),c = rnorm(10),d = rnorm(10))
+```
+
+In a previous example, we calculated mean for each variable
+```{r}
+for (i in seq_along(df)) {
+  cat("mean of element named",i,"is",mean(df[[i]]),fill=TRUE)
+}
+```
+Now we just have to create an object to store these results
+
+### Creating a new object
+
+Task: Create a new object that contains the mean value of each variable in `df`
+
+The new object will contain the mean for each variable, so the new object should be a numeric vector with number of elements (length) equal to the number of variables
+
+Grolemund and Wickham recommend creating the new object __prior__ to creating the loop
+```{r}
+#this code creates a numeric object called output
+output <- vector("double", ncol(df))
+typeof(output)
+length(output)
+length(df)
+```
+Now we can create a loop that uses position number to assign variable means to elements of the vector `output`
+```{r}
+for (i in seq_along(df)) {
+  cat("i=",i,fill=TRUE)
+  output[[i]] <- mean(df[[i]]) # mean of df[[1]] assigned to output[[1]], etc.
+}
+output
+```
+### Example of modifying an object?
+
+could use "rescale example" from 21.3 of Wickham
+
+### Count of events for each university
+
+This would use the df_event dataframe
+
+### Load recruiting data for practical loop tasks
+
+Load data frame with one observation per high school and variables for visits by each public research university in sample
+
+- Note: this data frame has more vars than previous data frame we used
+```{r, results="hide"}
+rm(list = ls()) # remove all objects
+load("../../data/recruiting/recruit_school_allvars.Rdata")
+```
+
+We are interested in creating measures of how good a job public universities are doing visiting in-state public high schools
+
+- Create data frame with one observation for each public high school
+```{r, results="hide"}
+names(df_school_all)
+df_school_all %>% str()
+df_pubhs <- df_school_all %>% # Create data-frame that keeps public high schools
+  filter(school_type=="public") %>% select(-school_type)
+rm(df_school_all)
+```
+
+Create standalone objects (output and code omitted)
+
+1. character vector containing ID for each public university
+2. A named list containing university name
+```{r, results="hide", echo=FALSE}
+ids<- c( '196097', '186380', '215293', '201885', '181464', '139959', '218663', '100751', '199193', '110635', '110653', '126614', '155317', '106397', '149222', '166629')
+str(ids)
+
+#create named list
+  #value of each element is university name
+  #name assigned to each element is the university ID
+  instnm<- list(
+    "196097"="Stony Brook",
+    "186380"="Rutgers",
+    "215293"="Pitt",
+    "201885"="Cinci",
+    "181464"="U Nebraska Lincoln",
+    "139959"="U Georgia",
+    "218663" ="U South Carolina",
+    "100751"="U Alabama",
+    "199193"="NC State",
+    "110635"="UC Berkeley",
+   "110653"="UC Irvine",
+   "126614"="CU Boulder" ,
+   "155317"="U Kansas",
+   "106397"="U Arkansas",
+   "149222"="U S Illinois",
+   "166629"="UMass Amherst")
+  
+  instnm<- list(
+    "Stony Brook"="196097",
+    "Rutgers"="186380",
+    "Pitt"="215293",
+    "Cinci"="201885",
+    "U Nebraska Lincoln"="181464",
+    "U Georgia"="139959",
+    "U South Carolina"="218663",
+    "U Alabama"="100751",
+    "NC State"="199193",
+    "UC Berkeley"="110635",
+   "UC Irvine"="110653",
+   "CU Boulder"="126614",
+   "U Kansas"="155317",
+   "U Arkansas"="106397",
+   "U S Illinois"="149222",
+   "UMass Amherst"="166629")  
+str(instnm)  
+```
+
+
+
+### How well do public universities cover in-state public high schools
+
+\medskip __Task__: for each public research university, calcualte the number and percent of public high schools in the university's home state that received a visit
+
+First, let's accomplish task outside of a loop for one university
+
+- let's choose `"U of South Carolina"`, `ID==218663`
+```{r, results="hide"}
+#"state_code" is the 2-letter high school state code
+df_pubhs %>% select(state_code) %>% str()
+
+#variables starting with "inst_" identify state the university is located in
+df_pubhs %>% select(inst_218663) %>% str()
+df_pubhs %>% select(inst_218663) %>% count(inst_218663) # these vars don't vary
+
+#variables starting with "visits_by_" indicate number of visits HS got in 2017
+df_pubhs %>% select(visits_by_218663) %>% str()
+df_pubhs %>% select(visits_by_218663) %>% count(visits_by_218663) 
+
+#filter only obs where HS state code equals home state of university
+df_pubhs %>% filter(state_code==inst_218663) %>% count() # count pub HS in SC
+
+#Create measures: number pub HS in SC; number w/ visit; pct w/ visit
+df_pubhs %>% filter(state_code==inst_218663) %>% select(visits_by_218663) %>% 
+  mutate(got_visit=ifelse(visits_by_218663>0,1,0)) %>%
+  summarise(n_hs=n(),n_visit=sum(got_visit),pct_visit=sum(got_visit)/n())
+
+```
+### How well do public universities cover in-state public high schools
+
+\medskip __Task__: for each public research university, calcualte the number and percent of public high schools in the university's home state that received a visit
+
+Build loop
+
+- first, loop through each value of list `instnm`
+```{r, results="hide"}
+instnm
+for (i in seq_along(instnm)) {
+  cat("\n","i=",i,sep="",fill=TRUE)
+  
+  name <- names(instnm)[[i]] # name of element
+  cat("name=",name,sep="",fill=TRUE)
+  
+  value <- instnm[[i]] # value of element
+  cat("value=",value,sep="",fill=TRUE)
+}
+```
+
+### How well do public universities cover in-state public high schools
+
+\medskip __Task__: for each public research university, calcualte the number and percent of public high schools in the university's home state that received a visit
+
+Build loop
+
+- next, loop should be able to work with the variables that start "inst_..." and "visits_by_..."
+```{r, results="hide"}
+names(df_pubhs)
+for (i in seq_along(instnm)) {
+  cat("\n","i=",i,sep="",fill=TRUE)
+  
+  #create object called inst_var; value is "inst_id" (e.g., "inst_166629")
+  cat("inst_",instnm[[i]],sep="",fill=TRUE)
+  inst_var <- paste("inst_",instnm[[i]],sep="")
+  print(inst_var)
+  
+  #create object called visits_by_var; value is "visits_by_id" (e.g., "visits_by_166629")
+  visits_by_var <- paste("visits_by_",instnm[[i]],sep="")
+  print(visits_by_var)
+  
+}
+```
+
+### How well do public universities cover in-state public high schools
+
+\medskip __Task__: for each public research university, calcualte the number and percent of public high schools in the university's home state that received a visit
+
+Build loop
+
+- for each university, keep obs for high schools in same state as the university
+    - why doesn't below code work?
+```{r, results="hide",eval=FALSE}
+for (i in seq_along(instnm)) {
+  cat("\n","i=",i,sep="",fill=TRUE)
+  
+  #create object called inst_var; value is "inst_id" (e.g., "inst_166629")
+  inst_var <- paste("inst_",instnm[[i]],sep="")
+  inst_var <- glue::glue({inst_var})
+  #print(inst_var)
+  #print(eval(inst_var))
+  
+  #keep obs in same state as the university [THIS CODE DOESN'T WORK]
+  #df_pubhs %>% filter(state_code==glue::as_glue(inst_var)) %>% count(state_code)
+  df_pubhs %>% filter_(glue::glue("state_code=={inst_var}")) %>% count(state_code)
+  #print(df_pubhs %>% filter_(glue::glue("state_code=={inst_var}")) %>% count(state_code))
+
+}
+
+df_pubhs %>% filter_(glue::glue("state_code=={inst_var}")) %>% count(state_code)
+```
+
+```{r}
+#base r aproach
+for (i in seq_along(instnm)) {
+  param <- paste("inst_", instnm[[i]],sep="")
+  print(param)
+  tempdf<-subset(df_pubhs, df_pubhs$state_code==df_pubhs[[param]])
+}
+names(tempdf)
+tempdf %>% count(state_code)
+
+```
 
