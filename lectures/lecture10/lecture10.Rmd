@@ -35,8 +35,6 @@ library(tidyverse)
 
 # Accessing elements of vectors and lists
 
-## Accessing elements of (atomic) vectors
-
 ### Types of vectors
 
 Recall that there are two broad types of vectors, __atomic vectors__ and __lists__
@@ -53,7 +51,9 @@ Main difference between atomic vectors and lists:
 
 Link to figure of data structures overview [HERE](http://r4ds.had.co.nz/diagrams/data-structures-overview.png)
 
-### Important Types of atomic vectors
+## Accessing elements of (atomic) vectors
+
+### Review: Types of atomic vectors
 
 \medskip 1. logical. each element can be three potential values: `TRUE`, `FALSE`, `NA`
 ```{r}
@@ -75,7 +75,7 @@ typeof(c(1L,2L,1L))
 typeof(c("element of character vector","another element"))
 length(c("element of character vector","another element"))
 ```
-### functions that identify type of vector
+### Review: functions that identify type of vector
 
 Function | logical | int | dbl | chr | list
 ---------|---------|-----|-----|-----|-----
@@ -103,7 +103,7 @@ is_integer(c(TRUE,1L))
 typeof(c(TRUE,1L,1.5,"b"))
 is_character(c(TRUE,1L,1.5,"b"))
 ```
-### naming vectors
+### Review: naming vectors
 
 All vectors can be "named" (i.e., you name individual elements within the vector)
 
@@ -193,7 +193,7 @@ x[c("xyz", "def")]
 
 ## Accessing elements of lists
 
-### Lists
+### Review: Lists
 
 Like atomic vectors, lists are objects that contain elements. However, the "type" of elements can very within a list and elements of a list can contain another list
 
@@ -211,7 +211,7 @@ str(x1)
 str(x2)
 ```
 
-### Lists and data frames
+### Review: Data frames are lists
 
 Recall the relationship between "lists" and "data frames"
 
@@ -230,6 +230,7 @@ str(df)
 load("../../data/recruiting/recruit_event_somevars.Rdata")
 typeof(df_event)
 ```
+
 ### Subsetting/accessing elements of a list
 
 Accessing elements of a list important for looping and many applications in R
@@ -334,7 +335,7 @@ str(list_a[[4]]) # [[]]
 
 Comparing `[]` to `[[]]` when working with lists that are data frames, `df`
 
-- The data frame object always has type=list; each element within the data frame is a vector
+- Data frame object always has type=list and each element a vector
 - If you subset using `[]` the result will always have type==list
 - If you subset using `[[]]` the result will always have type==vector
 
@@ -886,7 +887,7 @@ The general recipe for how to write a loop is very similar to the recipe for wri
 
 5. Construct the loop
 
-# Modfifying object vs. creating new object
+# Modfifying vs. creating new object
 
 ### Modify object or create new object
 
@@ -905,7 +906,6 @@ Grolemund and Wickham differentiate between two types of tasks that loops accomp
 ### Creating a new object
 
 So far our loops have two components: sequence and body
-
 
 When we create a new object to store the results of a loop, our loops have three components
 
@@ -941,15 +941,14 @@ Now we just have to create an object to store these results
 
 Task: Create a new object that contains the mean value of each variable in `df`
 
-The new object will contain the mean for each variable, so the new object should be a numeric vector with number of elements (length) equal to the number of variables
+Wickham recommends creating new object __prior__ to creating loop
 
-Grolemund and Wickham recommend creating the new object __prior__ to creating the loop
+- You must specify type and length of new object
+- New object will contain the mean for each variable, so it should be a numeric vector with number of elements (length) equal to number of variables in `df`
 ```{r}
-#this code creates a numeric object called output
-output <- vector("double", ncol(df))
+output <- vector("double", ncol(df)) # create object
 typeof(output)
-length(output)
-length(df)
+length(output); length(df)
 ```
 Now we can create a loop that uses position number to assign variable means to elements of the vector `output`
 ```{r}
@@ -959,15 +958,140 @@ for (i in seq_along(df)) {
 }
 output
 ```
-### Example of modifying an object?
+### Example of modifying an object: z-score loop
 
-could use "rescale example" from 21.3 of Wickham
+__Task__ (from Christenson lecture):
+
+- Write a loop that calculates z-score for a set of variables in a data frame and then  replaces the original variables with the z-score variables 
+
+The z-score for observation _i_ is number of standard deviations from mean:
+
+$z_i = \frac{x_i - \bar{x}}{sd(x)}$
+
+We wrote a z-score function in the functions lecture; this can be basis of our z-score loop
+```{r}
+z_score <- function(x) {
+  (x - mean(x, na.rm=TRUE))/sd(x, na.rm=TRUE)
+}
+z_score(df$a)
+z_score(df[["a"]]) # same
+z_score(df[[1]]) # same
+```
+
+### Example of modifying an object: z-score loop
+
+__Task__ (from Christenson lecture): 
+
+- Write loop that replaces variables with z-scores of those variables
+
+When modifying existing object, we only need to write __sequence__ and __body__
+
+- __sequence__. Data frame `df` has 4 variables and all are quantitative, so write a sequence that loops across each element of `df`
+    - `for (i in seq_along(df))`
+- Modify __body__.
+    - body of z-score function: `(x - mean(x, na.rm=TRUE))/sd(x, na.rm=TRUE)`
+    - Substitute `df[[i]]` for  `x`: 
+        - `(df[[i]] - mean(df[[i]], na.rm=TRUE))/sd(df[[i]], na.rm=TRUE)`
+    - Assign (replace) each observation the value of its z-score: 
+        - `df[[i]] <- (df[[i]] - mean(df[[i]], na.rm=TRUE))/sd(df[[i]], na.rm=TRUE)`
+
+```{r, results="hide"}
+set.seed(12345)
+df <- tibble(a = rnorm(10),b = rnorm(10),c = rnorm(10),d = rnorm(10))
+df
+for (i in seq_along(df)) {
+  cat("i=",i,"; mean=",mean(df[[i]], na.rm=TRUE),"; sd=",sd(df[[i]], na.rm=TRUE),sep="",fill=TRUE)
+  #print((df[[i]] - mean(df[[i]], na.rm=TRUE))/sd(df[[i]], na.rm=TRUE))
+  df[[i]] <- (df[[i]] - mean(df[[i]], na.rm=TRUE))/sd(df[[i]], na.rm=TRUE)
+}
+df
+```
+
+### Example of modifying an object: z-score loop
+
+```{r, results="hide", echo=FALSE}
+load("../../data/recruiting/recruit_event_somevars.Rdata")
+df_bama <- df_event %>% arrange(univ_id,event_date) %>% 
+  select(instnm,univ_id,event_date,event_type,event_state,zip,med_inc) %>% 
+  filter(row_number()<6)
+```
+What happens if we apply our loop to the data frame `df_bama`, which has both string and numeric variables?
+```{r, eval=FALSE}
+for (i in seq_along(df_bama)) {
+  cat("i=",i,"; mean=",mean(df_bama[[i]], na.rm=TRUE),"; sd=",sd(df_bama[[i]], na.rm=TRUE),sep="",fill=TRUE)
+  #print((df_bama[[i]] - mean(df_bama[[i]], na.rm=TRUE))/sd(df_bama[[i]], na.rm=TRUE))
+  df_bama[[i]] <- (df_bama[[i]] - mean(df_bama[[i]], na.rm=TRUE))/sd(df_bama[[i]], na.rm=TRUE)
+}
+df_bama
+```
+Let's modify our loop so that it only calculates z-score if for non-integer, numeric variables
+```{r, results="hide"}
+df_bama
+for (i in seq_along(df_bama)) {
+  cat("i=",i,"; var name=",names(df_bama)[[i]],"; type=",typeof(df_bama[[i]]),
+      "; class=",class(df_bama[[i]]),sep="",fill=TRUE)
+  
+  if(is.numeric(df_bama[[i]]) & (!is_integer(df_bama[[i]]))) {
+    df_bama[[i]] <- (df_bama[[i]] - mean(df_bama[[i]], na.rm=TRUE))/sd(df_bama[[i]], na.rm=TRUE)
+  } else {
+    # do nothing
+  }
+}
+df_bama
+```
+### Example of modifying an object: z-score loop
+
+```{r, results="hide", echo=FALSE}
+#recreate df
+set.seed(12345)
+df <- tibble(a = rnorm(10),b = rnorm(10),c = rnorm(10),d = rnorm(10))
+
+#recreate df_bama
+load("../../data/recruiting/recruit_event_somevars.Rdata")
+df_bama <- df_event %>% arrange(univ_id,event_date) %>% 
+  select(instnm,univ_id,event_date,event_type,event_state,zip,med_inc) %>% 
+  filter(row_number()<6)
+```
+Can we embed this loop in a function that takes the data frame as an argument so we don't have to modify loop for each data frame?
+
+```{r, results="hide"}
+z_score <- function(x) {
+
+  for (i in seq_along(x)) {
+    cat("i=",i,"; var name=",names(x)[[i]],"; type=",typeof(x[[i]]),
+        "; class=",class(x[[i]]),sep="",fill=TRUE)
+    
+    if(is.numeric(x[[i]]) & (!is_integer(x[[i]]))) {
+      x[[i]] <- (x[[i]] - mean(x[[i]], na.rm=TRUE))/sd(x[[i]], na.rm=TRUE)
+    } else {
+       #do nothing
+    }
+  }
+}
+
+#apply to data frame df
+df_z <- z_score(df)
+df; df_z
+
+#apply to data frame df_bama
+df_bama_z <- z_score(df_bama)
+df_bama; df_bama_z
+```
+
+# More Practice
+
+## Count of events for each university
 
 ### Count of events for each university
 
-This would use the df_event dataframe
+EITHER CUT OR MAKE THIS LATER
 
-### Load recruiting data for practical loop tasks
+This would use the df_event dataframe
+- loop that uses df_event and creates event table of number of events for each institution
+
+## How well do public universities cover in-state public high schools?
+
+### Load recruiting data
 
 Load data frame with one observation per high school and variables for visits by each public research university in sample
 
@@ -981,7 +1105,7 @@ We are interested in creating measures of how good a job public universities are
 
 - Create data frame with one observation for each public high school
 ```{r, results="hide"}
-names(df_school_all)
+#names(df_school_all)
 df_school_all %>% str()
 df_pubhs <- df_school_all %>% # Create data-frame that keeps public high schools
   filter(school_type=="public") %>% select(-school_type)
@@ -1043,7 +1167,7 @@ str(instnm)
 
 \medskip __Task__: for each public research university, calcualte the number and percent of public high schools in the university's home state that received a visit
 
-First, let's accomplish task outside of a loop for one university
+First, let's accomplish task outside of a loop for one university [Tidyverse]
 
 - let's choose `"U of South Carolina"`, `ID==218663`
 ```{r, results="hide"}
@@ -1071,7 +1195,48 @@ df_pubhs %>% filter(state_code==inst_218663) %>% select(visits_by_218663) %>%
 
 \medskip __Task__: for each public research university, calcualte the number and percent of public high schools in the university's home state that received a visit
 
-Build loop
+First, let's accomplish task outside of a loop for one university [Base R]
+
+- let's choose `"U of South Carolina"`, `ID==218663`
+```{r, results="hide"}
+#"state_code" is the 2-letter high school state code
+str(df_pubhs$state_code)
+
+#variables starting with "inst_" identify state the university is located in
+str(df_pubhs$inst_218663)
+table(df_pubhs$inst_218663, useNA='ifany') # these vars don't vary 
+
+#variables starting with "visits_by_" indicate number of visits HS got in 2017
+str(df_pubhs$visits_by_218663)
+table(df_pubhs$visits_by_218663, useNA='ifany')
+
+#filter only obs where HS state code equals home state of university
+tempdf <- subset(df_pubhs,df_pubhs[["state_code"]]==df_pubhs[["inst_218663"]])
+  #tempdf <- subset(df_pubhs,df_pubhs$state_code==df_pubhs$inst_218663) # same as above
+  #tempdf <- subset(df_pubhs,state_code==inst_218663) # same as above
+
+#Create 0/1 indicator of whether got visit
+tempdf$got_visit <- ifelse(tempdf$visits_by_218663>0,1,0)
+
+#frequency count of schools that got visits vs. not
+table(tempdf$got_visit, useNA='ifany')
+
+#create objects for count table and proportion table
+ct_table <- table(tempdf$got_visit, useNA='ifany')
+ct_table
+typeof(ct_table); length(ct_table); str(ct_table) # named vector with 2 elements
+
+prop.table(ct_table)
+pr_table <-prop.table(ct_table)
+pr_table
+typeof(pr_table); length(pr_table); str(pr_table) # named vector with 2 elements
+```
+
+### How well do public universities cover in-state public high schools
+
+\medskip __Task__: for each public research university, calcualte the number and percent of public high schools in the university's home state that received a visit
+
+Build loop [Base R approach]
 
 - first, loop through each value of list `instnm`
 ```{r, results="hide"}
@@ -1093,11 +1258,12 @@ for (i in seq_along(instnm)) {
 
 Build loop
 
-- next, loop should be able to work with the variables that start "inst_..." and "visits_by_..."
+- next, create "inst_..." and "visits_by_..." vars for each id
+- keep obs in same state as university
+- create 0/1 variable of whether high school got a visit
 ```{r, results="hide"}
-names(df_pubhs)
 for (i in seq_along(instnm)) {
-  cat("\n","i=",i,sep="",fill=TRUE)
+  cat("\n","i=",i,"; ",names(instnm)[[i]],sep="",fill=TRUE)
   
   #create object called inst_var; value is "inst_id" (e.g., "inst_166629")
   cat("inst_",instnm[[i]],sep="",fill=TRUE)
@@ -1108,6 +1274,12 @@ for (i in seq_along(instnm)) {
   visits_by_var <- paste("visits_by_",instnm[[i]],sep="")
   print(visits_by_var)
   
+  #create subset of data with high schools in same state as the university
+  tempdf <- subset(df_pubhs,df_pubhs[["state_code"]]==df_pubhs[[inst_var]])
+      # code df_pubhs[[inst_var]]) evaluates to df_pubhs[["inst_166629"]]) or whatever current value of inst_var is
+      # this is same as instnm[[i]] evaluating to instnm[[16]] or whatever current value of i is
+  #Create 0/1 indicator of whether got visit
+  tempdf$got_visit <- ifelse(tempdf[[visits_by_var]]>0,1,0)  
 }
 ```
 
@@ -1117,37 +1289,48 @@ for (i in seq_along(instnm)) {
 
 Build loop
 
-- for each university, keep obs for high schools in same state as the university
-    - why doesn't below code work?
+- next, create count of number of visted and non-visited in-state schools
+```{r, results="hide"}
+for (i in seq_along(instnm)) {
+  cat("\n","i=",i,"; ",names(instnm)[[i]],sep="",fill=TRUE)
+  
+  inst_var <- paste("inst_",instnm[[i]],sep="")
+  visits_by_var <- paste("visits_by_",instnm[[i]],sep="")
+
+  tempdf <- subset(df_pubhs,df_pubhs[["state_code"]]==df_pubhs[[inst_var]]) # keep obs in same state as university
+  tempdf$got_visit <- ifelse(tempdf[[visits_by_var]]>0,1,0) # create 0/1 indicator
+  
+  #create frequency table of number of schools with and without visits
+  print(table(tempdf$got_visit, useNA='ifany'))
+  ct_table <- table(tempdf$got_visit, useNA='ifany') # named vector with 2 elements str(ct_table)
+
+  #create proportion table
+  print(prop.table(ct_table))
+  pr_table <- prop.table(ct_table) # named vector with 2 elements str(pr_table)
+}
+```
+
+### How well do public universities cover in-state public high schools
+
+\medskip __Task__: for each public research university, calcualte the number and percent of public high schools in the university's home state that received a visit
+
+Here is tidyverse approach to loop, which uses some programming concepts we haven't covered
+
 ```{r, results="hide",eval=FALSE}
 for (i in seq_along(instnm)) {
-  cat("\n","i=",i,sep="",fill=TRUE)
+  cat("\n","i=",i,"; ",names(instnm)[[i]],sep="",fill=TRUE)
   
   #create object called inst_var; value is "inst_id" (e.g., "inst_166629")
   inst_var <- paste("inst_",instnm[[i]],sep="")
-  inst_var <- glue::glue({inst_var})
-  #print(inst_var)
-  #print(eval(inst_var))
-  
-  #keep obs in same state as the university [THIS CODE DOESN'T WORK]
-  #df_pubhs %>% filter(state_code==glue::as_glue(inst_var)) %>% count(state_code)
-  df_pubhs %>% filter_(glue::glue("state_code=={inst_var}")) %>% count(state_code)
-  #print(df_pubhs %>% filter_(glue::glue("state_code=={inst_var}")) %>% count(state_code))
 
+  #create object called visits_by_var; value is "visits_by_id" (e.g., "visits_by_166629")
+  visits_by_var <- paste("visits_by_",instnm[[i]],sep="")
+
+  #Create measures: number pub HS in SC; number w/ visit; pct w/ visit
+  df_pubhs %>% filter_(glue::glue("state_code=={inst_var}")) %>% 
+      select_(visits_by_var) %>% 
+      mutate_(got_visit=glue::glue("ifelse({visits_by_var}>0,1,0)")) %>%
+      summarise(n_hs=n(),n_visit=sum(got_visit),pct_visit=sum(got_visit)/n())
 }
-
-df_pubhs %>% filter_(glue::glue("state_code=={inst_var}")) %>% count(state_code)
-```
-
-```{r}
-#base r aproach
-for (i in seq_along(instnm)) {
-  param <- paste("inst_", instnm[[i]],sep="")
-  print(param)
-  tempdf<-subset(df_pubhs, df_pubhs$state_code==df_pubhs[[param]])
-}
-names(tempdf)
-tempdf %>% count(state_code)
-
 ```
 
