@@ -36,6 +36,7 @@ library(dplyr)
 library(readr)
 library(haven)
 library(readxl)
+library(labelled)
 ```
 
 ### Data we will use today
@@ -68,7 +69,7 @@ The [`readr`](https://readr.tidyverse.org/index.html) package is part of tidyver
 \
 - We could load **library(tidyverse)** if we wanted to load all packages in tidyverse (e.g. ggplot2, dplyr, tidyr, stringr, readr, etc...)  
 
-![Caption for the picture.](~/Desktop/tidyverse.png)
+![Caption for the picture.](~/Desktop/lecture8/tidyverse.png)
 \
 - For the purpose of this lecture, we will just need to load **library(readr)**  
 
@@ -211,7 +212,7 @@ read_csv("1,2,3
 
 Use `read_csv()` function from `readr` to import csv dataset into R without column specification. Follow along on your computers.
 ```{r, results="hide"}
-ipeds_ay <- read_csv(file="../ic2017ay_small.csv")
+#ipeds_ay <- read_csv(file="../ic2017ay_small.csv")
 ```
 
 Notice tuition and fee columns are read in as character type. 
@@ -221,21 +222,20 @@ Notice tuition and fee columns are read in as character type.
 Use `read_csv()` function from `readr` to import csv dataset into R with column specification
 **[Would it be better to change to integer or double?]** 
 ```{r, results='hide'}
-ipeds_ay <- read_csv("../ic2017ay_small.csv", col_types = 
-  cols(
-    unitid = col_integer(),
-    tuition1 = col_integer(),
-    fee1 = col_integer(),
-    hrchg1 = col_integer(),
-    tuition2 = col_integer(),
-    fee2 = col_integer(),
-    hrchg2 = col_integer(),
-    tuition3 = col_integer(),
-    fee3 = col_integer(),
-    hrchg3 = col_integer()
-  )
-)
-
+# {ipeds_ay <- read_csv("../ic2017ay_small.csv", col_types = 
+#  cols(
+#    unitid = col_integer(),
+#    tuition1 = col_integer(),
+#    fee1 = col_integer(),
+ #   hrchg1 = col_integer(),
+ #   tuition2 = col_integer(),
+ #   fee2 = col_integer(),
+ #   hrchg2 = col_integer(),
+ #   tuition3 = col_integer(),
+ #   fee3 = col_integer(),
+ #   hrchg3 = col_integer()
+ # )
+#) # }
 ```
 
 
@@ -274,19 +274,44 @@ For the purpose of this lecture, we will just need to load **library(haven)**.
 | Stata    | `read_dta`   |
 
 
+### `haven` read and write Stata arguments
 
+`read_dta(file, encoding = NULL)`  
+`write_data(data, path, version = 14)`  
+
+Arguments  
+- file: file path to data  
+- encoding: files prior to Stata 14 did not declare text encoding, files after Stata 14 do not need to declare encoding value  
+- data: data frame to save (write)  
+- path: file path to where data will be saved  
+- version: file version  
+
+[Link](https://haven.tidyverse.org/reference/read_dta.html)
+
+
+### `haven` read and write Stata example  
 
 Use `read_dta()` function from `haven` to import Stata dataset into R
 ```{r, results="hide"}
-#hsls <- read_dta(file="../../data/hsls/hsls_stu_small.dta")
+hsls <- read_dta("~/Desktop/lecture8/hsls_sch_small.dta", encoding=NULL)
+
+# View data
+head(hsls)
+glimpse(hsls)
 ```
 
-Talk about haven package (discussed in previous lectures) (recap lecture 5)
-Notes from reading or other sources
-Type of haven functions (SPSS, Stata, SAS)
-How to read in that data (stata example)
+Use `write_dta` function from `haven` to write State data
+```{r}
+write_dta(hsls, path = "~/Desktop/lecture8/hsls_sch_small.dta")
+```
+
+
 Student exercise
 Running into problems with variable/value labels?
+```{r}
+
+```
+
 
 
 # `readxl` package
@@ -383,7 +408,7 @@ For example, rather than downloading ipeds data and saving it in a folder, we co
 2. Choose "Online Data Table 1" 
 3. Right click and copy link address for "Excel" (Note: it is actually a csv file)
 
-![mobility report cards](~/Desktop/mrc_table1.png)\  
+![mobility report cards](~/Desktop/lecture8/mrc_table1.png)\  
 
 ### Downloading data from web  
 [FIX OUTPUT (CUTTING OFF)]
@@ -416,7 +441,7 @@ mrc[1:4, 1:4]
 2. Choose "All years" and "All surveys" and click continue  
 3. Right click and copy link address for "IC2017_AY" 
 
-![ipeds data center](~/Desktop/ic2017_ay.png)\  
+![ipeds data center](~/Desktop/lecture8/ic2017_ay.png)\  
 
 ### Downloading data (zip files) using IPEDS
 ```{r}
@@ -432,13 +457,13 @@ mrc[1:4, 1:4]
 ### Downloading data (zip files) using IPEDS
 ```{r}
 #Set path to where data will be saved
-path <- "~/Desktop/data/ic2017_ay.csv"
+path <- "~/Desktop/lecture8/ic2017_ay.csv"
 #download file and pa
 download.file("https://nces.ed.gov/ipeds/datacenter/data/IC2017_AY.zip", destfile = path , mode = 'wb')
 #unzip zip file and keep original name
 #unzip(zipfile = "ic2017_ay" , unzip = "unzip")
 
-ic2017_ay <- read_csv("ic2017_ay.csv")
+ic2017_ay <- read_csv(path)
 ```
 
 
@@ -456,6 +481,7 @@ ic2017_ay <- read_csv("ic2017_ay.csv")
 
 
 # Data sources (maybe)
+
 
 
 
