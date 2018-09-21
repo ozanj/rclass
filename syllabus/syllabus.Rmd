@@ -1,0 +1,85 @@
+---
+output:
+  pdf_document:
+    keep_tex: true
+    fig_caption: yes
+    latex_engine: pdflatex
+    template: ~/Desktop/GitHub/rclass/syllabus/svm-r-markdown-template.tex
+geometry: margin=1in
+
+title: "EDUC 263: Introduction to Data Management Using R"
+author: Ozan Jaquette
+date: "Fall 2018"
+
+instructor: "Ozan Jaquette"
+pronouns: "he/him/his"
+email: "ozanj@ucla.edu"
+officehours: 
+office: "Moore Hall 3038"
+
+web: "class website (e.g. piazza)?"
+classroom: "Moore Hall 3030"
+classhours: "Fridays 12 - 4 pm"
+
+ta: "Patricia Martín"
+tapronouns: "she/her/hers"
+taemail: "pmarti@g.ucla.edu"
+taofficehours:
+
+  
+fontfamily: mathpazo
+fontsize: 11pt
+header-includes:
+   - \linespread{1.05}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
+```
+
+```{r}
+fri <- as.Date("2018-09-24")
+
+
+advdate <- function(obj, adv) {
+ tmon <- obj + 7*(adv-1)
+ tfri <- obj + 4 + 7*(adv-0)
+ tmon <- format(tmon, format="%m/%d")
+ tfri <- format(tfri, format="%m/%d")
+ zadv <- sprintf("%02d", adv)
+ if(adv == 11) {
+   tmp <- paste("Finals Week",sep='',", ", tmon, "-" ,tfri)
+ } else {
+   tmp <- paste("Week ",zadv,sep='',", ", tfri)
+ }
+ return(tmp)
+}
+
+```
+# Course Description
+
+# Course Objectives  
+
+# Course Readings  
+
+\pagebreak  
+
+# Assignments & Grading  
+
+# Course Policies  
+
+# Course Schedule  
+## `r advdate(fri, 0)`: Introduction...
+## `r advdate(fri, 1)`:
+## `r advdate(fri, 2)`:
+## `r advdate(fri, 3)`:
+## `r advdate(fri, 4)`:
+## `r advdate(fri, 5)`:
+## `r advdate(fri, 6)`:
+## `r advdate(fri, 7)`:
+## `r advdate(fri, 8)`: No class
+## `r advdate(fri, 9)`:
+## `r advdate(fri, 10)`:
+## `r advdate(fri, 11)`:  
+
+# Resources
