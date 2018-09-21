@@ -28,7 +28,7 @@
 \newif\ifbibliography
 \hypersetup{
             pdftitle={Managing and Manipulating Data Using R},
-            pdfauthor={Ozan Jaquette},
+            pdfauthor={Patricia Martin},
             pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
@@ -169,7 +169,7 @@
 
 \title{Managing and Manipulating Data Using R}
 \subtitle{Lecture 8, Acquiring data in R}
-\author{Ozan Jaquette}
+\author{Patricia Martin}
 \date{}
 
 \begin{document}
@@ -198,11 +198,119 @@ don't have them{]}}
 
 \begin{frame}{Data we will use today}
 
-IPEDS or HSLS\\
-Federal Student Aid\\
-Chetty
+\begin{itemize}
+\tightlist
+\item
+  Integrated Postsecondary Education Data System (IPEDS)\\
+\item
+  High School Longitudinal Surveys (HSLS)\\
+\item
+  Federal Student Aid Data\\
+\item
+  Equality of Opportunity Project
+\end{itemize}
 
-\textbf{Work on this}
+\end{frame}
+
+\begin{frame}{Integrated Postsecondary Education Data System (IPEDS)}
+
+\begin{itemize}
+\tightlist
+\item
+  Postsecondary education data from NCES\\
+\item
+  There are
+  \href{https://nces.ed.gov/ipeds/resource/download/IPEDS_DataReleaseProcedures.pdf}{12
+  survey components} and 3 collection periods
+\end{itemize}
+
+We will be working with
+\href{https://nces.ed.gov/ipeds/datacenter/DataFiles.aspx}{Institutional
+Characteristics data of 2017}
+
+\end{frame}
+
+\begin{frame}{High school longitudinal surveys from National Center for
+Education Statistics (NCES)}
+
+\begin{itemize}
+\tightlist
+\item
+  Follow U.S. students from high school through college, labor market
+\end{itemize}
+
+We will be working with
+\href{https://nces.ed.gov/surveys/hsls09/index.asp}{High School
+Longitudinal Study of 2009 (HSLS:09)}
+
+\begin{itemize}
+\tightlist
+\item
+  Follows 9th graders from 2009
+\item
+  Data collection waves
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Base Year (2009)
+  \item
+    First Follow-up (2012)
+  \item
+    2013 Update (2013)
+  \item
+    High School Transcripts (2013-2014)
+  \item
+    Second Follow-up (2016)
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Federal Student Aid}
+
+\begin{itemize}
+\tightlist
+\item
+  Federal Student Aid Data Center provides information for federal
+  assistance programs and is divided into four categories:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Student Aid Data\\
+  \item
+    School Data\\
+  \item
+    Federal Family Education Loan (FFEL) Program\\
+  \item
+    Business Information Resources
+  \end{itemize}
+\end{itemize}
+
+We will be working with
+\href{https://studentaid.ed.gov/sa/node/105}{School Data}
+
+\end{frame}
+
+\begin{frame}{Equality of Opportunity Project}
+
+\begin{itemize}
+\tightlist
+\item
+  \href{http://www.equality-of-opportunity.org/papers/coll_mrc_paper.pdf}{Equality
+  of Opportunity Project} uses two data sources-- federal tax recoards
+  and Department of Education records (1999-2013)-- to investigate
+  intergenerational income mobility at colleges in the US.
+\end{itemize}
+
+We will use
+\href{http://www.equality-of-opportunity.org/documents/}{Mobility Report
+Cards: The Role of Colleges in Intergenerational Mobility data}
+
+\textbf{Not sure if to simply list datasets. Lecture will go over
+acquiring data and not so much about manipulating data. Not sure if
+students need to know each dataset in detail?}
 
 \end{frame}
 
@@ -243,7 +351,7 @@ files in R and transform them into data frames.\\[2\baselineskip]- We
 could load \textbf{library(tidyverse)} if we wanted to load all packages
 in tidyverse (e.g.~ggplot2, dplyr, tidyr, stringr, readr, etc\ldots{})
 
-\includegraphics{~/Desktop/lecture8/tidyverse.png}\\
+\includegraphics{~/Desktop/GitHub/rclass/lectures/lecture8/tidyverse.png}\\
 - For the purpose of this lecture, we will just need to load
 \textbf{library(readr)}
 
@@ -261,9 +369,6 @@ important steps for reading in data with \texttt{readr}:
 \item
   \textbf{column specification}
 \end{enumerate}
-
-\textbf{Talk about readr (tidyverse), Notes from the reading, Notes from
-other sources}
 
 \end{frame}
 
@@ -285,8 +390,6 @@ Text-formated data (txt) & \texttt{read\_table}\tabularnewline
 Web log files & \texttt{read\_log}\tabularnewline
 \bottomrule
 \end{longtable}
-
-\textbf{What type of data could be read in}
 
 \end{frame}
 
@@ -320,9 +423,9 @@ specify the data type for each column.
 
 \begin{frame}[fragile]{\texttt{readr\ column\ specification}}
 
-The output of the previous example shows us the column specification of
-the variables in the data. This is important because we could manually
-change column specification if we do not like readr's guess.
+The output of the previous example shows us the column specification
+readr gave us. However, we could manually change column specification if
+we do not like readr's guess.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -346,11 +449,18 @@ change column specification if we do not like readr's guess.
 
 \end{frame}
 
-\begin{frame}{\texttt{readr} features}
+\begin{frame}[fragile]{\texttt{readr} features}
 
-\textbf{skip}:\\
-\textbf{comment}:\\
-\textbf{col\_names}:
+\begin{itemize}
+\tightlist
+\item
+  \textbf{skip}: \texttt{read\_csv}(csv file, skip = n)\\
+\item
+  \textbf{comment}: \texttt{read\_csv}(csv file, comment = ``\#'')\\
+\item
+  \textbf{col\_names}: \texttt{read\_csv}(csv file, col\_names =
+  c(``x'', ``y'', ``z''))
+\end{itemize}
 
 \end{frame}
 
@@ -506,11 +616,19 @@ computers.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#ipeds_ay <- read_csv(file="../ic2017ay_small.csv")}
+\NormalTok{ipeds <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\DataTypeTok{file=}\StringTok{"~/Desktop/GitHub/rclass/data/ipeds/ic/ipeds_hd_2017_small.csv"}\NormalTok{)}
+\CommentTok{#> Parsed with column specification:}
+\CommentTok{#> cols(}
+\CommentTok{#>   unitid = col_integer(),}
+\CommentTok{#>   instnm = col_character(),}
+\CommentTok{#>   stabbr = col_character(),}
+\CommentTok{#>   sector = col_integer(),}
+\CommentTok{#>   iclevel = col_integer(),}
+\CommentTok{#>   control = col_integer()}
+\CommentTok{#> )}
+\CommentTok{# glimpse(ipeds)}
 \end{Highlighting}
 \end{Shaded}
-
-Notice tuition and fee columns are read in as character type.
 
 \end{frame}
 
@@ -522,26 +640,221 @@ to change to integer or double?{]}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# \{ipeds_ay <- read_csv("../ic2017ay_small.csv", col_types = }
-\CommentTok{#  cols(}
-\CommentTok{#    unitid = col_integer(),}
-\CommentTok{#    tuition1 = col_integer(),}
-\CommentTok{#    fee1 = col_integer(),}
- \CommentTok{#   hrchg1 = col_integer(),}
- \CommentTok{#   tuition2 = col_integer(),}
- \CommentTok{#   fee2 = col_integer(),}
- \CommentTok{#   hrchg2 = col_integer(),}
- \CommentTok{#   tuition3 = col_integer(),}
- \CommentTok{#   fee3 = col_integer(),}
- \CommentTok{#   hrchg3 = col_integer()}
- \CommentTok{# )}
-\CommentTok{#) # \}}
+\NormalTok{ipeds <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\DataTypeTok{file=}\StringTok{"~/Desktop/GitHub/rclass/data/ipeds/ic/ipeds_hd_2017_small.csv"}\NormalTok{,}
+                  \DataTypeTok{col_types =}
+                    \KeywordTok{cols}\NormalTok{(}
+                      \DataTypeTok{unitid =} \KeywordTok{col_number}\NormalTok{(), }
+                      \DataTypeTok{instnm =} \KeywordTok{col_character}\NormalTok{(),}
+                      \DataTypeTok{stabbr =} \KeywordTok{col_character}\NormalTok{(),}
+                      \DataTypeTok{sector =} \KeywordTok{col_integer}\NormalTok{(),}
+                      \DataTypeTok{iclevel =} \KeywordTok{col_integer}\NormalTok{(),}
+                      \DataTypeTok{control =} \KeywordTok{col_integer}\NormalTok{()}
+\NormalTok{  )}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+We changed unitid to number, but could be left as is or changed to
+character type for example.
+
+\end{frame}
+
+\begin{frame}[fragile]{\texttt{readr} variable and value labels}
+
+Let's view variable and value labels
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ipeds }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(sector) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{var_label}\NormalTok{()}
+\CommentTok{#> $sector}
+\CommentTok{#> NULL}
+\NormalTok{ipeds }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(sector) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{val_labels}\NormalTok{()}
+\CommentTok{#> $sector}
+\CommentTok{#> NULL}
+\end{Highlighting}
+\end{Shaded}
+
+There are no variable and value labels for this data. IPEDS has a
+separate do file with variable and value labels.\\
+- Let's practice manually adding variable and value labels using the
+\texttt{labelled} package.
+
+\end{frame}
+
+\begin{frame}[fragile]{\texttt{readr} labelled data}
+
+\begin{itemize}
+\tightlist
+\item
+  Open the data dictionary file for hd2017 data and select
+  ``Frequencies'' sheet
+\item
+  We are only working with these 6 variables (unitid, instnm, stabbr,
+  sector, iclevel, control)\\
+\item
+  We need to add variable labels for all 6 variables\\
+\item
+  We need to add value labels for sector, iclevel, and control
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Lets view values for sector}
+\NormalTok{ipeds }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{count}\NormalTok{(sector) }
+\CommentTok{#> # A tibble: 11 x 2}
+\CommentTok{#>    sector     n}
+\CommentTok{#>     <int> <int>}
+\CommentTok{#>  1      0    75}
+\CommentTok{#>  2      1   775}
+\CommentTok{#>  3      2  1701}
+\CommentTok{#>  4      3   661}
+\CommentTok{#>  5      4   981}
+\CommentTok{#>  6      5   169}
+\CommentTok{#>  7      6   864}
+\CommentTok{#>  8      7   248}
+\CommentTok{#>  9      8    85}
+\CommentTok{#> 10      9  1562}
+\CommentTok{#> 11     99    32}
 \end{Highlighting}
 \end{Shaded}
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readr\ Running\ into\ errors}}
+\begin{frame}[fragile]{\texttt{readr} manually add variable and value
+labels}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Need to manually assign variable and value labels using labelled package }
+\NormalTok{ipeds_labelled <-}\StringTok{ }\NormalTok{ipeds }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{set_variable_labels}\NormalTok{(}\DataTypeTok{unitid =} \StringTok{"Unit identification number"}\NormalTok{, }
+                      \DataTypeTok{instnm =} \StringTok{"Institution name"}\NormalTok{, }
+                      \DataTypeTok{stabbr =} \StringTok{"State abbreviation"}\NormalTok{,}
+                      \DataTypeTok{sector =} \StringTok{"Sector of institution"}\NormalTok{,}
+                      \DataTypeTok{iclevel =} \StringTok{"Level of institution"}\NormalTok{,}
+                      \DataTypeTok{control =} \StringTok{"Control of institution"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{set_value_labels}\NormalTok{(}\DataTypeTok{sector =} \KeywordTok{c}\NormalTok{(}\StringTok{"Administrative Unit"}\NormalTok{ =}\StringTok{ }\DecValTok{0}\NormalTok{, }
+                              \StringTok{"Public, 4-year or above"}\NormalTok{ =}\StringTok{ }\DecValTok{1}\NormalTok{, }
+                              \StringTok{"Private not-for-profit, 4-year or above"}\NormalTok{ =}\StringTok{ }\DecValTok{2}\NormalTok{,}
+                              \StringTok{"Private for-profit, 4-year or above"}\NormalTok{ =}\StringTok{ }\DecValTok{3}\NormalTok{, }
+                              \StringTok{"Public, 2-year"}\NormalTok{ =}\StringTok{ }\DecValTok{4}\NormalTok{, }
+                              \StringTok{"Private not-for-profit, 2-year"}\NormalTok{ =}\StringTok{ }\DecValTok{5}\NormalTok{, }
+                              \StringTok{"Private for-profit, 2-year"}\NormalTok{ =}\StringTok{ }\DecValTok{6}\NormalTok{,}
+                              \StringTok{"Public, less-than 2-year"}\NormalTok{ =}\StringTok{ }\DecValTok{7}\NormalTok{, }
+                              \StringTok{"Private not-for-profit, less-than 2-year"}\NormalTok{ =}\StringTok{ }\DecValTok{8}\NormalTok{,}
+                              \StringTok{"Private for-profit, less-than 2-year"}\NormalTok{ =}\StringTok{ }\DecValTok{9}\NormalTok{, }
+                              \StringTok{"Sector unknown (not active)"}\NormalTok{ =}\StringTok{ }\DecValTok{99}\NormalTok{), }
+                   \DataTypeTok{iclevel =} \KeywordTok{c}\NormalTok{(}\StringTok{"Four or more years"}\NormalTok{ =}\StringTok{ }\DecValTok{1}\NormalTok{, }
+                               \StringTok{"At least 2 but less than 4 years"}\NormalTok{ =}\StringTok{ }\DecValTok{2}\NormalTok{, }
+                               \StringTok{"Less than 2 years (below associate)"}\NormalTok{ =}\StringTok{ }\DecValTok{3}\NormalTok{,}
+                               \StringTok{"\{Not available\}"}\NormalTok{ =}\StringTok{ }\OperatorTok{-}\DecValTok{3}\NormalTok{),}
+                   \DataTypeTok{control =} \KeywordTok{c}\NormalTok{(}\StringTok{"Public"}\NormalTok{ =}\StringTok{ }\DecValTok{1}\NormalTok{, }\StringTok{"Private not-for-profit"}\NormalTok{ =}\StringTok{ }\DecValTok{2}\NormalTok{, }
+                               \StringTok{"Private for-profit"}\NormalTok{ =}\StringTok{ }\DecValTok{3}\NormalTok{, }
+                               \StringTok{"\{Not available\}"}\NormalTok{ =}\StringTok{ }\OperatorTok{-}\DecValTok{3}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{\texttt{readr} Let's view new labelled data}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{typeof}\NormalTok{(ipeds_labelled}\OperatorTok{$}\NormalTok{iclevel)}
+\CommentTok{#> [1] "integer"}
+\KeywordTok{class}\NormalTok{(ipeds_labelled}\OperatorTok{$}\NormalTok{iclevel)}
+\CommentTok{#> [1] "labelled"}
+\KeywordTok{attributes}\NormalTok{(ipeds_labelled}\OperatorTok{$}\NormalTok{iclevel)}
+\CommentTok{#> $label}
+\CommentTok{#> [1] "Level of institution"}
+\CommentTok{#> }
+\CommentTok{#> $labels}
+\CommentTok{#>                  Four or more years    At least 2 but less than 4 years }
+\CommentTok{#>                                   1                                   2 }
+\CommentTok{#> Less than 2 years (below associate)                     \{Not available\} }
+\CommentTok{#>                                   3                                  -3 }
+\CommentTok{#> }
+\CommentTok{#> $class}
+\CommentTok{#> [1] "labelled"}
+\end{Highlighting}
+\end{Shaded}
+
+Let's change class to factor
+
+\end{frame}
+
+\begin{frame}[fragile]{\texttt{readr} Class to factor}
+
+Approach \#1
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ipeds_factor <-}\StringTok{ }\KeywordTok{as_factor}\NormalTok{(ipeds_labelled, }\DataTypeTok{only_labelled =} \OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{typeof}\NormalTok{(ipeds_factor}\OperatorTok{$}\NormalTok{sector)}
+\CommentTok{#> [1] "integer"}
+\KeywordTok{class}\NormalTok{(ipeds_factor}\OperatorTok{$}\NormalTok{sector)}
+\CommentTok{#> [1] "factor"}
+\KeywordTok{attributes}\NormalTok{(ipeds_factor}\OperatorTok{$}\NormalTok{sector)}
+\CommentTok{#> $levels}
+\CommentTok{#>  [1] "Administrative Unit"                     }
+\CommentTok{#>  [2] "Public, 4-year or above"                 }
+\CommentTok{#>  [3] "Private not-for-profit, 4-year or above" }
+\CommentTok{#>  [4] "Private for-profit, 4-year or above"     }
+\CommentTok{#>  [5] "Public, 2-year"                          }
+\CommentTok{#>  [6] "Private not-for-profit, 2-year"          }
+\CommentTok{#>  [7] "Private for-profit, 2-year"              }
+\CommentTok{#>  [8] "Public, less-than 2-year"                }
+\CommentTok{#>  [9] "Private not-for-profit, less-than 2-year"}
+\CommentTok{#> [10] "Private for-profit, less-than 2-year"    }
+\CommentTok{#> [11] "Sector unknown (not active)"             }
+\CommentTok{#> }
+\CommentTok{#> $class}
+\CommentTok{#> [1] "factor"}
+\CommentTok{#> }
+\CommentTok{#> $label}
+\CommentTok{#> [1] "Sector of institution"}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{\texttt{readr} Class to factor}
+
+Approach \#2
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ipeds_factor2 <-}\StringTok{ }\KeywordTok{to_factor}\NormalTok{(ipeds_labelled, }\DataTypeTok{ordered =} \OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{typeof}\NormalTok{(ipeds_factor2}\OperatorTok{$}\NormalTok{sector)}
+\CommentTok{#> [1] "integer"}
+\KeywordTok{class}\NormalTok{(ipeds_factor2}\OperatorTok{$}\NormalTok{sector)}
+\CommentTok{#> [1] "ordered" "factor"}
+\KeywordTok{attributes}\NormalTok{(ipeds_factor2}\OperatorTok{$}\NormalTok{sector)}
+\CommentTok{#> $levels}
+\CommentTok{#>  [1] "Administrative Unit"                     }
+\CommentTok{#>  [2] "Public, 4-year or above"                 }
+\CommentTok{#>  [3] "Private not-for-profit, 4-year or above" }
+\CommentTok{#>  [4] "Private for-profit, 4-year or above"     }
+\CommentTok{#>  [5] "Public, 2-year"                          }
+\CommentTok{#>  [6] "Private not-for-profit, 2-year"          }
+\CommentTok{#>  [7] "Private for-profit, 2-year"              }
+\CommentTok{#>  [8] "Public, less-than 2-year"                }
+\CommentTok{#>  [9] "Private not-for-profit, less-than 2-year"}
+\CommentTok{#> [10] "Private for-profit, less-than 2-year"    }
+\CommentTok{#> [11] "Sector unknown (not active)"             }
+\CommentTok{#> }
+\CommentTok{#> $class}
+\CommentTok{#> [1] "ordered" "factor" }
+\CommentTok{#> }
+\CommentTok{#> $label}
+\CommentTok{#> [1] "Sector of institution"}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{1. \texttt{readr\ Running\ into\ errors}}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -610,25 +923,48 @@ Stata & \texttt{read\_dta}\tabularnewline
 \texttt{write\_data(data,\ path,\ version\ =\ 14)}
 
 Arguments\\
-- file: file path to data\\
-- encoding: files prior to Stata 14 did not declare text encoding, files
-after Stata 14 do not need to declare encoding value\\
-- data: data frame to save (write)\\
-- path: file path to where data will be saved\\
-- version: file version
+- \textbf{file}: file path to data\\
+- \textbf{encoding}: files prior to Stata 14 did not declare text
+encoding, files after Stata 14 do not need to declare encoding value\\
+- \textbf{data}: data frame to save (write)\\
+- \textbf{path}: file path to where data will be saved\\
+- \textbf{version}: file version
 
 \href{https://haven.tidyverse.org/reference/read_dta.html}{Link}
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{haven} read and write Stata example}
+\begin{frame}[fragile]{\texttt{haven} Student exercise}
 
-Use \texttt{read\_dta()} function from \texttt{haven} to import Stata
-dataset into R
+\begin{itemize}
+\tightlist
+\item
+  Use \texttt{read\_dta()} function from \texttt{haven} to import Stata
+  dataset into R\\
+\item
+  Use \texttt{write\_dta()} funtction from \texttt{haven} to save Stata
+  dataset\\
+\item
+  If you have time, explore data (View, glimpse, head, etc.)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    View variable and value labels\\
+  \item
+    Change class == labelled to class == factor
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{\texttt{haven} Student exercise Solution}
+
+Use \texttt{read\_dta} function from \texttt{haven} to import State data
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{hsls <-}\StringTok{ }\KeywordTok{read_dta}\NormalTok{(}\StringTok{"~/Desktop/lecture8/hsls_sch_small.dta"}\NormalTok{, }\DataTypeTok{encoding=}\OtherTok{NULL}\NormalTok{)}
+\NormalTok{hsls <-}\StringTok{ }\KeywordTok{read_dta}\NormalTok{(}\StringTok{"~/Desktop/GitHub/rclass/data/hsls/hsls_sch_small.dta"}\NormalTok{, }\DataTypeTok{encoding=}\OtherTok{NULL}\NormalTok{)}
 
 \CommentTok{# View data}
 \KeywordTok{head}\NormalTok{(hsls)}
@@ -640,11 +976,96 @@ Use \texttt{write\_dta} function from \texttt{haven} to write State data
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{write_dta}\NormalTok{(hsls, }\DataTypeTok{path =} \StringTok{"~/Desktop/lecture8/hsls_sch_small.dta"}\NormalTok{)}
+\KeywordTok{write_dta}\NormalTok{(hsls, }\DataTypeTok{path =} \StringTok{"~/Desktop/GitHub/rclass/data/hsls/hsls_sch_small.dta"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-Student exercise Running into problems with variable/value labels?
+\end{frame}
+
+\begin{frame}[fragile]{\texttt{haven} Student exercise Solution
+cont\ldots{}}
+
+Variable and Value labels
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# View variable labels}
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{var_label}\NormalTok{()}
+\CommentTok{#> $sch_id}
+\CommentTok{#> [1] "School ID"}
+\CommentTok{#> }
+\CommentTok{#> $x1control}
+\CommentTok{#> [1] "X1 School control"}
+\CommentTok{#> }
+\CommentTok{#> $x1locale}
+\CommentTok{#> [1] "X1 School locale (urbanicity)"}
+\CommentTok{#> }
+\CommentTok{#> $x1region}
+\CommentTok{#> [1] "X1 School geographic region"}
+\CommentTok{#> }
+\CommentTok{#> $a1schcontrol}
+\CommentTok{#> [1] "A1 A02 School control"}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{\texttt{haven} Student exercise Solution
+cont\ldots{}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#View value label for x1locale}
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(x1locale) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{val_labels}\NormalTok{()}
+\CommentTok{#> $x1locale}
+\CommentTok{#>                                    Missing }
+\CommentTok{#>                                          1 }
+\CommentTok{#> Unit non-response/component not applicable }
+\CommentTok{#>                                          2 }
+\CommentTok{#>                    Item legitimate skip/NA }
+\CommentTok{#>                                          3 }
+\CommentTok{#>                                       City }
+\CommentTok{#>                                          4 }
+\CommentTok{#>                                     Suburb }
+\CommentTok{#>                                          5 }
+\CommentTok{#>                                       Town }
+\CommentTok{#>                                          6 }
+\CommentTok{#>                                      Rural }
+\CommentTok{#>                                          7}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{\texttt{haven} Student exercise Solution
+cont\ldots{}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Change class == labelled to class == factor}
+\NormalTok{hsls <-}\StringTok{ }\KeywordTok{as_factor}\NormalTok{(hsls, }\DataTypeTok{only_labelled =} \OtherTok{TRUE}\NormalTok{)}
+
+\KeywordTok{typeof}\NormalTok{(hsls}\OperatorTok{$}\NormalTok{x1region)}
+\CommentTok{#> [1] "integer"}
+\KeywordTok{class}\NormalTok{(hsls}\OperatorTok{$}\NormalTok{x1region)}
+\CommentTok{#> [1] "factor"}
+\KeywordTok{attributes}\NormalTok{(hsls}\OperatorTok{$}\NormalTok{x1region)}
+\CommentTok{#> $levels}
+\CommentTok{#> [1] "Missing"                                   }
+\CommentTok{#> [2] "Unit non-response/component not applicable"}
+\CommentTok{#> [3] "Item legitimate skip/NA"                   }
+\CommentTok{#> [4] "Northeast"                                 }
+\CommentTok{#> [5] "Midwest"                                   }
+\CommentTok{#> [6] "South"                                     }
+\CommentTok{#> [7] "West"                                      }
+\CommentTok{#> }
+\CommentTok{#> $class}
+\CommentTok{#> [1] "factor"}
+\CommentTok{#> }
+\CommentTok{#> $label}
+\CommentTok{#> [1] "X1 School geographic region"}
+\end{Highlighting}
+\end{Shaded}
 
 \end{frame}
 
@@ -828,6 +1249,88 @@ anything to missing
 
 \end{frame}
 
+\begin{frame}[fragile]{\texttt{readxl} Student exercise solution}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Read in data using readxl function}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"~/Desktop/GitHub/rclass/data/fsa"}\NormalTok{)}
+\NormalTok{fsa <-}\StringTok{ }\KeywordTok{read_excel}\NormalTok{(}\StringTok{"peps300.xlsx"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Read in first four rows (n_max)}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"~/Desktop/GitHub/rclass/data/fsa"}\NormalTok{)}
+\KeywordTok{read_excel}\NormalTok{(}\StringTok{"peps300.xlsx"}\NormalTok{, }\DataTypeTok{n_max =} \DecValTok{4}\NormalTok{)}
+\CommentTok{#> # A tibble: 4 x 29}
+\CommentTok{#>    OPEID                                         Name}
+\CommentTok{#>    <chr>                                        <chr>}
+\CommentTok{#> 1 001002 ALABAMA AGRICULTURAL & MECHANICAL UNIVERSITY}
+\CommentTok{#> 2 001003                          FAULKNER UNIVERSITY}
+\CommentTok{#> 3 001004                     UNIVERSITY OF MONTEVALLO}
+\CommentTok{#> 4 001005                     ALABAMA STATE UNIVERSITY}
+\CommentTok{#> # ... with 27 more variables: Address <chr>, City <chr>, State <chr>,}
+\CommentTok{#> #   `State Desc` <chr>, `Zip Code` <chr>, `Zip Ext` <chr>,}
+\CommentTok{#> #   `Prog\textbackslash{}r\textbackslash{}nLength` <dbl>, `School\textbackslash{}r\textbackslash{}nType` <dbl>, `Year 1` <dbl>,}
+\CommentTok{#> #   `Dual\textbackslash{}r\textbackslash{}nNum 1` <dbl>, `Dual\textbackslash{}r\textbackslash{}nDenom 1` <dbl>, `DRate 1` <dbl>,}
+\CommentTok{#> #   `PRate 1` <chr>, `Ethnic Code` <chr>, Program <chr>, `Cong Dis` <chr>,}
+\CommentTok{#> #   Region <chr>, `Year 2` <dbl>, `Dual\textbackslash{}r\textbackslash{}nNum 2` <dbl>, `Dual\textbackslash{}r\textbackslash{}nDenom}
+\CommentTok{#> #   2` <dbl>, `DRate 2` <dbl>, `PRate 2` <chr>, `Year 3` <dbl>,}
+\CommentTok{#> #   `Dual\textbackslash{}r\textbackslash{}nNum 3` <dbl>, `Dual\textbackslash{}r\textbackslash{}nDenom 3` <dbl>, `DRate 3` <dbl>,}
+\CommentTok{#> #   `PRate 3` <chr>}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{\texttt{readxl} Student exercise solution
+cont\ldots{}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Read in column Names to column State}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"~/Desktop/GitHub/rclass/data/fsa"}\NormalTok{)}
+\KeywordTok{head}\NormalTok{(}\KeywordTok{read_excel}\NormalTok{(}\StringTok{"peps300.xlsx"}\NormalTok{, }\DataTypeTok{range =} \KeywordTok{cell_cols}\NormalTok{(}\StringTok{"B:E"}\NormalTok{)))}
+\CommentTok{#> # A tibble: 6 x 4}
+\CommentTok{#>                                           Name                  Address}
+\CommentTok{#>                                          <chr>                    <chr>}
+\CommentTok{#> 1 ALABAMA AGRICULTURAL & MECHANICAL UNIVERSITY     4900 MERIDIAN STREET}
+\CommentTok{#> 2                          FAULKNER UNIVERSITY     5345 ATLANTA HIGHWAY}
+\CommentTok{#> 3                     UNIVERSITY OF MONTEVALLO            PALMER CIRCLE}
+\CommentTok{#> 4                     ALABAMA STATE UNIVERSITY 915 SOUTH JACKSON STREET}
+\CommentTok{#> 5            CENTRAL ALABAMA COMMUNITY COLLEGE       1675 CHEROKEE ROAD}
+\CommentTok{#> 6                      ATHENS STATE UNIVERSITY   300 NORTH BEATY STREET}
+\CommentTok{#> # ... with 2 more variables: City <chr>, State <chr>}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"~/Desktop/GitHub/rclass/data/fsa"}\NormalTok{)}
+\KeywordTok{read_excel}\NormalTok{(}\StringTok{"peps300.xlsx"}\NormalTok{, }\DataTypeTok{n_max =} \DecValTok{4}\NormalTok{,  }\DataTypeTok{na =} \StringTok{"A"}\NormalTok{)}
+\CommentTok{#> # A tibble: 4 x 29}
+\CommentTok{#>    OPEID                                         Name}
+\CommentTok{#>    <chr>                                        <chr>}
+\CommentTok{#> 1 001002 ALABAMA AGRICULTURAL & MECHANICAL UNIVERSITY}
+\CommentTok{#> 2 001003                          FAULKNER UNIVERSITY}
+\CommentTok{#> 3 001004                     UNIVERSITY OF MONTEVALLO}
+\CommentTok{#> 4 001005                     ALABAMA STATE UNIVERSITY}
+\CommentTok{#> # ... with 27 more variables: Address <chr>, City <chr>, State <chr>,}
+\CommentTok{#> #   `State Desc` <chr>, `Zip Code` <chr>, `Zip Ext` <chr>,}
+\CommentTok{#> #   `Prog\textbackslash{}r\textbackslash{}nLength` <dbl>, `School\textbackslash{}r\textbackslash{}nType` <dbl>, `Year 1` <dbl>,}
+\CommentTok{#> #   `Dual\textbackslash{}r\textbackslash{}nNum 1` <dbl>, `Dual\textbackslash{}r\textbackslash{}nDenom 1` <dbl>, `DRate 1` <dbl>,}
+\CommentTok{#> #   `PRate 1` <chr>, `Ethnic Code` <chr>, Program <chr>, `Cong Dis` <chr>,}
+\CommentTok{#> #   Region <chr>, `Year 2` <dbl>, `Dual\textbackslash{}r\textbackslash{}nNum 2` <dbl>, `Dual\textbackslash{}r\textbackslash{}nDenom}
+\CommentTok{#> #   2` <dbl>, `DRate 2` <dbl>, `PRate 2` <chr>, `Year 3` <dbl>,}
+\CommentTok{#> #   `Dual\textbackslash{}r\textbackslash{}nNum 3` <dbl>, `Dual\textbackslash{}r\textbackslash{}nDenom 3` <dbl>, `DRate 3` <dbl>,}
+\CommentTok{#> #   `PRate 3` <chr>}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
 \begin{frame}[fragile]{\texttt{readxl} Running into problems}
 
 \begin{enumerate}
@@ -854,10 +1357,22 @@ anything to missing
 
 \begin{frame}{Downloading data from web}
 
-Could save time and reduce the steps of downloading, saving, and reading
-in data, by reading in data directly from the web.\\
-- note that not all packages will work downloading data from web
-(read\_excel)
+\begin{itemize}
+\tightlist
+\item
+  Save time
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Reduce the steps of downloading, saving, and reading in data\\
+  \item
+    Read in data directly from internet\\
+  \item
+    \textbf{note} not all packages will working with downloading data
+    from the web (read\_excel)
+  \end{itemize}
+\end{itemize}
 
 For example, rather than downloading ipeds data and saving it in a
 folder, we could download the data directly from the web.
@@ -880,7 +1395,7 @@ folder, we could download the data directly from the web.
   a csv file)
 \end{enumerate}
 
-\includegraphics{~/Desktop/lecture8/mrc_table1.png}~
+\includegraphics{~/Desktop/GitHub/rclass/lectures/lecture8/mrc_table1.png}~
 
 \end{frame}
 
@@ -936,7 +1451,15 @@ Alternative approach
 \CommentTok{#>   trend_bottom40 = col_double(),}
 \CommentTok{#>   count = col_double()}
 \CommentTok{#> )}
+\end{Highlighting}
+\end{Shaded}
 
+\end{frame}
+
+\begin{frame}[fragile]{Downloading data from web}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{#View first 4 rows and 4 columns }
 \NormalTok{mrc[}\DecValTok{1}\OperatorTok{:}\DecValTok{4}\NormalTok{, }\DecValTok{1}\OperatorTok{:}\DecValTok{4}\NormalTok{]}
 \CommentTok{#> # A tibble: 4 x 4}
@@ -965,21 +1488,15 @@ Alternative approach
   Right click and copy link address for ``IC2017\_AY''
 \end{enumerate}
 
-\includegraphics{~/Desktop/lecture8/ic2017_ay.png}~
+\includegraphics{~/Desktop/GitHub/rclass/lectures/lecture8/ic2017_ay.png}~
 
 \end{frame}
 
 \begin{frame}[fragile]{Downloading data (zip files) using IPEDS}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# Paste url and read in using read_csv}
-\CommentTok{# What happens when you try reading in this zip file? }
-\CommentTok{#ic2017_ay <- read_csv("https://nces.ed.gov/ipeds/datacenter/data/IC2017_AY.zip")}
-
-\CommentTok{# Need to download file first to unzip}
-\end{Highlighting}
-\end{Shaded}
+Paste url and read in using \texttt{read\_csv}\\
+What happens when you try reading in this zip file?\\
+Need to download \textbf{and} unzip
 
 \end{frame}
 
@@ -988,23 +1505,21 @@ Alternative approach
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{#Set path to where data will be saved}
-\NormalTok{path <-}\StringTok{ "~/Desktop/lecture8/ic2017_ay.csv"}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"~/Desktop/lecture8"}\NormalTok{)}
 \CommentTok{#download file and pa}
-\KeywordTok{download.file}\NormalTok{(}\StringTok{"https://nces.ed.gov/ipeds/datacenter/data/IC2017_AY.zip"}\NormalTok{, }\DataTypeTok{destfile =}\NormalTok{ path , }\DataTypeTok{mode =} \StringTok{'wb'}\NormalTok{)}
+\KeywordTok{download.file}\NormalTok{(}\StringTok{"https://nces.ed.gov/ipeds/datacenter/data/IC2017_AY.zip"}\NormalTok{,}
+              \DataTypeTok{destfile =} \StringTok{"ic2017_ay"}\NormalTok{, }\DataTypeTok{mode =} \StringTok{'wb'}\NormalTok{)}
 \CommentTok{#unzip zip file and keep original name}
-\CommentTok{#unzip(zipfile = "ic2017_ay" , unzip = "unzip")}
+\KeywordTok{unzip}\NormalTok{(}\DataTypeTok{zipfile =} \StringTok{"ic2017_ay"}\NormalTok{ , }\DataTypeTok{unzip =} \StringTok{"unzip"}\NormalTok{)}
+\CommentTok{#> arguments 'minimized' and 'invisible' are for Windows only}
 
-\NormalTok{ic2017_ay <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(path)}
+\NormalTok{ic2017_ay <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"ic2017_ay.csv"}\NormalTok{)}
 \CommentTok{#> Parsed with column specification:}
 \CommentTok{#> cols(}
-\CommentTok{#>   `PK` = col_character()}
+\CommentTok{#>   .default = col_character(),}
+\CommentTok{#>   UNITID = col_integer()}
 \CommentTok{#> )}
-\CommentTok{#> Warning in rbind(names(probs), probs_f): number of columns of result is not}
-\CommentTok{#> a multiple of vector length (arg 1)}
-\CommentTok{#> Warning: 1680 parsing failures.}
-\CommentTok{#> row # A tibble: 5 x 5 col     row              col  expected        actual expected   <int>            <chr>     <chr>         <chr> actual 1     1 "PK\textbackslash{}003\textbackslash{}004\textbackslash{}024"           embedded null file 2     2             <NA> 1 columns     3 columns row 3     3 "PK\textbackslash{}003\textbackslash{}004\textbackslash{}024"           embedded null col 4     3             <NA> 1 columns     3 columns expected 5     5             <NA> 1 columns     2 columns actual # ... with 1 more variables: file <chr>}
-\CommentTok{#> ... ................. ... ................................................ ........ ................................................ ...... ................................................ .... ................................................ ... ................................................ ... ................................................ ........ ................................................ ...... .......................................}
-\CommentTok{#> See problems(...) for more details.}
+\CommentTok{#> See spec(...) for full column specifications.}
 \end{Highlighting}
 \end{Shaded}
 

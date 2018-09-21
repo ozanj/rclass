@@ -253,7 +253,7 @@ read_csv("1,2,3
 
 Use `read_csv()` function from `readr` to import csv dataset into R without column specification. Follow along on your computers.
 ```{r, results="hide"}
-ipeds <- read_csv(file="~/Desktop/GitHub/rclass/data/ipeds/ipeds_hd_2017_small.csv")
+ipeds <- read_csv(file="~/Desktop/GitHub/rclass/data/ipeds/ic/ipeds_hd_2017_small.csv")
 # glimpse(ipeds)
 ```
 
@@ -263,7 +263,7 @@ ipeds <- read_csv(file="~/Desktop/GitHub/rclass/data/ipeds/ipeds_hd_2017_small.c
 Use `read_csv()` function from `readr` to import csv dataset into R with column specification
 **[Would it be better to change to integer or double?]** 
 ```{r, results='hide'}
-ipeds <- read_csv(file="~/Desktop/GitHub/rclass/data/ipeds/ipeds_hd_2017_small.csv",
+ipeds <- read_csv(file="~/Desktop/GitHub/rclass/data/ipeds/ic/ipeds_hd_2017_small.csv",
                   col_types =
                     cols(
                       unitid = col_number(), 
@@ -542,17 +542,20 @@ fsa <- read_excel("peps300.xlsx")
 
 ```{r}
 #Read in first four rows (n_max)
+setwd("~/Desktop/GitHub/rclass/data/fsa")
 read_excel("peps300.xlsx", n_max = 4)
 ```
 
 ### `readxl` Student exercise solution cont...
 ```{r}
 #Read in column Names to column State
+setwd("~/Desktop/GitHub/rclass/data/fsa")
 head(read_excel("peps300.xlsx", range = cell_cols("B:E")))
 
 ```
 
 ```{r}
+setwd("~/Desktop/GitHub/rclass/data/fsa")
 read_excel("peps300.xlsx", n_max = 4,  na = "A")
 ```
 
