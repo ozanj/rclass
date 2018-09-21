@@ -1,7 +1,7 @@
 ---
 title: Managing and Manipulating Data Using R # potentially push to header
 subtitle:  Lecture 8, Acquiring data in R
-author: Ozan Jaquette
+author: Patricia Martin
 date: 
 fontsize: 8pt
 classoption: dvipsnames  # for colors
