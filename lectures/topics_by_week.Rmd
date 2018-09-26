@@ -88,6 +88,8 @@ output:
 
 ## Class 1. Introduction and data types
 
+### to do before
+
 ### Big topics
 
 - Course objectives

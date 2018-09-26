@@ -3,7 +3,9 @@ title: Managing and Manipulating Data Using R # potentially push to header
 subtitle:  Lecture 2
 author: Ozan Jaquette
 date: 
+classoption: dvipsnames  # for colors
 fontsize: 8pt
+urlcolor: blue
 output:
   beamer_presentation:
     keep_tex: true
@@ -185,13 +187,13 @@ This approach to isolating variables is very useful for investigating and manipu
 - \hlgc{rename(obj\_name, new\_name = old\_name,\ldots)}
 \medskip
 ```{r results="hide"}
-rename(df_event, zip = determined_zip, titlei = titlei_status_pub)
+rename(df_event, g12_offered = g12offered, titlei = titlei_status_pub)
 names(df_event)
 ```
 Variable names do not change permanently unless we combine rename with assignment
 \medskip
 ```{r results="hide"}
-rename_event <- rename(df_event, zip = determined_zip, titlei = titlei_status_pub)
+rename_event <- rename(df_event, g12_offered = g12offered, titlei = titlei_status_pub)
 names(rename_event)
 rm(rename_event)
 ```
@@ -209,14 +211,14 @@ Printing observations is key to investigating data, but datasets often have hund
 Select __without assignment__ simply prints data for selected variables
 
 ```{r}
-select(df_event,instnm,event_date,eventtype,event_state,med_inc)
+select(df_event,instnm,event_date,event_type,event_state,med_inc)
 ```
 ### Select variables using \hlgc{select()} function
 
 Select __with assignment__ creates a new object containing only the variables you specify
 
 ```{r}
-event_small <- select(df_event,instnm,event_date,eventtype,event_state,med_inc)
+event_small <- select(df_event,instnm,event_date,event_type,event_state,med_inc)
 event_small
 ```
 
@@ -285,11 +287,11 @@ df_event$event_state
 - can be combined with sequences
 ```{r}
 df_event$event_state[1:10]
-df_event$eventtype[6:10]
+df_event$event_type[6:10]
 ```
 - can also print multiple variables using \hlgc{combine()} function
 ```{r}
-c(df_event$event_state[1:5],df_event$eventtype[1:5])
+c(df_event$event_state[1:5],df_event$event_type[1:5])
 ```
 
 
@@ -424,9 +426,9 @@ count(filter(df_school, visits_by_100751 %in% 2:3, school_type == "private"))
 - \hlgc{table()} to show potential values of categorical variables
 
 ```{r}
-class(df_event$eventtype)
-str(df_event$eventtype)
-table(df_event$eventtype)
+class(df_event$event_type)
+str(df_event$event_type)
+table(df_event$event_type)
 
 class(df_event$event_state)
 str(df_event$event_state) # double quotes indicate character
@@ -435,11 +437,11 @@ class(df_event$med_inc)
 str(df_event$med_inc)
 ```
 
-Now that we know \hlgc{eventtype} is a character, we can filter values
+Now that we know `event_type` is a character, we can filter values
 ```{r}
-count(filter(df_event, eventtype == "public hs", event_state =="CA"))
+count(filter(df_event, event_type == "public hs", event_state =="CA"))
 #below code would return an error because variables are character
-#count(filter(df_event, eventtype == public hs, event_state ==CA))
+#count(filter(df_event, event_type == public hs, event_state ==CA))
 ```
 
 
@@ -453,25 +455,25 @@ count(filter(df_event, univ_id == 215293))
 ```
 2. Count the number of recruiting events by Pitt at public or private high schools 
 ```{r eval=FALSE, echo=FALSE}
-count(filter(df_event, univ_id == 215293, eventtype == "private hs" | eventtype == "public hs"))
+count(filter(df_event, univ_id == 215293, event_type == "private hs" | event_type == "public hs"))
 ```
 3. Count the number of recruiting events by Pitt at public or private high schools located in the state of PA
 ```{r eval=FALSE, echo=FALSE}
-count(filter(df_event, univ_id == 215293, eventtype == "private hs" | eventtype == "public hs", event_state == "PA"))
+count(filter(df_event, univ_id == 215293, event_type == "private hs" | event_type == "public hs", event_state == "PA"))
 ```
 4. Count the number of recruiting events by Pitt at public high schools not located in PA where median income is less than 100,000
 ```{r eval=FALSE, echo=FALSE}
-count(filter(df_event, univ_id == 215293, eventtype == "public hs", event_state != "PA", med_inc < 100000))
+count(filter(df_event, univ_id == 215293, event_type == "public hs", event_state != "PA", med_inc < 100000))
 ```
 
 5. Count the number of recruiting events by Pitt at public high schools not located in PA where median income is greater than or  equal to 100,000
 
 ```{r eval=FALSE, echo=FALSE}
-count(filter(df_event, univ_id == 215293, eventtype == "public hs", event_state != "PA", med_inc >= 100000))
+count(filter(df_event, univ_id == 215293, event_type == "public hs", event_state != "PA", med_inc >= 100000))
 ```
 6. Count the number of out-of-state recruiting events by Pitt at private high schools or public high schools with median income of at least 100,000
 ```{r eval=FALSE, echo=FALSE}
-count(filter(df_event, univ_id == 215293, event_state != "PA", (eventtype == "public hs" & med_inc >= 100000) | eventtype == "private hs"))
+count(filter(df_event, univ_id == 215293, event_state != "PA", (event_type == "public hs" & med_inc >= 100000) | event_type == "private hs"))
 ```
 
 # Missing values
@@ -545,11 +547,11 @@ Wickham (2018) states:
 
 ```{r}
 #visits to public HS with less than 50 students on free/reduced lunch
-count(filter(df_event,eventtype == "public hs", fr_lunch<50))
+count(filter(df_event,event_type == "public hs", fr_lunch<50))
 #visits to public HS, where free/reduced lunch missing
-count(filter(df_event,eventtype == "public hs", is.na(fr_lunch)))
+count(filter(df_event,event_type == "public hs", is.na(fr_lunch)))
 #visits to public HS, where free/reduced is less than 50 OR is missing
-count(filter(df_event,eventtype == "public hs", fr_lunch<50 | is.na(fr_lunch)))
+count(filter(df_event,event_type == "public hs", fr_lunch<50 | is.na(fr_lunch)))
 ```
 
 
@@ -591,7 +593,7 @@ Can sort by multiple variables
 arrange(df_event, univ_id, desc(event_date), desc(med_inc))
 
 #sort by university and descending by size of 12th grade class; combine with select
-select(arrange(df_event, univ_id, desc(g12)),instnm,eventtype,event_date,g12)
+select(arrange(df_event, univ_id, desc(g12)),instnm,event_type,event_date,g12)
 ```
 
 ### \hlgc{arrange()}, missing values sorted at the end
@@ -599,14 +601,14 @@ select(arrange(df_event, univ_id, desc(g12)),instnm,eventtype,event_date,g12)
 Missing values automatically sorted at the end, regardless of whether you sort ascending or descending
 ```{r}
 #by university, date, ascending school id
-select(arrange(df_event, univ_id, desc(event_date), school_id),instnm,event_date,eventtype,school_id)
+select(arrange(df_event, univ_id, desc(event_date), school_id),instnm,event_date,event_type,school_id)
 
 #by university, date, descending school id
-select(arrange(df_event, univ_id, desc(event_date), desc(school_id)),instnm,event_date,eventtype,school_id)
+select(arrange(df_event, univ_id, desc(event_date), desc(school_id)),instnm,event_date,event_type,school_id)
 ```
 Can sort by \hlgc{is.na} to put missing values first
 ```{r}
-select(arrange(df_event, univ_id, desc(event_date), desc(is.na(school_id))),instnm,event_date,eventtype,school_id)
+select(arrange(df_event, univ_id, desc(event_date), desc(is.na(school_id))),instnm,event_date,event_type,school_id)
 ```
 
 ### Exercises, arranging
