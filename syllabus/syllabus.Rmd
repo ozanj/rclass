@@ -94,8 +94,31 @@ Data management consists of acquiring, investigating, cleaning, combining, and m
 
 The course will be taught in R, a free, open-source programming language. R has become the most popular language for statistical analysis, surpassing SPSS, Stata, and SAS. What differentiates R from these other languages is the thousands of open-source “libraries” created by R users.  R is one of the most popular languages for “data science,” because R libraries have been created for web-scraping, mapping, network analysis, etc.  By learning R you can be confident that you know a programming language that can run any modeling technique you might need and has amazing capabilities for data collection and data visualization. By learning fundamentals of R in this course, you will be "one step away" from web-scraping, network analysis, interactive maps, quantitative text analysis, or whatever other data science application you are interested in.
 
-# Course Objectives  
+Students will become proficient in data manipulation tasks through weekly “problem sets” that you complete in groups of three. These problem sets will account for 80% of your grade for the course.  Each week class will begin with one group will leading a discussion of challenges they encountered while completing the problem set.  The rest of class time will be devoted to learning new material. The instructor will provide students with lecture notes, and also data and code used during lecture. Therefore, student can follow along by running code from their own computers.
 
+# Course Learning Goals
+
+1. Understand fundamental concepts of object oriented programming
+    - What are the basic object types and how do they apply to statistical analysis
+    - What are object attributes and how do they apply to statistical analysis
+1. Become familiar with Base R approach to data manipulation and Tidyverse approach to data manipulation
+1. Investigate data patterns 
+    -	Sort datasets in ways that generate insights about data structure
+    - Select specific observations and specific variables in order  to identify data structure and to examine whether variables are created correctly
+    -	Create summary statistics of particular variables to diagnose errors in data
+1. Create variables
+    - Create variables that require calculations across columns
+    - Create variables that require processing across rows
+1. Combine multiple datasets
+    - Join (merge) datasets
+    - Append (stack) datasets
+1. Manipulate the organizational structure of datasets
+    - summarize and collapse by group
+    - Tidy untidy data
+1. Automate iterative tasks
+    - Write your own functions
+    - Write loops
+1. Learn habits of mind and practical strategies for cleaning dirty data and avoiding errors when creating analysis variables variables
 
 # Prerequisite Requirements 
 
@@ -109,11 +132,11 @@ The course will be taught in R, a free, open-source programming language. R has 
 
 Required text
 
-- Grolemund, G., & Wickham, H. (2018). _R for data science_. Retrieved from http://r4ds.had.co.nz/ 
+- Grolemund, G., & Wickham, H. (2018). _R for data science_. Retrieved from http://r4ds.had.co.nz/ [FREE!]
 
 # Required Software and Hardware
 
-## Software
+## Software [FREE!]
 
 PATRICIA - CAN YOU ADD TEXT HERE; PERHAPS PUT A LINK TO THE TO DO LIST?
 
@@ -129,7 +152,7 @@ Please install the following software on your laptop
 
 # Course Website and Resources
 
-PATRICIA - CAN YOU ADD TEXT HERE
+PATRICIA - CAN YOU ADD TEXT HERE; ABOUT PIAZZA, ABOUT PIAZZA DISCUSSION FORUMS; ABOUT THE WEBSITE
 
 # Communication with Instructor and Teaching Assistant
 
@@ -173,13 +196,13 @@ Students are expected to participate in the weekly class meetings by being atten
 
 ## Classroom environment
 
-We all have a responsibility to ensure that every student feels valued, feels safe, feels comfortable, and feels included. 
+We all have a responsibility to ensure that every member of the class feels valued, safe, and included. 
 
-With respect to the course material, learning programming and the essential skills of data manipulation is hard! This stuff feels overwhelming to me all the time. So it is important that we all create an environment where students feel comfortable asking questions and talking about what they did not understand. Let's help each other learn!
+With respect to the course material, learning programming and the essential skills of data manipulation is hard! This stuff feels overwhelming to me all the time. So it is important that we all create an environment where students feel comfortable asking questions and talking about what they did not understand. 
 
-With respect to creatin an inclusive environment, be mindful that what you say affects other people. So express your thoughts in a way that doesn’t make people feel excluded and does not belittle or make disparaging generalizations about a group.
+With respect to creatin an inclusive environment, be mindful that what you say affects other people. So express your thoughts in a way that doesn’t make people feel excluded and does not disparaging generalizations about a group.
 
-My responsibility as instructor to address the learning needs of all of the students in this course. I will present materials that are respectful of diversity: race, color, ethnicity, gender, age, disability, religious beliefs, political preference, sexual orientation, gender identity, citizenship, or national origin among other personal characteristics. I also believe that the diversity of student experiences and perspectives is essential to the deepening of knowledge in a course. Any suggestions that you have about other ways to include the value of diversity in this course are welcome. 
+As an instructor, I am responsible for setting an example through my own conduct. I hope to create an environment where students feel comfortable voicing concerns about the classroom environment. I will endeavor to present materials that are respectful of diversity: race, color, ethnicity, gender, age, disability, religious beliefs, political preference, sexual orientation, gender identity, citizenship, or national origin among other personal characteristics. The diversity of student experiences and perspectives is essential to the deepening of knowledge in a course. Any suggestions that you have about other ways to include the value of diversity in this course are welcome. During the quarter, I will also create forums where students can voice concerns anonymously.
 
 ## Online Collaboration/Netiquette
 
@@ -192,7 +215,6 @@ You will communicate with instructors and peers virtually through a variety of t
 ## Academic accomodations
 
 Students needing academic accommodations based on a disability should contact the Center for Accessible Education (CAE) at (310)825-1501 or in person at Murphy Hall A255. When possible, students should contact the CAE within the first two weeks of the term as reasonable notice is needed to coordinate accommodations. For more information visit www.cae.ucla.edu.
-
 
 ## Academic Honesty: 
 
