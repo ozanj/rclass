@@ -1,6 +1,6 @@
 ---
-title: Managing and Manipulating Data Using R # potentially push to header
-subtitle:  Introduction, part 2
+title: "Lecture 1: Objects in R"
+subtitle:  "EDUC 263: Managing and Manipulating Data Using R"
 author: Ozan Jaquette
 date: 
 classoption: dvipsnames  # for colors

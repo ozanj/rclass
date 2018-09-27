@@ -1,10 +1,11 @@
 ---
-title: Managing and Manipulating Data Using R # potentially push to header
-subtitle:  Lecture 4
+title: "Lecture 4: Processing across rows" # potentially push to header
+subtitle:  "EDUC 263: Managing and Manipulating Data Using R"
 author: Ozan Jaquette
 date: 
 fontsize: 8pt
 classoption: dvipsnames  # for colors
+urlcolor: blue
 output:
   beamer_presentation:
     keep_tex: true

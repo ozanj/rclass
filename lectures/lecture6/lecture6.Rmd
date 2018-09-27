@@ -1,8 +1,9 @@
 ---
-title: Tidy data
-subtitle:  Lecture 6
+title: "Lecture 6: Tidy data"
+subtitle:  "EDUC 263: Managing and Manipulating Data Using R"
 author: Ozan Jaquette
 date: 
+urlcolor: blue
 output: 
   html_document:
     toc: true

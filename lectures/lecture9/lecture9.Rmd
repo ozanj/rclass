@@ -1,10 +1,11 @@
 ---
-title: Managing and Manipulating Data Using R # potentially push to header
-subtitle:  Lecture 9, Writing functions
+title:  "Lecture 9: Writing functions"
+subtitle:  "EDUC 263: Managing and Manipulating Data Using R"
 author: Ozan Jaquette
 date: 
 fontsize: 8pt
 classoption: dvipsnames  # for colors
+urlcolor: blue
 output:
   beamer_presentation:
     keep_tex: true
@@ -1182,7 +1183,7 @@ If you are writing a side-effect type function, you should "invisibly" return th
 - do this using the `invisible()` function
 
 Example from Grolemund and Wickham
-```{r, eval=FALSE}
+```{r}
 show_missings <- function(df) {
   n <- sum(is.na(df))
   cat("Missing values: ", n, "\n", sep = "")
