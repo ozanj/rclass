@@ -113,10 +113,10 @@
 Instructor: \texttt{Ozan Jaquette} & Teaching Assistant: \texttt{Patricia Martín} \\
 Pronouns: \texttt{he/him/his} & Pronouns: \texttt{she/her/hers} \\
 E-mail: \texttt{\href{mailto:ozanj@ucla.edu}{\nolinkurl{ozanj@ucla.edu}}} & E-mail: \texttt{\href{mailto:pmarti@g.ucla.edu}{\nolinkurl{pmarti@g.ucla.edu}}} \\ 
-Office Hours: TBD  & Office Hours: TBD \\
+Office Hours: Tues 3-4PM; and by appt  & Office Hours: \texttt{Wed 12-1PM; Thur 1:30-3:30PM} \\
 Office: Moore Hall 3038 \\
 \\ *
-Class Room: Moore Hall 3030 & Class Hours: Fridays 12 - 4 pm\\
+Class Room: Moore Hall 2120 & Class Hours: Fridays 12 - 4 pm\\
 Web: \href{http://class website (e.g.~piazza)?}{\tt class website (e.g.~piazza)?}\\
 	&  \\
 	\hline
@@ -128,44 +128,500 @@ Web: \href{http://class website (e.g.~piazza)?}{\tt class website (e.g.~piazza)?
 
 \section{Course Description}\label{course-description}
 
-\section{Course Objectives}\label{course-objectives}
+This course has two foundational goals: (1) to develop core skills in
+``data management,'' which are important regardless of which programming
+language you use, and (2) to learn the fundamentals of the R programming
+language.
+
+Data management consists of acquiring, investigating, cleaning,
+combining, and manipulating data. Most statistics courses teach you how
+to analyze data that are ready for analysis. In real research projects,
+cleaning the data and creating analysis datasets is often more time
+consuming than conducting analyses. This course teaches the fundamental
+data management and data manipulation skills necessary for creating
+analysis datasets.
+
+The course will be taught in R, a free, open-source programming
+language. R has become the most popular language for statistical
+analysis, surpassing SPSS, Stata, and SAS. What differentiates R from
+these other languages is the thousands of open-source ``libraries''
+created by R users. R is one of the most popular languages for ``data
+science,'' because R libraries have been created for web-scraping,
+mapping, network analysis, etc. By learning R you can be confident that
+you know a programming language that can run any modeling technique you
+might need and has amazing capabilities for data collection and data
+visualization. By learning fundamentals of R in this course, you will be
+``one step away'' from web-scraping, network analysis, interactive maps,
+quantitative text analysis, or whatever other data science application
+you are interested in.
+
+Students will become proficient in data manipulation tasks through
+weekly ``problem sets'' that you complete in groups of three. These
+problem sets will account for 80\% of your grade for the course. Each
+week class will begin with one group will leading a discussion of
+challenges they encountered while completing the problem set. The rest
+of class time will be devoted to learning new material. The instructor
+will provide students with lecture notes, and also data and code used
+during lecture. Therefore, student can follow along by running code from
+their own computers.
+
+\section{Course Learning Goals}\label{course-learning-goals}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Understand fundamental concepts of object oriented programming
+
+  \begin{itemize}
+  \tightlist
+  \item
+    What are the basic object types and how do they apply to statistical
+    analysis
+  \item
+    What are object attributes and how do they apply to statistical
+    analysis
+  \end{itemize}
+\item
+  Become familiar with Base R approach to data manipulation and
+  Tidyverse approach to data manipulation
+\item
+  Investigate data patterns
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Sort datasets in ways that generate insights about data structure
+  \item
+    Select specific observations and specific variables in order to
+    identify data structure and to examine whether variables are created
+    correctly
+  \item
+    Create summary statistics of particular variables to diagnose errors
+    in data
+  \end{itemize}
+\item
+  Create variables
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Create variables that require calculations across columns
+  \item
+    Create variables that require processing across rows
+  \end{itemize}
+\item
+  Combine multiple datasets
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Join (merge) datasets
+  \item
+    Append (stack) datasets
+  \end{itemize}
+\item
+  Manipulate the organizational structure of datasets
+
+  \begin{itemize}
+  \tightlist
+  \item
+    summarize and collapse by group
+  \item
+    Tidy untidy data
+  \end{itemize}
+\item
+  Automate iterative tasks
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Write your own functions
+  \item
+    Write loops
+  \end{itemize}
+\item
+  Learn habits of mind and practical strategies for cleaning dirty data
+  and avoiding errors when creating analysis variables variables
+\end{enumerate}
+
+\section{Prerequisite Requirements}\label{prerequisite-requirements}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Students must have taken at least a one-semester introductory
+  statistics course.\\
+\item
+  Students should have some very basic experience using statistical
+  programming software (e.g., SPSS, Stata, R, SAS)
+\item
+  {[}General computer skills{]} Students should be able to download
+  files from the internet, rename these files, save them to a folder of
+  your choosing, and open this folder.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    During this course we will often be downloading datasets, opening
+    .Rmd files and .R scripts, changing directories to the folder where
+    we stored the data, and then opening the dataset we just downloaded.
+    Therefore, it is important that students feel comfortable doing
+    these tasks.
+  \end{itemize}
+\end{enumerate}
 
 \section{Course Readings}\label{course-readings}
 
-\pagebreak  
+Required text
+
+\begin{itemize}
+\tightlist
+\item
+  Grolemund, G., \& Wickham, H. (2018). \emph{R for data science}.
+  Retrieved from \url{http://r4ds.had.co.nz/} {[}FREE!{]}
+\end{itemize}
+
+\section{Required Software and
+Hardware}\label{required-software-and-hardware}
+
+\subsection{Software {[}FREE!{]}}\label{software-free}
+
+PATRICIA - CAN YOU ADD TEXT HERE; PERHAPS PUT A LINK TO THE TO DO LIST?
+
+Please install the following software on your laptop
+
+\begin{itemize}
+\tightlist
+\item
+  R
+\item
+  RStudio
+\item
+  MikTeK
+\end{itemize}
+
+\subsection{Hardware}\label{hardware}
+
+\begin{itemize}
+\tightlist
+\item
+  Please bring in laptop with above software installed each week
+\end{itemize}
+
+\section{Course Website and
+Resources}\label{course-website-and-resources}
+
+PATRICIA - CAN YOU ADD TEXT HERE; ABOUT PIAZZA, ABOUT PIAZZA DISCUSSION
+FORUMS; ABOUT THE WEBSITE
+
+\section{Communication with Instructor and Teaching
+Assistant}\label{communication-with-instructor-and-teaching-assistant}
+
+Use Piazza discussion forums for all questions related to course
+content. All students can then benefit from my response. I will aim to
+respond within 24 hours of your post Monday through Friday and 48 hours
+on Saturday and Sunday. Email me directly if you have a question
+regarding any personal issue
+
+I encourage students to answer questions your classmates post on CCLE
+discussion forums. Writing out explanations to student questions will
+improve your own knowledge and will benefit your classmates.
 
 \section{Assignments \& Grading}\label{assignments-grading}
 
+Your final grade will be based on the following components:
+
+\begin{itemize}
+\tightlist
+\item
+  Weekly problem sets (80 percent of total grade)
+\item
+  Your homework group leads a discussion about how you completed the
+  problem set (10 percent of total grade)
+\item
+  Attendance and participation (10 percent of total grade)
+\end{itemize}
+
+\subsection{Weekly problem sets}\label{weekly-problem-sets}
+
+Students will complete 10 problem sets. Problem sets are due by 12PM
+each Friday (right before the class meeting). Late submissions will not
+receive points because we will discuss solutions during class. The
+lowest grade will be dropped from the calculation of your final grade.
+
+In general, each problem set will give your practice using the skills
+and concepts introduced during the previous lecture. For example, after
+the lecture on joining (merging) datasets, the problem set for that week
+will require that students complete several different tasks involving
+merging data. Additionally, the weekly problem sets will require you to
+use data manipulation skills you learned in previous weeks.
+
+Students will work on problem sets in groups of three people (groups
+assigned in week 2; same group throughout the semester). However, each
+student will submit their own assignment. You are encouraged to share
+ideas and get help from your group. However, it is important that you
+understand how to do the problem set on your own, rather than copying
+the solution developed by group members. If I find compelling evidence
+that a student merely copied solutions from a classmate, I will consider
+this a violation of academic integrity and that student will receive a
+zero for the homework assignment.
+
+A general strategy I recommend for completing the problem sets is as
+follows: (1) after lecture, do the reading associated with that lecture;
+(2) try doing the problem set on your own; (3) meet with your group to
+work through the problem set, with a particular focus on areas group
+members find challenging.
+
+\subsection{Group led discussion about problem set (10 percent of total
+grade)}\label{group-led-discussion-about-problem-set-10-percent-of-total-grade}
+
+Each week a student group (groups of three) will lead a discussion on
+the problem set. Groups have a lot of autonomy in how they want to
+approach this discussion (e.g., can have slides, handouts, or neither).
+However, my preference is that this is more of an open discussion than a
+presentation. In terms of topics to cover, the group can invite class
+members to share what challenges/problems they encountered while
+completing the homework, how they were able to overcome these problems,
+alternative ways to overcome data manipulation challenges, and what
+concepts or tasks remain confusing.
+
+For now, we'll allot 40 minutes (at beginning of class) for these
+discussions. But this allotted time may increase to 50 minutes or
+decrease to 30 minutes.
+
+\subsection{Attendance and Participation (10 percent of total
+grade)}\label{attendance-and-participation-10-percent-of-total-grade}
+
+Students are required to attend the weekly class meetings. Each
+unexcused absence results in a loss of 20\% from your
+attendance/participation grade. Three or more unexcused absences will
+result in a failing grade for the course.
+
+An excused absence is a professional opportunity that you discuss with
+me beforehand or a medical, or family emergency. Excused absences will
+not result in a loss of attendance points. However, you will be
+responsible for all material covered in that class and you will be
+expected to turn in homework assignments on time.
+
+Students are expected to participate in the weekly class meetings by
+being attentive, by asking questions, by answering questions posed by
+classmates and by the professor. In addition to participation during
+class meetings, students can receive strong participation grades by
+asking questions and answering questions on Piazza.
+
 \section{Course Policies}\label{course-policies}
 
-\section{Course Schedule}\label{course-schedule}
+\subsection{Classroom environment}\label{classroom-environment}
 
-\subsection{Week 00, 09/28:
-Introduction\ldots{}}\label{week-00-0928-introduction}
+We all have a responsibility to ensure that every member of the class
+feels valued, safe, and included.
 
-\subsection{Week 01, 10/05:}\label{week-01-1005}
+With respect to the course material, learning programming and the
+essential skills of data manipulation is hard! This stuff feels
+overwhelming to me all the time. So it is important that we all create
+an environment where students feel comfortable asking questions and
+talking about what they did not understand.
 
-\subsection{Week 02, 10/12:}\label{week-02-1012}
+With respect to creatin an inclusive environment, be mindful that what
+you say affects other people. So express your thoughts in a way that
+doesn't make people feel excluded and does not disparaging
+generalizations about a group.
 
-\subsection{Week 03, 10/19:}\label{week-03-1019}
+As an instructor, I am responsible for setting an example through my own
+conduct. I hope to create an environment where students feel comfortable
+voicing concerns about the classroom environment. I will endeavor to
+present materials that are respectful of diversity: race, color,
+ethnicity, gender, age, disability, religious beliefs, political
+preference, sexual orientation, gender identity, citizenship, or
+national origin among other personal characteristics. The diversity of
+student experiences and perspectives is essential to the deepening of
+knowledge in a course. Any suggestions that you have about other ways to
+include the value of diversity in this course are welcome. During the
+quarter, I will also create forums where students can voice concerns
+anonymously.
 
-\subsection{Week 04, 10/26:}\label{week-04-1026}
+\subsection{Online
+Collaboration/Netiquette}\label{online-collaborationnetiquette}
 
-\subsection{Week 05, 11/02:}\label{week-05-1102}
+You will communicate with instructors and peers virtually through a
+variety of tools such as discussion forums, email, and web conferencing.
+The following guidelines will enable everyone in the course to
+participate and collaborate in a productive, safe environment.
 
-\subsection{Week 06, 11/09:}\label{week-06-1109}
+\begin{itemize}
+\tightlist
+\item
+  Be professional, courteous, and respectful as you would in a physical
+  classroom.
+\item
+  Online communication lacks the nonverbal cues that provide much of the
+  meaning and nuances in face-to-face conversations. Choose your words
+  carefully, phrase your sentences clearly, and stay on topic.
+\item
+  It is expected that students may disagree with the research presented
+  or the opinions of their fellow classmates. To disagree is fine but to
+  disparage others' views is unacceptable. All comments should be kept
+  civil and thoughtful.
+\end{itemize}
 
-\subsection{Week 07, 11/16:}\label{week-07-1116}
+\subsection{Academic accomodations}\label{academic-accomodations}
 
-\subsection{Week 08, 11/23: No class}\label{week-08-1123-no-class}
+Students needing academic accommodations based on a disability should
+contact the Center for Accessible Education (CAE) at (310)825-1501 or in
+person at Murphy Hall A255. When possible, students should contact the
+CAE within the first two weeks of the term as reasonable notice is
+needed to coordinate accommodations. For more information visit
+www.cae.ucla.edu.
 
-\subsection{Week 09, 11/30:}\label{week-09-1130}
+\subsection{Academic Honesty:}\label{academic-honesty}
 
-\subsection{Week 10, 12/07:}\label{week-10-1207}
+UCLA is a community of scholars. In this community, all members
+including faculty, staff and students alike are responsible for
+maintaining standards of academic honesty. As a student and member of
+the University community, you are here to get an education and are,
+therefore, expected to demonstrate integrity in your academic endeavors.
+You are evaluated on your own merits. Cheating, plagiarism,
+collaborative work, multiple submissions without the permission of the
+professor, or other kinds of academic dishonesty are considered
+unacceptable behavior and will result in formal disciplinary proceedings
+usually resulting in suspension or dismissal.
 
-\subsection{Finals Week, 12/03-12/14:}\label{finals-week-1203-1214}
+\section{Course Schedule and Required
+Reading}\label{course-schedule-and-required-reading}
 
-\section{Resources}\label{resources}
+All reading is required reading. I have worked hard to keep reading load
+light, focusing only on essentials, because weekly problem sets will be
+time consuming.
+
+In the below schedule, I lecture on a topic, and then you do the reading
+about that topic and are required to complete a problem set about that
+topic. However, if you would prefer to the reading about a topic
+\textbf{prior} to me lecturing about that topic, feel free to do so.
+
+\subsection{Lecture 1, 09/28: Course introduction; objects in
+R}\label{lecture-1-0928-course-introduction-objects-in-r}
+
+\begin{itemize}
+\tightlist
+\item
+  Reading (after class): Grolemund and Wickham (GW) 1; GW 2; GW 4; GW
+  20.1 - 20.3
+\end{itemize}
+
+\subsection{Lecture 2, 10/05: Investigating data
+patterns}\label{lecture-2-1005-investigating-data-patterns}
+
+\begin{itemize}
+\tightlist
+\item
+  Problem set due (before class): Yes
+\item
+  Reading (after class): GW 5.1 - 5.4
+\end{itemize}
+
+\subsection{Lecture 3, 10/12: Variable creation, attributes, factors,
+and
+pipes}\label{lecture-3-1012-variable-creation-attributes-factors-and-pipes}
+
+\begin{itemize}
+\tightlist
+\item
+  Problem set due (before class): Yes
+\item
+  Reading (after class): GW 5.5; GW 15.1 - 15.2; GW 20.6 - 20.7
+\end{itemize}
+
+\subsection{Lecture 4, 10/19: Processing across
+rows}\label{lecture-4-1019-processing-across-rows}
+
+\begin{itemize}
+\tightlist
+\item
+  Problem set due (before class): Yes
+\item
+  Reading (after class): GW 5.6 - 5.7
+\end{itemize}
+
+\subsection{Lecture 5, 10/26: Survey data and exploratory data analysis
+(for data
+quality)}\label{lecture-5-1026-survey-data-and-exploratory-data-analysis-for-data-quality}
+
+\begin{itemize}
+\tightlist
+\item
+  Problem set due (before class): Yes
+\item
+  Reading (after class): GW 10 (note: this chapter is about ``tibbles'',
+  not survey data/EDA)
+\end{itemize}
+
+\subsection{Lecture 6, 11/02: Tidy data}\label{lecture-6-1102-tidy-data}
+
+\begin{itemize}
+\tightlist
+\item
+  Problem set due (before class): Yes
+\item
+  Reading (after class): GW 12
+\end{itemize}
+
+\subsection{Lecture 7, 11/09: Joining multiple
+datasets}\label{lecture-7-1109-joining-multiple-datasets}
+
+\begin{itemize}
+\tightlist
+\item
+  Problem set due (before class): Yes
+\item
+  Reading (after class): GW 13
+\end{itemize}
+
+\subsection{Lecture 8, 11/16: Acquiring
+data}\label{lecture-8-1116-acquiring-data}
+
+\begin{itemize}
+\tightlist
+\item
+  Problem set due (before class): Yes
+\item
+  Reading (after class): GW 11
+\end{itemize}
+
+\subsection{Thanksgiving, 11/23: No
+class}\label{thanksgiving-1123-no-class}
+
+\subsection{Lecture 9, 11/30: Writing
+functions}\label{lecture-9-1130-writing-functions}
+
+\begin{itemize}
+\tightlist
+\item
+  Problem set due (before class): Yes
+\item
+  Reading (after class): GW 19
+\end{itemize}
+
+\subsection{Lecture 10, 12/07: Accessing object elements and
+looping}\label{lecture-10-1207-accessing-object-elements-and-looping}
+
+\begin{itemize}
+\tightlist
+\item
+  Problem set due (before class): Yes
+\item
+  Reading (after class): GW 20.4 - 20.5; 21.1 - 21.3
+\end{itemize}
+
+\subsection{Finals Week, 12/14: No
+class}\label{finals-week-1214-no-class}
+
+\begin{itemize}
+\tightlist
+\item
+  Problem set due: Yes
+\end{itemize}
 
 
 
