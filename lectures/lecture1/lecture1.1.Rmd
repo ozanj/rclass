@@ -1,0 +1,51 @@
+---
+title: Managing and Manipulating Data Using R # potentially push to header
+subtitle:  Introduction, part 1
+author: Ozan Jaquette
+date: 
+classoption: dvipsnames  # for colors
+fontsize: 8pt
+urlcolor: blue
+output:
+  beamer_presentation:
+    keep_tex: true
+    toc: true
+    slide_level: 3
+    theme: default # AnnArbor # push to header?
+    #colortheme: "dolphin" # push to header?
+    #fonttheme: "structurebold"
+    highlight: default # Supported styles include "default", "tango", "pygments", "kate", "monochrome", "espresso", "zenburn", and "haddock" (specify null to prevent syntax highlighting); push to header
+    df_print: tibble # push to header?    
+    latex_engine: xelatex #  Available engines are pdflatex [default], xelatex, and lualatex; The main reasons you may want to use xelatex or lualatex are: (1) They support Unicode better; (2) It is easier to make use of system fonts.
+    includes:
+      in_header: ../beamer_header.tex
+      #after_body: table-of-contents.txt 
+---
+
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
+#knitr::opts_chunk$set(collapse = TRUE, highlight = TRUE)
+#knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
+  #comment = "#>" makes it so results from a code chunk start with "#>"; default is "##"
+```
+# What is R
+
+ 
+### What is R
+
+### Why R? Capabilities of R
+
+### Base R vs. R packages
+
+INCLUDE INSTALLING AND LOADING PACKAGES
+
+### Functions; function syntax
+
+[I MAY MOVE THIS SLIDE BELOW; JUST WANT YOU TO DRAFT IT]
+
+describe basic syntax of functions in R; how to get help on a function
+
+### RStudio
+
+### RMarkdown

@@ -29,26 +29,6 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 #knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
   #comment = "#>" makes it so results from a code chunk start with "#>"; default is "##"
 ```
-# What is R
-
- 
-### What is R
-
-### Why R? Capabilities of R
-
-### Base R vs. R packages
-
-INCLUDE INSTALLING AND LOADING PACKAGES
-
-### Functions; function syntax
-
-[I MAY MOVE THIS SLIDE BELOW; JUST WANT YOU TO DRAFT IT]
-
-describe basic syntax of functions in R; how to get help on a function
-
-### RStudio
-
-### RMarkdown
 
 # R basics
 
