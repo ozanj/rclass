@@ -179,7 +179,6 @@ One difference between atomic vectors and lists: __homogeneous__ vs. __heterogen
 
 Here is a visual representation of the Grolemund and Wickham classification
 
-PATRICIA - PUT PIC ON WEBSITE AND PROVIDE LINK
 ![From Wickham, chapter 20](data-structures-overview.png)
 
 ### Developing an intuitive understanding of vector types
