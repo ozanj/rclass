@@ -200,7 +200,19 @@ One difference between atomic vectors and lists: __homogeneous__ vs. __heterogen
 Here is a visual representation of the Grolemund and Wickham classification
 
 PATRICIA - PUT PIC ON WEBSITE AND PROVIDE LINK
-![From Wickham, chapter 20](data-structures-overview.png)
+```{r}
+#url <- "https://ozanj.github.io/rclass/lectures/lecture1/data-structures-overview.png"
+url <- "https://ozanj.github.io//rclass//lectures//lecture1//data-structures-overview.png"
+url
+#![From Wickham, chapter 20](`r url`)
+#![](`r url`)
+#download.file("https://ozanj.github.io/rclass/lectures/lecture1/data-structures-overview.png","data-structures-overview.png")
+#![](data-structures-overview.png)
+```
+print `r url`
+
+
+
 
 ### Developing an intuitive understanding of vector types
 
