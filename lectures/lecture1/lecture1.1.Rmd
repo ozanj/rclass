@@ -31,14 +31,94 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 ```
 # What is R
 
- 
 ### What is R
 
+According to the Inter-university consortium for political and social research [(ICPSR)](https://www.icpsr.umich.edu/icpsrweb/content/shared/ICPSR/faqs/what-is-r.html), R is "an alternative to traditional statistical packages such as SPSS, SAS, and Stata such that it is an extensible, open-source language and computing environment for Windows, Macintosh, UNIX, and Linux platforms. Such software allows for the user to freely distribute, study, change, and improve the software under the [Free Software Foundation's GNU General Public License](https://www.gnu.org/home.en.html)."
+
+- For more info visit [R-project.org](https://www.r-project.org/about.html)
+
 ### Why R? Capabilities of R
+- [Graphs](https://ggplot2.tidyverse.org/)
+- [Presentation](https://bookdown.org/yihui/rmarkdown/presentations.html)
+- [Websites](https://bookdown.org/yihui/rmarkdown/websites.html)
+- [Journals](https://bookdown.org/yihui/rmarkdown/journals.html) 
+- [Interactive tutorials](https://rstudio.github.io/learnr/)
+- [Web apps](http://shiny.rstudio.com/)
+- [Dashbaords](https://rmarkdown.rstudio.com/flexdashboard/)
+- [Books](https://bookdown.org/)  
+- [Web scraping](https://www.analyticsvidhya.com/blog/2017/03/beginners-guide-on-web-scraping-in-r-using-rvest-with-hands-on-knowledge/)
+- [Maps](http://pierreroudier.github.io/teaching/20170626-Pedometrics/20170626-soil-data.html)
+
+For more info [visit](https://bookdown.org/yihui/rmarkdown/)
+
+### Graphs 
+- Create graphs with [ggplot2](https://ggplot2.tidyverse.org/) package 
+
+```{r echo=FALSE, warning=FALSE}
+# Source: http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html
+# install.packages("ggplot2")
+# load package and data
+options(scipen=999)  # turn-off scientific notation like 1e+48
+library(ggplot2)
+theme_set(theme_bw())  # pre-set the bw theme.
+data("midwest", package = "ggplot2")
+# midwest <- read.csv("http://goo.gl/G1K41K")  # bkup data source
+
+# Scatterplot
+gg <- ggplot(midwest, aes(x=area, y=poptotal)) + 
+  geom_point(aes(col=state, size=popdensity)) + 
+  geom_smooth(method="loess", se=F) + 
+  xlim(c(0, 0.1)) + 
+  ylim(c(0, 500000)) + 
+  labs(subtitle="Area Vs Population", 
+       y="Population", 
+       x="Area", 
+       title="Scatterplot", 
+       caption = "Source: midwest")
+
+plot(gg)
+```
+
+### Journal articles
+- Journal articls with [rticles](https://github.com/rstudio/rticles) package
+![](rticles.png)
+
+### Interactive web apps
+- Interactive web apps with [shiny](http://shiny.rstudio.com/) package
+![](shiny.png)
+
+### Mapping 
+- Mapping with [sf](http://strimas.com/r/tidy-sf/) package & ggplot
+![](sf.png)
 
 ### Base R vs. R packages
 
-INCLUDE INSTALLING AND LOADING PACKAGES
+There are "default" packages that come with [R](https://stat.ethz.ch/R-manual/R-devel/library/base/html/00Index.html). Some of these include:  
+
+- `as.character`  
+- `print`  
+- `setwd`
+
+And there are [R packages](http://r-pkgs.had.co.nz/intro.html) developed and shared by others. Some R packages include:  
+
+- `tidyverse`  
+- `stargazer`  
+- `foreign`  
+
+more about these in later weeks...
+
+### Installing and Loading R packages
+You only need to install a package once. To install an R package use `install.package()` function.
+```{r warning=FALSE, message=FALSE}
+#install.packages("tidyverse")
+```
+
+However, you need to load a package everytime you plan to use it. To load a package use the `library()` function. 
+```{r}
+library(tidyverse)
+```
+
+
 
 ### Functions; function syntax
 
@@ -48,4 +128,11 @@ describe basic syntax of functions in R; how to get help on a function
 
 ### RStudio
 
-### RMarkdown
+"[RStudio](https://www.rstudio.com/products/rstudio/features/) is an integrated development environment (IDE) for R. It includes a console, syntax-highlighting editor that supports direct code execution, as well as tools for plotting, history, debugging and workspace management."
+
+![](pane_layout.png)
+
+### R Markdown
+[R Markdown](https://rmarkdown.rstudio.com/) produces dynamic output formats in html, pdf, MS Word, dashboards, Beamer presentations, etc.
+
+- We will be using R Markdown for lectures and homeworks.
