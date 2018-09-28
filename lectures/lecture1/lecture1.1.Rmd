@@ -25,17 +25,65 @@ output:
 
 ```{r, echo=FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
-#knitr::opts_chunk$set(collapse = TRUE, highlight = TRUE)
-#knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
-  #comment = "#>" makes it so results from a code chunk start with "#>"; default is "##"
 ```
+# Student introductions
+
+### Student introductions
+
+What we want to know about you
+
+1. Preferred name
+1. Preferred pronouns
+1. Enrolled in course or auditing?
+1. Academic program (and how far along) and/or job
+1. Tell us about your name (e.g., what is the origin story?)
+
 # What is R
 
 ### What is R
 
-According to the Inter-university consortium for political and social research [(ICPSR)](https://www.icpsr.umich.edu/icpsrweb/content/shared/ICPSR/faqs/what-is-r.html), R is "an alternative to traditional statistical packages such as SPSS, SAS, and Stata such that it is an extensible, open-source language and computing environment for Windows, Macintosh, UNIX, and Linux platforms. Such software allows for the user to freely distribute, study, change, and improve the software under the [Free Software Foundation's GNU General Public License](https://www.gnu.org/home.en.html)."
+According to the Inter-university consortium for political and social research [(ICPSR)](https://www.icpsr.umich.edu/icpsrweb/content/shared/ICPSR/faqs/what-is-r.html):
+
+> R is "an alternative to traditional statistical packages such as SPSS, SAS, and Stata such that it is an extensible, open-source language and computing environment for Windows, Macintosh, UNIX, and Linux platforms. Such software allows for the user to freely distribute, study, change, and improve the software under the [Free Software Foundation's GNU General Public License](https://www.gnu.org/home.en.html)."
 
 - For more info visit [R-project.org](https://www.r-project.org/about.html)
+
+### Base R vs. R packages
+
+There are "default" packages that come with [R](https://stat.ethz.ch/R-manual/R-devel/library/base/html/00Index.html). Some of these include:  
+
+- `as.character`  
+- `print`  
+- `setwd`
+
+And there are [R packages](http://r-pkgs.had.co.nz/intro.html) developed and shared by others. Some R packages include:  
+
+- `tidyverse`  
+- `stargazer`  
+- `foreign`  
+
+more about these in later weeks...
+
+### Installing and Loading R packages
+You only need to install a package once. To install an R package use `install.package()` function.
+```{r warning=FALSE, message=FALSE}
+#install.packages("tidyverse")
+```
+
+However, you need to load a package everytime you plan to use it. To load a package use the `library()` function. 
+```{r}
+library(tidyverse)
+```
+### RStudio
+
+"[RStudio](https://www.rstudio.com/products/rstudio/features/) is an integrated development environment (IDE) for R. It includes a console, syntax-highlighting editor that supports direct code execution, as well as tools for plotting, history, debugging and workspace management."
+
+![](pane_layout.png)
+
+### R Markdown
+[R Markdown](https://rmarkdown.rstudio.com/) produces dynamic output formats in html, pdf, MS Word, dashboards, Beamer presentations, etc.
+
+- We will be using R Markdown for lectures and homeworks.
 
 ### Why R? Capabilities of R
 - [Graphs](https://ggplot2.tidyverse.org/)
@@ -91,48 +139,124 @@ plot(gg)
 - Mapping with [sf](http://strimas.com/r/tidy-sf/) package & ggplot
 ![](sf.png)
 
-### Base R vs. R packages
+# What is this course about?
 
-There are "default" packages that come with [R](https://stat.ethz.ch/R-manual/R-devel/library/base/html/00Index.html). Some of these include:  
+### What is data management?
 
-- `as.character`  
-- `print`  
-- `setwd`
+- All the stuff you have to do to create analysis datasets that are ready to analyze, e.g.:
+    - collect data
+    - read/import data into statistical programming language
+    - clean data
+    - integrate data from multiple sources (e.g, join/merge, append)
+    - change organizational structure of data so it is suitable for analysis
+    - create "analysis variables" from "input variables"
+    - Make sure that you have created analysis variables correctly
 
-And there are [R packages](http://r-pkgs.had.co.nz/intro.html) developed and shared by others. Some R packages include:  
+### Why I don't call this class "R for data science"
 
-- `tidyverse`  
-- `stargazer`  
-- `foreign`  
+Learn to walk before you can run!
 
-more about these in later weeks...
+- "data science" implies doing fancy, sexy things like mapping, network analysis, web-scraping, etc.
+- But if you don't know how to clean data, these sexy analyses and visualizations will be useless
+- "80% of data science is data cleaning"
+- The skills you learn in this data management oriented class will be usefull for fancy data science stuff down the road!
 
-### Installing and Loading R packages
-You only need to install a package once. To install an R package use `install.package()` function.
-```{r warning=FALSE, message=FALSE}
-#install.packages("tidyverse")
-```
+### Who is this class for?
 
-However, you need to load a package everytime you plan to use it. To load a package use the `library()` function. 
-```{r}
-library(tidyverse)
-```
+This class is for anyone who wants to work with data, that is peiple who want to be:
+
+- researchers working with survey data and doing traditional statistical analyses
+- researchers who want to do "data science" oreinted research involving 
+- analysts working at think tanks or non-profits
+- journalists who create interactive data visualizations
+- "Data scientists"
+
+# About your instructors
+
+### Patricia Martin, teaching assistant
+
+
+### Ozan Jaquette, instructor
+
+A middle aged man trying to learn new tricks
+
+My background in data management/statistical analysis
+
+- Started with SAS [ugh]
+    - administrative data on welfare records
+    - student-level data on English "further education colleges"
+    - created single analysis dataset from high school longitudinal surveys from seniors in 1972, 1982, 1992, 2004
+- Moved to Stata
+    - Used loops and user-defined functions to create longitudinal datasets of university characteristics/behaviors from 1969 to present
+- served on several federal committees tasked with making recommendations about changes to what data the federal govt collected
+
+I thought I was pretty hot stuff!
+
+- But the game changed on me
+
+### Recruiting research program and "data science"
+
+Got sick of the limitations of survey data
+
+- didn't ask questions I was interested in
+- I didn't believe the survey responses
+
+Wanted to figure out ways to collect data on university recruiting behavior
+
+- we realized "data science" methods could create concrete data from publicly available data sources
+
+The off-campus recruiting project
+
+- [LINK HERE](https://emraresearch.org/)
+    
+
+
+# Course logistics
+
+### Course logistics
+
+- follow the syllabus
+
+# Create "R project" and directory structure
+
+### What is an R project? Why are you doing this?
+
+What is an "R project"?
+
+- helps you keep all files for a project in one place
+- When you open an R project, the file-path of your current working directory is automatically set to the file-path of your R-project
+
+Why are we asking you to create R project and download a specific directory structure?
+
+- We want you to be able to run the .Rmd files for each lecture on your own computer
+- Sometimes these .Rmd files point to certain sub-folders
+- If you create R project and create directory structure we recommend, you will be able to run .Rmd files from your own computer without making any changes to file-paths!
+
+### Follow these steps to create "R project" and directory structure
+
+1. In RStudio, click on "File" >> "New Project" >> "New Directory" >> "New Project"
+    - In "Directory name", type "rclass"
+        - this will be the folder where you save all files related to this class
+    - In "Create project as subdirectory of":
+        - You decide where you want to save the folder "rclass"; choose somewhere easy to find
+2. Download this zip folder: [LINK HERE](https://github.com/ozanj/rclass/raw/master/rclass_directory.zip)
+3. Place zip folder in the "rclass" folder you created in Step 1
+4. Unzip zip folder. you should have the following file-paths
+    - "rclass/lectures"
+    - "rclass/data"
+5. Save the following files in "rclass/lectures/lecture1"
+    - lecture1.1.Rmd
+    - lecture1.1.pdf
+    - lecture1.2.Rmd
+    - lecture1.2.Pdf
+    - lecture1.2.R
+
+### After you follow these steps
+
+- you can add any additional sub-folders you want to the "rclass" folder
+    - e.g., "syllabus", "resources"
+- You can add any additional files you want to the sub-directory folders you unzipped
+    - e.g., in "rclass/lectures/lecture1" you might add an additional document of notes you took
 
 
 
-### Functions; function syntax
-
-[I MAY MOVE THIS SLIDE BELOW; JUST WANT YOU TO DRAFT IT]
-
-describe basic syntax of functions in R; how to get help on a function
-
-### RStudio
-
-"[RStudio](https://www.rstudio.com/products/rstudio/features/) is an integrated development environment (IDE) for R. It includes a console, syntax-highlighting editor that supports direct code execution, as well as tools for plotting, history, debugging and workspace management."
-
-![](pane_layout.png)
-
-### R Markdown
-[R Markdown](https://rmarkdown.rstudio.com/) produces dynamic output formats in html, pdf, MS Word, dashboards, Beamer presentations, etc.
-
-- We will be using R Markdown for lectures and homeworks.

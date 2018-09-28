@@ -11,13 +11,6 @@ output:
 
 # General
 
-## wish list for beamer slides
-
-- smaller font-size; similar to fontsize from Christenson slides
-- code in code chunks wraps to next row rather then bleeds off right margin
-- reduce horizontal space between line of text and first item of list below that line of text
-- when I run a code chunk RMarkdown that includes a print of data, the printout below the chunk looks the way printing data from console looks as opposed to having the df_print: paged style (HTML tables with support for pagination over rows and columns)
-
 ## Stuff for students to do before class
 
 1. Install R
@@ -90,7 +83,6 @@ output:
 
 ### to do before class 1 [9/26/2018]
 
-- revise class 1 lecture [for second half of class]
 - make outline/lecture for part 1 of class
 - make syllabus
 - make homework
@@ -100,6 +92,39 @@ output:
 
 ### Topics for part 1: general course intro
 
+- student introductions [DONE]
+    - preferred name
+    - preferred pronouns;
+    - program and/or job;
+    - Where does your name come from 
+- Tools for using R
+    - What is R
+    - Base R vs. R packages
+    - R studio
+    - R Markdown
+    - R projects
+    - Why R? capabilities
+- What is this course about?
+    - what is data management?
+    - why I don't call this class "R for data science"
+    - who is this class for?
+- About your instructors
+    - Patricia
+    - Ozan
+    - Recruiting research project
+- Course logistics
+    - Course components
+    - course outline
+    - TA support
+        - background about Patricia
+        - Patricia's role in this course
+- create directory structure and R project
+
+Tasks for patricia
+- figrue out how to put links to URLs for images in Rmd
+- finish website
+- create directory structure zip file
+- create .Rmd file with homework1
 
 2.	You might be planning to do this anyway, but I think it would be a good idea to explain what data management is during the first class meeting. Equally important, we should mention who this class is for. What I mean by this is that there may be folks who are experienced with R, but have no clue how to clean data or other folks who have experience with data management, but are new to R, or others who have no experience with either, etc. 
 3.	It would also be a good idea to discuss other uses for R during the first class meeting (graphing, mapping, web scraping, etc.) to introduce students to the various uses of R so they could potentially invest in learning more advanced methods in the future. 

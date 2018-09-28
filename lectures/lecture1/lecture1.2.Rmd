@@ -177,9 +177,11 @@ One difference between atomic vectors and lists: __homogeneous__ vs. __heterogen
 
 ### Formal classification of vectors in R
 
-Here is a visual representation of the Grolemund and Wickham classification
+Here is a link to a visual representation of the Grolemund and Wickham classification
 
-![From Wickham, chapter 20](data-structures-overview.png)
+- [LINK HERE](https://ozanj.github.io//rclass//lectures//lecture1//data-structures-overview.png)
+
+
 
 ### Developing an intuitive understanding of vector types
 
