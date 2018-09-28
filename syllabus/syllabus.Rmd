@@ -18,7 +18,8 @@ email: "ozanj@ucla.edu"
 officehours: Tues 3-4PM; and by appt
 office: "Moore Hall 3038"
 
-web: "class website (e.g. piazza)?"
+web: "ozanj.github.io/rclass/"
+discuss: "piazza.com/class/jlo6477nzqo2j0"
 classroom: "Moore Hall 2120"
 classhours: "Fridays 12 - 4 pm"
 
@@ -26,7 +27,7 @@ ta: "Patricia Martín"
 tapronouns: "she/her/hers"
 taemail: "pmarti@g.ucla.edu"
 taofficehours: Wed 12-1PM; Thur 1:30-2:30PM
-location: "Moore 3120 (computer lab"
+location: "Moore Hall 3120 (computer lab)"
 
   
 fontfamily: mathpazo
