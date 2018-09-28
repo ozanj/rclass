@@ -88,9 +88,36 @@ output:
 
 ## Class 1. Introduction and data types
 
-### to do before
+### to do before class 1 [9/26/2018]
 
-### Big topics
+- revise class 1 lecture [for second half of class]
+- make outline/lecture for part 1 of class
+- make syllabus
+- make homework
+    - run .rmd file for part 2 of lecture to create PDF by yourself
+    - something about changing directories and opening file
+
+
+### Topics for part 1: general course intro
+
+
+2.	You might be planning to do this anyway, but I think it would be a good idea to explain what data management is during the first class meeting. Equally important, we should mention who this class is for. What I mean by this is that there may be folks who are experienced with R, but have no clue how to clean data or other folks who have experience with data management, but are new to R, or others who have no experience with either, etc. 
+3.	It would also be a good idea to discuss other uses for R during the first class meeting (graphing, mapping, web scraping, etc.) to introduce students to the various uses of R so they could potentially invest in learning more advanced methods in the future. 
+
+### Topics for part 2
+
+
+- R as a calculator
+- ways to execute commands in R
+- Assignment
+- Classification of objects
+  - vectors/classification of vectors
+- details about atomic vectors
+    - data type of a vector
+    - vector math
+- lists
+- datasets are lists
+- review/main takeaways
 
 - Course objectives
     - Broad

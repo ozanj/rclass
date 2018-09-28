@@ -1,6 +1,6 @@
 ---
-title: Managing and Manipulating Data Using R # potentially push to header
-subtitle:  Lecture 2
+title: "Lecture 2: Investigating data patterns" # potentially push to header
+subtitle:  "EDUC 263: Managing and Manipulating Data Using R"
 author: Ozan Jaquette
 date: 
 classoption: dvipsnames  # for colors

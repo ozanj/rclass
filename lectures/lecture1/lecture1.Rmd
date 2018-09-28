@@ -29,6 +29,26 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 #knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
   #comment = "#>" makes it so results from a code chunk start with "#>"; default is "##"
 ```
+# What is R
+
+ 
+### What is R
+
+### Why R? Capabilities of R
+
+### Base R vs. R packages
+
+INCLUDE INSTALLING AND LOADING PACKAGES
+
+### Functions; function syntax
+
+[I MAY MOVE THIS SLIDE BELOW; JUST WANT YOU TO DRAFT IT]
+
+describe basic syntax of functions in R; how to get help on a function
+
+### RStudio
+
+### RMarkdown
 
 # R basics
 
@@ -277,7 +297,7 @@ typeof(5L)
 
 ### Data type of a vector, character
 
-In contrast to "numeric" data types which are used to store numbers, the "character" data type is used to store __strings__ of text.  
+In contrast to "numeric" data types wich are used to store numbers, the "character" data type is used to store __strings__ of text.  
 
 - Strings may contain any combination of numbers, letters, symbols, etc.
 - Character vectors are sometimes referred to as string vectors
@@ -389,7 +409,7 @@ seq(from=100,to=150,by=10)
 
 Most mathematical operations operate on each element of the vector
 
-- e.g., add a single value to a vector and that value will be added to each element of the vector
+- e.g., add a single value to a vector and that value added to each element of the vector
 ```{r}
 1:3
 1:3+.5
@@ -452,7 +472,7 @@ length(c)
 str(c) # 2 elements; element 1=vector w/ length=2; element 2=vector w/length=3
 ```
 
-### Elements within lists can have different data types
+### Elements within list can have different data types
 
 Lists are __heterogeneous__
 
@@ -463,7 +483,7 @@ typeof(b)
 length(b)
 str(b)
 ```
-Vectors are __homogeneous__
+Vector are __homogeneous__
 ```{r}
 a <- c(1,2,"apple")
 typeof(a)
@@ -561,7 +581,7 @@ names(df)
 length(df) # length=number of variables
 str(df)
 ```
-Like any named list, we can examine the elements
+Like any named list, can examine the elements
 
 - Individual elements of a data frame are the variables
 - these variables are vectors with length equal to the number of rows/observations

@@ -1,10 +1,11 @@
 ---
-title: Managing and Manipulating Data Using R # potentially push to header
-subtitle:  Lecture 8, Acquiring data in R
+title: "Lecture 8: Acquiring data"
+subtitle:  "EDUC 263: Managing and Manipulating Data Using R"
 author: Patricia Martin
 date: 
 fontsize: 8pt
 classoption: dvipsnames  # for colors
+urlcolor: blue
 output: 
   beamer_presentation:
     keep_tex: true

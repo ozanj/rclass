@@ -1,10 +1,11 @@
 ---
-title: Managing and Manipulating Data Using R # potentially push to header
-subtitle:  Lecture 5, Survey data and exploratory data analysis (for data quality)
+title: "Lecture 5: Survey data and exploratory data analysis (for data quality)"
+subtitle:  "EDUC 263: Managing and Manipulating Data Using R"
 author: Ozan Jaquette
 date: 
 fontsize: 8pt
 classoption: dvipsnames  # for colors
+urlcolor: blue
 output:
   beamer_presentation:
     keep_tex: true
