@@ -1,0 +1,74 @@
+---
+title: "Problem Set #1"
+author: "Patricia Martin"
+date: "9/28/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Problem set 1  
+
+***  
+Note: Change author to your name
+
+### Step 1:
+
+- Go to your rclass folder and open your saved lecture1.2.Rmd file (hint: in lecture1 folder)  
+- Open the lecture1.2.Rmd file in RStudio  
+- At the top of the lecture1.2.Rmd file, before the "# R basics", type your first and last name (e.g. "Patricia Martin")  
+- Now select the "Knit" tab (icon with blue yarn ball) or scroll down and "Knit to PDF (Beamer)"  
+- The goal of this assignment is to make sure you are able to knit to a Beamer presentation (PDF) without running into errors.  
+
+
+### Step 2:  
+
+**Question 1**: Load .Rdata directly with url  
+
+- Make sure to view current/working directory first `getwd()` 
+- Url to data https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_ps1_small.Rdata  
+- Hint: to load .Rdata use `load()` function and "url" because you are using a link 
+- E.g. `load(url("link"))`  
+
+```{r}
+
+```
+
+
+**Question 2**: Set your working directory and use absolute filepath to load data  
+
+- Download .Rdata using link from above  
+- Save .Rdata file in the recruiting folder (rclass/data/recruiting)  
+- View your current/working directory `getwd()` 
+- Use `setwd()` function to set your working directory to where .Rdata file is saved (rclass/data/recruiting)  
+- When setting working directory, use the absolute filepath  
+- Load the .Rdata file  `load(name.Rdata)`
+- Using the `names(data frame name)` function, report the names in this dataset  (Hint: data frame name is df_recruiting)  
+
+```{r}
+
+```
+
+**Question 3**: Set your working directory and use relative filepath to load data  
+
+- View your current/working directory `getwd()` 
+- Use `setwd()` function to set your working directory to where .Rdata file is saved (rclass/data/recruiting)  
+- When setting working directory, use the relative filepath  
+- Load the .Rdata file  `load()`
+- Report the names in this dataset (Hint: data frome name is df_recruiting)  
+
+```{r}
+
+```
+
+**Question 4**: Load dataset using relative filepath without first changing working directory  
+
+- View your current/working directory `getwd()`  
+- Load data without setting directory `load(filepath/data.Rmd)`
+
+```{r}
+
+```
+
