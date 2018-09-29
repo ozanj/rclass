@@ -72,3 +72,7 @@ Note: Change author to your name
 
 ```
 
+**Knit to pdf** select the "Knit" tab (icon with blue yarn ball) or scroll down and "Knit to PDF"  
+
+- Submit both .Rmd and pdf to rclass website https://ozanj.github.io/rclass/resources/ under week 1  
+- Use this naming convention "lastname_firstname_ps#"
