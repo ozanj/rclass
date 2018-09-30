@@ -19,8 +19,8 @@ Note: Change author to your name
 - Go to your rclass folder and open your saved lecture1.2.Rmd file (hint: in lecture1 folder)  
 - Open the lecture1.2.Rmd file in RStudio  
 - At the top of the lecture1.2.Rmd file, before the "# R basics", type your first and last name (e.g. "Patricia Martin")  
-- Now select the "Knit" tab (icon with blue yarn ball) or scroll down and "Knit to PDF (Beamer)"  
-- The goal of this assignment is to make sure you are able to knit to a Beamer presentation (PDF) without running into errors.  
+- Now select the "Knit" tab (icon with blue yarn ball) or scroll down and "Knit to PDF"  
+- The goal of this assignment is to make sure you are able to knit to a PDF without running into errors.  
 
 
 ### Step 2:  
