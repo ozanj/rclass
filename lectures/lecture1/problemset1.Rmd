@@ -66,7 +66,7 @@ Note: Change author to your name
 **Question 4**: Load dataset using relative filepath without first changing working directory  
 
 - View your current/working directory `getwd()`  
-- Load data without setting directory `load(filepath/data.Rmd)`
+- Load data without setting directory `load(filepath/data.Rdata)`
 
 ```{r}
 
