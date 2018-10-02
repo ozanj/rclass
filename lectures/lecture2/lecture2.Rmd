@@ -32,6 +32,13 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 ### What we will do today
 
 \tableofcontents
+```{r, eval=FALSE, echo=FALSE}
+#Use this if you want TOC to show level 2 headings
+\tableofcontents
+#Use this if you don't want TOC to show level 2 headings
+\tableofcontents[subsectionstyle=hide/hide/hide]
+```
+
 
 ### Libraries we will use today
 
@@ -482,21 +489,31 @@ length(df_event$med_inc)
 str(df_event$med_inc)
 ```
     
-## View and print data [START HERE ON TUESDAY]
+## View and print data
 
-### Viewing and printing data
+### Viewing and printing data frames
 
-- Use the `View()` function to view data in a browser
+Three ways to view/print a data frame object
+
+1. Simply type the object name (output omitted)
+
+    - number of observations and rows printed depend on YAML header settings and on attributes (discussed next week) of the object
+```{r, results="hide"}
+df_event
+```
+    
+2. Use the `View()` function to view data in a browser
 ```{r eval=FALSE}
 View(df_event)
 ```
-- `head()` to show the first _n_ rows
+3. `head()` to show the first _n_ rows
 ```{r results="hide"}
+#?head
 head(df_event, n=5)
 ```
-### Viewing and printing data
+### Viewing and printing data frames
 
-Use `{obj_name[<rows>,<cols>]` to print specific rows and columns of a data frame
+`{obj_name[<rows>,<cols>]` to print specific rows and columns of data frame
 
 - particularly powerful when combined with sequences (e.g., `1:10`)
 
@@ -514,18 +531,27 @@ df_event[1:5, 1:3]
 ```{r results="hide"}
 df_event[100, 1:3]
 ```
-Print the 50th observation, all variables
+- Print the 50th observation, all variables
 ```{r results="hide"}
 df_event[50,]
 ```
 ### Viewing and printing data
 
-- type `obj_name$var_name` to print obs for a variable
-```{r results="hide"}
-df_event$event_state
+type `obj_name$var_name` to print specific elements (i.e., variables) in a data frame
 
+```{r results="hide"}
+df_event$zip
 ```
-- can be combined with sequences
+- recall that these elements are vectors, with length = numnber of obs
+
+```{r}
+typeof(df_event$zip)
+length(df_event$zip)
+```
+
+- `obj_name$var_name` syntax can be combined with sequences
+    - vectors don't have "rows" or "columns"; they just have elements
+    - so use sequence to identify which elements you want to print
 ```{r}
 df_event$event_state[1:10]
 df_event$event_type[6:10]
@@ -538,10 +564,11 @@ c(df_event$event_state[1:5],df_event$event_type[1:5])
 
 ### Exercise
 
+PATRICIA: PLEASE ADD TO THIS/MODIFY
+
 Create a printing exercise using the df_school
 
 1. Use head() to print first 5 observations
-1. Use select to print observations of variables of your choosing
 1. Use `obj_name$var_name[1:10]` to print the first 10 observations of a variable
 1. use combine()
 
@@ -552,20 +579,21 @@ Create a printing exercise using the df_school
 Missing values have the value `NA`
 
 - `NA` is a special keyword, not the same as the character string `"NA"`
-- use `is.(na)` function to determine if a value is missing
 
-\medskip
+use `is.na()` function to determine if a value is missing
+
+- `is.na()` returns a logical vector
 ```{r}
 is.na(5)
 is.na(NA)
 is.na("NA")
+typeof(is.na("NA")) # example of a logical vector
 
 nvector <- c(10,5,NA)
-nvector
 is.na(nvector)
+typeof(is.na(nvector)) # example of a logical vector
 
 svector <- c("e","f",NA,"NA")
-svector
 is.na(svector)
 ```
 
@@ -584,25 +612,30 @@ NA*c(0,1,2,NA)
 ```
 ###  Function and missing values, the `table()` function
 
-Tip: command `str(df_event)` shows which variables have missing values
-```{r results="hide", echo=FALSE}
-str(df_event)
-```
-
 `table()` function useful for investigating categorical variables
-
-- by default `table()` ignores `NA` values
-- the `useNA` argument to include `NA` values
-    - from help file: "useNA controls if the table includes counts of NA values: the allowed values correspond to never ("no"), only if the count is positive ("ifany") and even for zero counts ("always")"
 ```{r}
 table(df_event$g12offered)
+```
+
+By default `table()` ignores `NA` values
+
+- `useNA` argument determines whether to include `NA` values
+    - "allowed values correspond to never ("no"); only if count is positive ("ifany"); and even for zero counts ("always")"
+```{r}
 nrow(df_event)
 table(df_event$g12offered, useNA="always")
 ```
 Broader point:
 
-- Most functions in R ignor missing values by default, but have the option to include missing values
-- When investigating data, generally a good idea to always include missing values
+- Most functions that create descriptive statistics have options about how to treat missing values
+- When investigating data, good practice to _always_ show missing values
+
+Tip: 
+
+- command `str(df_event)` shows which variables have missing values
+```{r results="hide", echo=FALSE}
+str(df_event)
+```
 
 # Investigating data frames, tidyverse approach
 
@@ -622,12 +655,12 @@ __Sorting data__ | - `group_by()` to calculate across rows within groups
 
 All `dplyr` verbs (i.e., functions) work as follows
 
-1. first argument is a data frame"
+1. first argument is a data frame
 1. subsequent arguments describe what to do with variables and observations in data frame
     - refer to variable names without quotes
 1. result of the function is a new data frame
 
-## Selecting variables
+## Select variables
 
 ### Select variables using `select()` function
 
@@ -635,44 +668,64 @@ Printing observations is key to investigating data, but datasets often have hund
 
 `select()` function selects __columns__ of data (i.e., variables) you specify
 
-- See syntax in help file
+- first argument is the name of data frame object
+- remaining arguments are variable names, which are separated by commas and without quotes
 
-Select __without assignment__ simply prints data for selected variables
-
+Without __assignment__, `select()` function by itself simply prints selected vars
 ```{r}
 select(df_event,instnm,event_date,event_type,event_state,med_inc)
 ```
+
 ### Select variables using `select()` function
 
-Select __with assignment__ creates a new object containing only the variables you specify
+Recall that all `dplyr` functions (e.g., `select()`) return a new data frame object
+
+- __type__ equals "list"
+- __length__ equals number of vars you select
+
+```{r}
+typeof(select(df_event,instnm,event_date,event_type,event_state,med_inc))
+
+length(select(df_event,instnm,event_date,event_type,event_state,med_inc))
+```
+`glimpse()` function -- a tidyverse function for viewing data frames -- is a cross between `str()` and simply printing data
+```{r}
+#?glimpse
+glimpse(select(df_event,instnm,event_date,event_type,event_state,med_inc))
+```
+
+### Select variables using `select()` function
+
+With __assignment__, `select()` creates a new object containing only the variables you specify
 
 ```{r}
 event_small <- select(df_event,instnm,event_date,event_type,event_state,med_inc)
-event_small
+glimpse(event_small)
 ```
 
 ### Select
 
-We can also use "helper functions" `starts_with()`, `contains()`, and `ends_with()` to choose columns 
+`select()` can use "helper functions" `starts_with()`, `contains()`, and `ends_with()` to choose columns 
 
+Example:
 ```{r}
-names(df_event)
+#names(df_event)
 select(df_event,instnm,starts_with("event"))
 ```
 
 ### Exercise
 
-The data frame "df_school" has one observation for each high school and indicators for whether the high school received a recruiting visit.
+The data frame `df_school` has one observation for each high school and indicators for whether the high school received a recruiting visit.
 
 ```{r results="hide"}
 names(df_school)
 ```
-
-
-1. Use `select()` to familiarize yourself with the data frame
+1. Use `select()` to familiarize yourself with variables in the data frame
 1. Practice using the `contains()` and `ends_with()` helper functions to to choose variables
 
 ### Rename variables
+
+
 
 `rename()` function renames variables within a data frame object
 
@@ -692,16 +745,19 @@ names(rename_event)
 rm(rename_event)
 ```
 
-## Filtering data
+## Filter rows
 
-### Filter
-filter() allows you to select observations based on values of variables
+### The `filter()` function
+
+`filter()` allows you to __select observations__ based on values of variables
 
 - Arguments
     - first argument is name of data frame
-    - subsequent arguments are _expressions_ to filter the data frame
+    - subsequent arguments are _logical expressions_ to filter the data frame
+    - Multiple expressions separated by commas work as __AND__ operators (e.g., condtion 1 `TRUE` AND condition 2 `TRUE`)
+
 - What is the result of a `filter()` command?
-    - `filter()` returns the rows where the condition is `TRUE`
+    - `filter()` returns a data frame consisting of rows where the condition is `TRUE`
 
 \medskip Example using data frame object `df_school`, where each observation is a high school
 
@@ -709,23 +765,50 @@ filter() allows you to select observations based on values of variables
 ```{r results="hide"}
 filter(df_school,visits_by_110635 == 1)
 ```
+
+Note that resulting object is list, consisting of obs where condition `TRUE`
+```{r}
+nrow(df_school)
+nrow(filter(df_school,visits_by_110635 == 1))
+```
+
+### The `filter()` function
+
+PATRICIA - CONVERT THIS SLIDE INTO A STUDENT TASK PLEASE. THX! CAN PUT SOLUTION ON SUBSEQUENT SLIDE
+
+Task
+
+- Create a filter to identify all the high schools that recieved 1 visit from UC Berkeley (110635) AND 1 visit from CU Boulder (126614)[output omitted]
+```{r, results="hide"}
+filter(df_school,visits_by_110635 == 1, visits_by_126614==1)
+
+nrow(filter(df_school,visits_by_110635 == 1, visits_by_126614==1))
+count(filter(df_school,visits_by_110635 == 1, visits_by_126614==1))
+```
+
+
 - Must __assign__ to create new object based on filter
 ```{r results="hide"}
 berk_boulder <- filter(df_school,visits_by_110635 == 1, visits_by_126614==1)
-berk_boulder
+count(berk_boulder)
 ```
 ### Filter, character variables
 
-- Use quotes `''` or `""` to refer to character variables
+Use single quotes `''` or double quotes `""` to refer to values of character variables
 
+Below, we identify all private high schools in CA that got visit by particular universities
 ```{r results="hide"}
+glimpse(df_school)
 #Berkeley
-filter(df_school,visits_by_110635 == 1, school_type == "private", state_code == "CA")
+filter(df_school,visits_by_110635 == 1, school_type == "private", 
+       state_code == "CA")
 #Bama
-filter(df_school,visits_by_100751 == 1, school_type == "private", state_code == "CA") 
+filter(df_school,visits_by_100751 == 1, school_type == "private", 
+       state_code == "CA") 
 
 #Berkeley and Bama
-filter(df_school,visits_by_100751 == 1, visits_by_110635 == 1, school_type == "private", state_code == "CA") 
+filter(df_school,visits_by_100751 == 1, visits_by_110635 == 1, 
+       school_type == "private", state_code == "CA") 
 ```
 
 
@@ -743,13 +826,14 @@ Symbol | Meaning
 `|` | OR
 `%in` | includes
 
-Table: Logical operators
-
 \medskip 
 
 !["Boolean" operations, x=left circle, y=right circle, from Wichkam (2018)](transform-logical.png){width=50% }
+PATRICIA - TRY TO PUT ON IMAGE ON WEBSITE AND GIVE LINK TO URL
 
 ### Filters and comparisons
+
+PATRICIA - MAKE A CALL AS TO WHETHER THE NEXT FEW SLIDES SHOULD BE STUDENT EXERCISES OR DEMONSTRATIONS. THX!
 
 Schools visited by Bama (100751) and/or Berkeley (110635)
 
@@ -764,25 +848,30 @@ Apply `count()` function on top of `filter()` function to count the number of ob
 
 - Avoids printing individual observations
 ```{r}
+#Number of schools that git visit by Berkeley AND Bama
 count(filter(df_school,visits_by_100751 >= 1 & visits_by_110635 >= 1))
+#Number of schools that git visit by Berkeley OR Bama
 count(filter(df_school,visits_by_100751 >= 1 | visits_by_110635 >= 1))
 ```
 
 ### Filters and comparisons, >=
 
-Number of public high schools that are at least 50% Black in Alabama compared to number of schools that received visit by Bama
+\medskip Number of public high schools that are at least 50% Black in Alabama compared to number of schools that received visit by Bama
 ```{r}
 #at least 50% black
-count(filter(df_school, school_type == "public", pct_black >= 50, state_code == "AL"))
-count(filter(df_school, school_type == "public", pct_black >= 50, state_code == "AL", visits_by_100751 >= 1))
-
+count(filter(df_school, school_type == "public", pct_black >= 50, 
+             state_code == "AL"))
+count(filter(df_school, school_type == "public", pct_black >= 50, 
+             state_code == "AL", visits_by_100751 >= 1))
 #at least 50% white
-count(filter(df_school, school_type == "public", pct_white >= 50, state_code == "AL"))
-count(filter(df_school, school_type == "public", pct_white >= 50, state_code == "AL", visits_by_100751 >= 1))
+count(filter(df_school, school_type == "public", pct_white >= 50, 
+             state_code == "AL"))
+count(filter(df_school, school_type == "public", pct_white >= 50, 
+             state_code == "AL", visits_by_100751 >= 1))
 ```
 ### Filters and comparisons, not equals (`!=`)
 
-Number of high schools visited by University of Colorado (126614) that are not located in CO
+Count the number of high schools visited by University of Colorado (126614) that are not located in CO
 ```{r}
 
 #number of high schools visited by U Colorado
@@ -810,6 +899,8 @@ count(filter(df_school, visits_by_100751 %in% 2:3, school_type == "private"))
 ```
 ### Identifying data type and possible values of variable is helpful for filtering
 
+PATRICIA - event_type IS CURRENTLY FACTOR VARIABLE, NOT CHARACTER [BUT YOU CAN REFER TO IT USING CHARACTER]; SHOULD WE CHANGE THIS VAR TO CHARACTER IN READ_CSV OR LEAVE IT AS FACTOR?
+
 - `class()` and `str()` shows data type of a variable 
 - `table()` to show potential values of categorical variables
 
@@ -834,6 +925,8 @@ count(filter(df_event, event_type == "public hs", event_state =="CA"))
 
 
 ### Exercises
+
+PATRICIA: CREATE SEPARATE SLIDE W/ JUST THE QUESTION AND THEN SEPARATE SLIDE OF JUST THE ANSWERS; ALSO LOOK AT BELOW QUESTIONS AND MODIFY/DELETE/ADD IF YOU THINK OF BETTER OPTIONS. I WROTE THESE REAL QUICK.
 
 Use the data from df_event, which has one observation for each off-campus recruiting event a university attends
 
@@ -884,9 +977,6 @@ count(filter(df_event,event_type == "public hs", is.na(fr_lunch)))
 count(filter(df_event,event_type == "public hs", fr_lunch<50 | is.na(fr_lunch)))
 ```
 
-
-### ? exercises, missing values and filtering?
-
 ## Arrange rows
 
 ### `arrange()` function
@@ -929,17 +1019,23 @@ select(arrange(df_event, univ_id, desc(g12)),instnm,event_type,event_date,g12)
 ### `arrange()`, missing values sorted at the end
 
 Missing values automatically sorted at the end, regardless of whether you sort ascending or descending
-```{r}
+
+Below, we sort by university, then by date of event, then by ID of high school
+```{r, results="hide"}
 #by university, date, ascending school id
-select(arrange(df_event, univ_id, desc(event_date), school_id),instnm,event_date,event_type,school_id)
+select(arrange(df_event, univ_id, desc(event_date), school_id),
+       instnm,event_date,event_type,school_id)
 
 #by university, date, descending school id
-select(arrange(df_event, univ_id, desc(event_date), desc(school_id)),instnm,event_date,event_type,school_id)
+select(arrange(df_event, univ_id, desc(event_date), desc(school_id)),
+       instnm,event_date,event_type,school_id)
 ```
 Can sort by `is.na` to put missing values first
 ```{r}
-select(arrange(df_event, univ_id, desc(event_date), desc(is.na(school_id))),instnm,event_date,event_type,school_id)
+select(arrange(df_event, univ_id, desc(event_date), desc(is.na(school_id))),
+       instnm,event_date,event_type,school_id)
 ```
 
 ### Exercises, arranging
 
+PATRICIA - CAN YOU CREATE A COUPLE OF EXERCISES FOR ARRANGE?
