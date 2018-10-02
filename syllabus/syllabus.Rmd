@@ -132,9 +132,10 @@ Students will become proficient in data manipulation tasks through weekly “pro
 
 # Course Readings
 
-Required text
+Course readings will be assigned from:
 
-- Grolemund, G., & Wickham, H. (2018). _R for data science_. Retrieved from http://r4ds.had.co.nz/ [FREE!]
+- Grolemund, G., & Wickham, H. (2018). _R for Data Science_. Retrieved from http://r4ds.had.co.nz/ [FREE!]
+- Xie, Y., Allaire, J. j., & Grolemund, G. (2018). _R Markdown: The Definitive Guide_.  Retrieved from https://bookdown.org/yihui/rmarkdown/ [FREE!]
 
 # Required Software and Hardware
 
@@ -241,22 +242,32 @@ In the below schedule, I lecture on a topic, and then you do the reading about t
 ## `r advdate(fri, 1)`: Investigating data patterns
 
 - Problem set due (before class): Yes
-- Reading (after class): GW 5.1 - 5.4
+- Reading (after class): 
+    - GW 5.1 - 5.4
+    - Xie, Allaire & Grolemund (XAG) 3.1 [LINK HERE](https://bookdown.org/yihui/rmarkdown/html-document.html)
+    - Spend 15 minutes studying the "R Markdown Reference Guide" [LINK HERE](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf)
 
 ## `r advdate(fri, 2)`: Variable creation, attributes, factors, and pipes
 
 - Problem set due (before class): Yes
-- Reading (after class): GW 5.5; GW 15.1 - 15.2; GW 20.6 - 20.7
+- Reading (after class): 
+    - GW 5.5 (creating variables)
+    - GW 20.6 - 20.7 (attributes and augmented vectors; do the best you can)    
+    - GW 15.1 - 15.2 (factors)
 
 ## `r advdate(fri, 3)`: Processing across rows
 
 - Problem set due (before class): Yes
-- Reading (after class): GW 5.6 - 5.7
+- Reading (after class): 
+    - GW 5.6 - 5.7 (grouped summaries and mutates)
+    - XAG 3.3 (R Markdown, creating PDF documents) [LINK HERE](https://bookdown.org/yihui/rmarkdown/pdf-document.html)
 
 ## `r advdate(fri, 4)`: Survey data and exploratory data analysis (for data quality)
 
 - Problem set due (before class): Yes
-- Reading (after class): GW 10 (note: this chapter is about "tibbles", not survey data/EDA)
+- Reading (after class): 
+    - XAG 4.3 (R Markdown, creating Beamer presentation) [LINK HERE](https://bookdown.org/yihui/rmarkdown/beamer-presentation.html)
+    - GW 10 ("tibbles"; this is not survey data/EDA)
 
 ## `r advdate(fri, 5)`: Tidy data
 

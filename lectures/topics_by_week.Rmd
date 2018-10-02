@@ -264,11 +264,18 @@ POTENTIAL STUFF TO ADD [10/1/2018]
 - Conduct basic descriptive statistics: one-way and two-way; categorical and continuous
     - skills: 
 
+### Problem set ideas
+
+- output as html_document
+- changes to YAML header
+    - include table of contents
+- change 
+
 ### Data sources
 
 ### Reading [after lecture]
 
-### Problem set ideas
+
 
 ### What covered in Stata data mgt course
 

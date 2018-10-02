@@ -18,7 +18,8 @@ all <-read.csv("data/recruiting/data_hs.csv",
                             address="character",
                             city="character",
                             zip_code="character",
-                            total_students="numeric"
+                            total_students="numeric",
+                            school_type="character"
                )
 )
 
@@ -70,13 +71,10 @@ df_school_all <- all
 save(df_school_all, file = "data/recruiting/recruit_school_allvars.RData")
 rm(list = ls()) # remove all objects
 load("data/recruiting/recruit_school_allvars.Rdata")
-
+names(df_school_all)
 
 #save version with selected variables
-
-select(all,state_code,school_type,ncessch,name,address,city,zip_code,pct_white,pct_black,pct_hispanic,pct_asian,pct_amerindian,pct_other,num_fr_lunch,total_students,num_took_math,num_prof_math,num_took_rla,num_prof_rla,avgmedian_inc_2564,visits_by_110635,visits_by_126614,visits_by_100751,inst_110635,inst_126614,inst_100751)
-
-df_school <- select(all,state_code,school_type,ncessch,name,address,city,zip_code,pct_white,pct_black,pct_hispanic,pct_asian,pct_amerindian,pct_other,num_fr_lunch,total_students,num_took_math,num_prof_math,num_took_rla,num_prof_rla,avgmedian_inc_2564,visits_by_110635,visits_by_126614,visits_by_100751,inst_110635,inst_126614,inst_100751)
+df_school <- select(df_school_all,state_code,school_type,ncessch,name,address,city,zip_code,pct_white,pct_black,pct_hispanic,pct_asian,pct_amerindian,pct_other,num_fr_lunch,total_students,num_took_math,num_prof_math,num_took_rla,num_prof_rla,avgmedian_inc_2564,visits_by_110635,visits_by_126614,visits_by_100751,inst_110635,inst_126614,inst_100751)
 
 names(df_school)
 

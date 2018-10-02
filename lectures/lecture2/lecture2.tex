@@ -215,10 +215,6 @@
 \begin{document}
 \frame{\titlepage}
 
-\begin{frame}
-\tableofcontents[hideallsubsections]
-\end{frame}
-
 \section{Introduction}\label{introduction}
 
 \begin{frame}{What we will do today}
@@ -1502,8 +1498,7 @@ variables) in a data frame
 \NormalTok{df_event}\OperatorTok{$}\NormalTok{event_state[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{]}
 \CommentTok{#>  [1] "MA" "MA" "MA" "MA" "MA" "MA" "MA" "MA" "MA" "MA"}
 \NormalTok{df_event}\OperatorTok{$}\NormalTok{event_type[}\DecValTok{6}\OperatorTok{:}\DecValTok{10}\NormalTok{]}
-\CommentTok{#> [1] private hs public hs  private hs public hs  public hs }
-\CommentTok{#> Levels: public hs private hs 2yr college 4yr college other}
+\CommentTok{#> [1] "private hs" "public hs"  "private hs" "public hs"  "public hs"}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1516,7 +1511,8 @@ variables) in a data frame
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{c}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{event_state[}\DecValTok{1}\OperatorTok{:}\DecValTok{5}\NormalTok{],df_event}\OperatorTok{$}\NormalTok{event_type[}\DecValTok{1}\OperatorTok{:}\DecValTok{5}\NormalTok{])}
-\CommentTok{#>  [1] "MA" "MA" "MA" "MA" "MA" "1"  "1"  "1"  "1"  "2"}
+\CommentTok{#>  [1] "MA"         "MA"         "MA"         "MA"         "MA"        }
+\CommentTok{#>  [6] "public hs"  "public hs"  "public hs"  "public hs"  "private hs"}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1761,7 +1757,7 @@ prints selected vars
 \KeywordTok{select}\NormalTok{(df_event,instnm,event_date,event_type,event_state,med_inc)}
 \CommentTok{#> # A tibble: 17,976 x 5}
 \CommentTok{#>    instnm      event_date event_type event_state med_inc}
-\CommentTok{#>    <chr>       <date>     <fct>      <chr>         <dbl>}
+\CommentTok{#>    <chr>       <date>     <chr>      <chr>         <dbl>}
 \CommentTok{#>  1 UM Amherst  2017-10-12 public hs  MA           71714.}
 \CommentTok{#>  2 UM Amherst  2017-10-04 public hs  MA           89122.}
 \CommentTok{#>  3 UM Amherst  2017-10-26 public hs  MA           70136.}
@@ -1813,7 +1809,7 @@ frames -- is a cross between \texttt{str()} and simply printing data
 \CommentTok{#> Variables: 5}
 \CommentTok{#> $ instnm      <chr> "UM Amherst", "UM Amherst", "UM Amherst", "UM Amhe...}
 \CommentTok{#> $ event_date  <date> 2017-10-12, 2017-10-04, 2017-10-26, 2017-10-25, 2...}
-\CommentTok{#> $ event_type  <fct> public hs, public hs, public hs, public hs, privat...}
+\CommentTok{#> $ event_type  <chr> "public hs", "public hs", "public hs", "public hs"...}
 \CommentTok{#> $ event_state <chr> "MA", "MA", "MA", "MA", "MA", "MA", "MA", "MA", "M...}
 \CommentTok{#> $ med_inc     <dbl> 71713.5, 89121.5, 70136.5, 70136.5, 71023.5, 71023...}
 \end{Highlighting}
@@ -1835,7 +1831,7 @@ containing only the variables you specify
 \CommentTok{#> Variables: 5}
 \CommentTok{#> $ instnm      <chr> "UM Amherst", "UM Amherst", "UM Amherst", "UM Amhe...}
 \CommentTok{#> $ event_date  <date> 2017-10-12, 2017-10-04, 2017-10-26, 2017-10-25, 2...}
-\CommentTok{#> $ event_type  <fct> public hs, public hs, public hs, public hs, privat...}
+\CommentTok{#> $ event_type  <chr> "public hs", "public hs", "public hs", "public hs"...}
 \CommentTok{#> $ event_state <chr> "MA", "MA", "MA", "MA", "MA", "MA", "MA", "MA", "M...}
 \CommentTok{#> $ med_inc     <dbl> 71713.5, 89121.5, 70136.5, 70136.5, 71023.5, 71023...}
 \end{Highlighting}
@@ -1856,7 +1852,7 @@ Example:
 \KeywordTok{select}\NormalTok{(df_event,instnm,}\KeywordTok{starts_with}\NormalTok{(}\StringTok{"event"}\NormalTok{))}
 \CommentTok{#> # A tibble: 17,976 x 8}
 \CommentTok{#>    instnm event_date event_type event_state event_inst event_name}
-\CommentTok{#>    <chr>  <date>     <fct>      <chr>       <chr>      <chr>     }
+\CommentTok{#>    <chr>  <date>     <chr>      <chr>       <chr>      <chr>     }
 \CommentTok{#>  1 UM Am~ 2017-10-12 public hs  MA          In-State   Amherst-P~}
 \CommentTok{#>  2 UM Am~ 2017-10-04 public hs  MA          In-State   Hampshire~}
 \CommentTok{#>  3 UM Am~ 2017-10-26 public hs  MA          In-State   Chicopee ~}
@@ -2243,10 +2239,6 @@ Select the private high schools that got either 2 or 3 visits from Bama
 \begin{frame}[fragile]{Identifying data type and possible values of
 variable is helpful for filtering}
 
-PATRICIA - event\_type IS CURRENTLY FACTOR VARIABLE, NOT CHARACTER
-{[}BUT YOU CAN REFER TO IT USING CHARACTER{]}; SHOULD WE CHANGE THIS VAR
-TO CHARACTER IN READ\_CSV OR LEAVE IT AS FACTOR?
-
 \begin{itemize}
 \tightlist
 \item
@@ -2258,13 +2250,13 @@ TO CHARACTER IN READ\_CSV OR LEAVE IT AS FACTOR?
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{class}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{event_type)}
-\CommentTok{#> [1] "factor"}
+\CommentTok{#> [1] "character"}
 \KeywordTok{str}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{event_type)}
-\CommentTok{#>  Factor w/ 5 levels "public hs","private hs",..: 1 1 1 1 2 2 1 2 1 1 ...}
+\CommentTok{#>  chr [1:17976] "public hs" "public hs" "public hs" "public hs" ...}
 \KeywordTok{table}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{event_type)}
 \CommentTok{#> }
-\CommentTok{#>   public hs  private hs 2yr college 4yr college       other }
-\CommentTok{#>       11025        3644         769         431        2107}
+\CommentTok{#> 2yr college 4yr college       other  private hs   public hs }
+\CommentTok{#>         769         431        2107        3644       11025}
 
 \KeywordTok{class}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{event_state)}
 \CommentTok{#> [1] "character"}
@@ -2475,7 +2467,7 @@ Can sort by \texttt{is.na} to put missing values first
 \NormalTok{       instnm,event_date,event_type,school_id)}
 \CommentTok{#> # A tibble: 17,976 x 4}
 \CommentTok{#>    instnm event_date event_type school_id   }
-\CommentTok{#>    <chr>  <date>     <fct>      <chr>       }
+\CommentTok{#>    <chr>  <date>     <chr>      <chr>       }
 \CommentTok{#>  1 Bama   2017-12-18 other      <NA>        }
 \CommentTok{#>  2 Bama   2017-12-18 private hs A9106483    }
 \CommentTok{#>  3 Bama   2017-12-15 other      <NA>        }

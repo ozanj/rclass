@@ -9,7 +9,7 @@ urlcolor: blue
 output:
   beamer_presentation:
     keep_tex: true
-    toc: true
+    toc: false
     slide_level: 3
     theme: default # AnnArbor # push to header?
     #colortheme: "dolphin" # push to header?
@@ -27,6 +27,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 #knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
   #comment = "#>" makes it so results from a code chunk start with "#>"; default is "##"
 ```
+
 # Introduction
 
 ### What we will do today
@@ -38,6 +39,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 #Use this if you don't want TOC to show level 2 headings
 \tableofcontents[subsectionstyle=hide/hide/hide]
 ```
+
 
 
 ### Libraries we will use today
@@ -898,8 +900,6 @@ Select the private high schools that got either 2 or 3 visits from Bama
 count(filter(df_school, visits_by_100751 %in% 2:3, school_type == "private"))
 ```
 ### Identifying data type and possible values of variable is helpful for filtering
-
-PATRICIA - event_type IS CURRENTLY FACTOR VARIABLE, NOT CHARACTER [BUT YOU CAN REFER TO IT USING CHARACTER]; SHOULD WE CHANGE THIS VAR TO CHARACTER IN READ_CSV OR LEAVE IT AS FACTOR?
 
 - `class()` and `str()` shows data type of a variable 
 - `table()` to show potential values of categorical variables
