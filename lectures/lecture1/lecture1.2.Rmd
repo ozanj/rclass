@@ -137,7 +137,7 @@ Below we use the combine function `c()` to create a numeric vector that contains
 
 - Help file says that `c()` "combines values into a vector or list"
 ```{r}
-#?c()
+?c
 x <- c(4, 7, 9)
 x
 ```
@@ -509,6 +509,7 @@ names(x1) # no names
 Syntax: `list_name$element_name`
 ```{r}
 x2 <- list(a=1, b=list("apple", "orange"), c=list(1, 2, 3))
+x2$a
 typeof(x2$a)
 length(x2$a)
 
@@ -557,6 +558,7 @@ Additionally, data frames have "attributes"; we'll discuss those in upcoming wee
 ### A data frame is a named list
 
 ```{r}
+df
 typeof(df)
 names(df)
 length(df) # length=number of variables
