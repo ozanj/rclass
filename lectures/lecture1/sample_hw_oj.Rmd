@@ -38,6 +38,11 @@ load("recruit_event_somevars.Rdata")
 names(df_event)
 ```
 
+```{r}
+load("C:/Users/ozanj/Documents/rclass/data/recruiting/recruit_event_somevars.Rdata")
+rm(df_event)
+```
+
 Some question where they first change directories using `setwd()` using relative filepath
 ```{r}
 getwd() # in instructions, make sure that 

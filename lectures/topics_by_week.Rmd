@@ -231,7 +231,15 @@ What Patricia says:
     - logical expressions
     - Useful functions for data frames
 
-## Class X. Investigating data patterns
+## Class 2. Investigating data patterns
+
+POTENTIAL STUFF TO ADD [10/1/2018]
+
+- directories; 
+    - absolute vs. relative
+    - what is working directory in code chunk
+    - what is working directory for code run from console (or R script)
+- general discussion of how functions work
 
 ### Big topics
 
