@@ -1,5 +1,5 @@
 
-# Anything that starts with a hashtag is a comment. R will ignore it
+#Anything that starts with a hashtag is a comment. R will ignore it
 
 # R as a calculator
 5

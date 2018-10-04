@@ -231,7 +231,15 @@ What Patricia says:
     - logical expressions
     - Useful functions for data frames
 
-## Class X. Investigating data patterns
+## Class 2. Investigating data patterns
+
+POTENTIAL STUFF TO ADD [10/1/2018]
+
+- directories; 
+    - absolute vs. relative
+    - what is working directory in code chunk
+    - what is working directory for code run from console (or R script)
+- general discussion of how functions work
 
 ### Big topics
 
@@ -256,11 +264,18 @@ What Patricia says:
 - Conduct basic descriptive statistics: one-way and two-way; categorical and continuous
     - skills: 
 
+### Problem set ideas
+
+- output as html_document
+- changes to YAML header
+    - include table of contents
+- change 
+
 ### Data sources
 
 ### Reading [after lecture]
 
-### Problem set ideas
+
 
 ### What covered in Stata data mgt course
 

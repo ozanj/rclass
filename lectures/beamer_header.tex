@@ -14,7 +14,10 @@
 
 %\setbeamertemplate{frametitle}{\thesection \hspace{0.2cm} \insertframetitle}
 \setbeamertemplate{section in toc}[sections numbered]
-\setbeamertemplate{subsection in toc}[subsections numbered]
+%\setbeamertemplate{subsection in toc}[subsections numbered]
+\setbeamertemplate{subsection in toc}{%
+  \leavevmode\leftskip=3.2em\color{gray}\rlap{\hskip-2em\inserttocsectionnumber.\inserttocsubsectionnumber}\inserttocsubsection\par
+}
 
 %define colors
 %\definecolor{uva_orange}{RGB}{216,141,42} % UVa orange (Rotunda orange)
