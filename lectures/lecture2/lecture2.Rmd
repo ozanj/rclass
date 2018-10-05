@@ -22,13 +22,13 @@ output:
       #after_body: table-of-contents.txt 
 ---
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 #knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
   #comment = "#>" makes it so results from a code chunk start with "#>"; default is "##"
 ```
 
-```{r echo=FALSE}
+```{r, echo=FALSE, include=FALSE}
 #DO NOT WORRY ABOUT THIS
 if(!file.exists('transform-logical.png')){
   download.file(url = 'https://raw.githubusercontent.com/ozanj/rclass/master/lectures/lecture2/transform-logical.png', 
@@ -47,7 +47,7 @@ if(!file.exists("fp1.JPG")) {
 }
 ```
 
-```{r}
+```{r echo=FALSE}
 #DO NOT WORRY ABOUT THIS
 if(!file.exists("fp2.JPG")) {
   download.file(url ="https://github.com/ozanj/rclass/raw/master/lectures/lecture2/fp2.JPG",
@@ -68,7 +68,17 @@ if(!file.exists("fp2.JPG")) {
 \tableofcontents[subsectionstyle=hide/hide/hide]
 ```
 
+### Logistics
 
+1. Volunteer teaching assistant, Diana Lopez
+1. New student introductions
+1. Homework expectations
+    - due date: before class (except first homework due today)
+    - general instructions for homework
+    - grading (enrolled students, auditing students)
+1. Added required reading for next week on syllaus 
+1. If we don't get through all of lecture, finish on your own
+    - whenever we don't cover difficult concepts in class; I'll cover those concepts next week and slow down the pace of class
 
 ### Libraries we will use today
 
@@ -424,7 +434,7 @@ Let's say we want to get to the green folder using the absolute file path.
 
 ### Solution
 
-```{r}
+```{r, eval=FALSE}
 getwd()
 setwd("~/Desktop/red/yellow/green")
 getwd() 
@@ -571,7 +581,26 @@ typeof(df_event$med_inc)
 length(df_event$med_inc)
 str(df_event$med_inc)
 ```
-    
+
+### Variable names
+
+Recall that object `df_school` has one obs per high school
+
+- the variable `visits_by_100751` shows number of visits by University of Alabama to each high school
+- like all variables in a data frame, the var `visits_by_100751` is just a vector
+```{r}
+typeof(df_school$visits_by_100751)
+length(df_school$visits_by_100751) # num elements in vector
+sum(df_school$visits_by_100751)
+```
+Sp we perform calculations on a variable, just like we would any numeric vector
+```{r}
+v <- c(2,4,6)
+typeof(v)
+length(v)
+sum(v)
+```
+
 ## View and print data
 
 ### Viewing and printing data frames
@@ -620,7 +649,7 @@ df_event[50,]
 ```
 ### Viewing and printing data
 
-type `obj_name$var_name` to print specific elements (i.e., variables) in a data frame
+\medskip type `obj_name$var_name` to print specific elements (i.e., vars) in data frame
 
 ```{r results="hide"}
 df_event$zip
@@ -639,7 +668,8 @@ length(df_event$zip)
 df_event$event_state[1:10]
 df_event$event_type[6:10]
 ```
-- can also print multiple variables using `combine()` function
+
+Can also print multiple variables using `combine()` function
 ```{r}
 c(df_event$event_state[1:5],df_event$event_type[1:5])
 ```
@@ -745,6 +775,21 @@ Tip:
 ```{r results="hide", echo=FALSE}
 str(df_event)
 ```
+
+# Find homework groups
+
+### What we'll do to choose homework groups
+
+- Meet new people (10-15 minutes of speed-dating!)
+    - find someone in class you don't know and talk to them for three minutes about whatever!
+        - e.g., where you from, what program, what are research interests, what you like doing outside of school, work
+- We'll spend 10-15 minutes where enrolled students choose homework groups
+    - must be groups of 3
+    - cannot have more than 2 people from same academic program (e.g., HEOC, HDP)
+- Auditors not part of "official" homework groups of 3, but they are welcome to join any homework group or form their own homework group
+
+Use Zoom for group meetings!
+- https://ucla.zoom.us/ 
 
 # Investigating data frames, tidyverse approach
 
