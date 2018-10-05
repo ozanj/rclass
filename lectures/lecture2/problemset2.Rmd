@@ -183,7 +183,7 @@ For the questions below, imagine that you have been asked by a major news outlet
   
 
 Once finished, knit to (HTML) and upload both .Rmd and HTML files to class website under the week 2 tab  
-*Remeber to use this naming convention "lastname_firstname_ps2"*
+*Remember to use this naming convention "lastname_firstname_ps2"*
 
 
 
