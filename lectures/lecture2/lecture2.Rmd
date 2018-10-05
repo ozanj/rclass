@@ -55,8 +55,8 @@ If package not yet installed, then must install before you load. Install in "con
 
 Note: when we load package, name of package is not in quotes; but when we install package, name of package is in quotes:
 
-- `library(tidyverse)`
 - `install.packages("tidyverse")`
+- `library(tidyverse)`
 
 # R Markdown
 
@@ -81,7 +81,7 @@ How we will be using R Markdown files in this class:
 
 __Do this with a partner__
 
-Two approaches for creating an RMarkdown document. 
+Approach for creating a RMarkdown document. 
 
 1. Point-and-click from within RStudio
     - Click on _File_ >> _New File_ >> _R Markdown_ >> _Document_ >> choose _HTML_ >> click _OK_
@@ -89,13 +89,17 @@ Two approaches for creating an RMarkdown document.
     - "Knit" the entire .Rmd file
         - point-and-click OR shortcut: __Cmd/Ctrl + Shift + k__
 
-2. From blank text file
-    - create blank text file
-        - can give it any name, but change extension from .txt to .Rmd
-    - Open this blank .Rmd file in Rstudio
-    - copy this text into file [LINK HERE][PATRICIA CREATE LINK TO sample_simple_rmarkdown.txt FILE WHICH IS STORED IN LECTURE 2 DIRECTORY]
-    - "knit" the entire .Rmd file
-        - point-and-click OR shortcut: __Cmd/Ctrl + Shift + k__
+```{r eval=FALSE}
+# 2. From blank text file
+#     - create blank text file
+#         - can give it any name, but change extension from .txt to .Rmd
+#     - Open this blank .Rmd file in Rstudio
+#     - copy this text into file [LINK HERE][PATRICIA CREATE LINK TO sample_simple_rmarkdown.txt FILE WHICH IS STORED IN LECTURE 2 DIRECTORY]
+#     - "knit" the entire .Rmd file
+#         - point-and-click OR shortcut: __Cmd/Ctrl + Shift + k__
+
+#Don't worry about this. Ozan's notes
+```
 
 ### Components of a .Rmd file
 
@@ -144,7 +148,7 @@ Common/important output types:
     - Most features/code in .Rmd files were written for html_document
     - many of these features are available in other output types
     - When learning R Markdown, best to start by learning html_document
-- __pdf_document__: Requires installation of LaTeX (MiKTeX)
+- __pdf_document__: Requires installation of LaTeX (MiKTeX/MacTeX)
     - How it works:
         - You write .Rmd code; 
         - When you compile, this .Rmd code is transformed into LaTeX code
@@ -314,7 +318,7 @@ sum(10,5,NA,na.rm=TRUE)
 sum(10,5,10,20,NA,na.rm=TRUE)
 ```
 
-## Directories and filepaths [PATRICIA - EDIT/COMPLETE THIS SECTION]
+## Directories and filepaths 
 
 ### Working directory
 
@@ -351,7 +355,56 @@ Command `getwd()` shows current working directory
 getwd()
 ```
 
-### Absolute vs. relative filepath
+### Absolute vs. relative filepath  
+**Absolute file path**:  The absolute file path is the complete list of directories needed to locate a file or folder.  
+`setwd("/Users/pm/Desktop/rclass/lectures/lecture2")`
+
+
+**Relative file path**:  The relative file path is the path relative to your current location/directory.  
+Assuming your current working directory is in the "lecture2" folder and you want to change your directory to the data folder, your relative file path would look something like this:  
+`setwd("../../data")`  
+
+            File path shortcuts
+
+| **Key** | **Description** |
+| ------ | -------- |
+| ~    | tilde is a shortcut for user's home directory (mine is my name pmartin)   |
+| ../    | moves up a level   |
+| ../../    | moves up two level   |
+
+
+### Exercise  
+1. Let's create a folder on our desktop and name it red  
+2. Inside the red folder, create two subfolders named orange and yellow  
+3. Inside the yellow folder create another subfolder named green  
+
+Make sure to name these folders in lowercase.  
+
+You should have 1 folder on your desktop called red. Inside the red folder you have two folders called orange and yellow. Inside the yellow folder you have a folder called green.  
+
+Here is a visual of how it should look...  
+
+### File path visual  
+![](~/Desktop/fp1.jpg)
+![](~/Desktop/fp2.jpg)  
+
+### Exercise continued  
+Let's say we want to get to the green folder using the absolute file path.  
+1. View your current working directory `getwd()`  
+2. Set your working directory to the green folder using the absolute file path  
+3. Now set your working directory to the orange folder using the relative file path  (hint: ../)  
+
+
+### Solution
+
+```{r}
+getwd()
+setwd("~/Desktop/red/yellow/green")
+getwd() 
+setwd("../../orange")
+getwd()
+```
+
 
 # Investigating objects, Base R approach
 
@@ -361,19 +414,20 @@ Data on off-campus recruiting events by public universities
 
 - Data frame object `df_event`
     - One observation per university, recruiting event
-- Data frame object `df_event`
+- Data frame object `df_school`
     - One observation per high school (visited and non-visited)
 
-PATRICIA; REPLACE FILE PATH W/ URL; KEEP EXISTING LOAD COMMANDS TOO BUT COMMENT THEM OUT    
 ```{r}
 rm(list = ls()) # remove all objects in current environment
 
 getwd()
 #load dataset with one obs per recruiting event
-load("../../data/recruiting/recruit_event_somevars.Rdata")
+load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData"))
+#load("../../data/recruiting/recruit_event_somevars.Rdata")
 
 #load dataset with one obs per high school
-load("../../data/recruiting/recruit_school_somevars.Rdata")
+load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_school_somevars.RData"))
+#load("../../data/recruiting/recruit_school_somevars.Rdata")
 ```
 
 
@@ -515,7 +569,7 @@ head(df_event, n=5)
 ```
 ### Viewing and printing data frames
 
-`{obj_name[<rows>,<cols>]` to print specific rows and columns of data frame
+`obj_name[<rows>,<cols>]` to print specific rows and columns of data frame
 
 - particularly powerful when combined with sequences (e.g., `1:10`)
 
@@ -544,7 +598,7 @@ type `obj_name$var_name` to print specific elements (i.e., variables) in a data 
 ```{r results="hide"}
 df_event$zip
 ```
-- recall that these elements are vectors, with length = numnber of obs
+- recall that these elements are vectors, with length = number of obs
 
 ```{r}
 typeof(df_event$zip)
@@ -566,13 +620,39 @@ c(df_event$event_state[1:5],df_event$event_type[1:5])
 
 ### Exercise
 
-PATRICIA: PLEASE ADD TO THIS/MODIFY
 
 Create a printing exercise using the df_school
 
-1. Use head() to print first 5 observations
+1. Use `obj_name[<rows>,<cols>]` to print the first 5 rows and 3 columns of data frame
+1. Use head() to print first 4 observations
 1. Use `obj_name$var_name[1:10]` to print the first 10 observations of a variable
-1. use combine()
+1. Use combine() to print the first 3 observations of variables "school_type" & "name"
+
+### Solution
+
+1. Use `obj_name[<rows>,<cols>]` to print the first 5 rows and 3 columns of data frame
+```{r}
+df_school[1:5,1:3]
+```
+
+### Solution
+2. Use head() to print first 4 observations
+```{r}
+head(df_school, n=4)
+```
+
+### Solution
+3. Use `obj_name$var_name[1:10]` to print the first 10 observations of a variable
+```{r}
+df_school$name[1:10]
+```
+
+### Solution
+4. Use combine() to print the first 3 observations of variables "school_type" & "name"
+```{r}
+c(df_school$school_type[1:3],df_school$name[1:3])
+```
+
 
 ## Missing values
 
@@ -736,7 +816,8 @@ names(df_school)
 - `rename(obj_name, new_name = old_name,...)`
 \medskip
 ```{r results="hide"}
-rename(df_event, g12_offered = g12offered, titlei = titlei_status_pub)
+rename(df_event, g12_offered = g12offered, 
+       titlei = titlei_status_pub)
 names(df_event)
 ```
 Variable names do not change permanently unless we combine rename with assignment
@@ -774,13 +855,14 @@ nrow(df_school)
 nrow(filter(df_school,visits_by_110635 == 1))
 ```
 
-### The `filter()` function
-
-PATRICIA - CONVERT THIS SLIDE INTO A STUDENT TASK PLEASE. THX! CAN PUT SOLUTION ON SUBSEQUENT SLIDE
+### Exercise
 
 Task
 
 - Create a filter to identify all the high schools that recieved 1 visit from UC Berkeley (110635) AND 1 visit from CU Boulder (126614)[output omitted]
+
+### Solution
+
 ```{r, results="hide"}
 filter(df_school,visits_by_110635 == 1, visits_by_126614==1)
 
@@ -833,9 +915,7 @@ Symbol | Meaning
 !["Boolean" operations, x=left circle, y=right circle, from Wichkam (2018)](transform-logical.png){width=50% }
 PATRICIA - TRY TO PUT ON IMAGE ON WEBSITE AND GIVE LINK TO URL
 
-### Filters and comparisons
-
-PATRICIA - MAKE A CALL AS TO WHETHER THE NEXT FEW SLIDES SHOULD BE STUDENT EXERCISES OR DEMONSTRATIONS. THX!
+### Filters and comparisons, Demonstration
 
 Schools visited by Bama (100751) and/or Berkeley (110635)
 
@@ -888,7 +968,8 @@ count(filter(df_school, visits_by_126614 >= 1, state_code != "CO"))
 
 What if you wanted to count the number of schools visited by Bama (100751) in a group of states?
 ```{r}
-count(filter(df_school,visits_by_100751 >= 1, state_code == "MA" | state_code == "VT" | state_code == "ME"))
+count(filter(df_school,visits_by_100751 >= 1, state_code == "MA" |
+               state_code == "VT" | state_code == "ME"))
 ```
 Easier way to do this is with `%in%` operator
 ```{r}
@@ -926,35 +1007,56 @@ count(filter(df_event, event_type == "public hs", event_state =="CA"))
 
 ### Exercises
 
-PATRICIA: CREATE SEPARATE SLIDE W/ JUST THE QUESTION AND THEN SEPARATE SLIDE OF JUST THE ANSWERS; ALSO LOOK AT BELOW QUESTIONS AND MODIFY/DELETE/ADD IF YOU THINK OF BETTER OPTIONS. I WROTE THESE REAL QUICK.
+[Patricia] 
 
 Use the data from df_event, which has one observation for each off-campus recruiting event a university attends
 
+1. Count the number of events attended by the University of Pittsburgh (Pitt) `univ_id == 215293`  
+1. Count the number of recruiting events by Pitt at public or private high schools  
+1. Count the number of recruiting events by Pitt at public or private high schools located in the state of PA  
+1. Count the number of recruiting events by Pitt at public high schools not located in PA where median income is less than 100,000  
+1. Count the number of recruiting events by Pitt at public high schools not located in PA where median income is greater than or  equal to 100,000  
+1. Count the number of out-of-state recruiting events by Pitt at private high schools or public high schools with median income of at least 100,000  
+
+
+### Solution  
 1. Count the number of events attended by the University of Pittsburgh (Pitt) `univ_id == 215293`
-```{r eval=FALSE, echo=FALSE}
+```{r}
 count(filter(df_event, univ_id == 215293))
 ```
+
 2. Count the number of recruiting events by Pitt at public or private high schools 
-```{r eval=FALSE, echo=FALSE}
-count(filter(df_event, univ_id == 215293, event_type == "private hs" | event_type == "public hs"))
-```
-3. Count the number of recruiting events by Pitt at public or private high schools located in the state of PA
-```{r eval=FALSE, echo=FALSE}
-count(filter(df_event, univ_id == 215293, event_type == "private hs" | event_type == "public hs", event_state == "PA"))
-```
-4. Count the number of recruiting events by Pitt at public high schools not located in PA where median income is less than 100,000
-```{r eval=FALSE, echo=FALSE}
-count(filter(df_event, univ_id == 215293, event_type == "public hs", event_state != "PA", med_inc < 100000))
+```{r }
+count(filter(df_event, univ_id == 215293, event_type == "private hs" |
+               event_type == "public hs"))
 ```
 
+### Solution
+3. Count the number of recruiting events by Pitt at public or private high schools located in the state of PA
+```{r}
+count(filter(df_event, univ_id == 215293, event_type == "private hs" |
+               event_type == "public hs", event_state == "PA"))
+```
+
+4. Count the number of recruiting events by Pitt at public high schools not located in PA where median income is less than 100,000
+```{r}
+count(filter(df_event, univ_id == 215293, event_type == "public hs",
+             event_state != "PA", med_inc < 100000))
+```
+
+### Solution
 5. Count the number of recruiting events by Pitt at public high schools not located in PA where median income is greater than or  equal to 100,000
 
-```{r eval=FALSE, echo=FALSE}
-count(filter(df_event, univ_id == 215293, event_type == "public hs", event_state != "PA", med_inc >= 100000))
+```{r}
+count(filter(df_event, univ_id == 215293, event_type == "public hs",
+             event_state != "PA", med_inc >= 100000))
 ```
+
 6. Count the number of out-of-state recruiting events by Pitt at private high schools or public high schools with median income of at least 100,000
-```{r eval=FALSE, echo=FALSE}
-count(filter(df_event, univ_id == 215293, event_state != "PA", (event_type == "public hs" & med_inc >= 100000) | event_type == "private hs"))
+```{r}
+count(filter(df_event, univ_id == 215293, event_state != "PA", 
+             (event_type == "public hs" & med_inc >= 100000) |
+               event_type == "private hs"))
 ```
 
 
