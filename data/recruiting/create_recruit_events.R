@@ -7,7 +7,7 @@ library(tidyverse)
 #library(DataExplorer)
 library(reshape2)
 #library(stringr)
-library(plyr)
+#library(plyr)
 library(scales)
 #options(scipen=999)
 
@@ -86,16 +86,16 @@ table(all$instst) #no missing
 
 
 #19 events have missing locations==wrong IDS attached [drop, we'll fix during manual checks address for all pubs]
-count(all$event_state) #19 are missing 
+count(all,event_state) #19 are missing 
 all[is.na(all$event_state), "instnm"] #diff univs
 
 all<-all[!is.na(all$event_state),]
-count(all$event_state) #none are missing 
+count(all,event_state) #none are missing 
 
 
 #drop if ipeds_id of recruting event =ipeds_id of institution (on campus event)
-count(is.na(all$ipeds_id))
-count(all$univ_id==all$ipeds_id) #none currently on-campus
+count(all,is.na(ipeds_id))
+count(all,univ_id==all$ipeds_id) #none currently on-campus
 
 #OZAN [8/3/2018]: I DON'T HAVE ACCESS TO THIS FOLDER
 #merge in level of urbanicity
