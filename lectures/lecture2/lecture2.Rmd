@@ -28,6 +28,34 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
   #comment = "#>" makes it so results from a code chunk start with "#>"; default is "##"
 ```
 
+```{r echo=FALSE}
+#DO NOT WORRY ABOUT THIS
+if(!file.exists('transform-logical.png')){
+  download.file(url = 'https://raw.githubusercontent.com/ozanj/rclass/master/lectures/lecture2/transform-logical.png', 
+                destfile = 'transform-logical.png',
+                mode = 'wb')
+}
+```
+
+
+```{r echo=FALSE}
+#DO NOT WORRY ABOUT THIS
+if(!file.exists("fp1.JPG")) {
+  download.file(url ="https://github.com/ozanj/rclass/raw/master/lectures/lecture2/fp1.JPG",
+                destfile = 'fp1.JPG',
+                mode = 'wb')
+}
+```
+
+```{r}
+#DO NOT WORRY ABOUT THIS
+if(!file.exists("fp2.JPG")) {
+  download.file(url ="https://github.com/ozanj/rclass/raw/master/lectures/lecture2/fp2.JPG",
+                destfile = 'fp2.JPG',
+                mode = 'wb')
+}
+```
+
 # Introduction
 
 ### What we will do today
@@ -384,8 +412,8 @@ You should have 1 folder on your desktop called red. Inside the red folder you h
 Here is a visual of how it should look...  
 
 ### File path visual  
-![](~/Desktop/fp1.jpg)
-![](~/Desktop/fp2.jpg)  
+![](fp1.JPG)
+![](fp2.JPG)  
 
 ### Exercise continued  
 Let's say we want to get to the green folder using the absolute file path.  
@@ -911,8 +939,7 @@ Symbol | Meaning
 
 \medskip 
 
-!["Boolean" operations, x=left circle, y=right circle, from Wichkam (2018)](transform-logical.png){width=50% }
-PATRICIA - TRY TO PUT ON IMAGE ON WEBSITE AND GIVE LINK TO URL
+!["Boolean" operations, x=left circle, y=right circle, from Wichkam (2018)](transform-logical.png){width=50%}
 
 ### Filters and comparisons, Demonstration
 

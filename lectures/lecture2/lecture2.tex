@@ -215,6 +215,21 @@
 \begin{document}
 \frame{\titlepage}
 
+\begin{frame}[fragile]
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#DO NOT WORRY ABOUT THIS}
+\ControlFlowTok{if}\NormalTok{(}\OperatorTok{!}\KeywordTok{file.exists}\NormalTok{(}\StringTok{"fp2.JPG"}\NormalTok{)) \{}
+  \KeywordTok{download.file}\NormalTok{(}\DataTypeTok{url =}\StringTok{"https://github.com/ozanj/rclass/raw/master/lectures/lecture2/fp2.JPG"}\NormalTok{,}
+                \DataTypeTok{destfile =} \StringTok{'fp2.JPG'}\NormalTok{,}
+                \DataTypeTok{mode =} \StringTok{'wb'}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
 \section{Introduction}\label{introduction}
 
 \begin{frame}{What we will do today}
@@ -1006,10 +1021,10 @@ of directories needed to locate a file or folder.\\
 \texttt{setwd("/Users/pm/Desktop/rclass/lectures/lecture2")}
 
 \textbf{Relative file path}: The relative file path is the path relative
-to your current location/directory.\\
-Assuming your current working directory is in the ``lecture2'' folder
-and you want to change your directory to the data folder, your relative
-file path would look something like this:\\
+to your current location/directory. Assuming your current working
+directory is in the ``lecture2'' folder and you want to change your
+directory to the data folder, your relative file path would look
+something like this:\\
 \texttt{setwd("../../data")}
 
 \begin{verbatim}
@@ -1022,7 +1037,7 @@ file path would look something like this:\\
 \midrule
 \endhead
 \textasciitilde{} & tilde is a shortcut for user's home directory (mine
-is my name pmartin)\tabularnewline
+is my name pm)\tabularnewline
 ../ & moves up a level\tabularnewline
 ../../ & moves up two level\tabularnewline
 \bottomrule
@@ -1055,7 +1070,7 @@ Here is a visual of how it should look\ldots{}
 
 \begin{frame}{File path visual}
 
-\includegraphics{~/Desktop/fp1.jpg} \includegraphics{~/Desktop/fp2.jpg}
+\includegraphics{fp1.JPG} \includegraphics{fp2.JPG}
 
 \end{frame}
 
@@ -1578,7 +1593,7 @@ variables) in a data frame
 
 \begin{frame}[fragile]{Exercise}
 
-Create a printing exercise using the df\_school
+Create a printing exercise using the df\_school data frame
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -2246,8 +2261,12 @@ Symbol & Meaning\tabularnewline
 
 \medskip 
 
+\begin{figure}
+\centering
 \includegraphics[width=0.50000\textwidth]{transform-logical.png}
-PATRICIA - TRY TO PUT ON IMAGE ON WEBSITE AND GIVE LINK TO URL
+\caption{``Boolean'' operations, x=left circle, y=right circle, from
+Wichkam (2018)}
+\end{figure}
 
 \end{frame}
 
@@ -2794,7 +2813,7 @@ off-campus recruiting event a university attends
   descending by ``event\_date''\\
 \item
   Now using the same variables from above, sort by \texttt{is.na} to put
-  missing values in ``univ\_id'' first
+  missing values in ``school\_id'' first
 \end{enumerate}
 
 \end{frame}
