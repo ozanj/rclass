@@ -60,3 +60,9 @@ load("../../data/recruiting/recruit_event_somevars.Rdata")
 names(df_event)
 ```
 
+```{r}
+getwd()
+load("../../data/recruiting/recruit_ps1_small.Rdata")
+names(df_recruiting)
+```
+

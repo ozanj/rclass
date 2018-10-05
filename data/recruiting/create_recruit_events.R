@@ -25,8 +25,8 @@ getwd()
 #setwd("/Users/Karina/Dropbox/recruiting-m1/analysis/data")
 
 #load in csv
-#all<-read.csv("data/recruiting/events_data.csv", na.strings = "")
-all <-read.csv("data/recruiting/events_data.csv", 
+#all <-read.csv("data/recruiting/events_data.csv", 
+all <-read.csv("data/recruiting/events_data_.csv", 
   na.strings = "",
   colClasses=c(school_id="character",
     determined_zip="character",
