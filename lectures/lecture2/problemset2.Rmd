@@ -21,7 +21,9 @@ Recommend reading R Markdown: The Definative Guide section 3.1 ([LINK HERE](http
 1. Add a table of contents to YAML header
 1. table of contents should have "depth" of 2
 1. table of contents should "float"
-1. add section numbering to headers
+1. add section numbering to headers  
+
+Note: you can knit this document to HTML at any point to give you an idea of how the compiled HTML document is displayed. 
 
 
 Load tidyverse package
