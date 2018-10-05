@@ -309,7 +309,7 @@ How we will be using R Markdown files in this class:
 
 \end{frame}
 
-\begin{frame}[fragile]{Creating RMarkdown documents}
+\begin{frame}{Creating RMarkdown documents}
 
 \textbf{Do this with a partner}
 
@@ -341,20 +341,6 @@ Approach for creating a RMarkdown document.
     \end{itemize}
   \end{itemize}
 \end{enumerate}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# 2. From blank text file}
-\CommentTok{#     - create blank text file}
-\CommentTok{#         - can give it any name, but change extension from .txt to .Rmd}
-\CommentTok{#     - Open this blank .Rmd file in Rstudio}
-\CommentTok{#     - copy this text into file [LINK HERE][PATRICIA CREATE LINK TO sample_simple_rmarkdown.txt FILE WHICH IS STORED IN LECTURE 2 DIRECTORY]}
-\CommentTok{#     - "knit" the entire .Rmd file}
-\CommentTok{#         - point-and-click OR shortcut: __Cmd/Ctrl + Shift + k__}
-
-\CommentTok{#Don't worry about this. Ozan's notes}
-\end{Highlighting}
-\end{Shaded}
 
 \end{frame}
 
@@ -2469,8 +2455,6 @@ values
 
 \begin{frame}[fragile]{Exercises}
 
-{[}Patricia{]}
-
 Use the data from df\_event, which has one observation for each
 off-campus recruiting event a university attends
 
@@ -2795,9 +2779,132 @@ Can sort by \texttt{is.na} to put missing values first
 
 \end{frame}
 
-\begin{frame}{Exercises, arranging}
+\begin{frame}[fragile]{Exercise, arranging}
 
-PATRICIA - CAN YOU CREATE A COUPLE OF EXERCISES FOR ARRANGE?
+Use the data from df\_event, which has one observation for each
+off-campus recruiting event a university attends
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Sort ascending by ``univ\_id'' and descending by ``event\_date''\\
+\item
+  Select four variables in total and sort ascending by ``univ\_id'' and
+  descending by ``event\_date''\\
+\item
+  Now using the same variables from above, sort by \texttt{is.na} to put
+  missing values in ``univ\_id'' first
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]{Solution}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Sort ascending by ``univ\_id'' and descending by ``event\_date''
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{arrange}\NormalTok{(df_event, univ_id, }\KeywordTok{desc}\NormalTok{(event_date))}
+\CommentTok{#> # A tibble: 17,976 x 33}
+\CommentTok{#>    instnm univ_id instst   pid event_date event_type zip   school_id}
+\CommentTok{#>    <chr>    <int> <chr>  <int> <date>     <chr>      <chr> <chr>    }
+\CommentTok{#>  1 Bama    100751 AL      7115 2017-12-18 private hs 77089 A9106483 }
+\CommentTok{#>  2 Bama    100751 AL      7121 2017-12-18 other      <NA>  <NA>     }
+\CommentTok{#>  3 Bama    100751 AL      7114 2017-12-15 public hs  75165 48447300~}
+\CommentTok{#>  4 Bama    100751 AL      7100 2017-12-15 public hs  93012 06292700~}
+\CommentTok{#>  5 Bama    100751 AL      7073 2017-12-15 other      98027 <NA>     }
+\CommentTok{#>  6 Bama    100751 AL      7072 2017-12-14 other      98007 <NA>     }
+\CommentTok{#>  7 Bama    100751 AL      7118 2017-12-13 public hs  31906 13038700~}
+\CommentTok{#>  8 Bama    100751 AL      7099 2017-12-13 private hs 90293 00071151 }
+\CommentTok{#>  9 Bama    100751 AL      7109 2017-12-13 public hs  92630 06338600~}
+\CommentTok{#> 10 Bama    100751 AL      7071 2017-12-13 other      98032 <NA>     }
+\CommentTok{#> # ... with 17,966 more rows, and 25 more variables: ipeds_id <int>,}
+\CommentTok{#> #   event_state <chr>, event_inst <chr>, med_inc <dbl>, pop_total <dbl>,}
+\CommentTok{#> #   pct_white_zip <dbl>, pct_black_zip <dbl>, pct_asian_zip <dbl>,}
+\CommentTok{#> #   pct_hispanic_zip <dbl>, pct_amerindian_zip <dbl>,}
+\CommentTok{#> #   pct_nativehawaii_zip <dbl>, pct_tworaces_zip <dbl>,}
+\CommentTok{#> #   pct_otherrace_zip <dbl>, fr_lunch <dbl>, titlei_status_pub <fct>,}
+\CommentTok{#> #   total_12 <dbl>, school_type_pri <int>, school_type_pub <int>,}
+\CommentTok{#> #   g12offered <dbl>, g12 <dbl>, total_students_pub <dbl>,}
+\CommentTok{#> #   total_students_pri <dbl>, event_name <chr>, event_location_name <chr>,}
+\CommentTok{#> #   event_datetime_start <dttm>}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Solution}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Select four variables in total and sort ascending by ``univ\_id'' and
+  descending by ``event\_date''
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{select}\NormalTok{(}\KeywordTok{arrange}\NormalTok{(df_event, univ_id, }\KeywordTok{desc}\NormalTok{(event_date)), univ_id, event_date, }
+\NormalTok{       instnm, event_type)}
+\CommentTok{#> # A tibble: 17,976 x 4}
+\CommentTok{#>    univ_id event_date instnm event_type}
+\CommentTok{#>      <int> <date>     <chr>  <chr>     }
+\CommentTok{#>  1  100751 2017-12-18 Bama   private hs}
+\CommentTok{#>  2  100751 2017-12-18 Bama   other     }
+\CommentTok{#>  3  100751 2017-12-15 Bama   public hs }
+\CommentTok{#>  4  100751 2017-12-15 Bama   public hs }
+\CommentTok{#>  5  100751 2017-12-15 Bama   other     }
+\CommentTok{#>  6  100751 2017-12-14 Bama   other     }
+\CommentTok{#>  7  100751 2017-12-13 Bama   public hs }
+\CommentTok{#>  8  100751 2017-12-13 Bama   private hs}
+\CommentTok{#>  9  100751 2017-12-13 Bama   public hs }
+\CommentTok{#> 10  100751 2017-12-13 Bama   other     }
+\CommentTok{#> # ... with 17,966 more rows}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Solution}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Select the variables ``univ\_id'', ``event\_date'', and ``school\_id''
+  and sort by \texttt{is.na} to put missing values in ``school\_id''
+  first.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{select}\NormalTok{(}\KeywordTok{arrange}\NormalTok{(df_event, univ_id, }\KeywordTok{desc}\NormalTok{(event_date), }\KeywordTok{desc}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(school_id))), }
+\NormalTok{       univ_id, event_date, school_id)}
+\CommentTok{#> # A tibble: 17,976 x 3}
+\CommentTok{#>    univ_id event_date school_id   }
+\CommentTok{#>      <int> <date>     <chr>       }
+\CommentTok{#>  1  100751 2017-12-18 <NA>        }
+\CommentTok{#>  2  100751 2017-12-18 A9106483    }
+\CommentTok{#>  3  100751 2017-12-15 <NA>        }
+\CommentTok{#>  4  100751 2017-12-15 484473005095}
+\CommentTok{#>  5  100751 2017-12-15 062927004516}
+\CommentTok{#>  6  100751 2017-12-14 <NA>        }
+\CommentTok{#>  7  100751 2017-12-13 <NA>        }
+\CommentTok{#>  8  100751 2017-12-13 130387001439}
+\CommentTok{#>  9  100751 2017-12-13 00071151    }
+\CommentTok{#> 10  100751 2017-12-13 063386005296}
+\CommentTok{#> # ... with 17,966 more rows}
+\end{Highlighting}
+\end{Shaded}
 
 \end{frame}
 

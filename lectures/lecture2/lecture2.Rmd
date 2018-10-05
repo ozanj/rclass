@@ -89,7 +89,7 @@ Approach for creating a RMarkdown document.
     - "Knit" the entire .Rmd file
         - point-and-click OR shortcut: __Cmd/Ctrl + Shift + k__
 
-```{r eval=FALSE}
+```{r eval=FALSE, echo=FALSE}
 # 2. From blank text file
 #     - create blank text file
 #         - can give it any name, but change extension from .txt to .Rmd
@@ -360,15 +360,14 @@ getwd()
 `setwd("/Users/pm/Desktop/rclass/lectures/lecture2")`
 
 
-**Relative file path**:  The relative file path is the path relative to your current location/directory.  
-Assuming your current working directory is in the "lecture2" folder and you want to change your directory to the data folder, your relative file path would look something like this:  
+**Relative file path**:  The relative file path is the path relative to your current location/directory. Assuming your current working directory is in the "lecture2" folder and you want to change your directory to the data folder, your relative file path would look something like this:  
 `setwd("../../data")`  
 
             File path shortcuts
 
 | **Key** | **Description** |
 | ------ | -------- |
-| ~    | tilde is a shortcut for user's home directory (mine is my name pmartin)   |
+| ~    | tilde is a shortcut for user's home directory (mine is my name pm)   |
 | ../    | moves up a level   |
 | ../../    | moves up two level   |
 
@@ -621,7 +620,7 @@ c(df_event$event_state[1:5],df_event$event_type[1:5])
 ### Exercise
 
 
-Create a printing exercise using the df_school
+Create a printing exercise using the df_school data frame
 
 1. Use `obj_name[<rows>,<cols>]` to print the first 5 rows and 3 columns of data frame
 1. Use head() to print first 4 observations
@@ -1007,7 +1006,6 @@ count(filter(df_event, event_type == "public hs", event_state =="CA"))
 
 ### Exercises
 
-[Patricia] 
 
 Use the data from df_event, which has one observation for each off-campus recruiting event a university attends
 
@@ -1138,6 +1136,31 @@ select(arrange(df_event, univ_id, desc(event_date), desc(is.na(school_id))),
        instnm,event_date,event_type,school_id)
 ```
 
-### Exercises, arranging
+### Exercise, arranging  
 
-PATRICIA - CAN YOU CREATE A COUPLE OF EXERCISES FOR ARRANGE?
+Use the data from df_event, which has one observation for each off-campus recruiting event a university attends
+
+1. Sort ascending by "univ_id" and descending by "event_date"  
+1. Select four variables in total and sort ascending by "univ_id" and descending by "event_date"  
+1. Now using the same variables from above, sort by `is.na` to put missing values in "school_id" first  
+
+### Solution 
+1. Sort ascending by "univ_id" and descending by "event_date"  
+```{r}
+arrange(df_event, univ_id, desc(event_date))
+```
+
+### Solution
+2. Select four variables in total and sort ascending by "univ_id" and descending by "event_date"  
+```{r}
+select(arrange(df_event, univ_id, desc(event_date)), univ_id, event_date, 
+       instnm, event_type)
+```
+
+### Solution
+3. Select the variables "univ_id", "event_date", and "school_id" and sort  by `is.na` to put missing values in "school_id" first. 
+```{r}
+select(arrange(df_event, univ_id, desc(event_date), desc(is.na(school_id))), 
+       univ_id, event_date, school_id)
+```
+
