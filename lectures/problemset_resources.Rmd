@@ -1,0 +1,50 @@
+---
+title: "Problem Set Resources"
+date: "10/5/2018"
+output: pdf_document
+urlcolor: blue
+---
+
+# Resources 
+## **1.** Re-watch these videos on working with relative and absolute paths  
+
+  * Absolute versus relative file paths [Youtube link](https://www.youtube.com/watch?v=ephId3mYu9o)  
+  * Relative paths and working directory in R [Youtube link](https://www.youtube.com/watch?v=fe6GA200dks)  
+  
+## **2.** `list.files()` command  
+  * The list.files command will list the files in the current working directory  
+  * To learn more type `?list.files` in the console 
+```{r}
+?list.files
+list.files() #currently in rclass project folder
+```
+  * Alternatively, you could set the path to the folder you would like to list files
+```{r}
+list.files(path = "data/ipeds")
+```
+## **3.** To view the filepath of your current/working directory use the `getwd()` function.  
+  * Note that when you use the `getwd()` function from a code chunk in .Rmd, the filepath will be the directory where the .Rmd file is saved. 
+```{r}
+getwd()
+```
+  * This pdf "problemset_instructions.Rmd" is saved in the rclass folder (current working directory)  
+  
+## **4.** To set your working directory, use the `setwd()` function.  
+  * Note that when `setwd()` is executed within a code chunk, the working directory changes only for that code chunk and will revert back to previous working directory in another code chunk.  
+  
+```{r}
+getwd()
+setwd("lecture2")
+```
+
+## **5.** Once problem sets are complete, knit to pdf or html (depending on instructions)  
+
+- Select the "Knit" tab (icon with blue yarn ball) or scroll down and "Knit to PDF" or "Knit to HTML" 
+- Go to class website https://ozanj.github.io/rclass/resources/ and each week collapsible will have a link titled "Sumbit Problem Set Here"  
+- Select the link and submit both .Rmd and pdf/html files  
+- Make sure to use this naming convention "lastname_firstname_ps#"  
+
+## **6.** Homework Groups  
+- We strongly encourage you all to work in your homework groups for every problem set. Although you are working together in groups, each person is responsible for turning in their own problem set.  
+
+## **7.** If you do not have a homework group, please contact Ozan and Patricia. 
