@@ -85,3 +85,34 @@ wwlist <- as.tibble(wwlist)
 
 save(wwlist, file = "data/prospect_list/western_washington_college_board_list.RData")
 
+# Merged data
+wwlist_merged <- read.csv("data/prospect_list/wwlist_merged.csv",
+                          na.strings="",
+                          col.names=c("receive_date", "psat_range", "sat_range", "ap_range", "gpa_b_aplus", "gpa_b_aplus_null","gpa_bplus_aplus","state","zip","for_country","sex","hs_ceeb_code","hs_name","hs_city","hs_state","hs_grad_date","ethn_code","homeschool","firstgen", "zip_code", "pop_total", "pop_white", "pop_black", "pop_asian", "pop_hispanic", "pop_amerindian", "pop_nativehawaii", "pop_tworaces", "pop_otherrace", "avgmedian_inc_2564", "school_type", "merged_hs", "total_students", "total_free_reduced_lunch"),
+                          colClasses=c(receive_date="myDate",
+                                       state="character",
+                                       zip="character",
+                                       for_country="character",
+                                       hs_name="character",
+                                       hs_city="character",
+                                       hs_state="character",
+                                       hs_grad_date="myDate",
+                                       zip_code="character",
+                                       merged_hs="character"
+                          )
+)
+
+# Convert/save data
+wwlist_merged <- as.tibble(wwlist_merged)
+save(wwlist_merged, file = "data/prospect_list/wwlist_merged.RData")
+
+# Shows fctr, dbl, int as col types
+wwlist_merged %>% select(ethn_code, avgmedian_inc_2564, pop_total)
+
+# Of the 268396 obs...
+count(filter(wwlist_merged, is.na(merged_hs)))  # 134731 not merged to HS data
+count(filter(wwlist_merged, !is.na(merged_hs)))  # 133665 merged to HS data
+
+# Of 133665 merged to HS data...
+count(filter(wwlist_merged, school_type=='private'))  # 94 private
+count(filter(wwlist_merged, school_type=='public'))  # 133571 public

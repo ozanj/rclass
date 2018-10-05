@@ -215,6 +215,21 @@
 \begin{document}
 \frame{\titlepage}
 
+\begin{frame}[fragile]
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#DO NOT WORRY ABOUT THIS}
+\ControlFlowTok{if}\NormalTok{(}\OperatorTok{!}\KeywordTok{file.exists}\NormalTok{(}\StringTok{"fp2.JPG"}\NormalTok{)) \{}
+  \KeywordTok{download.file}\NormalTok{(}\DataTypeTok{url =}\StringTok{"https://github.com/ozanj/rclass/raw/master/lectures/lecture2/fp2.JPG"}\NormalTok{,}
+                \DataTypeTok{destfile =} \StringTok{'fp2.JPG'}\NormalTok{,}
+                \DataTypeTok{mode =} \StringTok{'wb'}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
 \section{Introduction}\label{introduction}
 
 \begin{frame}{What we will do today}
@@ -250,9 +265,9 @@ we install package, name of package is in quotes:
 \begin{itemize}
 \tightlist
 \item
-  \texttt{library(tidyverse)}
-\item
   \texttt{install.packages("tidyverse")}
+\item
+  \texttt{library(tidyverse)}
 \end{itemize}
 
 \end{frame}
@@ -313,7 +328,7 @@ How we will be using R Markdown files in this class:
 
 \textbf{Do this with a partner}
 
-Two approaches for creating an RMarkdown document.
+Approach for creating a RMarkdown document.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -333,34 +348,6 @@ Two approaches for creating an RMarkdown document.
     save the .Rmd file {[}any name, anywhere you can find it{]}
   \item
     ``Knit'' the entire .Rmd file
-
-    \begin{itemize}
-    \tightlist
-    \item
-      point-and-click OR shortcut: \textbf{Cmd/Ctrl + Shift + k}
-    \end{itemize}
-  \end{itemize}
-\item
-  From blank text file
-
-  \begin{itemize}
-  \tightlist
-  \item
-    create blank text file
-
-    \begin{itemize}
-    \tightlist
-    \item
-      can give it any name, but change extension from .txt to .Rmd
-    \end{itemize}
-  \item
-    Open this blank .Rmd file in Rstudio
-  \item
-    copy this text into file {[}LINK HERE{]}{[}PATRICIA CREATE LINK TO
-    sample\_simple\_rmarkdown.txt FILE WHICH IS STORED IN LECTURE 2
-    DIRECTORY{]}
-  \item
-    ``knit'' the entire .Rmd file
 
     \begin{itemize}
     \tightlist
@@ -494,7 +481,7 @@ Common/important output types:
     When learning R Markdown, best to start by learning html\_document
   \end{itemize}
 \item
-  \textbf{pdf\_document}: Requires installation of LaTeX (MiKTeX)
+  \textbf{pdf\_document}: Requires installation of LaTeX (MiKTeX/MacTeX)
 
   \begin{itemize}
   \tightlist
@@ -949,8 +936,7 @@ now:
 
 \end{frame}
 
-\subsection{Directories and filepaths {[}PATRICIA - EDIT/COMPLETE THIS
-SECTION{]}}\label{directories-and-filepaths-patricia---editcomplete-this-section}
+\subsection{Directories and filepaths}\label{directories-and-filepaths}
 
 \begin{frame}[fragile]{Working directory}
 
@@ -973,7 +959,7 @@ Function \texttt{getwd()} shows current working directory
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{getwd}\NormalTok{()}
-\CommentTok{#> [1] "C:/Users/ozanj/Documents/rclass/lectures/lecture2"}
+\CommentTok{#> [1] "/Users/patriciamartin/Desktop/GitHub/rclass/lectures/lecture2"}
 \end{Highlighting}
 \end{Shaded}
 
@@ -983,12 +969,13 @@ directory
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{getwd}\NormalTok{()}
-\CommentTok{#> [1] "C:/Users/ozanj/Documents/rclass/lectures/lecture2"}
+\CommentTok{#> [1] "/Users/patriciamartin/Desktop/GitHub/rclass/lectures/lecture2"}
 \KeywordTok{list.files}\NormalTok{()}
-\CommentTok{#> [1] "lecture2.pdf"                "lecture2.Rmd"               }
-\CommentTok{#> [3] "lecture2.tex"                "sample.html"                }
-\CommentTok{#> [5] "sample.Rmd"                  "sample_simple_rmarkdown.txt"}
-\CommentTok{#> [7] "text"                        "transform-logical.png"}
+\CommentTok{#> [1] "fp1.JPG"                     "fp2.JPG"                    }
+\CommentTok{#> [3] "lecture2.pdf"                "lecture2.Rmd"               }
+\CommentTok{#> [5] "lecture2.tex"                "sample_simple_rmarkdown.txt"}
+\CommentTok{#> [7] "sample.Rmd"                  "text"                       }
+\CommentTok{#> [9] "transform-logical.png"}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1003,12 +990,13 @@ directory is set to the filepath where the .Rmd file is stored
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{getwd}\NormalTok{()}
-\CommentTok{#> [1] "C:/Users/ozanj/Documents/rclass/lectures/lecture2"}
+\CommentTok{#> [1] "/Users/patriciamartin/Desktop/GitHub/rclass/lectures/lecture2"}
 \KeywordTok{list.files}\NormalTok{()}
-\CommentTok{#> [1] "lecture2.pdf"                "lecture2.Rmd"               }
-\CommentTok{#> [3] "lecture2.tex"                "sample.html"                }
-\CommentTok{#> [5] "sample.Rmd"                  "sample_simple_rmarkdown.txt"}
-\CommentTok{#> [7] "text"                        "transform-logical.png"}
+\CommentTok{#> [1] "fp1.JPG"                     "fp2.JPG"                    }
+\CommentTok{#> [3] "lecture2.pdf"                "lecture2.Rmd"               }
+\CommentTok{#> [5] "lecture2.tex"                "sample_simple_rmarkdown.txt"}
+\CommentTok{#> [7] "sample.Rmd"                  "text"                       }
+\CommentTok{#> [9] "transform-logical.png"}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1020,13 +1008,98 @@ Command \texttt{getwd()} shows current working directory
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{getwd}\NormalTok{()}
-\CommentTok{#> [1] "C:/Users/ozanj/Documents/rclass/lectures/lecture2"}
+\CommentTok{#> [1] "/Users/patriciamartin/Desktop/GitHub/rclass/lectures/lecture2"}
 \end{Highlighting}
 \end{Shaded}
 
 \end{frame}
 
-\begin{frame}{Absolute vs.~relative filepath}
+\begin{frame}[fragile]{Absolute vs.~relative filepath}
+
+\textbf{Absolute file path}: The absolute file path is the complete list
+of directories needed to locate a file or folder.\\
+\texttt{setwd("/Users/pm/Desktop/rclass/lectures/lecture2")}
+
+\textbf{Relative file path}: The relative file path is the path relative
+to your current location/directory. Assuming your current working
+directory is in the ``lecture2'' folder and you want to change your
+directory to the data folder, your relative file path would look
+something like this:\\
+\texttt{setwd("../../data")}
+
+\begin{verbatim}
+        File path shortcuts
+\end{verbatim}
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+\textbf{Key} & \textbf{Description}\tabularnewline
+\midrule
+\endhead
+\textasciitilde{} & tilde is a shortcut for user's home directory (mine
+is my name pm)\tabularnewline
+../ & moves up a level\tabularnewline
+../../ & moves up two level\tabularnewline
+\bottomrule
+\end{longtable}
+
+\end{frame}
+
+\begin{frame}{Exercise}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Let's create a folder on our desktop and name it red\\
+\item
+  Inside the red folder, create two subfolders named orange and yellow\\
+\item
+  Inside the yellow folder create another subfolder named green
+\end{enumerate}
+
+Make sure to name these folders in lowercase.
+
+You should have 1 folder on your desktop called red. Inside the red
+folder you have two folders called orange and yellow. Inside the yellow
+folder you have a folder called green.
+
+Here is a visual of how it should look\ldots{}
+
+\end{frame}
+
+\begin{frame}{File path visual}
+
+\includegraphics{fp1.JPG} \includegraphics{fp2.JPG}
+
+\end{frame}
+
+\begin{frame}[fragile]{Exercise continued}
+
+Let's say we want to get to the green folder using the absolute file
+path.\\
+1. View your current working directory \texttt{getwd()}\\
+2. Set your working directory to the green folder using the absolute
+file path\\
+3. Now set your working directory to the orange folder using the
+relative file path (hint: ../)
+
+\end{frame}
+
+\begin{frame}[fragile]{Solution}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{getwd}\NormalTok{()}
+\CommentTok{#> [1] "/Users/patriciamartin/Desktop/GitHub/rclass/lectures/lecture2"}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"~/Desktop/red/yellow/green"}\NormalTok{)}
+\KeywordTok{getwd}\NormalTok{() }
+\CommentTok{#> [1] "/Users/patriciamartin/Desktop/red/yellow/green"}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"../../orange"}\NormalTok{)}
+\KeywordTok{getwd}\NormalTok{()}
+\CommentTok{#> [1] "/Users/patriciamartin/Desktop/red/orange"}
+\end{Highlighting}
+\end{Shaded}
 
 \end{frame}
 
@@ -1048,7 +1121,7 @@ Data on off-campus recruiting events by public universities
     One observation per university, recruiting event
   \end{itemize}
 \item
-  Data frame object \texttt{df\_event}
+  Data frame object \texttt{df\_school}
 
   \begin{itemize}
   \tightlist
@@ -1057,20 +1130,19 @@ Data on off-campus recruiting events by public universities
   \end{itemize}
 \end{itemize}
 
-PATRICIA; REPLACE FILE PATH W/ URL; KEEP EXISTING LOAD COMMANDS TOO BUT
-COMMENT THEM OUT
-
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{rm}\NormalTok{(}\DataTypeTok{list =} \KeywordTok{ls}\NormalTok{()) }\CommentTok{# remove all objects in current environment}
 
 \KeywordTok{getwd}\NormalTok{()}
-\CommentTok{#> [1] "C:/Users/ozanj/Documents/rclass/lectures/lecture2"}
+\CommentTok{#> [1] "/Users/patriciamartin/Desktop/GitHub/rclass/lectures/lecture2"}
 \CommentTok{#load dataset with one obs per recruiting event}
-\KeywordTok{load}\NormalTok{(}\StringTok{"../../data/recruiting/recruit_event_somevars.Rdata"}\NormalTok{)}
+\KeywordTok{load}\NormalTok{(}\KeywordTok{url}\NormalTok{(}\StringTok{"https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData"}\NormalTok{))}
+\CommentTok{#load("../../data/recruiting/recruit_event_somevars.Rdata")}
 
 \CommentTok{#load dataset with one obs per high school}
-\KeywordTok{load}\NormalTok{(}\StringTok{"../../data/recruiting/recruit_school_somevars.Rdata"}\NormalTok{)}
+\KeywordTok{load}\NormalTok{(}\KeywordTok{url}\NormalTok{(}\StringTok{"https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_school_somevars.RData"}\NormalTok{))}
+\CommentTok{#load("../../data/recruiting/recruit_school_somevars.Rdata")}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1093,12 +1165,13 @@ directory
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{getwd}\NormalTok{() }\CommentTok{# what is your current working directory}
-\CommentTok{#> [1] "C:/Users/ozanj/Documents/rclass/lectures/lecture2"}
+\CommentTok{#> [1] "/Users/patriciamartin/Desktop/GitHub/rclass/lectures/lecture2"}
 \KeywordTok{list.files}\NormalTok{()}
-\CommentTok{#> [1] "lecture2.pdf"                "lecture2.Rmd"               }
-\CommentTok{#> [3] "lecture2.tex"                "sample.html"                }
-\CommentTok{#> [5] "sample.Rmd"                  "sample_simple_rmarkdown.txt"}
-\CommentTok{#> [7] "text"                        "transform-logical.png"}
+\CommentTok{#> [1] "fp1.JPG"                     "fp2.JPG"                    }
+\CommentTok{#> [3] "lecture2.pdf"                "lecture2.Rmd"               }
+\CommentTok{#> [5] "lecture2.tex"                "sample_simple_rmarkdown.txt"}
+\CommentTok{#> [7] "sample.Rmd"                  "text"                       }
+\CommentTok{#> [9] "transform-logical.png"}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1327,7 +1400,7 @@ syntax:
 \KeywordTok{length}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{med_inc)}
 \CommentTok{#> [1] 17976}
 \KeywordTok{str}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{med_inc)}
-\CommentTok{#>  num [1:17976] 71714 89122 70137 70137 71024 ...}
+\CommentTok{#>  num [1:17976] 71714 89122 70136 70136 71024 ...}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1391,7 +1464,7 @@ Three ways to view/print a data frame object
 
 \begin{frame}[fragile]{Viewing and printing data frames}
 
-\texttt{\{obj\_name{[}\textless{}rows\textgreater{},\textless{}cols\textgreater{}{]}}
+\texttt{obj\_name{[}\textless{}rows\textgreater{},\textless{}cols\textgreater{}{]}}
 to print specific rows and columns of data frame
 
 \begin{itemize}
@@ -1467,7 +1540,7 @@ variables) in a data frame
 \begin{itemize}
 \tightlist
 \item
-  recall that these elements are vectors, with length = numnber of obs
+  recall that these elements are vectors, with length = number of obs
 \end{itemize}
 
 \begin{Shaded}
@@ -1520,21 +1593,129 @@ variables) in a data frame
 
 \begin{frame}[fragile]{Exercise}
 
-PATRICIA: PLEASE ADD TO THIS/MODIFY
-
-Create a printing exercise using the df\_school
+Create a printing exercise using the df\_school data frame
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Use head() to print first 5 observations
+  Use
+  \texttt{obj\_name{[}\textless{}rows\textgreater{},\textless{}cols\textgreater{}{]}}
+  to print the first 5 rows and 3 columns of data frame
+\item
+  Use head() to print first 4 observations
 \item
   Use \texttt{obj\_name\$var\_name{[}1:10{]}} to print the first 10
   observations of a variable
 \item
-  use combine()
+  Use combine() to print the first 3 observations of variables
+  ``school\_type'' \& ``name''
 \end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]{Solution}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Use
+  \texttt{obj\_name{[}\textless{}rows\textgreater{},\textless{}cols\textgreater{}{]}}
+  to print the first 5 rows and 3 columns of data frame
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df_school[}\DecValTok{1}\OperatorTok{:}\DecValTok{5}\NormalTok{,}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{]}
+\CommentTok{#> # A tibble: 5 x 3}
+\CommentTok{#>   state_code school_type ncessch     }
+\CommentTok{#>   <chr>      <chr>       <chr>       }
+\CommentTok{#> 1 AK         public      020000100208}
+\CommentTok{#> 2 AK         public      020000100211}
+\CommentTok{#> 3 AK         public      020000100212}
+\CommentTok{#> 4 AK         public      020000100213}
+\CommentTok{#> 5 AK         public      020000300216}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Solution}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Use head() to print first 4 observations
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{head}\NormalTok{(df_school, }\DataTypeTok{n=}\DecValTok{4}\NormalTok{)}
+\CommentTok{#> # A tibble: 4 x 26}
+\CommentTok{#>   state_code school_type ncessch name  address city  zip_code pct_white}
+\CommentTok{#>   <chr>      <chr>       <chr>   <chr> <chr>   <chr> <chr>        <dbl>}
+\CommentTok{#> 1 AK         public      020000~ Beth~ 1006 R~ Beth~ 99559         11.8}
+\CommentTok{#> 2 AK         public      020000~ Ayag~ 106 Vi~ Kong~ 99559          0  }
+\CommentTok{#> 3 AK         public      020000~ Kwig~ 108 Vi~ Kwig~ 99622          0  }
+\CommentTok{#> 4 AK         public      020000~ Nels~ 118 Vi~ Toks~ 99637          0  }
+\CommentTok{#> # ... with 18 more variables: pct_black <dbl>, pct_hispanic <dbl>,}
+\CommentTok{#> #   pct_asian <dbl>, pct_amerindian <dbl>, pct_other <dbl>,}
+\CommentTok{#> #   num_fr_lunch <dbl>, total_students <dbl>, num_took_math <dbl>,}
+\CommentTok{#> #   num_prof_math <dbl>, num_took_rla <dbl>, num_prof_rla <dbl>,}
+\CommentTok{#> #   avgmedian_inc_2564 <dbl>, visits_by_110635 <int>,}
+\CommentTok{#> #   visits_by_126614 <int>, visits_by_100751 <int>, inst_110635 <chr>,}
+\CommentTok{#> #   inst_126614 <chr>, inst_100751 <chr>}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Solution}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Use \texttt{obj\_name\$var\_name{[}1:10{]}} to print the first 10
+  observations of a variable
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df_school}\OperatorTok{$}\NormalTok{name[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{]}
+\CommentTok{#>  [1] "Bethel Regional High School" "Ayagina'ar Elitnaurvik"     }
+\CommentTok{#>  [3] "Kwigillingok School"         "Nelson Island Area School"  }
+\CommentTok{#>  [5] "Alakanuk School"             "Emmonak School"             }
+\CommentTok{#>  [7] "Hooper Bay School"           "Ignatius Beans School"      }
+\CommentTok{#>  [9] "Pilot Station School"        "Kotlik School"}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Solution}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Use combine() to print the first 3 observations of variables
+  ``school\_type'' \& ``name''
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{c}\NormalTok{(df_school}\OperatorTok{$}\NormalTok{school_type[}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{],df_school}\OperatorTok{$}\NormalTok{name[}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{])}
+\CommentTok{#> [1] "public"                      "public"                     }
+\CommentTok{#> [3] "public"                      "Bethel Regional High School"}
+\CommentTok{#> [5] "Ayagina'ar Elitnaurvik"      "Kwigillingok School"}
+\end{Highlighting}
+\end{Shaded}
 
 \end{frame}
 
@@ -1909,7 +2090,8 @@ visit.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{rename}\NormalTok{(df_event, }\DataTypeTok{g12_offered =}\NormalTok{ g12offered, }\DataTypeTok{titlei =}\NormalTok{ titlei_status_pub)}
+\KeywordTok{rename}\NormalTok{(df_event, }\DataTypeTok{g12_offered =}\NormalTok{ g12offered, }
+       \DataTypeTok{titlei =}\NormalTok{ titlei_status_pub)}
 \KeywordTok{names}\NormalTok{(df_event)}
 \end{Highlighting}
 \end{Shaded}
@@ -1992,10 +2174,7 @@ Note that resulting object is list, consisting of obs where condition
 
 \end{frame}
 
-\begin{frame}[fragile]{The \texttt{filter()} function}
-
-PATRICIA - CONVERT THIS SLIDE INTO A STUDENT TASK PLEASE. THX! CAN PUT
-SOLUTION ON SUBSEQUENT SLIDE
+\begin{frame}{Exercise}
 
 Task
 
@@ -2006,6 +2185,10 @@ Task
   from UC Berkeley (110635) AND 1 visit from CU Boulder
   (126614){[}output omitted{]}
 \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Solution}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2078,15 +2261,16 @@ Symbol & Meaning\tabularnewline
 
 \medskip 
 
+\begin{figure}
+\centering
 \includegraphics[width=0.50000\textwidth]{transform-logical.png}
-PATRICIA - TRY TO PUT ON IMAGE ON WEBSITE AND GIVE LINK TO URL
+\caption{``Boolean'' operations, x=left circle, y=right circle, from
+Wichkam (2018)}
+\end{figure}
 
 \end{frame}
 
-\begin{frame}[fragile]{Filters and comparisons}
-
-PATRICIA - MAKE A CALL AS TO WHETHER THE NEXT FEW SLIDES SHOULD BE
-STUDENT EXERCISES OR DEMONSTRATIONS. THX!
+\begin{frame}[fragile]{Filters and comparisons, Demonstration}
 
 Schools visited by Bama (100751) and/or Berkeley (110635)
 
@@ -2202,7 +2386,8 @@ What if you wanted to count the number of schools visited by Bama
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_school,visits_by_}\DecValTok{100751} \OperatorTok{>=}\StringTok{ }\DecValTok{1}\NormalTok{, state_code }\OperatorTok{==}\StringTok{ "MA"} \OperatorTok{|}\StringTok{ }\NormalTok{state_code }\OperatorTok{==}\StringTok{ "VT"} \OperatorTok{|}\StringTok{ }\NormalTok{state_code }\OperatorTok{==}\StringTok{ "ME"}\NormalTok{))}
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_school,visits_by_}\DecValTok{100751} \OperatorTok{>=}\StringTok{ }\DecValTok{1}\NormalTok{, state_code }\OperatorTok{==}\StringTok{ "MA"} \OperatorTok{|}
+\StringTok{               }\NormalTok{state_code }\OperatorTok{==}\StringTok{ "VT"} \OperatorTok{|}\StringTok{ }\NormalTok{state_code }\OperatorTok{==}\StringTok{ "ME"}\NormalTok{))}
 \CommentTok{#> # A tibble: 1 x 1}
 \CommentTok{#>       n}
 \CommentTok{#>   <int>}
@@ -2266,7 +2451,7 @@ variable is helpful for filtering}
 \KeywordTok{class}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{med_inc)}
 \CommentTok{#> [1] "numeric"}
 \KeywordTok{str}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{med_inc)}
-\CommentTok{#>  num [1:17976] 71714 89122 70137 70137 71024 ...}
+\CommentTok{#>  num [1:17976] 71714 89122 70136 70136 71024 ...}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2289,37 +2474,166 @@ values
 
 \begin{frame}[fragile]{Exercises}
 
-PATRICIA: CREATE SEPARATE SLIDE W/ JUST THE QUESTION AND THEN SEPARATE
-SLIDE OF JUST THE ANSWERS; ALSO LOOK AT BELOW QUESTIONS AND
-MODIFY/DELETE/ADD IF YOU THINK OF BETTER OPTIONS. I WROTE THESE REAL
-QUICK.
-
 Use the data from df\_event, which has one observation for each
 off-campus recruiting event a university attends
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
+\tightlist
 \item
   Count the number of events attended by the University of Pittsburgh
-  (Pitt) \texttt{univ\_id\ ==\ 215293}
+  (Pitt) \texttt{univ\_id\ ==\ 215293}\\
 \item
   Count the number of recruiting events by Pitt at public or private
-  high schools
+  high schools\\
 \item
   Count the number of recruiting events by Pitt at public or private
-  high schools located in the state of PA
+  high schools located in the state of PA\\
 \item
   Count the number of recruiting events by Pitt at public high schools
-  not located in PA where median income is less than 100,000
+  not located in PA where median income is less than 100,000\\
 \item
   Count the number of recruiting events by Pitt at public high schools
   not located in PA where median income is greater than or equal to
-  100,000
+  100,000\\
 \item
   Count the number of out-of-state recruiting events by Pitt at private
   high schools or public high schools with median income of at least
   100,000
 \end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]{Solution}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Count the number of events attended by the University of Pittsburgh
+  (Pitt) \texttt{univ\_id\ ==\ 215293}
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_event, univ_id }\OperatorTok{==}\StringTok{ }\DecValTok{215293}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1  1220}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Count the number of recruiting events by Pitt at public or private
+  high schools
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_event, univ_id }\OperatorTok{==}\StringTok{ }\DecValTok{215293}\NormalTok{, event_type }\OperatorTok{==}\StringTok{ "private hs"} \OperatorTok{|}
+\StringTok{               }\NormalTok{event_type }\OperatorTok{==}\StringTok{ "public hs"}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1   964}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Solution}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Count the number of recruiting events by Pitt at public or private
+  high schools located in the state of PA
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_event, univ_id }\OperatorTok{==}\StringTok{ }\DecValTok{215293}\NormalTok{, event_type }\OperatorTok{==}\StringTok{ "private hs"} \OperatorTok{|}
+\StringTok{               }\NormalTok{event_type }\OperatorTok{==}\StringTok{ "public hs"}\NormalTok{, event_state }\OperatorTok{==}\StringTok{ "PA"}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1   246}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Count the number of recruiting events by Pitt at public high schools
+  not located in PA where median income is less than 100,000
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_event, univ_id }\OperatorTok{==}\StringTok{ }\DecValTok{215293}\NormalTok{, event_type }\OperatorTok{==}\StringTok{ "public hs"}\NormalTok{,}
+\NormalTok{             event_state }\OperatorTok{!=}\StringTok{ "PA"}\NormalTok{, med_inc }\OperatorTok{<}\StringTok{ }\DecValTok{100000}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1   189}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Solution}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  Count the number of recruiting events by Pitt at public high schools
+  not located in PA where median income is greater than or equal to
+  100,000
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_event, univ_id }\OperatorTok{==}\StringTok{ }\DecValTok{215293}\NormalTok{, event_type }\OperatorTok{==}\StringTok{ "public hs"}\NormalTok{,}
+\NormalTok{             event_state }\OperatorTok{!=}\StringTok{ "PA"}\NormalTok{, med_inc }\OperatorTok{>=}\StringTok{ }\DecValTok{100000}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1   319}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{5}
+\tightlist
+\item
+  Count the number of out-of-state recruiting events by Pitt at private
+  high schools or public high schools with median income of at least
+  100,000
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{count}\NormalTok{(}\KeywordTok{filter}\NormalTok{(df_event, univ_id }\OperatorTok{==}\StringTok{ }\DecValTok{215293}\NormalTok{, event_state }\OperatorTok{!=}\StringTok{ "PA"}\NormalTok{, }
+\NormalTok{             (event_type }\OperatorTok{==}\StringTok{ "public hs"} \OperatorTok{&}\StringTok{ }\NormalTok{med_inc }\OperatorTok{>=}\StringTok{ }\DecValTok{100000}\NormalTok{) }\OperatorTok{|}
+\StringTok{               }\NormalTok{event_type }\OperatorTok{==}\StringTok{ "private hs"}\NormalTok{))}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1   526}
+\end{Highlighting}
+\end{Shaded}
 
 \end{frame}
 
@@ -2484,9 +2798,132 @@ Can sort by \texttt{is.na} to put missing values first
 
 \end{frame}
 
-\begin{frame}{Exercises, arranging}
+\begin{frame}[fragile]{Exercise, arranging}
 
-PATRICIA - CAN YOU CREATE A COUPLE OF EXERCISES FOR ARRANGE?
+Use the data from df\_event, which has one observation for each
+off-campus recruiting event a university attends
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Sort ascending by ``univ\_id'' and descending by ``event\_date''\\
+\item
+  Select four variables in total and sort ascending by ``univ\_id'' and
+  descending by ``event\_date''\\
+\item
+  Now using the same variables from above, sort by \texttt{is.na} to put
+  missing values in ``school\_id'' first
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]{Solution}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Sort ascending by ``univ\_id'' and descending by ``event\_date''
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{arrange}\NormalTok{(df_event, univ_id, }\KeywordTok{desc}\NormalTok{(event_date))}
+\CommentTok{#> # A tibble: 17,976 x 33}
+\CommentTok{#>    instnm univ_id instst   pid event_date event_type zip   school_id}
+\CommentTok{#>    <chr>    <int> <chr>  <int> <date>     <chr>      <chr> <chr>    }
+\CommentTok{#>  1 Bama    100751 AL      7115 2017-12-18 private hs 77089 A9106483 }
+\CommentTok{#>  2 Bama    100751 AL      7121 2017-12-18 other      <NA>  <NA>     }
+\CommentTok{#>  3 Bama    100751 AL      7114 2017-12-15 public hs  75165 48447300~}
+\CommentTok{#>  4 Bama    100751 AL      7100 2017-12-15 public hs  93012 06292700~}
+\CommentTok{#>  5 Bama    100751 AL      7073 2017-12-15 other      98027 <NA>     }
+\CommentTok{#>  6 Bama    100751 AL      7072 2017-12-14 other      98007 <NA>     }
+\CommentTok{#>  7 Bama    100751 AL      7118 2017-12-13 public hs  31906 13038700~}
+\CommentTok{#>  8 Bama    100751 AL      7099 2017-12-13 private hs 90293 00071151 }
+\CommentTok{#>  9 Bama    100751 AL      7109 2017-12-13 public hs  92630 06338600~}
+\CommentTok{#> 10 Bama    100751 AL      7071 2017-12-13 other      98032 <NA>     }
+\CommentTok{#> # ... with 17,966 more rows, and 25 more variables: ipeds_id <int>,}
+\CommentTok{#> #   event_state <chr>, event_inst <chr>, med_inc <dbl>, pop_total <dbl>,}
+\CommentTok{#> #   pct_white_zip <dbl>, pct_black_zip <dbl>, pct_asian_zip <dbl>,}
+\CommentTok{#> #   pct_hispanic_zip <dbl>, pct_amerindian_zip <dbl>,}
+\CommentTok{#> #   pct_nativehawaii_zip <dbl>, pct_tworaces_zip <dbl>,}
+\CommentTok{#> #   pct_otherrace_zip <dbl>, fr_lunch <dbl>, titlei_status_pub <fct>,}
+\CommentTok{#> #   total_12 <dbl>, school_type_pri <int>, school_type_pub <int>,}
+\CommentTok{#> #   g12offered <dbl>, g12 <dbl>, total_students_pub <dbl>,}
+\CommentTok{#> #   total_students_pri <dbl>, event_name <chr>, event_location_name <chr>,}
+\CommentTok{#> #   event_datetime_start <dttm>}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Solution}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Select four variables in total and sort ascending by ``univ\_id'' and
+  descending by ``event\_date''
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{select}\NormalTok{(}\KeywordTok{arrange}\NormalTok{(df_event, univ_id, }\KeywordTok{desc}\NormalTok{(event_date)), univ_id, event_date, }
+\NormalTok{       instnm, event_type)}
+\CommentTok{#> # A tibble: 17,976 x 4}
+\CommentTok{#>    univ_id event_date instnm event_type}
+\CommentTok{#>      <int> <date>     <chr>  <chr>     }
+\CommentTok{#>  1  100751 2017-12-18 Bama   private hs}
+\CommentTok{#>  2  100751 2017-12-18 Bama   other     }
+\CommentTok{#>  3  100751 2017-12-15 Bama   public hs }
+\CommentTok{#>  4  100751 2017-12-15 Bama   public hs }
+\CommentTok{#>  5  100751 2017-12-15 Bama   other     }
+\CommentTok{#>  6  100751 2017-12-14 Bama   other     }
+\CommentTok{#>  7  100751 2017-12-13 Bama   public hs }
+\CommentTok{#>  8  100751 2017-12-13 Bama   private hs}
+\CommentTok{#>  9  100751 2017-12-13 Bama   public hs }
+\CommentTok{#> 10  100751 2017-12-13 Bama   other     }
+\CommentTok{#> # ... with 17,966 more rows}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Solution}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Select the variables ``univ\_id'', ``event\_date'', and ``school\_id''
+  and sort by \texttt{is.na} to put missing values in ``school\_id''
+  first.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{select}\NormalTok{(}\KeywordTok{arrange}\NormalTok{(df_event, univ_id, }\KeywordTok{desc}\NormalTok{(event_date), }\KeywordTok{desc}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(school_id))), }
+\NormalTok{       univ_id, event_date, school_id)}
+\CommentTok{#> # A tibble: 17,976 x 3}
+\CommentTok{#>    univ_id event_date school_id   }
+\CommentTok{#>      <int> <date>     <chr>       }
+\CommentTok{#>  1  100751 2017-12-18 <NA>        }
+\CommentTok{#>  2  100751 2017-12-18 A9106483    }
+\CommentTok{#>  3  100751 2017-12-15 <NA>        }
+\CommentTok{#>  4  100751 2017-12-15 484473005095}
+\CommentTok{#>  5  100751 2017-12-15 062927004516}
+\CommentTok{#>  6  100751 2017-12-14 <NA>        }
+\CommentTok{#>  7  100751 2017-12-13 <NA>        }
+\CommentTok{#>  8  100751 2017-12-13 130387001439}
+\CommentTok{#>  9  100751 2017-12-13 00071151    }
+\CommentTok{#> 10  100751 2017-12-13 063386005296}
+\CommentTok{#> # ... with 17,966 more rows}
+\end{Highlighting}
+\end{Shaded}
 
 \end{frame}
 
