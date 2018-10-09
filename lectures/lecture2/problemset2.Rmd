@@ -115,7 +115,7 @@ For the questions below, imagine that you have been asked by a major news outlet
 
 
 
-2. The news outlet is interested in comparing the in-state and out-of-state high school visits for [The University of Alabama](https://nces.ed.gov/globallocator/col_info_popup.asp?ID=100751) (IPEDS ID = 100751) variable `visits_by_100751`. Count the number of in-state public high school that received at least one vist from The University of Alabama.      
+2. The news outlet is interested in comparing the in-state and out-of-state high school visits for [The University of Alabama](https://nces.ed.gov/globallocator/col_info_popup.asp?ID=100751) (IPEDS ID = 100751) variable `visits_by_100751`. Count the number of in-state public high schools that received at least one vist from The University of Alabama.      
     - Note: You will need to use `filter` and the `count` function  
     - Use commas to separate varibles for this questions (e.g. filter(dataframe, variable == something, variable == something))
     - You can do this in one step by wrapping the `count` function around the `filter` function ; or you can do this in two steps by creating a new data frame first  
@@ -149,38 +149,6 @@ For the questions below, imagine that you have been asked by a major news outlet
 
 
 
-
-6. The news outlet is interested in getting more information about the high schools these public research universities visit. The variable `total_visits` counts the total number of visits to the high school across all public 16 public research universities in the sample. Print the `name`, `state_code`, `city`, `school_type`,`total_visits`, `med_inc`, `pct_white`, `pct_black`, `pct_hispanic`, `pct_asian`, `pct_amerindian`, and `pct_other` of the top 10 schools with respect to the variable `total_visits` (top 10 schools visited)
-    - Note: You will have to sort descending by total number of visits
-    - You can do this in one step by wrapping the `select()` function around the `arrange()` (i.e., sort) function; or you can do this in two steps by creating a new data frame first
-```{r}
-
-```
-
-
-
-
-7. Print the following (same vars as above):
-    - (A) the top 10 public high schools in terms of total number of visits and then
-    - (B) the top 10 private high schoools in terms of total number of visits
-    
-```{r}
-
-```
-
-
-
-8. Print the following (same vars as above): 
-    - (A) the top 10 public high schools in Massachusetts in terms of total number of visits and then 
-    - (B) the top 10 private high schools in Massachusetts in terms of total number of visits
-    - (C) the top 10 public high schools in California in terms of total number of visits and then 
-    - (D) the top 10 private high schools in California in terms of total number of visits    
-
-```{r}
-
-
-```
-  
 
 Once finished, knit to (HTML) and upload both .Rmd and HTML files to class website under the week 2 tab  
 *Remeber to use this naming convention "lastname_firstname_ps2"*
