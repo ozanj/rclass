@@ -21,9 +21,7 @@ Recommend reading R Markdown: The Definative Guide section 3.1 ([LINK HERE](http
 1. Add a table of contents to YAML header
 1. table of contents should have "depth" of 2
 1. table of contents should "float"
-1. add section numbering to headers  
-
-Note: you can knit this document to HTML at any point to give you an idea of how the compiled HTML document is displayed. 
+1. add section numbering to headers
 
 
 Load tidyverse package
@@ -97,14 +95,17 @@ df_school_all %>% count(total_visits)
 
 ```
 
-# Filter and select questions
+# Filter, select, arrange questions
 
 The data frame `df_school_all` has one observation for each high school (public and private). 
 
 - The variables that begin with `visits_by_...` identify how many off-campus recruiting visits the high school received from a particular public university. For example, UC Berkeley has the ID `110635` so the variable `visits_by_110635` identifies how many visits the high school received from UC Berkeley. 
 - The variable `total_visits` identifies the number of visits the high school received from all (16) public research universities in this data collection sample.
 
+For the questions below, imagine that you have been asked by a major news outlet to identify which high schools receive the most total number of off-campus recruiting visits from public universities. 
 
+- for all questions below, you can answer using one line of code or you can answer in several steps (e.g., first create new data frame, then print selected variables)
+- For questions that ask you to print the "top 10" observations, you can simply print the object and rely on the fact that the default option [for "tibble" data frames] is to print 10 observations OR you can wrap the command in the `head()` function and explicitly tell R to print 10 observations
 - Before conducting analyses, we'll rename the variable `avgmedian_inc_2564` to give it a shorter name.
 
 1. Rename the variable `avgmedian_inc_2564` to `med_inc` and assign new variable name to the existing object `df_school_all`
@@ -114,7 +115,7 @@ The data frame `df_school_all` has one observation for each high school (public 
 
 
 
-2. The news outlet is interested in comparing the in-state and out-of-state high school visits for [The University of Alabama](https://nces.ed.gov/globallocator/col_info_popup.asp?ID=100751) (IPEDS ID = 100751) variable `visits_by_100751`. Count the number of in-state public high school visits for The University of Alabama.   
+2. The news outlet is interested in comparing the in-state and out-of-state high school visits for [The University of Alabama](https://nces.ed.gov/globallocator/col_info_popup.asp?ID=100751) (IPEDS ID = 100751) variable `visits_by_100751`. Count the number of in-state public high school that received at least one vist from The University of Alabama.      
     - Note: You will need to use `filter` and the `count` function  
     - Use commas to separate varibles for this questions (e.g. filter(dataframe, variable == something, variable == something))
     - You can do this in one step by wrapping the `count` function around the `filter` function ; or you can do this in two steps by creating a new data frame first  
@@ -132,7 +133,7 @@ The data frame `df_school_all` has one observation for each high school (public 
 
 
 
-4. Now count the out-of-state public high school visits for the University of Alabama without using commas.  
+4. Now count the out-of-state public high schools that received at least one visit by the university of Alabama without using commas to seprate conditions in your filter.  
     - hint: `&` or `%in%`
 ```{r}
 
@@ -148,8 +149,41 @@ The data frame `df_school_all` has one observation for each high school (public 
 
 
 
-Once finished, knit to (HTML) and upload both .Rmd and HTML files to class website under the [week 2 tab](https://ozanj.github.io/rclass/resources/)  
-*Remember to use this naming convention "lastname_firstname_ps2"*
+
+6. The news outlet is interested in getting more information about the high schools these public research universities visit. The variable `total_visits` counts the total number of visits to the high school across all public 16 public research universities in the sample. Print the `name`, `state_code`, `city`, `school_type`,`total_visits`, `med_inc`, `pct_white`, `pct_black`, `pct_hispanic`, `pct_asian`, `pct_amerindian`, and `pct_other` of the top 10 schools with respect to the variable `total_visits` (top 10 schools visited)
+    - Note: You will have to sort descending by total number of visits
+    - You can do this in one step by wrapping the `select()` function around the `arrange()` (i.e., sort) function; or you can do this in two steps by creating a new data frame first
+```{r}
+
+```
+
+
+
+
+7. Print the following (same vars as above):
+    - (A) the top 10 public high schools in terms of total number of visits and then
+    - (B) the top 10 private high schoools in terms of total number of visits
+    
+```{r}
+
+```
+
+
+
+8. Print the following (same vars as above): 
+    - (A) the top 10 public high schools in Massachusetts in terms of total number of visits and then 
+    - (B) the top 10 private high schools in Massachusetts in terms of total number of visits
+    - (C) the top 10 public high schools in California in terms of total number of visits and then 
+    - (D) the top 10 private high schools in California in terms of total number of visits    
+
+```{r}
+
+
+```
+  
+
+Once finished, knit to (HTML) and upload both .Rmd and HTML files to class website under the week 2 tab  
+*Remeber to use this naming convention "lastname_firstname_ps2"*
 
 
 
