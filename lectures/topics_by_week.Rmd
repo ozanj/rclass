@@ -302,7 +302,31 @@ POTENTIAL STUFF TO ADD [10/1/2018]
 
 ### What covered in Christenson class
 
-## Class X. Creating variables, factors, labeling variables
+## Class X. Creating variables
+
+### broad outline [desired] [10/9/2018]
+
+- Pipes
+- Creating variables using mutate
+- [maybe/doubtful] variable creation using base R
+
+### Order of things to do Tuesday 10/9 and wednesday 10/10
+
+- look at revised student list dataset created by Crystal
+- add exercise for pipes function
+- add components to mutate() function
+    - take some time to go through syntax of help file
+    - ifelse() function
+    - recode() function
+    - case_when() function
+- create draft problem set
+    - on which data set
+
+
+### Stuff that needs to be added to lecture
+
+
+
 
 ### Big topics
 
