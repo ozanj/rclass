@@ -260,7 +260,7 @@ In the below schedule, I lecture on a topic, and then you do the reading about t
 - Problem set due (before class): Yes
 - Reading (after class): 
     - GW 5.6 - 5.7 (grouped summaries and mutates)
-    - XAG 4.3 (R Markdown, creating Beamer presentation) [LINK HERE](https://bookdown.org/yihui/rmarkdown/beamer-presentation.html)
+    - XAG 4.1 (R Markdown, ioslides presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/ioslides-presentation.html) and 4.3 (R Markdown, Beamer presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/beamer-presentation.html)
 
 ## `r advdate(fri, 4)`: Augmented vectors, Survey data, and exploratory data analysis
 
