@@ -69,16 +69,16 @@ Data on off-campus recruiting events by public universities
 ```{r}
 rm(list = ls()) # remove all objects
 #load dataset with one obs per recruiting event
-load("../../data/recruiting/recruit_event_somevars.Rdata")
+load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData"))
 #load dataset with one obs per high school
-load("../../data/recruiting/recruit_school_somevars.Rdata")
+load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_school_somevars.RData"))
 ```
 
 Object `df_event`
 
 - Off-campus recruiting project; one obs per university, recruiting event
 
-Object `df_event`
+Object `df_school`
 
 - Off-campus recruiting project; one obs per high school (visited and non-visited)
 
@@ -96,7 +96,7 @@ The "Student list" business
 
 ```{r}
 #load prospect list data
-load("../../data/prospect_list/wwlist_merged.RData")
+load(url("https://github.com/ozanj/rclass/raw/master/data/prospect_list/wwlist_merged.RData"))
 ```
 
 Object `wwlist`
@@ -242,6 +242,8 @@ With pipes
 wwlist %>% filter(firstgen == "N", state == "WA") %>% count(school_type)
 ```
 
+### Comparing the two approachces
+
 Comparison of two approaches
 
 - without pipes, task requires multiple lines of code; this is quite common
@@ -250,7 +252,45 @@ Comparison of two approaches
 
 ### Student exercises with pipes
 
-PATRICIA CAN YOU CREATE A COUPLE STUDENT EXERCISES FOR PIPES
+1. Using object `wwlist` select the following variables (state, firstgen, ethn_code) and assign them to object `wwlist_temp`.  
+
+2. Using the object you just created `wwlist_temp`, create a frequency table of `ethn_code` for first-gen prospects from California.  
+
+3. **Bonus**: Try doing question 1 and 2 together. Use original object `wwlist`, but do not assign to a new object. 
+
+Once finished you can `rm(wwlist_temp)`
+
+### Solution to exercises with pipes
+
+1. Using object `wwlist` select the following variables (state, firstgen, ethn_code) and assign them to object `wwlist_small` 
+```{r}
+wwlist_temp <- wwlist %>%
+  select(state, firstgen, ethn_code) 
+```
+
+### Solution to exercises with pipes
+2. Using the object you just created `wwlist_temp`, create a frequency table of `ethn_code` for first-gen prospects from California. 
+```{r}
+#names(wwlist)
+wwlist_temp %>%
+  filter(firstgen == "Y", state == "CA") %>% count(ethn_code)
+```
+
+### Solution to exercises with pipes
+3. **Bonus**: Try doing question 1 and 2 together. 
+
+```{r}
+wwlist %>%
+  select(state, firstgen, ethn_code) %>%
+  filter(firstgen == "Y", state == "CA") %>% 
+  count(ethn_code)
+#rm(wwlist_temp)
+```
+
+```{r}
+rm(wwlist_temp)
+```
+
 
 # Creating variables using mutate
 
@@ -279,7 +319,7 @@ __Next week__
 
 Data frame `df_school_all` has one obs per US high school and then variables identifying number of visits by particular universities
 ```{r}
-load("../../data/recruiting/recruit_school_allvars.Rdata")
+load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_school_allvars.RData"))
 names(df_school_all)
 ```
 ### Create new data frame based on `df_school_all`
@@ -341,7 +381,7 @@ rm(school_sml)
 ```
 ### Syntax for `mutate()`
 
-Let's spend a couple minutes looking at help fule for `mutate()`
+Let's spend a couple minutes looking at help file for `mutate()`
 ```{r, eval=FALSE}
 ?mutate
 ```
@@ -440,7 +480,45 @@ school_v2 %>%
 
 ### Student exercise using mutate()
 
-PATRICIA ADD?
+1. Using the object `school_v2`, select the following variables (num_prof_math, num_took_math, num_prof_read, num_took_read) and create a measure of percent proficient in math `pct_prof_math` and percent proficient in reading `pct_prof_read`.  
+
+2. Now using the code for question 1, filter schools where at least 50% of students are proficient in math **&** reading.  
+
+3. If you have time, count the number of schools from question 2.
+
+
+### Solutions for exercise using mutate()
+
+1. Using the object `school_v2`, select the following variables (num_prof_math, num_took_math, num_prof_read, num_took_read) and create a measure of percent proficient in math and percent proficient in reading. 
+
+```{r}
+school_v2 %>%
+  select(num_prof_math, num_took_math, num_prof_read, num_took_read) %>%
+  mutate(pct_prof_math = num_prof_math/num_took_math,
+         pct_prof_read = num_prof_read/num_took_read) 
+```
+### Solutions for exercise using mutate()
+
+2. Now using the code for question 1, filter schools where at least 50% of students are proficient in math **&** reading.
+```{r}
+school_v2 %>%
+  select(num_prof_math, num_took_math, num_prof_read, num_took_read) %>%
+  mutate(pct_prof_math = num_prof_math/num_took_math,
+         pct_prof_read = num_prof_read/num_took_read) %>%
+  filter(pct_prof_math >= 0.5 & pct_prof_read >= 0.5) 
+```
+
+### Solutions for exercise using mutate()
+3. If you have time, count the number of schools from question 2.
+```{r}
+school_v2 %>%
+  select(num_prof_math, num_took_math, num_prof_read, num_took_read) %>%
+  mutate(pct_prof_math = num_prof_math/num_took_math,
+         pct_prof_read = num_prof_read/num_took_read) %>%
+  filter(pct_prof_math >= 0.5 & pct_prof_read >= 0.5) %>%
+  count()
+```
+
 
 ## Using ifelse() function within mutate()
 
@@ -468,7 +546,7 @@ __Value__
 - "Where condition is TRUE, the matching value from true, where it's FALSE, the matching value from false, otherwise NA."
 - missing values from "input" var are assigned missing values in "output var", unless you specify otherwise
 
-__Example__: Create 0/1 indicator of whether got at least one visit from Berkeley
+__Example__: Create 0/1 indicator of whether high school got at least one visit from Berkeley
 ```{r, results="hide"}
 school_v2 %>% 
   mutate(got_visit_berkeley = ifelse(visits_by_berkeley>0,1,0)) %>%
@@ -480,13 +558,14 @@ school_v2 %>%
 
 Task
 
-- Create 0/1 indicator of school has median income greater than $100,000
+- Create 0/1 indicator if school has median income greater than $100,000
 
 Usually a good idea to investigate "input" variables before creating analysis vars
 ```{r, results="hide"}
 school_v2 %>% count(med_inc) # this isn't very helpful
 
-school_v2 %>% filter(is.na(med_inc)) %>% count(med_inc) # shows number of obs w/ missing med_inc
+school_v2 %>% filter(is.na(med_inc)) %>% count(med_inc) 
+# shows number of obs w/ missing med_inc
 ```
 Create variable
 ```{r}
@@ -517,30 +596,30 @@ school_v2 %>% select(num_took_math) %>%
 ```
 ### Student exercises `ifelse()`
 
-PATRICIA FINISH CREATE STUDENT EXERCISES FOR IFELSE
+1. Using the object `school_v2`, create 0/1 indicator variable `in_state_berkeley` that equals `1` if the high school is in the same state as UC Berkeley (i.e., `state_code=="CA"`).  
+2. Create 0/1 indicator `berkeley_and_irvine` of whether a school got at least one visit from UC Berkeley __AND__ from UC Irvine.  
+3. Create 0/1 indicator `berkeley_or_irvine` of whether a school got at least one visit from UC Berkeley __OR__ from UC Irvine.
 
-Task
+### Exercise`ifelse()` solutions
 
-- Create 0/1 indicator variable `in_state_berkeley` that equals `1` if the high school is in the same state as UC Berkeley (i.e., `state_code=="CA"`)
-
+1. Using the object `school_v2`, create 0/1 indicator variable `in_state_berkeley` that equals `1` if the high school is in the same state as UC Berkeley (i.e., `state_code=="CA"`). 
 ```{r, results="hide"}
 school_v2 %>% mutate(in_state_berkeley=ifelse(state_code=="CA",1,0)) %>%
   count(in_state_berkeley)
 ```
 
-Task
+### Exercise`ifelse()` solutions
 
-- create 0/1 indicator `berkeley_and_irvine` of whether a school got at least one visit from UC Berkeley __AND__ from UC Irvine
+2. Create 0/1 indicator `berkeley_and_irvine` of whether a school got at least one visit from UC Berkeley __AND__ from UC Irvine.
 ```{r, results="hide"}
 school_v2 %>% 
   mutate(berkeley_and_irvine=ifelse(visits_by_berkeley>0 & visits_by_irvine>0,1,0)) %>%
   count(berkeley_and_irvine)
 ```
 
+### Exercise`ifelse()` solutions
 
-Task
-
-- create 0/1 indicator `berkeley_or_irvine` of whether a school got at least one visit from UC Berkeley __OR__ from UC Irvine
+3. Create 0/1 indicator `berkeley_or_irvine` of whether a school got at least one visit from UC Berkeley __OR__ from UC Irvine.
 ```{r, results="hide"}
 school_v2 %>% 
   mutate(berkeley_or_irvine=ifelse(visits_by_berkeley>0 | visits_by_irvine>0,1,0)) %>%
@@ -684,23 +763,54 @@ rm(wwlist_temp)
 ```
 ### Student exercise using `recode()` within `mutate()`
 
-PATRICIA CREATE STUDENT EXERCISE
 
-A COUPLE CHOICES [OR CHOOSE YOUR OWN]
+1. Using object `df_event`, create `event_typev2` based on `event_type` with these categories: 
+- `1` for "2yr college"; `2` for "4yr college"; `3` for "other"; `4` for "private hs"; `5` for "public hs"  
+- Assign new object `df_event_temp`
 
-- in wwlist object, recode the variable psat_range or recode the variable ethn_code
+2. This time use the `.default` argument to assign the value `5` for "public hs"
+
+### Exercise using `recode()` within `mutate()` solutions
 ```{r}
-str(wwlist$psat_range)
-wwlist %>% count(psat_range)
-str(wwlist$ethn_code)
-wwlist %>% count(ethn_code)
-```
-- in object school_v2, recode the variable event_type
-
-```{r}
-load("../../data/recruiting/recruit_event_somevars.Rdata")
-names(df_event)
+#load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData"))
+#names(df_event)
 str(df_event$event_type)
+df_event %>% count(event_type)
+```
+
+
+1. Using object `df_event`, create `event_typev2` based on `event_type` with these categories: 
+- `1` for "2yr college"; `2` for "4yr college"; `3` for "other"; `4` for "private hs"; `5` for "public hs"   
+Assign new object `df_event_temp`
+```{r}
+df_event_temp <- df_event %>% 
+  select(event_type) %>%
+  mutate(event_typev2 = recode(event_type,
+                              "2yr college" = 1,
+                              "4yr college" = 2,
+                              "other" = 3,
+                              "private hs" = 4,
+                              "public hs" = 5)
+         )
+str(df_event_temp$event_typev2)
+df_event_temp %>% count(event_typev2)
+df_event %>% count(event_type)
+```
+
+### Exercise using `recode()` within `mutate()` solutions  
+
+2. This time use the `.default` argument to assign the value `5` for "public hs"
+```{r}
+df_event %>% select(event_type) %>% 
+  mutate(event_typev2 = recode(event_type,
+    "2yr college" = 1,
+    "4yr college" = 2,
+    "other" = 3,
+    "private hs" = 4,
+    .default = 5)
+  )
+str(df_event_temp$event_typev2)
+df_event_temp %>% count(event_typev2)
 df_event %>% count(event_type)
 ```
 
@@ -768,7 +878,36 @@ wwlist_temp %>% filter(is.na(firstgen)) %>% count(state_gen)
 ```
 ### Student exercise using `case_when()` within `mutate()`
 
-PATRICIA CREATE STUDENT EXERCISE
+1. Using the object `school_v2` and input vars `school_type`, and `state_code` , create a 4-category var with following categories:  
+  - "instate_public"; "instate_private"; "outstate_public"; "outstate_private" 
+
+
+### Exercise using `case_when()` within `mutate()` solution
+Investigate
+```{r}
+school_v2 %>% select(state_code,school_type) %>% str()
+count(school_v2,state_code)
+count(school_v2,school_type)
+```
+
+### Exercise using `case_when()` within `mutate()` solution
+1. Using the object `school_v2` and input vars `school_type`, and `state_code` , create a 4-category var with following categories:  
+  - "instate_public"; "instate_private"; "outstate_public"; "outstate_private" 
+```{r}
+school_v2_temp <- school_v2 %>% select(state_code,school_type) %>%
+  mutate(state_type = case_when(
+    state_code == "CA" & school_type == "public"  ~ "instate_public",
+    state_code == "CA" & school_type == "private" ~ "instate_private",
+    state_code != "CA" & school_type == "public" ~ "outstate_public",
+    state_code != "CA" & school_type == "private" ~ "outstate_private")
+  )
+
+school_v2_temp %>% count(state_type)
+#school_v2_temp %>% filter(is.na(state_code)) %>% count(state_type) #no missing
+#school_v2_temp %>% filter(is.na(school_type)) %>% count(state_type) #no missing
+```
+
+
 
 ### Mutate to create indicator variables
 
