@@ -41,6 +41,15 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 \tableofcontents[subsectionstyle=hide/hide/hide]
 ```
 
+### Logistics
+
+Required reading for next week:
+
+- Grolemund and Wickham 5.5 (Add new variables with `mutate()`)
+- Xie, Allaire, and Grolemund (XAG) section 3.3 (R Markdown, PDF document) [LINK HERE](https://bookdown.org/yihui/rmarkdown/pdf-document.html)
+
+Syllabus (on class website has been revised to reflect this); these readings are also listed on the problem set due next week
+
 ### Libraries we will use today
 
 "Load" the package we will use today (output omitted)
