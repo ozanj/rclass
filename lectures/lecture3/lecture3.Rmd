@@ -206,10 +206,67 @@ Comparing the two approaches:
 - In "pipes" approach the left-to-right order of code matches how we think about the task
     - First, we start with an object __*and then*__ (`%>%`) we use `filter()` to isolate first-gen students __*and then*__ (`%>%`) we select which  variables to print
 
-Note the object "piped" into `select()` from `filter()`
+Think about what object was "piped" into `select()` from `filter()`
 ```{r, results="hide"}
 wwlist %>% filter(firstgen == "Y") %>% str()
 ```
+
+### Aside: the `count()` function  [students work on their own]
+
+\medskip `count()` function from `dplyr` package counts the number of obs by group
+```{r, eval=FALSE, echo=FALSE}
+?count
+```
+
+__Syntax__ [see help file for full syntax]
+
+- `count(x,...)`
+
+__Arguments__ [see help file for full arguments]
+
+- `x`: an object, often a data frame
+- `...`: variables to group by
+
+Examples of using `count()`
+
+- Without vars in `...` argument, counts number of obs in object
+```{r, results="hide"}
+count(wwlist)
+wwlist %>% count()
+```
+- With vars in `...` argument, counts number of obs per variable value
+    - note: by default, `count()` always shows `NAs` [this is good!]
+```{r, results="hide"}
+count(wwlist,school_category)
+wwlist %>% count(school_category)
+```
+### Aside: pipe operators and new lines
+
+\medskip Often want to insert line breaks to make long line of code more readable
+
+- When inserting line breaks, __pipe operator `%>%` should be the last thing before a line break, not the first thing after a line break__
+
+__This works__
+```{r, results="hide"}
+wwlist %>% filter(firstgen == "Y") %>% 
+  select(state, hs_city, sex) %>%
+  count(sex)
+```
+__This works too__
+```{r, results="hide"}
+wwlist %>% filter(firstgen == "Y",
+                  state != "WA") %>% 
+  select(state, hs_city, sex) %>%
+  count(sex)
+```
+
+__This doesn't work__
+```{r, eval=FALSE}
+wwlist %>% filter(firstgen == "Y") 
+  %>% select(state, hs_city, sex) 
+  %>% count(sex)
+```
+
 
 ### Do task with and without pipes
 
@@ -229,24 +286,22 @@ wwlist %>% filter(firstgen == "Y", state == "WA") %>% count()
 
 ### Do task with and without pipes
 
-__Task__: Create frequency table of `school_type` for non first-gen prospects from WA
+__Task__: frequency table of `school_type` for non first-gen prospects from WA
 
-without pipes
+__without pipes__
 ```{r}
 wwlist_temp <- filter(wwlist, firstgen == "N", state == "WA")
 table(wwlist_temp$school_type, useNA = "always")
 rm(wwlist_temp) # cuz we don't need after creating table
 ```
-With pipes
+__With pipes__
 ```{r}
 wwlist %>% filter(firstgen == "N", state == "WA") %>% count(school_type)
 ```
 
-### Comparing the two approachces
+__Comparison of two approaches__
 
-Comparison of two approaches
-
-- without pipes, task requires multiple lines of code; this is quite common
+- without pipes, task requires multiple lines of code (this is quite common)
     - first line creates object; second line analyzes object
 - with pipes, task can be completed in one line of code and you aren't left with objects you don't care about
 
@@ -352,9 +407,6 @@ school_v2 <- df_school_all %>%
 names(school_v2)
 ```
 
-
-
-
 ## Introduce mutate() function 
 
 ### Introduce `mutate()` function
@@ -363,7 +415,7 @@ names(school_v2)
 
 Description of `mutate()`
 
-- `mutate()` creates new columns (variables) that are functions of existing columns
+- creates new columns (variables) that are functions of existing columns
 - After creating a new variable using `mutate()`, every row of data is retained
 - `mutate()` works best with pipes `%>%`
 
@@ -382,7 +434,7 @@ rm(school_sml)
 ### Syntax for `mutate()`
 
 Let's spend a couple minutes looking at help file for `mutate()`
-```{r, eval=FALSE}
+```{r, eval=FALSE, echo=FALSE}
 ?mutate
 ```
 
@@ -412,7 +464,7 @@ __Useful functions (i.e., "helper functions")__
 
 New variable not retained unless we __assign__ `<-` it to an object (existing or new)
 
-__`mutate()` without assignment__
+\medskip __`mutate()` without assignment__
 ```{r, results='hide'}
 school_v2 %>% mutate(pct_fr_lunch = num_fr_lunch/total_students)
 
@@ -431,9 +483,7 @@ rm(school_v2_temp)
 
 ### Aside: Base R approach to creating new variables
 
-Task:
-
-- Create measure of percent of students on free-reduced lunch
+__Task__: Create measure of percent of students on free-reduced lunch
 
 __dplyr/tidyverse approach__
 ```{r}
@@ -480,7 +530,7 @@ school_v2 %>%
 
 ### Student exercise using mutate()
 
-1. Using the object `school_v2`, select the following variables (num_prof_math, num_took_math, num_prof_read, num_took_read) and create a measure of percent proficient in math `pct_prof_math` and percent proficient in reading `pct_prof_read`.  
+1. Using the object `school_v2`, select the following variables (`num_prof_math`, `num_took_math`, `num_prof_read`, `num_took_read`) and create a measure of percent proficient in math `pct_prof_math` and percent proficient in reading `pct_prof_read`.  
 
 2. Now using the code for question 1, filter schools where at least 50% of students are proficient in math **&** reading.  
 
@@ -489,7 +539,7 @@ school_v2 %>%
 
 ### Solutions for exercise using mutate()
 
-1. Using the object `school_v2`, select the following variables (num_prof_math, num_took_math, num_prof_read, num_took_read) and create a measure of percent proficient in math and percent proficient in reading. 
+1. Using the object `school_v2`, select the following variables (`num_prof_math`, `num_took_math`, `num_prof_read`, `num_took_read`) and create a measure of percent proficient in math `pct_prof_math` and percent proficient in reading `pct_prof_read`.
 
 ```{r}
 school_v2 %>%
@@ -546,23 +596,32 @@ __Value__
 - "Where condition is TRUE, the matching value from true, where it's FALSE, the matching value from false, otherwise NA."
 - missing values from "input" var are assigned missing values in "output var", unless you specify otherwise
 
-__Example__: Create 0/1 indicator of whether high school got at least one visit from Berkeley
+__Example__: Create 0/1 indicator of whether got at least one visit from Berkeley
 ```{r, results="hide"}
 school_v2 %>% 
   mutate(got_visit_berkeley = ifelse(visits_by_berkeley>0,1,0)) %>%
   count(got_visit_berkeley)
 ```
 
+### `ifelse()` within `mutate()` to create 0/1 indicator variables
 
-### Using `ifelse()` function within `mutate()`
+We often create dichotomous (0/1) indicator variables of whether something happened (or whether something is TRUE)
 
-Task
+- Variables that are of substantive interest to project
+    - e.g., did student graduate from college
+- Variables that help you investigate data, check quality
+    - e.g., indicator of whether an observation is missing/non-missing for a particular variable
+
+### Using `ifelse()` within `mutate()`
+
+__Task__
 
 - Create 0/1 indicator if school has median income greater than $100,000
 
-Usually a good idea to investigate "input" variables before creating analysis vars
+Usually a good idea to investigate "input" variables __before__ creating analysis vars
 ```{r, results="hide"}
-school_v2 %>% count(med_inc) # this isn't very helpful
+str(school_v2$med_inc) # investigate variable type
+school_v2 %>% count(med_inc) # frequency count, but this isn't very helpful
 
 school_v2 %>% filter(is.na(med_inc)) %>% count(med_inc) 
 # shows number of obs w/ missing med_inc
@@ -604,6 +663,10 @@ school_v2 %>% select(num_took_math) %>%
 
 1. Using the object `school_v2`, create 0/1 indicator variable `in_state_berkeley` that equals `1` if the high school is in the same state as UC Berkeley (i.e., `state_code=="CA"`). 
 ```{r, results="hide"}
+str(school_v2$state_code) # investigate input variable
+school_v2 %>% filter(is.na(state_code)) %>% count() # investigate input var
+
+#Create var
 school_v2 %>% mutate(in_state_berkeley=ifelse(state_code=="CA",1,0)) %>%
   count(in_state_berkeley)
 ```
@@ -612,6 +675,11 @@ school_v2 %>% mutate(in_state_berkeley=ifelse(state_code=="CA",1,0)) %>%
 
 2. Create 0/1 indicator `berkeley_and_irvine` of whether a school got at least one visit from UC Berkeley __AND__ from UC Irvine.
 ```{r, results="hide"}
+#investigate input vars
+school_v2 %>% select(visits_by_berkeley, visits_by_irvine) %>% str() 
+school_v2 %>% filter(is.na(visits_by_berkeley)) %>% count()
+school_v2 %>% filter(is.na(visits_by_irvine)) %>% count()
+#create variable
 school_v2 %>% 
   mutate(berkeley_and_irvine=ifelse(visits_by_berkeley>0 & visits_by_irvine>0,1,0)) %>%
   count(berkeley_and_irvine)
@@ -642,11 +710,11 @@ __Usage (i.e., syntax)__
 __Arguments__ [see help file for further details]
 
 - `.x`	A vector (e.g., variable) to modify
-- `...`	Specifications for recode, of the form `current_value = new recoded value` 
+- `...`	Specifications for recode, of form `current_value = new_recoded_value` 
 - `.default`:	If supplied, all values not otherwise matched given this value. 
 - `.missing`: If supplied, any missing values in .x replaced by this value.
 
-Example: Using data frame `wwlist`, create new 0/1 indicator `public_school` from variable `school_type`
+__Example__: Using data frame `wwlist`, create new 0/1 indicator `public_school` from variable `school_type`
 ```{r, results="hide"}
 str(wwlist$school_type)
 wwlist %>% count(school_type)
@@ -763,6 +831,10 @@ rm(wwlist_temp)
 ```
 ### Student exercise using `recode()` within `mutate()`
 
+```{r, results="hide"}
+load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData"))
+names(df_event)
+```
 
 1. Using object `df_event`, assign new object `df_event_temp` and create `event_typev2` based on `event_type` with these categories: 
     - `1` for "2yr college"; `2` for "4yr college"; `3` for "other"; `4` for "private hs"; `5` for "public hs" 
@@ -772,7 +844,6 @@ rm(wwlist_temp)
 ### Exercise using `recode()` within `mutate()` solutions 
 Check input variable
 ```{r, results="hide"}
-load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData"))
 names(df_event)
 str(df_event$event_type)
 df_event %>% count(event_type)
@@ -823,7 +894,7 @@ df_event %>% count(event_type)
 ```
 __Description__ Useful when the variable you want to create is more complicated than variables that can be created using `ifelse()` or `recode()`
 
-- For example, useful when new variable is a function of multiple "input" variables
+- Useful when new variable is a function of multiple "input" variables
 
 __Usage (i.e., syntax)__: `case_when(...)`
 
@@ -836,7 +907,8 @@ __Arguments__ [from help file; see help file for more details]
  
  
 __Example task__: Using data frame `wwlist` and input vars `state` and `firstgen`, create a 4-category var with following categories:
-    - "instate_firstgen"; "instate_nonfirstgen"; "outstate_firstgen"; "outstate_nonfirstgen"
+
+- "instate_firstgen"; "instate_nonfirstgen"; "outstate_firstgen"; "outstate_nonfirstgen"
 
 ```{r, results="hide"}
 wwlist_temp <- wwlist %>% select(state,firstgen) %>%
@@ -854,7 +926,8 @@ wwlist_temp %>% count(state_gen)
 ### Using `case_when()` function within `mutate()` 
 
 __Task__: Using data frame `wwlist` and input vars `state` and `firstgen`, create a 4-category var with following categories:
-    - "instate_firstgen"; "instate_nonfirstgen"; "outstate_firstgen"; "outstate_nonfirstgen"
+
+- "instate_firstgen"; "instate_nonfirstgen"; "outstate_firstgen"; "outstate_nonfirstgen"
 
 Let's take a closer look at how values of inputs are coded into values of outputs
 ```{r, results="hide"}
@@ -874,6 +947,8 @@ wwlist_temp %>% count(state_gen)
 wwlist_temp %>% filter(is.na(state)) %>% count(state_gen)
 wwlist_temp %>% filter(is.na(firstgen)) %>% count(state_gen)
 ```
+__Take-away__: by default var created by `case_when()` equals `NA` for obs where one of the inputs equals `NA`
+
 ### Student exercise using `case_when()` within `mutate()`
 
 1. Using the object `school_v2` and input vars `school_type`, and `state_code` , create a 4-category var `state_type` with following categories:  
@@ -883,10 +958,13 @@ wwlist_temp %>% filter(is.na(firstgen)) %>% count(state_gen)
 
 ### Exercise using `case_when()` within `mutate()` solution
 Investigate
-```{r}
+```{r, results="hide"}
 school_v2 %>% select(state_code,school_type) %>% str()
 count(school_v2,state_code)
+school_v2 %>% filter(is.na(state_code)) %>% count()
+
 count(school_v2,school_type)
+school_v2 %>% filter(is.na(school_type)) %>% count()
 ```
 
 ### Exercise using `case_when()` within `mutate()` solution
@@ -908,62 +986,8 @@ school_v2_temp %>% count(state_type)
 
 
 
-### Mutate to create indicator variables
-
-We often create dichotomous (0/1) indicator variables of whether something happened (or whether something is TRUE)
-
-- Variables that are of substantive interest to project
-    - e.g., did student graduate from college
-- Variables that help you investigate data, check quality
-    - e.g., indicator of whether an observation is missing/non-missing for a particular variable
-
-Let's conduct some investigations of `df_school`, which has one observation for each high school
 
 
 
 
-### Creating indicators for `df_schoolv2` data frame
-
-Create TRUE/FALSE indicator that median household income greater than $50,000
-```{r}
-school_v2_temp <- school_v2 %>% mutate(incgt50k = med_inc>50000)
-
-school_v2_temp %>% select(med_inc, incgt50k) %>% head(n=3)
-
-school_v2_temp %>% filter(is.na(med_inc)) %>% count(incgt50k)
-```
-Important takeaway:
-
-- Variable created by `mutate()` equals `NA` for obs if input variable to `mutate()` is missing for that obs. This is a good thing!
-
-## Alternative approach to creating 0/1 indicators
-
-### Creating indicators for `school_v2` data frame
-
-PATRICIA - I WROTE THESE BELOW SLIDES IN SUMMER BEFORE I KNEW ABOUT `ifelse()`; YOU MAKE A RECOMMENDATION TO ME ABOUT WHETHER THESE SLIDES SHOULD BE CUT
-Create TRUE/FALSE indicator that school is less than 50 percent white
-
-```{r}
-school_v2_temp <- school_v2 %>% mutate(lt50pctwhite = pct_white<50)
-school_v2_temp %>% select(pct_white,lt50pctwhite) %>% head(n=3)
-str(school_v2_temp$lt50pctwhite)
-```
-Create 0/1 integer indicator rather than logical indicator 
-```{r}
-df_schoolv2_temp <- school_v2 %>% mutate(lt50pctwhite = as.integer(pct_white<50))
-df_schoolv2_temp %>% select(pct_white,lt50pctwhite) %>% head(n=3)
-str(df_schoolv2_temp$lt50pctwhite)
-```
-
-### Student exercises
-
-0/1 indicators of whether school received visit from each university
-```{r}
-school_v2 %>% count(visits_by_berkeley)
-school_v2_temp <- school_v2 %>% mutate(yesvis_berkeley = visits_by_berkeley>0)
-
-school_v2_temp %>% filter(visits_by_berkeley>0) %>% select(visits_by_berkeley,visits_by_berkeley)
-school_v2_temp %>% filter(visits_by_berkeley==0) %>% select(visits_by_berkeley,yesvis_berkeley)
-
-```
 

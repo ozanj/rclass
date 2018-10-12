@@ -27,9 +27,12 @@
 }{}
 \newif\ifbibliography
 \hypersetup{
-            pdftitle={Managing and Manipulating Data Using R},
+            pdftitle={Lecture 5: Survey data and exploratory data analysis (for data quality)},
             pdfauthor={Ozan Jaquette},
-            pdfborder={0 0 0},
+            colorlinks=true,
+            linkcolor=Maroon,
+            citecolor=Blue,
+            urlcolor=blue,
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
 \usepackage{color}
@@ -158,8 +161,8 @@
 % Reduce space before lists
 \addtobeamertemplate{itemize/enumerate body begin}{}{\vspace*{-8pt}}
 
-\title{Managing and Manipulating Data Using R}
-\subtitle{Lecture 5, Survey data and exploratory data analysis (for data quality)}
+\title{Lecture 5: Survey data and exploratory data analysis (for data quality)}
+\subtitle{EDUC 263: Managing and Manipulating Data Using R}
 \author{Ozan Jaquette}
 \date{}
 
@@ -182,12 +185,12 @@ don't have them{]}}
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(tidyverse)}
-\CommentTok{#> -- Attaching packages ------------------------------------------------------------------------------------ tidyverse 1.2.1 --}
+\CommentTok{#> -- Attaching packages ---------------------------------------------------------------------------------- tidyverse 1.2.1 --}
 \CommentTok{#> v ggplot2 3.0.0     v purrr   0.2.5}
 \CommentTok{#> v tibble  1.4.2     v dplyr   0.7.6}
 \CommentTok{#> v tidyr   0.8.1     v stringr 1.3.1}
 \CommentTok{#> v readr   1.1.1     v forcats 0.3.0}
-\CommentTok{#> -- Conflicts --------------------------------------------------------------------------------------- tidyverse_conflicts() --}
+\CommentTok{#> -- Conflicts ------------------------------------------------------------------------------------- tidyverse_conflicts() --}
 \CommentTok{#> x dplyr::filter() masks stats::filter()}
 \CommentTok{#> x dplyr::lag()    masks stats::lag()}
 \KeywordTok{library}\NormalTok{(haven)}
