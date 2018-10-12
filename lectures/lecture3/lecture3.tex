@@ -686,7 +686,8 @@ Comparison of two approaches
 \def\labelenumi{\arabic{enumi}.}
 \item
   Using object \texttt{wwlist} select the following variables (state,
-  firstgen, ethn\_code) and assign them to object \texttt{wwlist\_temp}.
+  firstgen, ethn\_code) and assign \texttt{\textless{}-} them to object
+  \texttt{wwlist\_temp}. (ex. wwlist\_temp \textless{}- wwlist)
 \item
   Using the object you just created \texttt{wwlist\_temp}, create a
   frequency table of \texttt{ethn\_code} for first-gen prospects from
@@ -707,7 +708,7 @@ Once finished you can \texttt{rm(wwlist\_temp)}
 \tightlist
 \item
   Using object \texttt{wwlist} select the following variables (state,
-  firstgen, ethn\_code) and assign them to object \texttt{wwlist\_small}
+  firstgen, ethn\_code) and assign them to object \texttt{wwlist\_temp}
 \end{enumerate}
 
 \begin{Shaded}
@@ -1727,26 +1728,17 @@ Recode
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Using object \texttt{df\_event}, create \texttt{event\_typev2} based
-  on \texttt{event\_type} with these categories:
-\item
   Using object \texttt{df\_event}, assign new object
   \texttt{df\_event\_temp} and create \texttt{event\_typev2} based on
   \texttt{event\_type} with these categories:
-\end{enumerate}
 
-\begin{itemize}
-\tightlist
-\item
-  \texttt{1} for ``2yr college''; \texttt{2} for ``4yr college'';
-  \texttt{3} for ``other''; \texttt{4} for ``private hs''; \texttt{5}
-  for ``public hs''
-\end{itemize}
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\setcounter{enumi}{1}
-\tightlist
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{1} for ``2yr college''; \texttt{2} for ``4yr college'';
+    \texttt{3} for ``other''; \texttt{4} for ``private hs''; \texttt{5}
+    for ``public hs''
+  \end{itemize}
 \item
   This time use the \texttt{.default} argument to assign the value
   \texttt{5} for ``public hs''
@@ -1780,15 +1772,15 @@ Check input variable
   Using object \texttt{df\_event}, assign new object
   \texttt{df\_event\_temp} and create \texttt{event\_typev2} based on
   \texttt{event\_type} with these categories:
-\end{enumerate}
 
-\begin{itemize}
-\tightlist
-\item
-  \texttt{1} for ``2yr college''; \texttt{2} for ``4yr college'';
-  \texttt{3} for ``other''; \texttt{4} for ``private hs''; \texttt{5}
-  for ``public hs''
-\end{itemize}
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{1} for ``2yr college''; \texttt{2} for ``4yr college'';
+    \texttt{3} for ``other''; \texttt{4} for ``private hs''; \texttt{5}
+    for ``public hs''
+  \end{itemize}
+\end{enumerate}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1882,14 +1874,8 @@ or \texttt{recode()}
 
 \textbf{Example task}: Using data frame \texttt{wwlist} and input vars
 \texttt{state} and \texttt{firstgen}, create a 4-category var with
-following categories:
-
-\begin{itemize}
-\tightlist
-\item
-  ``instate\_firstgen''; ``instate\_nonfirstgen'';
-  ``outstate\_firstgen''; ``outstate\_nonfirstgen''
-\end{itemize}
+following categories: - ``instate\_firstgen''; ``instate\_nonfirstgen'';
+``outstate\_firstgen''; ``outstate\_nonfirstgen''
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1912,14 +1898,8 @@ following categories:
 
 \textbf{Task}: Using data frame \texttt{wwlist} and input vars
 \texttt{state} and \texttt{firstgen}, create a 4-category var with
-following categories:
-
-\begin{itemize}
-\tightlist
-\item
-  ``instate\_firstgen''; ``instate\_nonfirstgen'';
-  ``outstate\_firstgen''; ``outstate\_nonfirstgen''
-\end{itemize}
+following categories: - ``instate\_firstgen''; ``instate\_nonfirstgen'';
+``outstate\_firstgen''; ``outstate\_nonfirstgen''
 
 Let's take a closer look at how values of inputs are coded into values
 of outputs
@@ -1955,15 +1935,17 @@ within \texttt{mutate()}}
 \item
   Using the object \texttt{school\_v2} and input vars
   \texttt{school\_type}, and \texttt{state\_code} , create a 4-category
-  var with following categories:\\
-\end{enumerate}
+  var \texttt{state\_type} with following categories:
 
-\begin{itemize}
-\tightlist
-\item
-  ``instate\_public''; ``instate\_private''; ``outstate\_public'';
-  ``outstate\_private''
-\end{itemize}
+  \begin{itemize}
+  \tightlist
+  \item
+    ``instate\_public''; ``instate\_private''; ``outstate\_public'';
+    ``outstate\_private''
+  \item
+    Note: We are referring to CA as in-state for this example
+  \end{itemize}
+\end{enumerate}
 
 \end{frame}
 
@@ -2013,15 +1995,15 @@ Investigate
 \item
   Using the object \texttt{school\_v2} and input vars
   \texttt{school\_type}, and \texttt{state\_code} , create a 4-category
-  var with following categories:\\
-\end{enumerate}
+  var \texttt{state\_type} with following categories:
 
-\begin{itemize}
-\tightlist
-\item
-  ``instate\_public''; ``instate\_private''; ``outstate\_public'';
-  ``outstate\_private''
-\end{itemize}
+  \begin{itemize}
+  \tightlist
+  \item
+    ``instate\_public''; ``instate\_private''; ``outstate\_public'';
+    ``outstate\_private''
+  \end{itemize}
+\end{enumerate}
 
 \begin{Shaded}
 \begin{Highlighting}[]

@@ -252,7 +252,7 @@ Comparison of two approaches
 
 ### Student exercises with pipes
 
-1. Using object `wwlist` select the following variables (state, firstgen, ethn_code) and assign them to object `wwlist_temp`.  
+1. Using object `wwlist` select the following variables (state, firstgen, ethn_code) and assign `<-` them to object `wwlist_temp`.  (ex. wwlist_temp <- wwlist)
 
 2. Using the object you just created `wwlist_temp`, create a frequency table of `ethn_code` for first-gen prospects from California.  
 
@@ -262,7 +262,7 @@ Once finished you can `rm(wwlist_temp)`
 
 ### Solution to exercises with pipes
 
-1. Using object `wwlist` select the following variables (state, firstgen, ethn_code) and assign them to object `wwlist_small` 
+1. Using object `wwlist` select the following variables (state, firstgen, ethn_code) and assign them to object `wwlist_temp` 
 ```{r}
 wwlist_temp <- wwlist %>%
   select(state, firstgen, ethn_code) 
@@ -764,9 +764,8 @@ rm(wwlist_temp)
 ### Student exercise using `recode()` within `mutate()`
 
 
-1. Using object `df_event`, create `event_typev2` based on `event_type` with these categories: 
 1. Using object `df_event`, assign new object `df_event_temp` and create `event_typev2` based on `event_type` with these categories: 
-- `1` for "2yr college"; `2` for "4yr college"; `3` for "other"; `4` for "private hs"; `5` for "public hs" 
+    - `1` for "2yr college"; `2` for "4yr college"; `3` for "other"; `4` for "private hs"; `5` for "public hs" 
 
 2. This time use the `.default` argument to assign the value `5` for "public hs"
 
@@ -781,7 +780,7 @@ df_event %>% count(event_type)
 
 ### Exercise using `recode()` within `mutate()` solutions 
 1. Using object `df_event`, assign new object `df_event_temp` and create `event_typev2` based on `event_type` with these categories: 
-- `1` for "2yr college"; `2` for "4yr college"; `3` for "other"; `4` for "private hs"; `5` for "public hs"   
+    - `1` for "2yr college"; `2` for "4yr college"; `3` for "other"; `4` for "private hs"; `5` for "public hs"   
 
 ```{r results="hide"}
 df_event_temp <- df_event %>% 
@@ -837,8 +836,7 @@ __Arguments__ [from help file; see help file for more details]
  
  
 __Example task__: Using data frame `wwlist` and input vars `state` and `firstgen`, create a 4-category var with following categories:
-
-- "instate_firstgen"; "instate_nonfirstgen"; "outstate_firstgen"; "outstate_nonfirstgen"
+    - "instate_firstgen"; "instate_nonfirstgen"; "outstate_firstgen"; "outstate_nonfirstgen"
 
 ```{r, results="hide"}
 wwlist_temp <- wwlist %>% select(state,firstgen) %>%
@@ -856,8 +854,7 @@ wwlist_temp %>% count(state_gen)
 ### Using `case_when()` function within `mutate()` 
 
 __Task__: Using data frame `wwlist` and input vars `state` and `firstgen`, create a 4-category var with following categories:
-
-- "instate_firstgen"; "instate_nonfirstgen"; "outstate_firstgen"; "outstate_nonfirstgen"
+    - "instate_firstgen"; "instate_nonfirstgen"; "outstate_firstgen"; "outstate_nonfirstgen"
 
 Let's take a closer look at how values of inputs are coded into values of outputs
 ```{r, results="hide"}
@@ -879,8 +876,9 @@ wwlist_temp %>% filter(is.na(firstgen)) %>% count(state_gen)
 ```
 ### Student exercise using `case_when()` within `mutate()`
 
-1. Using the object `school_v2` and input vars `school_type`, and `state_code` , create a 4-category var with following categories:  
-  - "instate_public"; "instate_private"; "outstate_public"; "outstate_private" 
+1. Using the object `school_v2` and input vars `school_type`, and `state_code` , create a 4-category var `state_type` with following categories:  
+    - "instate_public"; "instate_private"; "outstate_public"; "outstate_private" 
+    - Note: We are referring to CA as in-state for this example
 
 
 ### Exercise using `case_when()` within `mutate()` solution
@@ -892,8 +890,8 @@ count(school_v2,school_type)
 ```
 
 ### Exercise using `case_when()` within `mutate()` solution
-1. Using the object `school_v2` and input vars `school_type`, and `state_code` , create a 4-category var with following categories:  
-  - "instate_public"; "instate_private"; "outstate_public"; "outstate_private" 
+1. Using the object `school_v2` and input vars `school_type`, and `state_code` , create a 4-category var `state_type` with following categories:  
+    - "instate_public"; "instate_private"; "outstate_public"; "outstate_private" 
 ```{r}
 school_v2_temp <- school_v2 %>% select(state_code,school_type) %>%
   mutate(state_type = case_when(
