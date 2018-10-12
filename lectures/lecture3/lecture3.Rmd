@@ -770,19 +770,19 @@ rm(wwlist_temp)
 
 2. This time use the `.default` argument to assign the value `5` for "public hs"
 
-### Exercise using `recode()` within `mutate()` solutions
-```{r}
+### Exercise using `recode()` within `mutate()` solutions 
+Check input variable
+```{r, results="hide"}
 #load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData"))
 #names(df_event)
 str(df_event$event_type)
 df_event %>% count(event_type)
 ```
 
-
 1. Using object `df_event`, create `event_typev2` based on `event_type` with these categories: 
 - `1` for "2yr college"; `2` for "4yr college"; `3` for "other"; `4` for "private hs"; `5` for "public hs"   
 Assign new object `df_event_temp`
-```{r}
+```{r results="hide"}
 df_event_temp <- df_event %>% 
   select(event_type) %>%
   mutate(event_typev2 = recode(event_type,
@@ -800,7 +800,7 @@ df_event %>% count(event_type)
 ### Exercise using `recode()` within `mutate()` solutions  
 
 2. This time use the `.default` argument to assign the value `5` for "public hs"
-```{r}
+```{r, results="hide"}
 df_event %>% select(event_type) %>% 
   mutate(event_typev2 = recode(event_type,
     "2yr college" = 1,

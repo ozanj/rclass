@@ -1755,21 +1755,14 @@ Recode
 \begin{frame}[fragile]{Exercise using \texttt{recode()} within
 \texttt{mutate()} solutions}
 
+Check input variable
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{#load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData"))}
 \CommentTok{#names(df_event)}
 \KeywordTok{str}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{event_type)}
-\CommentTok{#>  chr [1:18680] "public hs" "public hs" "public hs" "public hs" ...}
 \NormalTok{df_event }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(event_type)}
-\CommentTok{#> # A tibble: 5 x 2}
-\CommentTok{#>   event_type      n}
-\CommentTok{#>   <chr>       <int>}
-\CommentTok{#> 1 2yr college   951}
-\CommentTok{#> 2 4yr college   531}
-\CommentTok{#> 3 other        2001}
-\CommentTok{#> 4 private hs   3774}
-\CommentTok{#> 5 public hs   11423}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1802,25 +1795,8 @@ Recode
                               \StringTok{"public hs"}\NormalTok{ =}\StringTok{ }\DecValTok{5}\NormalTok{)}
 \NormalTok{         )}
 \KeywordTok{str}\NormalTok{(df_event_temp}\OperatorTok{$}\NormalTok{event_typev2)}
-\CommentTok{#>  num [1:18680] 5 5 5 5 5 4 4 5 4 5 ...}
 \NormalTok{df_event_temp }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(event_typev2)}
-\CommentTok{#> # A tibble: 5 x 2}
-\CommentTok{#>   event_typev2     n}
-\CommentTok{#>          <dbl> <int>}
-\CommentTok{#> 1            1   951}
-\CommentTok{#> 2            2   531}
-\CommentTok{#> 3            3  2001}
-\CommentTok{#> 4            4  3774}
-\CommentTok{#> 5            5 11423}
 \NormalTok{df_event }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(event_type)}
-\CommentTok{#> # A tibble: 5 x 2}
-\CommentTok{#>   event_type      n}
-\CommentTok{#>   <chr>       <int>}
-\CommentTok{#> 1 2yr college   951}
-\CommentTok{#> 2 4yr college   531}
-\CommentTok{#> 3 other        2001}
-\CommentTok{#> 4 private hs   3774}
-\CommentTok{#> 5 public hs   11423}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1848,40 +1824,9 @@ Recode
     \StringTok{"private hs"}\NormalTok{ =}\StringTok{ }\DecValTok{4}\NormalTok{,}
     \DataTypeTok{.default =} \DecValTok{5}\NormalTok{)}
 \NormalTok{  )}
-\CommentTok{#> # A tibble: 18,680 x 2}
-\CommentTok{#>    event_type event_typev2}
-\CommentTok{#>    <chr>             <dbl>}
-\CommentTok{#>  1 public hs             5}
-\CommentTok{#>  2 public hs             5}
-\CommentTok{#>  3 public hs             5}
-\CommentTok{#>  4 public hs             5}
-\CommentTok{#>  5 public hs             5}
-\CommentTok{#>  6 private hs            4}
-\CommentTok{#>  7 private hs            4}
-\CommentTok{#>  8 public hs             5}
-\CommentTok{#>  9 private hs            4}
-\CommentTok{#> 10 public hs             5}
-\CommentTok{#> # ... with 18,670 more rows}
 \KeywordTok{str}\NormalTok{(df_event_temp}\OperatorTok{$}\NormalTok{event_typev2)}
-\CommentTok{#>  num [1:18680] 5 5 5 5 5 4 4 5 4 5 ...}
 \NormalTok{df_event_temp }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(event_typev2)}
-\CommentTok{#> # A tibble: 5 x 2}
-\CommentTok{#>   event_typev2     n}
-\CommentTok{#>          <dbl> <int>}
-\CommentTok{#> 1            1   951}
-\CommentTok{#> 2            2   531}
-\CommentTok{#> 3            3  2001}
-\CommentTok{#> 4            4  3774}
-\CommentTok{#> 5            5 11423}
 \NormalTok{df_event }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(event_type)}
-\CommentTok{#> # A tibble: 5 x 2}
-\CommentTok{#>   event_type      n}
-\CommentTok{#>   <chr>       <int>}
-\CommentTok{#> 1 2yr college   951}
-\CommentTok{#> 2 4yr college   531}
-\CommentTok{#> 3 other        2001}
-\CommentTok{#> 4 private hs   3774}
-\CommentTok{#> 5 public hs   11423}
 \end{Highlighting}
 \end{Shaded}
 
