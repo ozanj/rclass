@@ -217,6 +217,7 @@ df_school_all %>% count(school_type) # frequency count of school_type
 
 ```
 
+# **THIS IS A BONUS QUESTION**
 
 # case_when() question
 
