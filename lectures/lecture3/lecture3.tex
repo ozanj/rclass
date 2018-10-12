@@ -1729,6 +1729,10 @@ Recode
 \item
   Using object \texttt{df\_event}, create \texttt{event\_typev2} based
   on \texttt{event\_type} with these categories:
+\item
+  Using object \texttt{df\_event}, assign new object
+  \texttt{df\_event\_temp} and create \texttt{event\_typev2} based on
+  \texttt{event\_type} with these categories:
 \end{enumerate}
 
 \begin{itemize}
@@ -1736,9 +1740,7 @@ Recode
 \item
   \texttt{1} for ``2yr college''; \texttt{2} for ``4yr college'';
   \texttt{3} for ``other''; \texttt{4} for ``private hs''; \texttt{5}
-  for ``public hs''\\
-\item
-  Assign new object \texttt{df\_event\_temp}
+  for ``public hs''
 \end{itemize}
 
 \begin{enumerate}
@@ -1759,19 +1761,25 @@ Check input variable
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData"))}
-\CommentTok{#names(df_event)}
+\KeywordTok{load}\NormalTok{(}\KeywordTok{url}\NormalTok{(}\StringTok{"https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData"}\NormalTok{))}
+\KeywordTok{names}\NormalTok{(df_event)}
 \KeywordTok{str}\NormalTok{(df_event}\OperatorTok{$}\NormalTok{event_type)}
 \NormalTok{df_event }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(event_type)}
 \end{Highlighting}
 \end{Shaded}
 
+\end{frame}
+
+\begin{frame}[fragile]{Exercise using \texttt{recode()} within
+\texttt{mutate()} solutions}
+
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Using object \texttt{df\_event}, create \texttt{event\_typev2} based
-  on \texttt{event\_type} with these categories:
+  Using object \texttt{df\_event}, assign new object
+  \texttt{df\_event\_temp} and create \texttt{event\_typev2} based on
+  \texttt{event\_type} with these categories:
 \end{enumerate}
 
 \begin{itemize}
@@ -1779,8 +1787,7 @@ Check input variable
 \item
   \texttt{1} for ``2yr college''; \texttt{2} for ``4yr college'';
   \texttt{3} for ``other''; \texttt{4} for ``private hs''; \texttt{5}
-  for ``public hs''\\
-  Assign new object \texttt{df\_event\_temp}
+  for ``public hs''
 \end{itemize}
 
 \begin{Shaded}
