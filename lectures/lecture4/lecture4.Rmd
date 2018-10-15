@@ -9,7 +9,7 @@ urlcolor: blue
 output:
   beamer_presentation:
     keep_tex: true
-    toc: true
+    toc: false
     slide_level: 3
     theme: default # AnnArbor # push to header?
     #colortheme: "dolphin" # push to header?
@@ -22,29 +22,58 @@ output:
       #after_body: table-of-contents.txt 
 ---
 
-<!-- CAN THIS BE MOVED TO SOME KIND OF HEADER FILE? --> 
-
-```{r, echo=FALSE}
+```{r, echo=FALSE, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
-#knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
   #comment = "#>" makes it so results from a code chunk start with "#>"; default is "##"
 ```
 
 # Introduction
 
+### What we will do today
+
+\tableofcontents
+
+```{r, eval=FALSE, echo=FALSE}
+#Use this if you want TOC to show level 2 headings
+\tableofcontents
+#Use this if you don't want TOC to show level 2 headings
+\tableofcontents[subsectionstyle=hide/hide/hide]
+```
+### Logistics
+
+Required reading for next week:
+
+- Grolemund and Wickham 5.6 - 5.7 (grouped summaries and mutates)
+- Xie, Allaire, and Grolemund 4.1 (R Markdown, ioslides presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/ioslides-presentation.html) and 4.3 (R Markdown, Beamer presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/beamer-presentation.html)
+    - Why? Lectures for this class are `beamer_presentation` output type.
+    - `ioslides_presentation` are the most basic presentation output format for RMarkdown, so learning about `ioslides` will help you understand `beamer`
+- Any slides from lecture we don't cover
+
 ### Libraries we will use today
 
-```{r}
+"Load" the package we will use today (output omitted)
+
+- __you must run this code chunk__
+```{r, message=FALSE}
 library(tidyverse)
 ```
+If package not yet installed, then must install before you load. Install in "console" rather than .Rmd file
+
+- Generic syntax: `install.packages("package_name")`
+- Install "tidyverse": `install.packages("tidyverse")`
+
+Note: when we load package, name of package is not in quotes; but when we install package, name of package is in quotes:
+
+- `install.packages("tidyverse")`
+- `library(tidyverse)`
 
 ### Data we will use today
 
 Data on off-campus recruiting events by public universities
 
-- Object \hlgc{df\_event}
+- Object `df_event`
     - One observation per university, recruiting event
-- Object \hlgc{df\_event}
+- Object `df_event`
     - One observation per high school (visited and non-visited)
 
 ```{r}
@@ -52,12 +81,15 @@ rm(list = ls()) # remove all objects
 
 #load dataset with one obs per recruiting event
 load("../../data/recruiting/recruit_event_somevars.Rdata")
+#load("../../data/recruiting/recruit_event_allvars.Rdata")
 
 #load dataset with one obs per high school
-load("../../data/recruiting/recruit_school_somevars.Rdata")
+load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_school_allvars.RData"))
+#load("../../data/recruiting/recruit_school_allvars.Rdata")
 
-load("../../data/prospect_list/western_washington_college_board_list.RData")
-
+#load prospect list data
+load(url("https://github.com/ozanj/rclass/raw/master/data/prospect_list/wwlist_merged.RData"))
+#load("../../data/prospect_list/wwlist_merged.RData")
 ```
 
 ### Processing across observations, introduction
@@ -71,6 +103,10 @@ Examples:
 - Number of off-campus recruiting events university makes to each state
 - Average household income at visited versus non-visited high schools
 
+
+__Note__
+
+- in today's lecture, I'll use the terms "observations" and "rows" interchangeably
 ### Processing across variables vs. processing across observations
 
 Visits by UC Berkely to public high schools
@@ -86,27 +122,42 @@ df_event %>% filter(event_type == "public hs", univ_id == 110635) %>%
 
 - So far, we have focused on ``processing across variables''
     - Performing calculations across columns (i.e., vars), typically within a row (i.e., observation)
-    - Example: percent free-reduced lunch
+    - Example: percent free-reduced lunch (above)
 - Processing across obs (focus of today's lecture)
     - Performing calculations across rows (i.e., obs), often within a column (i.e., variable)
     - Example: Average household income of visited high schools, by state
     
-# `group_by()` and `summarise()`
+# Introduce group_by() and summarise() [separately]
+
+### Strategy for teaching processing across obs
+
+In `tidyverse` the `group_by()` and `summarise()` functions are the primary means of performing calculations across observations
+
+- Usually, processing across observations requires using `group_by()` and `summarise()` together
+- `group_by()` and `summarise()` usually aren't very useful by themselves (like peanut butter and jelly)
+
+How we'll teach:
+
+- introduce `group_by()` and `summarise()` separately
+    - goal: you understand what each function does
+- then we'll combine them
+
+## group_by 
 
 ### group_by()
 
-\hlgc{group\_by()} converts a data frame object into groups. After grouping, functions performed on  data frame are performed "by group"
+`group_by()` converts a data frame object into groups. After grouping, functions performed on  data frame are performed "by group"
 
 - part of __dplyr__ package within __tidyverse__; not part of __Base R__
-- works best with pipes \hlgc{\%>\%} and \hlgc{summarise()} function [described below]
+- works best with pipes `%>%` and `summarise()` function [described below]
 
 Basic syntax:
 
-- \hlgc{group\_by(object, vars to group by separated by commas)}
+- `group_by(object, vars to group by separated by commas)`
 
 \medskip Typically, "group_by" variables are character, factor, or integer variables
 
-\medskip Possible "group by" variables in \hlgc{df\_event} data
+\medskip Possible "group by" variables in `df_event` data
 
 - university
 - event type (e.g., public HS, private HS, hotel)
@@ -114,7 +165,7 @@ Basic syntax:
 
 ### `group_by()`
 
-Group \hlgc{df\_event} data by university, event type, and event state
+Group `df_event` data by university, event type, and event state
 
 - group_by doesn't do much by itself; just prints data
 ```{r, results="hide"}
@@ -129,22 +180,23 @@ class(df_event)
 df_event_grp <- df_event %>% group_by(univ_id, event_type, event_state) # using pipes
 class(df_event_grp)
 ```
-Use \hlgc{ungroup(object)} to un-group grouped data
+Use `ungroup(object)` to un-group grouped data
 ```{r}
 df_event_grp <- ungroup(df_event_grp)
 class(df_event_grp)
 rm(df_event_grp)
 ```
 
+## summarise()
 
 ### `summarise()`
 
-\hlgc{summarise()} function performs calculations across rows of a data frame and then collapses the data frame to a single row
+`summarise()` function performs calculations across rows of a data frame and then collapses the data frame to a single row
 
 
 Basic syntax [see documentation]:
 
-- \hlgc{summarise(object, summarise functions separated by commas)}
+- `summarise(object, summarise functions separated by commas)`
 - summarise functions include: `n()`, `mean()`, `first()`, etc.
 
 Simple example (output omitted)
@@ -162,12 +214,14 @@ rm(event_temp)
 ```
 I'll explain `na.rm = TRUE` later
 
+# Combining group_by() and summarise()
+
 ### Combining `summarise()` and `group_by`
 
 `summarise()` on ungrouped vs. grouped data:
 
-- By itself, \hlgc{summarise()} performs calculations across all rows of data frame then collapses the data frame to a single row
-- When data frame is grouped, \hlgc{summarise()} performs calculations across rows within a group and then collapses to a single row for each group
+- By itself, `summarise()` performs calculations across all rows of data frame then collapses the data frame to a single row
+- When data frame is grouped, `summarise()` performs calculations across rows within a group and then collapses to a single row for each group
 
 Number of recruiting events for each university
 ```{r, results="hide"}
