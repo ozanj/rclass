@@ -1,18 +1,20 @@
 #CREATE DATASET WITH ONE OBSERVATION PER EVENT FOR USE IN R-CLASS
-rm(list = ls()) # remove all objects
 
 ######## LOAD LIBRARIES ##########
 #options(max.print=999999)
 library(tidyverse)
 #################################
 
+rm(list = ls()) # remove all objects
+
 setAs("character","myDate", function(from) as.Date(from, format="%d-%b-%y") )
 
+#"state_name", "pop_total_state", "pop_white_state", "pop_black_state", "pop_amerindian_state", "pop_asian_state", "pop_nativehawaii_state", "pop_otherrace_state", "pop_tworaces_state", "pop_hispanic_state", "median_inc_2544_state", "median_inc_4564_state", "state_fips_code", "avgmedian_inc_2564_state"
 
 # Merged data
-wwlist_merged <- read.csv("data/prospect_list/wwlist_merged_.csv",
+wwlist_merged <- read.csv("data/prospect_list/wwlist_merged_state.csv",
                           na.strings=c("","NA"),
-                          col.names=c("receive_date", "psat_range", "sat_range", "ap_range", "gpa_b_aplus", "gpa_b_aplus_null","gpa_bplus_aplus","state","zip","for_country","sex","hs_ceeb_code","hs_name","hs_city","hs_state","hs_grad_date","ethn_code","homeschool","firstgen", "zip_code", "pop_total", "pop_white", "pop_black", "pop_asian", "pop_hispanic", "pop_amerindian", "pop_nativehawaii", "pop_tworaces", "pop_otherrace", "avgmedian_inc_2564", "school_type", "merged_hs", "school_category", "total_12", "total_students", "total_free_reduced_lunch"),
+                          col.names=c("receive_date", "psat_range", "sat_range", "ap_range", "gpa_b_aplus", "gpa_b_aplus_null","gpa_bplus_aplus","state","zip","for_country","sex","hs_ceeb_code","hs_name","hs_city","hs_state","hs_grad_date","ethn_code","homeschool","firstgen", "zip_code", "pop_total_zip", "pop_white_zip", "pop_black_zip", "pop_asian_zip", "pop_hispanic_zip", "pop_amerindian_zip", "pop_nativehawaii_zip", "pop_tworaces_zip", "pop_otherrace_zip", "avgmedian_inc_2564_zip", "school_type", "merged_hs", "school_category", "total_12", "total_students", "total_free_reduced_lunch","state_name", "pop_total_state", "pop_white_state", "pop_black_state", "pop_amerindian_state", "pop_asian_state", "pop_nativehawaii_state", "pop_otherrace_state", "pop_tworaces_state", "pop_hispanic_state", "median_inc_2544_state", "median_inc_4564_state", "state_fips_code", "avgmedian_inc_2564_state"),
                           colClasses=c(receive_date="myDate",
                                        state="character",
                                        zip="character",
@@ -38,9 +40,28 @@ wwlist_merged <- read.csv("data/prospect_list/wwlist_merged_.csv",
 # Convert to tibble
 wwlist_merged <- as.tibble(wwlist_merged)
 
-
 names(wwlist_merged)
 str(wwlist_merged)
+
+#remove certain variables
+names(wwlist_merged)
+wwlist <- wwlist_merged %>% select(-sat_range,-contains("gpa"),-ap_range,
+                                   -median_inc_4564_state,-median_inc_2544_state,
+                                   -state_name,-state_fips_code)
+names(wwlist)
+wwlist <- wwlist %>% rename(fr_lunch = total_free_reduced_lunch, 
+                            med_inc_zip = avgmedian_inc_2564_zip,
+                            med_inc_state = avgmedian_inc_2564_state,
+                            zip9 = zip,
+                            zip5 = zip_code)
+names(wwlist)
+
+# Convert/save data
+save(wwlist, file = "data/prospect_list/wwlist_merged.RData")
+
+
+################### OLD INVESTIGATIONS OF VARS FROM 10/10/2018
+
 # Shows fctr, dbl, int as col types
 wwlist_merged %>% select(ethn_code, avgmedian_inc_2564, pop_total)
 
@@ -57,48 +78,33 @@ options(tibble.print_min=50) # set default printing back to 10 lines
 names(wwlist_merged)
 wwlist_merged %>% count(receive_date)
 wwlist_merged %>% count(psat_range) # mostly present!
-  wwlist_merged %>% filter(is.na(psat_range)) %>% count(receive_date) # psat score missing for lots of different receive dates
+wwlist_merged %>% filter(is.na(psat_range)) %>% count(receive_date) # psat score missing for lots of different receive dates
 
 wwlist_merged %>% count(sat_range) # mostly missing
-  wwlist_merged %>% group_by(receive_date) %>% count(sat_range) # not a systematic relationship
-  
+wwlist_merged %>% group_by(receive_date) %>% count(sat_range) # not a systematic relationship
+
 wwlist_merged %>% count(ap_range) # mostly missing
 
 #investigate received date, gpa vars
 wwlist_merged %>% count(gpa_b_aplus) # X for 164,242; missing for 104,154
-  wwlist_merged %>% group_by(receive_date) %>% count(gpa_b_aplus) %>% 
-    spread(gpa_b_aplus, n) # no systematic relationship between receive data and NA
+wwlist_merged %>% group_by(receive_date) %>% count(gpa_b_aplus) %>% 
+  spread(gpa_b_aplus, n) # no systematic relationship between receive data and NA
 
-  wwlist_merged %>% filter(gpa_b_aplus_null=="x") %>% count(gpa_b_aplus)
-  
+wwlist_merged %>% filter(gpa_b_aplus_null=="x") %>% count(gpa_b_aplus)
+
 wwlist_merged %>% count(gpa_b_aplus_null) # X for 88,943;
-  wwlist_merged %>% group_by(receive_date) %>% count(gpa_b_aplus_null) %>% 
-    spread(gpa_b_aplus_null, n) # no systematic relationship between receive data and NA
+wwlist_merged %>% group_by(receive_date) %>% count(gpa_b_aplus_null) %>% 
+  spread(gpa_b_aplus_null, n) # no systematic relationship between receive data and NA
 
-  wwlist_merged %>% filter(gpa_b_aplus=="x") %>% count(gpa_b_aplus_null)
+wwlist_merged %>% filter(gpa_b_aplus=="x") %>% count(gpa_b_aplus_null)
 wwlist_merged %>% count(gpa_bplus_aplus) # X for 15211;
-  wwlist_merged %>% group_by(receive_date) %>% count(gpa_bplus_aplus) %>% 
-    spread(gpa_bplus_aplus, n) # no systematic relationship between receive data and NA
-  
+wwlist_merged %>% group_by(receive_date) %>% count(gpa_bplus_aplus) %>% 
+  spread(gpa_bplus_aplus, n) # no systematic relationship between receive data and NA
+
 164242+88943+15211
 nrow(wwlist_merged)
 
 wwlist_merged %>% count(school_type)
-
-#remove certain variables
-names(wwlist_merged)
-wwlist <- wwlist_merged %>% select(-sat_range,-contains("gpa"),-ap_range)
-wwlist <- wwlist %>% rename(fr_lunch = total_free_reduced_lunch, 
-                            med_inc = avgmedian_inc_2564,
-                            zip9 = zip,
-                            zip5 = zip_code)
-names(wwlist)
-
-# Convert/save data
-save(wwlist, file = "data/prospect_list/wwlist_merged.RData")
-
-
-
 
 
 
