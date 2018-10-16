@@ -76,6 +76,7 @@ Data on off-campus recruiting events by public universities
 - Object `df_event`
     - One observation per high school (visited and non-visited)
 
+PATRICIA - WE DON'T USE ALL OF THOSE; CUT THE ONES WE DON'T USE
 ```{r}
 rm(list = ls()) # remove all objects
 
