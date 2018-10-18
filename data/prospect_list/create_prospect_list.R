@@ -9,12 +9,11 @@ rm(list = ls()) # remove all objects
 
 setAs("character","myDate", function(from) as.Date(from, format="%d-%b-%y") )
 
-#"state_name", "pop_total_state", "pop_white_state", "pop_black_state", "pop_amerindian_state", "pop_asian_state", "pop_nativehawaii_state", "pop_otherrace_state", "pop_tworaces_state", "pop_hispanic_state", "median_inc_2544_state", "median_inc_4564_state", "state_fips_code", "avgmedian_inc_2564_state"
 
 # Merged data
 wwlist_merged <- read.csv("data/prospect_list/wwlist_merged_state.csv",
                           na.strings=c("","NA"),
-                          col.names=c("receive_date", "psat_range", "sat_range", "ap_range", "gpa_b_aplus", "gpa_b_aplus_null","gpa_bplus_aplus","state","zip","for_country","sex","hs_ceeb_code","hs_name","hs_city","hs_state","hs_grad_date","ethn_code","homeschool","firstgen", "zip_code", "pop_total_zip", "pop_white_zip", "pop_black_zip", "pop_asian_zip", "pop_hispanic_zip", "pop_amerindian_zip", "pop_nativehawaii_zip", "pop_tworaces_zip", "pop_otherrace_zip", "avgmedian_inc_2564_zip", "school_type", "merged_hs", "school_category", "total_12", "total_students", "total_free_reduced_lunch","state_name", "pop_total_state", "pop_white_state", "pop_black_state", "pop_amerindian_state", "pop_asian_state", "pop_nativehawaii_state", "pop_otherrace_state", "pop_tworaces_state", "pop_hispanic_state", "median_inc_2544_state", "median_inc_4564_state", "state_fips_code", "avgmedian_inc_2564_state"),
+                          col.names=c("receive_date", "psat_range", "sat_range", "ap_range", "gpa_b_aplus", "gpa_b_aplus_null","gpa_bplus_aplus","state","zip","for_country","sex","hs_ceeb_code","hs_name","hs_city","hs_state","hs_grad_date","ethn_code","homeschool","firstgen", "zip_code", "pop_total_zip", "pop_white_zip", "pop_black_zip", "pop_asian_zip", "pop_latinx_zip", "pop_amerindian_zip", "pop_nativehawaii_zip", "pop_multirace_zip", "pop_otherrace_zip", "avgmedian_inc_2564_zip", "school_type", "merged_hs", "school_category", "total_12", "total_students", "total_free_reduced_lunch","state_name", "pop_total_state", "pop_white_state", "pop_black_state", "pop_amerindian_state", "pop_asian_state", "pop_nativehawaii_state", "pop_otherrace_state", "pop_multirace_state", "pop_latinx_state", "median_inc_2544_state", "median_inc_4564_state", "state_fips_code", "avgmedian_inc_2564_state"),
                           colClasses=c(receive_date="myDate",
                                        state="character",
                                        zip="character",
@@ -40,11 +39,10 @@ wwlist_merged <- read.csv("data/prospect_list/wwlist_merged_state.csv",
 # Convert to tibble
 wwlist_merged <- as.tibble(wwlist_merged)
 
+#remove certain variables
 names(wwlist_merged)
 str(wwlist_merged)
 
-#remove certain variables
-names(wwlist_merged)
 wwlist <- wwlist_merged %>% select(-sat_range,-contains("gpa"),-ap_range,
                                    -median_inc_4564_state,-median_inc_2544_state,
                                    -state_name,-state_fips_code)
@@ -55,6 +53,16 @@ wwlist <- wwlist %>% rename(fr_lunch = total_free_reduced_lunch,
                             zip9 = zip,
                             zip5 = zip_code)
 names(wwlist)
+
+#recode variable ethn_code
+  wwlist$ethn_code <- str_to_lower(wwlist$ethn_code) # this code converts from factor to string too
+  str(wwlist_merged$ethn_code)
+  str(wwlist$ethn_code)
+  wwlist %>% count(ethn_code)
+  
+  wwlist <- wwlist %>% mutate(ethn_code = recode(ethn_code,
+    "asian or native hawaiian or other pacific islanderh" = "asian or native hawaiian or other pacific islander"))
+  wwlist %>% count(ethn_code)
 
 # Convert/save data
 save(wwlist, file = "data/prospect_list/wwlist_merged.RData")
