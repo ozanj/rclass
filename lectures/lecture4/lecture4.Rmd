@@ -73,7 +73,7 @@ Data on off-campus recruiting events by public universities
 
 - Object `df_event`
     - One observation per university, recruiting event
-- Object `df_event`
+- Object `df_school`
     - One observation per high school (visited and non-visited)
 
 PATRICIA - WE DON'T USE ALL OF THOSE; CUT THE ONES WE DON'T USE
@@ -81,7 +81,7 @@ PATRICIA - WE DON'T USE ALL OF THOSE; CUT THE ONES WE DON'T USE
 rm(list = ls()) # remove all objects
 
 #load dataset with one obs per recruiting event
-load("../../data/recruiting/recruit_event_somevars.Rdata")
+load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData"))
 #load("../../data/recruiting/recruit_event_allvars.Rdata")
 
 #load dataset with one obs per high school
@@ -197,7 +197,7 @@ df_event %>% group_by(univ_id, event_type, event_state) %>% count()
 
 Below, we'll use `class()` function to show whether data frame is grouped
 
-- will talk more about `class()` next week, but for now, just think of it as a function that provides information about about an object
+- will talk more about `class()` next week, but for now, just think of it as a function that provides information about an object
 - similar to `typeof()`, but `class()` provides different info about object
 
 Grouping is not retained unless you __assign__ it
@@ -368,7 +368,9 @@ event_berk %>% count(event_type)
 
 The 0/1 variable `event_inst` equals 1 if event is in same state as the university
 ```{r}
-event_berk %>% arrange(event_date) %>% select(pid, event_date, event_type, event_state, event_inst) %>% slice(1:8)
+event_berk %>% arrange(event_date) %>% 
+  select(pid, event_date, event_type, event_state, event_inst) %>%
+  slice(1:8)
 ```
 ## summarise() and Counts
 
