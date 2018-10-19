@@ -217,7 +217,7 @@ rm(df_event_grp)
     - How many rows and columns do you have? What do the number of rows mean?  
 1. Now group by "instnm" **and** "event_type" and get a frequency count.  
     - How many rows and columns do you have? What do the number of rows mean?
-1. **Bonus:** In the same code chunk group by "instnm" and "event_type", but this time filter for observations where "med_inc" is greater than 75000 and get a frequency count. 
+1. **Bonus:** In the same code chunk, group by "instnm" and "event_type", but this time filter for observations where "med_inc" is greater than 75000 and get a frequency count. 
 
 
 ### `group_by()` student exercise solutions
@@ -478,11 +478,11 @@ event_berk %>% group_by(event_type) %>%
 
 ### `summarise()` and count student exercises  
 
-Use one code chunk for this exercise. You could tackle this a step at a time until you could run the entire code chunk answering all parts of this question. Create your own variable names.  
+Use one code chunk for this exercise. You could tackle this a step at a time and run the entire code chunk when you have answered all parts of this question. Create your own variable names.  
 
 
-1. Using the `event_berk` object filter observations where `event_state` is VA and group by `event_type`.  
-    1. Using the summarise function, create a variable that represents the count for each `event_type`.  
+1. Using the `event_berk` object, filter observations where `event_state` is VA and group by `event_type`.  
+    1. Using the summarise function to create a variable that represents the count for each `event_type`.  
     1. Now get the sum of missing obs for `med_inc`.  
     1. Now get the sum of non-missing obs for `med_inc`.  
     1. **Bonus**: Arrange variable you created representing the count of each `event_type` in descending order. 
@@ -556,7 +556,7 @@ event_berk %>% group_by(event_inst, event_type) %>% summarise(
 ### Student exercise
 
 1. Using the `event_berk` object, group by `instnm`, `event_inst`, & `event_type`.  
-    1. Create vars for number non_missing for these racial/ethnic group (`pct_white_zip`, `pct_black_zip`, `pct_asian_zip`, `pct_hispanic_zip`, `pct_amerindian_zip`, `pct_nativehawaii_zip`)  
+    1. Create vars for number non_missing for these racial/ethnic groups (`pct_white_zip`, `pct_black_zip`, `pct_asian_zip`, `pct_hispanic_zip`, `pct_amerindian_zip`, `pct_nativehawaii_zip`)  
     1. Create vars for mean percent for each racial/ethnic group 
     
 ### Student exercise solutions
@@ -718,8 +718,8 @@ event_berk %>% arrange(event_type, event_datetime_start) %>%
 
 Task: Investigate visit patterns for each event type.
 
-Using the example from the previous slide as a guide, what is the value of event data for:  
-- the first, second, third, fourth, and fifth event for each event type?  
+Using the example from the previous slide as a guide, what is the value of event date for:  
+- the first event, second event, third event, fourth event, and fifth event for each event type (2-year, 4-year, etc.)?  
 
 ### Student exercise solution
 
