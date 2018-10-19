@@ -36,6 +36,22 @@ download.file(url = 'https://raw.githubusercontent.com/ozanj/rclass/master/lectu
 
 # Introduction
 
+
+### Logistics
+
+__Required reading for next week:__
+
+- Grolemund and Wickham 5.6 - 5.7 (grouped summaries and mutates)
+- Xie, Allaire, and Grolemund 4.1 (R Markdown, ioslides presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/ioslides-presentation.html) and 4.3 (R Markdown, Beamer presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/beamer-presentation.html)
+    - Why? Lectures for this class are `beamer_presentation` output type.
+    - `ioslides_presentation` are the most basic presentation output format for RMarkdown, so learning about `ioslides` will help you understand `beamer`
+- Any slides from lecture we don't cover
+
+__Explanation about `beamer_header.tex` in YAML header:__
+
+- What does it do? Why do we include this?
+- Incorporating updates to `beamer_header.tex`
+
 ### What we will do today
 
 \tableofcontents
@@ -46,15 +62,6 @@ download.file(url = 'https://raw.githubusercontent.com/ozanj/rclass/master/lectu
 #Use this if you don't want TOC to show level 2 headings
 \tableofcontents[subsectionstyle=hide/hide/hide]
 ```
-### Logistics
-
-Required reading for next week:
-
-- Grolemund and Wickham 5.6 - 5.7 (grouped summaries and mutates)
-- Xie, Allaire, and Grolemund 4.1 (R Markdown, ioslides presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/ioslides-presentation.html) and 4.3 (R Markdown, Beamer presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/beamer-presentation.html)
-    - Why? Lectures for this class are `beamer_presentation` output type.
-    - `ioslides_presentation` are the most basic presentation output format for RMarkdown, so learning about `ioslides` will help you understand `beamer`
-- Any slides from lecture we don't cover
 
 ### Libraries we will use today
 
@@ -443,7 +450,7 @@ event_berk %>% group_by(event_type, event_inst) %>% count()
 
 berk_temp2 <- event_berk %>% group_by(event_type, event_inst) %>% count()
 
-berk_temp == berk_temp2
+berk_temp == berk_temp2 # TAKEAWAY: these two objects are identical!
 rm(berk_temp,berk_temp2)
 ```
 
@@ -716,10 +723,16 @@ event_berk %>% arrange(event_type, event_datetime_start) %>%
 
 ### Student exercise
 
-Task: Investigate visit patterns for each event type.
+Identify value of `event_date` for the _nth_ event in each by group
 
-Using the example from the previous slide as a guide, what is the value of event date for:  
-- the first event, second event, third event, fourth event, and fifth event for each event type (2-year, 4-year, etc.)?  
+__Specific task__:  
+
+- arrange (i.e., sort) by `event_type` and `event_datetme_start`, then group by `event_type`, and then identify the value of `event_date` for: 
+    - the first event in each by group (`event_type`)
+    - the second event in each by group
+    - the third event in each by group
+    - the fourth event in each by group
+    - the fifth event in each by group
 
 ### Student exercise solution
 
