@@ -27,6 +27,12 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
   #comment = "#>" makes it so results from a code chunk start with "#>"; default is "##"
 ```
 
+```{r, echo=FALSE, include=FALSE}
+download.file(url = 'https://raw.githubusercontent.com/ozanj/rclass/master/lectures/beamer_header.tex', 
+              destfile = '../beamer_header.tex',
+              mode = 'wb')
+
+```
 # Introduction
 
 ### What we will do today
@@ -73,24 +79,14 @@ Data on off-campus recruiting events by public universities
 
 - Object `df_event`
     - One observation per university, recruiting event
-- Object `df_school`
-    - One observation per high school (visited and non-visited)
 
-PATRICIA - WE DON'T USE ALL OF THOSE; CUT THE ONES WE DON'T USE
+
 ```{r}
 rm(list = ls()) # remove all objects
 
 #load dataset with one obs per recruiting event
 load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData"))
 #load("../../data/recruiting/recruit_event_allvars.Rdata")
-
-#load dataset with one obs per high school
-#load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_school_allvars.RData"))
-#load("../../data/recruiting/recruit_school_allvars.Rdata")
-
-#load prospect list data
-#load(url("https://github.com/ozanj/rclass/raw/master/data/prospect_list/wwlist_merged.RData"))
-#load("../../data/prospect_list/wwlist_merged.RData")
 ```
 
 ### Processing across observations, introduction
@@ -111,7 +107,7 @@ __Note__
 
 ### Processing across variables vs. processing across observations
 
-Visits by UC Berkely to public high schools
+Visits by UC Berkeley to public high schools
 ```{r, echo=FALSE}
 #df_event %>% count(event_type)
 df_event %>% filter(event_type == "public hs", univ_id == 110635) %>% 
@@ -215,7 +211,41 @@ rm(df_event_grp)
 ```
 ### `group_by()` student exercise
 
-PATRICIA CREATE EXERCISE
+
+1. Group by "instnm" and get a frequency count.
+    - How many rows and columns do you have? What do the number of rows mean?  
+1. Now group by "instnm" **and** "event_type" and get a frequency count.  
+    - How many rows and columns do you have? What do the number of rows mean?
+1. **Bonus:** In the same code chunk group by "instnm" and "event_type", but this time filter for observations where "med_inc" is greater than 75000 and get a frequency count. 
+
+
+### `group_by()` student exercise solutions
+
+1. Group by "instnm" and get a frequency count.
+    - How many rows and columns do you have? What do the number of rows mean?  
+```{r}
+df_event %>%
+  group_by(instnm) %>%
+  count() 
+```
+
+### `group_by()` student exercise solutions
+2. Now group by "instnm" **and** "event_type" and get a frequency count.  
+    - How many rows and columns do you have? What do the number of rows mean?
+```{r}
+df_event %>%
+  group_by(instnm, event_type) %>%
+  count() 
+```
+
+### `group_by()` student exercise solutions
+3. **Bonus:** Group by "instnm" and "event_type", but this time filter for observations where "med_inc" is greater than 75000 and get a frequency count. 
+```{r}
+df_event %>%
+  group_by(instnm, event_type) %>%
+  filter(med_inc > 75000) %>%
+  count()
+```
 
 ## summarise()
 
@@ -250,10 +280,6 @@ __Example__: Count total number of events
 ```{r, results="hide"}
 summarise(df_event, num_events=n()) # without pipes
 df_event %>% summarise(num_events=n()) # using pipes
-```
-__Example__: What is max value of `med_inc` across all events
-```{r, results="hide"}
-df_event %>% summarise(mean_inc=max(med_inc, na.rm = TRUE))
 ```
 
 ### Investigate objects created by `summarise()`
@@ -291,7 +317,27 @@ rm(event_temp)
 ```
 ### `summarise()` student exercise
 
-PATRICIA CREATE EXERCISE; CAN KEEP IT SHORT
+1. What is the min value of `med_inc` across all events?  
+1. What is the mean value of `fr_lunch` across all events?  
+    - Hint: Use mean()
+    
+### `summarise()` student exercise
+
+1. What is min value of `med_inc` across all events? 
+```{r}
+df_event %>%
+  summarise(min_med_income = min(med_inc, na.rm = TRUE))
+```
+
+### `summarise()` student exercise
+
+2. What is the mean value of `fr_lunch` across all events?  
+    - Hint: Use mean()
+```{r}
+df_event %>%
+  summarise(mean_fr_lunch = mean(fr_lunch, na.rm = TRUE))
+```
+
 
 # Combining group_by() and summarise()
 
@@ -415,8 +461,8 @@ sum(c(TRUE,TRUE,FALSE,FALSE))
 ```{r}
 is.na(c(5,NA,4,NA))
 
-sum(is.na(c(5,NA,4,NA)))
-sum(!is.na(c(5,NA,4,NA)))
+sum(is.na(c(5,NA,4,NA,5)))
+sum(!is.na(c(5,NA,4,NA,5)))
 ```
 Application: How many missing/non-missing obs in variable [__very important__]
 ```{r, results="hide"}
@@ -429,9 +475,36 @@ event_berk %>% group_by(event_type) %>%
   )
 ```
 
-### `summarise()` and count student exercises
+### `summarise()` and count student exercises  
 
-PATRICIA CREATE STUDENT EXERCISE FOR `summarise()`: count with logical vectors and `sum()`
+Use one code chunk for this exercise. You could tackle this a step at a time until you could run the entire code chunk answering all parts of this question. Create your own variable names.  
+
+
+1. Using the `event_berk` object filter observations where `event_state` is VA and group by `event_type`.  
+    1. Using the summarise function, create a variable that represents the count for each `event_type`.  
+    1. Now get the sum of missing obs for `med_inc`.  
+    1. Now get the sum of non-missing obs for `med_inc`.  
+    1. **Bonus**: Arrange variable you created representing the count of each `event_type` in descending order. 
+
+
+### `summarise()` and count student exercises  
+1. Using the `event_berk` object filter observations where `event_state` is VA and group by `event_type`.  
+    1. Using the summarise function, create a variable that represents the count for each `event_type`.  
+    1. Now get the sum of missing obs for `med_inc`.  
+    1. Now get the sum of non-missing obs for `med_inc`.  
+
+    
+```{r}
+event_berk %>%
+  filter(event_state == "VA") %>%
+  group_by(event_type) %>%
+  summarise(
+    n_events = n(),
+    n_miss_inc = sum(is.na(med_inc)),
+    n_nonmiss_inc = sum(!is.na(med_inc))) %>%
+  arrange(desc(n_events))
+```
+
 
 ## summarise() and means 
 
@@ -481,13 +554,32 @@ event_berk %>% group_by(event_inst, event_type) %>% summarise(
 
 ### Student exercise
 
-PATRICIA CREATE STUDENT EXERCISE FOR MEANS
+1. Using the `event_berk` object, group by `instnm`, `event_inst`, & `event_type`.  
+    1. Create vars for number non_missing for these racial/ethnic group (`pct_white_zip`, `pct_black_zip`, `pct_asian_zip`, `pct_hispanic_zip`, `pct_amerindian_zip`, `pct_nativehawaii_zip`)  
+    1. Create vars for mean percent for each racial/ethnic group 
+    
+### Student exercise solutions
 
-potential example [feel free to choose your own]  
-- e.g., by_groups: univ_id, event_type, event_inst  
-- create vars for number non_missing for each racial group  
-- create vars for mean pct_race_group for each race group, etc  
-[forget if I have used this example already!]  
+
+```{r}
+event_berk %>% group_by(instnm, event_inst, event_type) %>%
+  summarise(
+  n_events=n(),
+  n_miss_white = sum(!is.na(pct_white_zip)),
+  mean_white = mean(pct_white_zip, na.rm = TRUE),
+  n_miss_black = sum(!is.na(pct_black_zip)),
+  mean_black = mean(pct_black_zip, na.rm = TRUE),
+  n_miss_asian = sum(!is.na(pct_asian_zip)),
+  mean_asian = mean(pct_asian_zip, na.rm = TRUE),
+  n_miss_lat = sum(!is.na(pct_hispanic_zip)),
+  mean_lat = mean(pct_hispanic_zip, na.rm = TRUE),
+  n_miss_na = sum(!is.na(pct_amerindian_zip)),
+  mean_na = mean(pct_amerindian_zip, na.rm = TRUE),
+  n_miss_nh = sum(!is.na(pct_nativehawaii_zip)),
+  mean_nh = mean(pct_nativehawaii_zip, na.rm = TRUE)) %>%
+  head(6)
+```
+
 
 ## summarise() and logical vectors, part II
 
@@ -555,11 +647,6 @@ event_berk %>% filter(event_type == "public hs") %>% # filter public hs visits
     p_incgt100k = mean(med_inc>100000)) # proportion visits to $100K+ commmunities 
 ```
 
-
-### Student exercise
-
-PATRICIA - ADD STUDENT EXERCISE IF YOU THINK HELPFUL; DON'T IF YOU THINK IT IS OVERKILL
-
 ### `summarise()`: Other "helper" functions
 
 Lots of other functions we can use within `summarise()`
@@ -579,7 +666,7 @@ Lots of other functions we can use within `summarise()`
 | `first` | first value |
 | `last` | last value |
 | `nth`  |  nth value     |
-| `any`  |  condition true for at least one value? |
+| `any`  |  condition true for at least one value |
 
 *Note: These functions can also be used on their own or with `mutate()`*
 
@@ -628,7 +715,25 @@ event_berk %>% arrange(event_type, event_datetime_start) %>%
 
 ### Student exercise
 
-something that involves whether visits adhered to a certain pattern? e.g., visited org of type 1 and then org of type 2 in succession?
+Task: Investigate visit patterns for each event type.
+
+Using the example from the previous slide as a guide, what is the value of event data for:  
+- the first, second, third, fourth, and fifth event for each event type?  
+
+### Student exercise solution
+
+```{r}
+event_berk %>% arrange(event_type, event_datetime_start) %>%
+  group_by(event_type) %>%
+  summarise(
+    n_events = n(),
+    date_1st= first(event_date),
+    date_2nd= nth(event_date,2),
+    date_3rd= nth(event_date,3),
+    date_4th= nth(event_date,4),
+    date_5th= nth(event_date,5))
+
+```
 
 ## Attach aggregate measures to your data frame
 
@@ -646,7 +751,7 @@ __Task__: Using `event_berk` data frame, create (1) a measure of average income 
 
 Steps:
 
-1. create measure of avg. income across all events by using `group_by()` without `summarise()` and assign as (new) object
+1. create measure of avg. income across all events without using `group_by()` or `summarise()` and assign as (new) object
 1. Using object from previous step, create measure of avg. income across by event type using `group_by()` without `summarise()` and assign as new object
 
 ### Attach aggregate measures to your data frame
@@ -709,7 +814,21 @@ Task: is `pct_white_zip` at a particular event higher or lower than the average 
 Steps in task:
 
 - Create measure of average pct white for each event_type
-- Compare whether pct_white_zup is higher or lower than this average
+- Compare whether pct_white_zip is higher or lower than this average
 
+
+### Student exercise solution
+
+Task: is `pct_white_zip` at a particular event higher or lower than the average pct_white_zip for that `event_type`?
+
+```{r}
+event_berk_tempv3 <- event_berk %>% 
+  arrange(event_date) %>% # sort by event_date (optional)
+  select(event_date, event_type, pct_white_zip) %>% #optional
+  group_by(event_type) %>% # grouping by event type
+  mutate(avg_pct_white = mean(pct_white_zip, na.rm=TRUE),
+         gt_avg_pctwhite_type = as.integer(pct_white_zip > avg_pct_white)) 
+event_berk_tempv3 %>% head(4)
+```
 
 
