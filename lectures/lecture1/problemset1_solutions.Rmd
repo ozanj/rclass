@@ -1,5 +1,5 @@
 ---
-title: "Problem Set #1"
+title: "Problem Set #1 Solutions"
 author: "Patricia Martin"
 date: "9/28/2018"
 output: pdf_document
