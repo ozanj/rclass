@@ -169,8 +169,10 @@ Typically, "group_by" variables are character, factor, or integer variables
 
 __Example__: in `df_event`, create frequency count of `event_type`
 ```{r, results="hide"}
+names(df_event)
 #without group_by()
 df_event %>% count(event_type)
+df_event %>% count(instnm)
 #group_by() university
 df_event %>% group_by(instnm) %>% count(event_type)
 ```
@@ -188,11 +190,17 @@ By itself `group_by()` doesn't do much; it just prints data
 group_by(df_event, univ_id, event_type, event_state)
 #with pipes
 df_event %>% group_by(univ_id, event_type, event_state) 
+
 ```
 
 But once an object is grouped, all subsequent functions are run separately "by group"
 
 ```{r, results="hide"}
+df_event  %>% count()
+df_event %>% group_by(univ_id) %>% count()
+df_event %>% group_by(univ_id) %>% count() %>% str()
+df_event %>% group_by(univ_id, event_type) %>% count()
+df_event %>% group_by(univ_id, event_type) %>% count() %>% str()
 df_event %>% group_by(univ_id, event_type, event_state) %>% count()
 ```
 
@@ -288,6 +296,7 @@ __Useful functions (i.e., "helper functions")__
 __Example__: Count total number of events
 ```{r, results="hide"}
 summarise(df_event, num_events=n()) # without pipes
+sum_object <- df_event %>% summarise(num_events=n()) # using pipes
 df_event %>% summarise(num_events=n()) # using pipes
 ```
 
@@ -360,6 +369,7 @@ df_event %>%
 __Example__: Count the number of events for each university
 
 ```{r, results="hide"}
+df_event %>% summarise(num_events=n())
 df_event %>% group_by(instnm) %>% summarise(num_events=n())
 ```
 - Investigate the object created above
@@ -382,6 +392,9 @@ __Task__
 - Count number of recruiting events by event_type for each university
 ```{r, results="hide"}
 df_event %>% group_by(instnm, event_type) %>% 
+  summarise(num_events=n())
+
+df_event %>% group_by(instnm, event_state, event_type) %>% 
   summarise(num_events=n())
 
 #investigate object created
@@ -525,7 +538,7 @@ The `mean()` function within `summarise()` calculates means, separately for each
 event_berk %>% group_by(event_inst, event_type) %>% summarise(
   n_events=n(),
   mean_inc=mean(med_inc, na.rm = TRUE),
-  mean_pct_white=mean(pct_white_zip, na.rm = TRUE)) %>% head(5)
+  mean_pct_white=mean(pct_white_zip, na.rm = TRUE))
 ```
 
 
@@ -690,6 +703,9 @@ __Task__: For each combination of in-state/out-of-state and event type, what is 
 ```{r}
 event_berk %>% group_by(event_type, event_inst) %>% 
   summarise(max_inc = max(med_inc))
+
+event_berk %>% group_by(event_type, event_inst) %>% 
+  summarise(max_inc = max(med_inc, na.rm = TRUE))
 ```
 What did we do wrong here?
 
