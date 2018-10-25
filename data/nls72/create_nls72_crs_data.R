@@ -95,8 +95,7 @@ nls_crs %>% count(crsgradb)
 #STEPS IN CREATING INSTITUTION-LEVEL GPA VARIABLE
 
 #Write a plan for how you will create an institution-level GPA variable  
-  #The general definition of GPA is quality points (course credit multiplied by numerical grade value) 
-    #divided by total credits. 
+  #The general definition of GPA is quality points (course credit multiplied by numerical grade value) divided by total credits. 
   
   #The first part of creating an institution-level GPA variable is to explore the input variables: 
     #id transnum gradtype crsecred crsgradb crsgrada. 
