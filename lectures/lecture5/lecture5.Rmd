@@ -87,32 +87,17 @@ Note: when we load package, name of package is not in quotes; but when we instal
 - `install.packages("tidyverse")`
 - `library(tidyverse)`
 
-### Data we will use today
+# Augmented vectors
 
-Data on off-campus recruiting events by public universities
+### Data we will use to introduce augmented vecors
 
 ```{r}
 rm(list = ls()) # remove all objects
-
-#load dataset with one obs per recruiting event
-#load("../../data/recruiting/recruit_event_somevars.Rdata")
-
-#load dataset with one obs per high school
-#load("../../data/recruiting/recruit_school_somevars.Rdata")
 
 #load("../../data/prospect_list/western_washington_college_board_list.RData")
 load("../../data/prospect_list/wwlist_merged.RData")
 
 ```
-Object `df_event`
-
-- One observation per university, recruiting event
-
-Object `df_event`
-
-- One observation per high school (visited and non-visited)
-
-# Augmented vectors
 
 ## Review data types and structures
 
@@ -266,9 +251,11 @@ attributes(list3)
 
 ### Object class
 
+\medskip 
 Every object in R has a __class__
 
 - Object class defines rules for how object can be treated by object oriented programming language (e.g., which functions you can apply to object)
+- class is an __attribute__ of an object
 
 Identify the class of an object using the `class()` function
 ```{r}
@@ -350,7 +337,7 @@ Many different object classes exist in R
 - we can also create our own classes
 - but in thise cours we will work with classes that have been created by others
 
-# Class == factor
+## Class == factor
 
 ### Factors
 
@@ -462,9 +449,9 @@ See Appendix
 
 PATRICIA, CREATE AN EXERCISE INVOLVING WHAT WE HAVE LEARNED THUS FAR ABOUT FACTORS
 
-# Class == labelled
+## Class == labelled
 
-### Data we will be using
+### Data we will use to introduce `labelled` class
 
 High school longitudinal surveys from National Center for Education Statistics (NCES)
 
@@ -1120,7 +1107,7 @@ hsls_small_temp <- hsls_small %>%
 #verify
 hsls_small_temp %>% group_by(x4x2sesq5) %>% count(sesq5)
 ```
-## Skip patterns
+## Skip patterns in survey data
 
 ### What are skip patterns
 

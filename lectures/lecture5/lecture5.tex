@@ -278,44 +278,20 @@ we install package, name of package is in quotes:
 
 \end{frame}
 
-\begin{frame}[fragile]{Data we will use today}
+\section{Augmented vectors}\label{augmented-vectors}
 
-Data on off-campus recruiting events by public universities
+\begin{frame}[fragile]{Data we will use to introduce augmented vecors}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{rm}\NormalTok{(}\DataTypeTok{list =} \KeywordTok{ls}\NormalTok{()) }\CommentTok{# remove all objects}
-
-\CommentTok{#load dataset with one obs per recruiting event}
-\CommentTok{#load("../../data/recruiting/recruit_event_somevars.Rdata")}
-
-\CommentTok{#load dataset with one obs per high school}
-\CommentTok{#load("../../data/recruiting/recruit_school_somevars.Rdata")}
 
 \CommentTok{#load("../../data/prospect_list/western_washington_college_board_list.RData")}
 \KeywordTok{load}\NormalTok{(}\StringTok{"../../data/prospect_list/wwlist_merged.RData"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-Object \texttt{df\_event}
-
-\begin{itemize}
-\tightlist
-\item
-  One observation per university, recruiting event
-\end{itemize}
-
-Object \texttt{df\_event}
-
-\begin{itemize}
-\tightlist
-\item
-  One observation per high school (visited and non-visited)
-\end{itemize}
-
 \end{frame}
-
-\section{Augmented vectors}\label{augmented-vectors}
 
 \subsection{Review data types and
 structures}\label{review-data-types-and-structures}
@@ -636,7 +612,7 @@ function
 
 \begin{frame}[fragile]{Object class}
 
-Every object in R has a \textbf{class}
+\medskip  Every object in R has a \textbf{class}
 
 \begin{itemize}
 \tightlist
@@ -644,6 +620,8 @@ Every object in R has a \textbf{class}
   Object class defines rules for how object can be treated by object
   oriented programming language (e.g., which functions you can apply to
   object)
+\item
+  class is an \textbf{attribute} of an object
 \end{itemize}
 
 Identify the class of an object using the \texttt{class()} function
@@ -801,7 +779,7 @@ Many different object classes exist in R
 
 \end{frame}
 
-\section{Class == factor}\label{class-factor}
+\subsection{Class == factor}\label{class-factor}
 
 \begin{frame}[fragile]{Factors}
 
@@ -1038,9 +1016,9 @@ ABOUT FACTORS
 
 \end{frame}
 
-\section{Class == labelled}\label{class-labelled}
+\subsection{Class == labelled}\label{class-labelled}
 
-\begin{frame}{Data we will be using}
+\begin{frame}{Data we will use to introduce \texttt{labelled} class}
 
 High school longitudinal surveys from National Center for Education
 Statistics (NCES)
@@ -2300,7 +2278,8 @@ Task: Create analysis fir ses qunitile called \texttt{sesq5} based on
 
 \end{frame}
 
-\subsection{Skip patterns}\label{skip-patterns}
+\subsection{Skip patterns in survey
+data}\label{skip-patterns-in-survey-data}
 
 \begin{frame}[fragile]{What are skip patterns}
 
