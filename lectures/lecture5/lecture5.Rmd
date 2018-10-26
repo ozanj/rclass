@@ -48,9 +48,13 @@ if(!file.exists('data-structures-overview.png')){
 
 ### Logistics
 
-__Required reading for next week:__
+__Reading to do before next class:__
 
-ADD
+- Work through slides from lecture 5 that we don't get to in class
+- GW 15.1 - 15.2 (factors) [this is like 2-3 pages]
+- [OPTIONAL] GW 15.3 - 15.5 (remainder of "factors" chapter)
+- [OPTIONAL] GW 20.6 - 20.7 (attributes and augmented vectors)
+- [OPTIONAL] GW 10 (tibbles)
 
 __Explanation about `beamer_header.tex` in YAML header:__
 
@@ -552,7 +556,7 @@ Use `read_dta()` function from `haven` to import Stata dataset into R
 hsls <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/hsls/hsls_stu_small.dta")
 ```
 
-Let's examine the data
+Let's examine the data [you __must__ run this code chunk]
 ```{r, results="hide"}
 names(hsls)
 names(hsls) <- tolower(names(hsls)) # convert names to lowercase
@@ -803,44 +807,59 @@ hsls_f %>% filter(s3classes=="Yes") %>% count(s3classes)
 
 # Exploratory data analysis (EDA)
 
-## Tools for EDA
-
 ### What is exploratory data analysis (EDA)?
 
 The [Towards Data Science](https://towardsdatascience.com/exploratory-data-analysis-8fc1cb20fd15) website has a nice definition of EDA:
 
-> "Exploratory Data Analysis refers to the critical process of performing initial investigations on data so as to discover patterns,to spot anomalies,to test hypothesis and to check assumptions with the help of summary statistics and graphical representations." 
+> "Exploratory Data Analysis refers to the critical process of performing initial investigations on data so as to discover patterns,to spot anomalies,to test hypothesis and to check assumptions with the help of summary statistics" 
 
-This course focuses on "data management": 
+__This course focuses on "data management":__
 
 - investigating and cleaning data for the purpose of creating analysis variables
-- Basically, everything that happens before you conduct analyses
+- Basically, everything that happens __before__ you conduct analyses
 
-I think about "Exploratory data analysis for data quality"
+__I think about "exploratory data analysis for data quality"__
 
 - Investigating values and patterns of variables from "input data"
 - Identifying and cleaning errors or values that need to be changed
 - Creating analysis variables
 - Checking values of analysis variables agains values of input variables
 
+### How we will teach exploratory data analysis
+
+Will teach exploratory data analysis (EDA) in two sub-sections:
+
+1. Introduce "Tools of EDA": 
+    - Demonstrate code to investigate variables and relatioship between variables
+    - I'll focus on the __tidyverse__ approach rather than __base R__    
+    - Most of these tools are just the application of programming skills you have already learned
+1. Provide "Guidelines for EDA"
+    - Less about coding, more about practices you should follow and mentality necessary to ensure high data quality
+
+## Tools for EDA
+
+
 ### Tools of EDA
 
-To do EDA for data quality, must master the following tools:
+__To do EDA for data quality, must master the following tools:__
 
-- \medskip Select, sort, filter, and print
+- \medskip __Select, sort, filter, and print__ in order to see data patterns, anomolies
     - Select and sort particular values of particular variables
     - Print particular values of particular variables
-- One-way descriptive analyses (i.e,. focus on one variable)
+- __One-way descriptive analyses__ (i.e,. focus on one variable)
     - Descriptive analyses for continuous variables
     - Descriptive analyses for discreet/categorical variables
-- Two-way descriptive analyses (relationship between two variables)
+- __Two-way descriptive analyses__ (relationship between two variables)
     - Categorical by categorical
     - Categorical by continuous
     - Continuous by continuous
 
 Whenever using any of these tools, __pay close attention to missing values and how they are coded__
 
-I'll focus on the __tidyverse__ approach rather than __base R__
+- Often, the "input" variables don't code missing values as `NA` 
+- Especially when working with survey data, missing values coded as a negative number (e.g., `-9`,`-8`,`-4`) with different negative values representing different reasons for data being missing
+- sometimes missing values coded as very high positive numbers
+- Therefore, important to investigate input vars prior to creating analysis vars
 
 ### Tools of EDA
 
@@ -856,22 +875,33 @@ hsls_small <- hsls %>%
          x4refselect, x2sex,x2race,x2paredu,x2txmtscor,x4x2ses,x4x2sesq5)
 ```
 
+```{r, results="hide"}
+names(hsls_small)
+hsls_small %>% var_label()
+```
+
+
 ### Tools of EDA: select, sort, filter, and print
 
 We've already know `select()`, `arrange()`, `filter()` 
 
 \medskip Select, sort, and print specific vars
 ```{r, results="hide"}
+#sort and print
 hsls_small %>% arrange(desc(stu_id)) %>% 
   select(stu_id,x3univ1,x3sqstat,s3classes,s3clglvl)
 
-#print value labels
+#investigate variable attributes
+hsls_small %>% arrange(desc(stu_id)) %>% 
+  select(stu_id,x3univ1,x3sqstat,s3classes,s3clglvl) %>% str()
+
+#print observations with value labels rather than variable values
 hsls_small %>% arrange(desc(stu_id)) %>% 
   select(stu_id,x3univ1,x3sqstat,s3classes,s3clglvl) %>% as_factor()
 ```
 Sometimes helpful to increase the number of observations printed
 ```{r, results="hide"}
-class(hsls_small) #it's a tibble
+class(hsls_small) #it's a tibble, which is the "tidyverse" version of a data frame
 options(tibble.print_min=50) 
 # execute this in console
 hsls_small %>% arrange(desc(stu_id)) %>%
@@ -902,12 +932,16 @@ rm(hsls_small_temp)
 ```
 ### One-way descriptive stats for continuous vars, Tidyverse approach
 
-Use `summarise_at()` which is a variation of `summarise()` to calculate descriptive stats
+Use `summarise_at()`, a variation of `summarise()`, to make descriptive stats
 
-- explain `.args=list(na.rm=TRUE)` on next slide
+- explain `.args=list(na.rm=TRUE)` on following slides
 
+__Task__:
+
+- calculate descriptive stats for `x2txmtscor`, math test score
 ```{r, results}
 #?summarise_at
+hsls_small %>% select(x2txmtscor) %>% var_label()
 hsls_small %>% 
   summarise_at(
     .vars = vars(x2txmtscor),
@@ -917,11 +951,33 @@ hsls_small %>%
 
 ### One-way descriptive stats for continuous vars, Tidyverse approach
 
+Can calculate descriptive stats for more than one variable at a time
+
+__Task__:
+
+- calculate descriptive stats for `x2txmtscor`, math test score, and `x4x2ses`, socioeconomic index score
+
+
+```{r}
+hsls_small %>% select(x2txmtscor,x4x2ses) %>% var_label()
+
+hsls_small %>% 
+  summarise_at(
+    .vars = vars(x2txmtscor,x4x2ses),
+    .funs = funs(mean, sd, min, max, .args=list(na.rm=TRUE))
+  )
+```
+
+### One-way descriptive stats for continuous vars, Tidyverse approach
+
 "Input vars" in survey data often have negative values for missing/skips
+```{r, results="hide"}
+hsls_small %>% filter(x2txmtscor<0) %>% count(x2txmtscor)
+```
 
-- R includes those negative values when calculating statistics, which you probably don't want
+R includes those negative values when calculating stats; you don't want this
 
-Solution: create version of variable that replaces negative values with NAs
+- Solution: create version of variable that replaces negative values with `NA`
 ```{r}
 hsls_small %>% mutate(x2txmtscor_na=ifelse(x2txmtscor<0,NA,x2txmtscor)) %>%
   summarise_at(
@@ -934,8 +990,7 @@ What if you didn't include `.args=list(na.rm=TRUE)`?
 hsls_small %>% mutate(x2txmtscor_na=ifelse(x2txmtscor<0,NA,x2txmtscor)) %>%
   summarise_at(
     .vars = vars(x2txmtscor_na),
-    .funs = funs(mean, sd, min, max)
-  )
+    .funs = funs(mean, sd, min, max))
 ```
 
 
@@ -943,11 +998,15 @@ hsls_small %>% mutate(x2txmtscor_na=ifelse(x2txmtscor<0,NA,x2txmtscor)) %>%
 
 How to identify these missing/skip values if you don't have a codebook?
 
-`count()` combined with `filter()` helpful for finding extreme values of continuous vars, which are often associated with missing or skip
+- `count()` combined with `filter()` helpful for finding extreme values of continuous vars, which are often associated with missing or skip
 
 ```{r}
+#variable x2txmtscor
 hsls_small %>% filter(x2txmtscor<0) %>% 
   count(x2txmtscor)
+
+#variable s3clglvl
+hsls_small %>% select(s3clglvl) %>% var_label()
 
 hsls_small %>% filter(s3clglvl<0) %>%
   count(s3clglvl)
@@ -955,22 +1014,27 @@ hsls_small %>% filter(s3clglvl<0) %>%
 
 ### One-way descriptive stats student exercise
 
-1. Using the object `hsls`, check the variable and value labels of `x4ps1start`  
+1. Using the object `hsls`, identify variable type, variable class, and check the variable vakyes and value labels of `x4ps1start`
+    - variable `x4ps1start` identifies month and year student first started postsecondary education
+    - **Note**: This variable is a bit counterintuitive.
+        - e.g., the value `201105` refers to May 2011
 2. Get a frequency count of the variable `x4ps1start`  
-3. Get a frequency count of the variable, but this time checking for negative values __hint__: use filter()  
+3. Get a frequency count of the variable, but this time only observations that have negative values __hint__: use filter()  
 4. Create a new version of the variable `x4ps1start_na` that replaces negative values with NAs and use `summarise_at()` to get the min and max value.  
-**Note**: This variable is a bit counterintuitive.
+
+
 
 ### One-way descriptive stats student exercise solutions
-1. Using the object `hsls`, check the variable and value labels of `x4ps1start` 
-```{r}
-hsls %>%
-  select(x4ps1start) %>%
-  var_label()
+\medskip
 
-hsls %>%
-  select(x4ps1start) %>%
-  val_labels()
+1. Using the object `hsls`, identify variable type, variable class, and check the variable vakyes and value labels of `x4ps1start`
+```{r}
+typeof(hsls$x4ps1start)
+class(hsls$x4ps1start)
+
+hsls %>% select(x4ps1start) %>% var_label()
+
+hsls %>% select(x4ps1start) %>% val_labels()
 ```
 
 ### One-way descriptive stats student exercise solutions  
@@ -981,7 +1045,7 @@ hsls %>%
 ```
 
 ### One-way descriptive stats student exercise solutions
-3. Get a frequency count of the variable, but this time checking for negative values __hint__: use filter() 
+3. Get a frequency count of the variable, but this time only observations that have negative values __hint__: use filter()  
 ```{r}
 hsls %>% 
   filter(x4ps1start<0) %>% 
@@ -1017,27 +1081,33 @@ hsls_small %>% mutate(s3classes_na=ifelse(s3classes<0,NA,s3classes)) %>%
   count(s3classes_na)
 ```
 
-Show both values and value labels on count tables for `class==labelled`
+Simultaneously show both values and value labels on count tables for `class==labelled`
+
+- requires some concepts/functions we haven't introduced
 ```{r, results="hide"}
-#CRYSTAL'S SOLUTION
 x <- hsls_small %>% count(s3classes)
 y <- hsls_small %>% count(s3classes) %>% as_factor()
 bind_cols(x[,1], y)
 ```
 
-### One-way descriptive stats for discrete/categorical vars, Tidyverse approach
+### One-way descriptive stats for factor vars [OPTIONAL/SKIP]
 
-For variables where `class==factor` 
-[PROBLEM: HOW TO RETAIN FACTOR LEVELS AFTER MUTATE]
+For variables where `class==factor`
+
+- Note: data frame object `hsls_f` created in previous section
+
 ```{r, results="hide"}
 #use variable from the hsls data frame where vars are factors
+typeof(hsls_f$s3classes)
 class(hsls_f$s3classes)
 attributes(hsls_f$s3classes)
 
 #show frequency table
 hsls_f %>% count(s3classes)
-#frequency table with NAs
-  #note: within ifelse() used levels(s3classes)[s3classes]) rather than s3classes  to show attribute levels not values
+
+#Create VAR that converts different types of missing to NA and then create frequency table
+
+#note: within ifelse() used levels(s3classes)[s3classes]) rather than s3classes  to show attribute levels not values
 hsls_f %>% mutate(s3classes_f=ifelse(s3classes %in% c("Missing","Unit non-response"),NA,levels(s3classes)[s3classes])) %>% 
   count(s3classes_f)
 ```
@@ -1045,38 +1115,58 @@ hsls_f %>% mutate(s3classes_f=ifelse(s3classes %in% c("Missing","Unit non-respon
 
 ### Relationship between variables, categorical by categorical
 
-Two-way frequency table, sometimes called "Cross tabulation", is important for checking data quality  
+Two-way frequency table, called "cross tabulation", important for data quality
+
 - When you create categorical analysis var from single categorical "input" var  
     - Two-way tables show us whether we did this correctly  
 - Two-way tables helpful for understanding skip patterns in surveys
 
-Task: Create a two-way table between `s3classes` and `s3clglvl`
+__key to syntax__
+
+- `group_by(var1) %>% count(var2)`
+- play around with which variable is `var1` and which variable is `var2`
+
+__Task__: 
+
+- Create a two-way table between `s3classes` and `s3clglvl`
 ```{r, results="hide"}
 hsls_small %>% select(s3classes,s3clglvl) %>% var_label()
 
-hsls_small %>% group_by(s3classes) %>% count(s3clglvl)
-hsls_small %>% group_by(s3classes) %>% count(s3clglvl) %>% as_factor()
+hsls_small %>% group_by(s3classes) %>% count(s3clglvl) # show values
+hsls_small %>% group_by(s3classes) %>% count(s3clglvl) %>% as_factor() # show value labels
 ```
+
+### Relationship between variables, categorical by categorical
+
+Two-way frequency table, also called "cross tabulation"
+
 What if one of the variables has `NAs`?
 
 - Table created by `group_by()` and `count()` shows `NAs`!
+
+__Task__: 
+
+- Create a version of `s3classes` called `s3classes_na` that changes negative values to `NA`
+- Create a two-way table between `s3classes_na` and `s3clglvl`
 ```{r, results="hide"}
-hsls_small %>% select(s3classes,s3clglvl) %>%
+hsls_small %>% 
   mutate(s3classes_na=ifelse(s3classes<0,NA,s3classes)) %>%
   group_by(s3classes_na) %>% count(s3clglvl)
 
-hsls_small %>% select(s3classes,s3clglvl) %>%
+#example where we create some NA obs in the second variable
+hsls_small %>% 
   mutate(s3classes_na=ifelse(s3classes<0,NA,s3classes),
          s3clglvl_na=ifelse(s3clglvl==-7,NA,s3clglvl)) %>%
   group_by(s3classes_na) %>% count(s3clglvl_na)
 ```
-### Relationship between variables, categorical by categorical
+### Relationship between variables, categorical by categorical [SKIP]
 
 Tables above are pretty ugly
 
 Use the `spread()` function from `tidyr` package to create table with one variable as columns and the other variable as rows
 
 - The variable you place in `spread()` will be columns
+- We learn `spread()` function next week
 
 ```{r, results="hide"}
 hsls_small %>% group_by(s3classes) %>% count(s3clglvl) %>% 
@@ -1092,27 +1182,26 @@ hsls_small %>% group_by(s3classes) %>% count(s3clglvl) %>%
 
 Investigating relationship between multiple variables is a little tougher when at least one of the variables is continuous
 
-One approach is the __conditional mean__:
+__Conditional mean__ (like regression with continuous Y and one categorical X):
 
 - Shows average values of continous variables within groups
 - Groups are defined by your categorical variable(s)
 
-Relationship to regression
+__key to syntax__
 
-- Conditional mean is similar to regression with a continuous dependent variable and a categorical X variable
+- `group_by(categorical_var) %>% summarise_at(.vars = vars(continuous_var)`
 
-Task: 
+__Task__
 
-- Investigate the relationship between math test score, `x2txmtscor`, and parental education, `x2paredu`
+- Calculate mean math score, `x2txmtscor`, for each value of parental education, `x2paredu`
 
 ```{r, results="hide"}
 #first, investigate parental education
 hsls_small %>% count(x2paredu)
 hsls_small %>% count(x2paredu) %>% as_factor
 
-## using dplyr to get average math score by parental education level
-hsls_small %>%
-    group_by(x2paredu) %>%
+# using dplyr to get average math score by parental education level
+hsls_small %>% group_by(x2paredu) %>%
     summarise_at(.vars = vars(x2txmtscor),
                  .funs = funs(mean, .args = list(na.rm = TRUE))) %>%
     as_factor()
@@ -1120,7 +1209,9 @@ hsls_small %>%
 
 ### Relationship between variables, categorical by continuous
 
-Task: Investigate the relationship between math test score, `x2txmtscor`, and parental education, `x2paredu`
+__Task__
+
+- Calculate mean math score, `x2txmtscor`, for each value of `x2paredu`
 
 For checking data quality, helpful to calculate other stats besides mean
 ```{r, results="hide"}
@@ -1138,7 +1229,7 @@ hsls_small %>% filter(x2txmtscor<0) %>% count(x2txmtscor)
 
 Replace `-8` with `NA` and re-calculate conditional stats
 ```{r, results="hide"}
-hsls_small %>% select(x2paredu,x2txmtscor) %>%
+hsls_small %>% 
   mutate(x2paredu_na=ifelse(x2paredu<0,NA,x2paredu),
          x2txmtscor_na=ifelse(x2txmtscor<0,NA,x2txmtscor)) %>% 
   group_by(x2paredu_na) %>%
@@ -1158,8 +1249,7 @@ Can use same approach to calculate conditional mean by multiple `group_by()` var
 ### Student exercise solution  
 1. Calculate mean math test score (`x2txmtscor`), for each combination of parental education (`x2paredu`) and sex (`x2sex`)
 ```{r, results="hide"}
-#hsls_small %>% 
-#  count(x2sex)
+#hsls_small %>% count(x2sex)
 
 hsls_small %>%
   group_by(x2paredu,x2sex) %>%
@@ -1187,6 +1277,8 @@ While this is not a linear process, these are the broad steps I follow
 
 __Always be aware of missing values__
 
+- They will not always be coded as `NA` in input variables
+
 ### "Unit of analysis" and which variables uniquely identify observations
 
 "Unit of analysis" refers to "what does each observation represent" in an input data source
@@ -1201,34 +1293,7 @@ How to identify unit of analysis
 - data documentation
 - investigating the data set
 
-### "Unit of analysis" and which variables uniquely identify observations
-
-Identify the variable -- or group of vars -- that "uniquely identifies" observations
-
-- "uniquely identifies observations": each value of the var has a frequency count of `1`
-
-This is important for many data management tasks
-
-- e.g., merging data sources, "tidying" data
-
-How to identify which variable(s) uniquely identify observations
-
-- data documentation
-- investigating the data set
-
-```{r}
-hsls_small %>% group_by(stu_id) %>% # group_by our candidate
-  mutate(n_per_id=n()) %>% # calculate number of obs per group
-  ungroup() %>% # ungroup the data
-  count(n_per_id==1) # count "true that only one obs per group"
-
-
-#hsls_small %>% count(stu_id) %>% filter(n> 1) ## Patricia's approach
-#Karina approaches using assertthat package
-#library(assertthat)
-#stopifnot(length(unique(uga_pub$ncessch))==nrow(uga_pub))
-#assert_that(any(duplicated(uga_pub, by=c("ncessch", "var2")))==FALSE)
-```
+We will go over syntax for identifying unit of analysis in subsequent weeks
 
 ### Rules for variable creation
 
@@ -1246,7 +1311,9 @@ Rules I follow for variable creation
 
 ### Rules for variable creation
 
-Task: Create analysis for ses qunitile called `sesq5` based on `x4x2sesq5`
+__Task__: 
+
+- Create analysis for variable ses qunitile called `sesq5` based on `x4x2sesq5` that converts negative values to `NAs`
 
 ```{r, results="hide"}
 #investigate input variable
@@ -1264,6 +1331,36 @@ hsls_small_temp <- hsls_small %>%
 #verify
 hsls_small_temp %>% group_by(x4x2sesq5) %>% count(sesq5)
 ```
+
+### Overview of problem set due next week
+
+__Assignment__: 
+
+- create GPA from postsecondary transcript student-course level data
+
+__Data source__: [National Longitudinal Study of 1972 (NLS72)](https://nces.ed.gov/surveys/nls72/)
+
+- Follows 12th graders from 1972
+    - Base year: 1972
+    - Follow-up surveys in:  1973, 1974, 1976, 1979, 1986
+    - Postsecondary transcripts collected in 1984
+
+__Why use such an old survey for this assignment?__
+
+- NLS72 predates data privacy agreements; transcript data publicly available
+
+__What we do to make assignment more manageable__
+
+- we give you code for investigation of variables
+- we give you some hints/guidelines
+- but you are responsible for developing plan to create GPA vars and for executing plan (rather than us giving you step-by-step quations)
+
+__Why this assignment?__
+
+1. Give you more practice investigating data, cleaning data, creating variables that require processing across rows
+1. Sometimes social justice is creating student GPA from course-level data
+
+
 ## Skip patterns in survey data
 
 ### What are skip patterns
@@ -1276,7 +1373,7 @@ Harder to create analysis variables based on multiple input variables
 
 What are "skip patterns"? 
 
-- [?DELETE OR DELAY?] Response on a particular survey item determines whether respondent answers some set of subsequent questions
+- Response on a particular survey item determines whether respondent answers some set of subsequent questions
 - What are some examples of this?
 
 Key to working with skip patterns
@@ -1376,39 +1473,6 @@ hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes==1) %>%
 hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes==1) %>% 
   group_by(s3classes) %>% count(s3clglvl) %>% as_factor()
 ```
-
-
-# Brainstorm next assignment: create GPA from course-level data
-
-### Brainstorm in your homework groups for next assignment
-
-Assignment: create GPA variables from student-course level data
-
-- Link to assignment HERE
-
-Data source: [National Longitudinal Study of 1972 (NLS72)](https://nces.ed.gov/surveys/nls72/)
-
-- Follows 12th graders from 1972
-- Data collection waves
-    - Base year: 1972
-    - Follow-up surveys in:  1973, 1974, 1976, 1979, 1986
-    - Postsecondary transcripts collected in 1984
-- Why use such an old survey for this assignment?
-    - NLS72 predates data privacy agreements so postsecondary transcript data are publicly available
-    
-```{r}
-#LOAD DATA
-```
-Work on the following in your homework groups:
-
-- Read assignment
-- Conduct EDA investigations of input data
-    - For homework assignment, you only need to focus on these variables [and can ignore the others]
-- Develop a plan for how you will go about creating GPA variables
-
-### Brainstorm in your homework groups for next assignment
-
-PUT CODE FOR EDA INVESTIGATIONS OF NLS72 HERE? OR PUT LINK TO .R SCRIPT W/ NLS EDA INVESTIGATIONS HERE?
 
 # Appendix. Creating factor variables
 

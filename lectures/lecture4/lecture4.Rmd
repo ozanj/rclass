@@ -11,8 +11,8 @@ output:
     keep_tex: true
     toc: false
     slide_level: 3
-    theme: default # AnnArbor # push to header?
-    #colortheme: "dolphin" # push to header?
+    theme: default # AnnArbor 
+    #colortheme: "dolphin" 
     #fonttheme: "structurebold"
     highlight: default # Supported styles include "default", "tango", "pygments", "kate", "monochrome", "espresso", "zenburn", and "haddock" (specify null to prevent syntax highlighting); push to header
     df_print: tibble #default # tibble # 
