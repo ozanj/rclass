@@ -243,7 +243,7 @@ PATRICIA ADD
 \begin{itemize}
 \tightlist
 \item
-  \textbf{you must run this code chunk}
+  \textbf{you must run this code chunk after installing these packages}
 \end{itemize}
 
 \begin{Shaded}
@@ -254,8 +254,8 @@ PATRICIA ADD
 \end{Highlighting}
 \end{Shaded}
 
-If package not yet installed, then must install before you load. Install
-in ``console'' rather than .Rmd file
+\textbf{If package not yet installed}, then must install before you
+load. Install in ``console'' rather than .Rmd file
 
 \begin{itemize}
 \tightlist
@@ -280,14 +280,14 @@ we install package, name of package is in quotes:
 
 \section{Augmented vectors}\label{augmented-vectors}
 
-\begin{frame}[fragile]{Data we will use to introduce augmented vecors}
+\begin{frame}[fragile]{Data we will use to introduce augmented vectors}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{rm}\NormalTok{(}\DataTypeTok{list =} \KeywordTok{ls}\NormalTok{()) }\CommentTok{# remove all objects}
 
 \CommentTok{#load("../../data/prospect_list/western_washington_college_board_list.RData")}
-\KeywordTok{load}\NormalTok{(}\StringTok{"../../data/prospect_list/wwlist_merged.RData"}\NormalTok{)}
+\KeywordTok{load}\NormalTok{(}\KeywordTok{url}\NormalTok{(}\StringTok{"https://github.com/ozanj/rclass/raw/master/data/prospect_list/wwlist_merged.RData"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 
@@ -354,9 +354,9 @@ atomic vector}
 \NormalTok{(b <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DataTypeTok{v1=}\DecValTok{1}\NormalTok{,}\DataTypeTok{v2=}\DecValTok{2}\NormalTok{,}\DataTypeTok{v3=}\DecValTok{3}\NormalTok{))}
 \CommentTok{#> v1 v2 v3 }
 \CommentTok{#>  1  2  3}
-\KeywordTok{length}\NormalTok{(a)}
+\KeywordTok{length}\NormalTok{(b)}
 \CommentTok{#> [1] 3}
-\KeywordTok{typeof}\NormalTok{(a)}
+\KeywordTok{typeof}\NormalTok{(b)}
 \CommentTok{#> [1] "double"}
 \KeywordTok{str}\NormalTok{(b)}
 \CommentTok{#>  Named num [1:3] 1 2 3}
@@ -696,7 +696,8 @@ object with \texttt{numeric} class (output omitted)
 
 \CommentTok{# load library with date functions}
 \KeywordTok{library}\NormalTok{(lubridate) }
-\KeywordTok{year}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{med_inc_zip[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{]) }\CommentTok{# date function}
+\CommentTok{#Sys.setenv(TZ="America/Los_Angeles") #setting time zone to Los Angeles time}
+\KeywordTok{year}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{receive_date[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{]) }\CommentTok{# date function}
 \end{Highlighting}
 \end{Shaded}
 
@@ -773,7 +774,7 @@ Many different object classes exist in R
 \item
   we can also create our own classes
 \item
-  but in thise cours we will work with classes that have been created by
+  but in this course we will work with classes that have been created by
   others
 \end{itemize}
 
@@ -816,12 +817,12 @@ Below, I'll create a factor version of the character variable
 \begin{Highlighting}[]
 \KeywordTok{str}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{ethn_code)}
 \CommentTok{#>  chr [1:268396] "other-2 or more" "white" "white" "other-2 or more" ...}
-
-\NormalTok{wwlist <-}\StringTok{ }\NormalTok{wwlist }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{ethn_code_fac =} \KeywordTok{factor}\NormalTok{(ethn_code)) }\CommentTok{# create factor var; tidyverse approach}
+\CommentTok{# create factor var; tidyverse approach}
+\NormalTok{wwlist <-}\StringTok{ }\NormalTok{wwlist }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{ethn_code_fac =} \KeywordTok{factor}\NormalTok{(ethn_code)) }
 \CommentTok{#wwlist$ethn_code_fac <- factor(wwlist$ethn_code) # base r approach}
 
 \KeywordTok{str}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{ethn_code_fac)}
-\CommentTok{#>  Factor w/ 10 levels "american indian or alaska native",..: 7 10 10 7 10 7 7 7 7 10 ...}
+\CommentTok{#>  Factor w/ 10 levels "american indian or alaska native",..: 8 10 10 8 10 8 8 8 8 10 ...}
 \end{Highlighting}
 \end{Shaded}
 
@@ -830,7 +831,7 @@ Below, I'll create a factor version of the character variable
 \begin{frame}[fragile]{Factors}
 
 A factor is an \textbf{augmented vector} built by attaching a ``levels''
-attribute to an (atomic) integer vectors
+attribute to an (atomic) integer vector
 
 Compare (character) \texttt{ethn\_code} to (factor)
 \texttt{ethn\_code\_fac} (output omitted)
@@ -937,8 +938,8 @@ If you want to refer to underlying values, then apply
 \CommentTok{#>  [4] "cuban"                                             }
 \CommentTok{#>  [5] "mexican/mexican american"                          }
 \CommentTok{#>  [6] "not reported"                                      }
-\CommentTok{#>  [7] "other-2 or more"                                   }
-\CommentTok{#>  [8] "other spanish/hispanic"                            }
+\CommentTok{#>  [7] "other spanish/hispanic"                            }
+\CommentTok{#>  [8] "other-2 or more"                                   }
 \CommentTok{#>  [9] "puerto rican"                                      }
 \CommentTok{#> [10] "white"                                             }
 \CommentTok{#> }
@@ -1002,17 +1003,156 @@ Or you can just filter based on value of \textbf{factor levels}
 
 \end{frame}
 
-\begin{frame}{Creating factor variables from characterer variables or
-from integer variables}
+\begin{frame}{Creating factor variables from character variables or from
+integer variables}
 
 See Appendix
 
 \end{frame}
 
-\begin{frame}{Some in-class exercise involving factors}
+\begin{frame}[fragile]{Factor student exercise}
 
-PATRICIA, CREATE AN EXERCISE INVOLVING WHAT WE HAVE LEARNED THUS FAR
-ABOUT FACTORS
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  After running the code below, use \texttt{typeof}, \texttt{class},
+  \texttt{str}, and \texttt{attributes} functions to check the new
+  variable \texttt{receive\_year}\\
+\item
+  Create a factor variable from the input variable
+  \texttt{receive\_year} and name it \texttt{receive\_year\_fac}\\
+\item
+  Run the same functions (\texttt{typeof}, \texttt{class}, etc.) from
+  the first question using the new variable you created\\
+\item
+  Get a count of \texttt{receive\_year\_fac}. \textbf{hint:} you could
+  also run this in the console to see values associated with each factor
+\end{enumerate}
+
+Run this code to create a year variable from the input variable
+``receive\_date''
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#wwlist %>% glimpse()}
+
+\KeywordTok{library}\NormalTok{(lubridate) }\CommentTok{#load library if you haven't already}
+\NormalTok{wwlist <-}\StringTok{ }\NormalTok{wwlist }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{receive_year =} \KeywordTok{year}\NormalTok{(receive_date)) }\CommentTok{#creating year variable with the lubricate package}
+
+\CommentTok{#Check variable}
+\NormalTok{wwlist }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{count}\NormalTok{(receive_year)}
+
+\NormalTok{wwlist }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(receive_year) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{count}\NormalTok{(receive_date)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Factor student exercise solutions}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Use \texttt{typeof}, \texttt{class}, \texttt{str}, and
+  \texttt{attributes} functions to check the new variable
+  \texttt{receive\_year}
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{typeof}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{receive_year)}
+\CommentTok{#> [1] "double"}
+\KeywordTok{class}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{receive_year)}
+\CommentTok{#> [1] "numeric"}
+\KeywordTok{str}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{receive_year)}
+\CommentTok{#>  num [1:268396] 2016 2016 2016 2016 2016 ...}
+\KeywordTok{attributes}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{receive_year) }
+\CommentTok{#> NULL}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Factor student exercise solutions}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Now create a factor variable from the input variable
+  \texttt{receive\_year} and name it \texttt{receive\_year\_fac}
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# create factor var; tidyverse approach}
+\NormalTok{wwlist <-}\StringTok{ }\NormalTok{wwlist }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{receive_year_fac =} \KeywordTok{factor}\NormalTok{(receive_year))  }
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Factor student exercise solutions}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Run the same functions (\texttt{typeof}, \texttt{class}, etc.) from
+  the first question using the new variable you created
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{typeof}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{receive_year_fac)}
+\CommentTok{#> [1] "integer"}
+\KeywordTok{class}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{receive_year_fac)}
+\CommentTok{#> [1] "factor"}
+\KeywordTok{str}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{receive_year_fac)}
+\CommentTok{#>  Factor w/ 3 levels "2016","2017",..: 1 1 1 1 1 1 1 1 1 1 ...}
+\KeywordTok{attributes}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{receive_year_fac)   }
+\CommentTok{#> $levels}
+\CommentTok{#> [1] "2016" "2017" "2018"}
+\CommentTok{#> }
+\CommentTok{#> $class}
+\CommentTok{#> [1] "factor"}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Factor student exercise solutions}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Get a count of \texttt{receive\_year\_fac}. \textbf{hint:} you could
+  also run this in the console to see values associated with each factor
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{wwlist }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{count}\NormalTok{(receive_year_fac)}
+\CommentTok{#> # A tibble: 3 x 2}
+\CommentTok{#>   receive_year_fac     n}
+\CommentTok{#>   <fct>            <int>}
+\CommentTok{#> 1 2016             89637}
+\CommentTok{#> 2 2017             89816}
+\CommentTok{#> 3 2018             88943}
+\end{Highlighting}
+\end{Shaded}
 
 \end{frame}
 
@@ -1115,7 +1255,7 @@ dataset into R
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{hsls <-}\StringTok{ }\KeywordTok{read_dta}\NormalTok{(}\DataTypeTok{file=}\StringTok{"../../data/hsls/hsls_stu_small.dta"}\NormalTok{)}
+\NormalTok{hsls <-}\StringTok{ }\KeywordTok{read_dta}\NormalTok{(}\DataTypeTok{file=}\StringTok{"https://github.com/ozanj/rclass/raw/master/data/hsls/hsls_stu_small.dta"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1336,9 +1476,9 @@ Create frequency tables with \texttt{labelled} class variables using
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes)}
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes)}
 \CommentTok{#investigate the object created}
-\NormalTok{hsls_freq_temp <-}\StringTok{ }\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes)}
+\NormalTok{hsls_freq_temp <-}\StringTok{ }\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes)}
 \NormalTok{hsls_freq_temp}
 \KeywordTok{rm}\NormalTok{(hsls_freq_temp)}
 \end{Highlighting}
@@ -1356,9 +1496,9 @@ To make frequency table show \textbf{value labels} add
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
 \CommentTok{#investigate the object created}
-\NormalTok{hsls_freq_temp <-}\StringTok{ }\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes)  }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
+\NormalTok{hsls_freq_temp <-}\StringTok{ }\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes)  }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
 \NormalTok{hsls_freq_temp}
 \KeywordTok{rm}\NormalTok{(hsls_freq_temp)}
 \end{Highlighting}
@@ -1406,8 +1546,8 @@ Investigate object
 \begin{Highlighting}[]
 \KeywordTok{class}\NormalTok{(hsls}\OperatorTok{$}\NormalTok{s3classes)}
 \NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes,s3clglvl) }\OperatorTok{%>%}\StringTok{ }\NormalTok{var_label }\CommentTok{#show variable label}
-\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes) }\CommentTok{# freq table, values}
-\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{() }\CommentTok{# freq table, value labels}
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes) }\CommentTok{# freq table, values}
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{() }\CommentTok{# freq table, value labels}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1415,18 +1555,162 @@ filter specific values
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(s3classes}\OperatorTok{==-}\DecValTok{8}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{() }\CommentTok{# -8 = unit non-response}
-\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(s3classes}\OperatorTok{==}\DecValTok{1}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{() }\CommentTok{# 1 = yes}
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(s3classes}\OperatorTok{==-}\DecValTok{8}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{() }\CommentTok{# -8 = unit non-response}
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(s3classes}\OperatorTok{==}\DecValTok{1}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{() }\CommentTok{# 1 = yes}
 \end{Highlighting}
 \end{Shaded}
 
 \end{frame}
 
-\begin{frame}{Student exercise}
+\begin{frame}[fragile]{Labelled student exercise}
 
-PATRICIA CREATE STUDENT EXERCISE; SHOULD INVOLVE FREQUENCY TABLES AND
-FILTERING; EXPERIMENT WITH FILTERS THAT FITLER MULTIPLE VALUES OF
-VARIABLE RATHER THAN JUST ONE
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Get variable and value labels of \texttt{s3hs}\\
+\item
+  Get a count of the variable showing the values and the value labels.
+  \textbf{hint} use factor()\\
+\item
+  Filter if value is associated with ``Missing''\\
+\item
+  Filter if value is associated with ``Missing'' or ``Unit
+  non-response''
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]{Labelled student exercise solutions}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Get variable and value labels of \texttt{s3hs}
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{select}\NormalTok{(s3hs) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{var_label}\NormalTok{() }
+\CommentTok{#> $s3hs}
+\CommentTok{#> [1] "S3 B01F Attending high school or homeschool as of Nov 1 2013"}
+
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{select}\NormalTok{(s3hs) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{val_labels}\NormalTok{()}
+\CommentTok{#> $s3hs}
+\CommentTok{#>                                      Missing }
+\CommentTok{#>                                           -9 }
+\CommentTok{#>                            Unit non-response }
+\CommentTok{#>                                           -8 }
+\CommentTok{#>                      Item legitimate skip/NA }
+\CommentTok{#>                                           -7 }
+\CommentTok{#>                     Component not applicable }
+\CommentTok{#>                                           -6 }
+\CommentTok{#> Item not administered: abbreviated interview }
+\CommentTok{#>                                           -4 }
+\CommentTok{#>                                          Yes }
+\CommentTok{#>                                            1 }
+\CommentTok{#>                                           No }
+\CommentTok{#>                                            2 }
+\CommentTok{#>                                   Don't know }
+\CommentTok{#>                                            3}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Labelled student exercise solutions}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Get a count of the variable \texttt{s3hs} showing the value labels.
+  \textbf{hint} use factor()
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{count}\NormalTok{(s3hs) }
+\CommentTok{#> # A tibble: 6 x 2}
+\CommentTok{#>   s3hs          n}
+\CommentTok{#>   <dbl+lbl> <int>}
+\CommentTok{#> 1 -9           22}
+\CommentTok{#> 2 -8         4945}
+\CommentTok{#> 3 -7        16770}
+\CommentTok{#> 4 " 1"        624}
+\CommentTok{#> 5 " 2"        985}
+\CommentTok{#> 6 " 3"        157}
+
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{count}\NormalTok{(s3hs) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{as_factor}\NormalTok{() }
+\CommentTok{#> # A tibble: 6 x 2}
+\CommentTok{#>   s3hs                        n}
+\CommentTok{#>   <fct>                   <int>}
+\CommentTok{#> 1 Missing                    22}
+\CommentTok{#> 2 Unit non-response        4945}
+\CommentTok{#> 3 Item legitimate skip/NA 16770}
+\CommentTok{#> 4 Yes                       624}
+\CommentTok{#> 5 No                        985}
+\CommentTok{#> 6 Don't know                157}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Labelled student exercise solutions}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Filter if value is associated with ``Missing''
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(s3hs}\OperatorTok{==}\StringTok{ }\OperatorTok{-}\DecValTok{9}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{count}\NormalTok{()}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1    22}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Labelled student exercise solutions}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Filter if value is associated with ``Missing'' or ``Unit
+  non-response''
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(s3hs}\OperatorTok{==}\StringTok{ }\OperatorTok{-}\DecValTok{9} \OperatorTok{|}\StringTok{ }\NormalTok{s3hs}\OperatorTok{==}\StringTok{ }\OperatorTok{-}\DecValTok{8}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{count}\NormalTok{()}
+\CommentTok{#> # A tibble: 1 x 1}
+\CommentTok{#>       n}
+\CommentTok{#>   <int>}
+\CommentTok{#> 1  4967}
+\end{Highlighting}
+\end{Shaded}
 
 \end{frame}
 
@@ -1503,7 +1787,7 @@ Showing values associated with factor levels
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{hsls_f }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes)}
+\NormalTok{hsls_f }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes)}
 \CommentTok{#> # A tibble: 5 x 2}
 \CommentTok{#>   s3classes             n}
 \CommentTok{#>   <fct>             <int>}
@@ -1519,7 +1803,7 @@ In code, refer \texttt{level} attribute not variable value
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{hsls_f }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(s3classes}\OperatorTok{==}\StringTok{"Yes"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes)}
+\NormalTok{hsls_f }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(s3classes}\OperatorTok{==}\StringTok{"Yes"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3classes)}
 \CommentTok{#> # A tibble: 1 x 2}
 \CommentTok{#>   s3classes     n}
 \CommentTok{#>   <fct>     <int>}
@@ -1629,10 +1913,13 @@ First, Let's create a smaller version of the HSLS:09 dataset
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{#hsls %>% var_label()}
-\NormalTok{hsls_small <-}\StringTok{ }\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(stu_id,x3univ1,x3sqstat,x4univ1,x4sqstat,s3classes,       s3work,s3focus,s3clgft,s3workft,s3clgid,s3clgcntrl,s3clglvl,s3clgsel,s3clgstate,s3proglevel,}
-\NormalTok{  x4evrappclg,x4evratndclg,x4atndclg16fb,x4ps1sector,x4ps1level,x4ps1ctrl,x4ps1select,}
-\NormalTok{  x4refsector,x4reflevel,x4refctrl,x4refselect,}
-\NormalTok{  x2sex,x2race,x2paredu,x2txmtscor,x4x2ses,x4x2sesq5)}
+\NormalTok{hsls_small <-}\StringTok{ }\NormalTok{hsls }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(stu_id,x3univ1,x3sqstat,x4univ1,x4sqstat,s3classes,}
+\NormalTok{         s3work,s3focus,s3clgft,s3workft,s3clgid,s3clgcntrl,}
+\NormalTok{         s3clglvl,s3clgsel,s3clgstate,s3proglevel,x4evrappclg,}
+\NormalTok{         x4evratndclg,x4atndclg16fb,x4ps1sector,x4ps1level,}
+\NormalTok{         x4ps1ctrl,x4ps1select,x4refsector,x4reflevel,x4refctrl,}
+\NormalTok{         x4refselect, x2sex,x2race,x2paredu,x2txmtscor,x4x2ses,x4x2sesq5)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1663,7 +1950,8 @@ Sometimes helpful to increase the number of observations printed
 \KeywordTok{class}\NormalTok{(hsls_small) }\CommentTok{#it's a tibble}
 \KeywordTok{options}\NormalTok{(}\DataTypeTok{tibble.print_min=}\DecValTok{50}\NormalTok{) }
 \CommentTok{# execute this in console}
-\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(stu_id)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(stu_id,x3univ1,x3sqstat,s3classes,s3clglvl)}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(stu_id)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(stu_id,x3univ1,x3sqstat,s3classes,s3clglvl)}
 \KeywordTok{options}\NormalTok{(}\DataTypeTok{tibble.print_min=}\DecValTok{10}\NormalTok{) }\CommentTok{# set default printing back to 10 lines}
 \end{Highlighting}
 \end{Shaded}
@@ -1772,7 +2060,7 @@ What if you didn't include \texttt{.args=list(na.rm=TRUE)}?
 \CommentTok{#> # A tibble: 1 x 4}
 \CommentTok{#>    mean    sd   min   max}
 \CommentTok{#>   <dbl> <dbl> <dbl> <dbl>}
-\CommentTok{#> 1    NA   NaN    NA    NA}
+\CommentTok{#> 1    NA    NA    NA    NA}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1789,13 +2077,15 @@ missing or skip
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x2txmtscor}\OperatorTok{<}\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(x2txmtscor)}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x2txmtscor}\OperatorTok{<}\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{count}\NormalTok{(x2txmtscor)}
 \CommentTok{#> # A tibble: 1 x 2}
 \CommentTok{#>   x2txmtscor     n}
 \CommentTok{#>        <dbl> <int>}
 \CommentTok{#> 1         -8  2909}
 
-\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(s3clglvl}\OperatorTok{<}\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl)}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(s3clglvl}\OperatorTok{<}\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{count}\NormalTok{(s3clglvl)}
 \CommentTok{#> # A tibble: 3 x 2}
 \CommentTok{#>   s3clglvl      n}
 \CommentTok{#>   <dbl+lbl> <int>}
@@ -1807,9 +2097,156 @@ missing or skip
 
 \end{frame}
 
-\begin{frame}{Student exercise}
+\begin{frame}[fragile]{One-way descriptive stats student exercise}
 
-PATRICIA CREATE
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Using the object \texttt{hsls}, check the variable and value labels of
+  \texttt{x4ps1start}\\
+\item
+  Get a frequency count of the variable \texttt{x4ps1start}\\
+\item
+  Get a frequency count of the variable, but this time checking for
+  negative values \textbf{hint}: use filter()\\
+\item
+  Create a new version of the variable \texttt{x4ps1start\_na} that
+  replaces negative values with NAs and use \texttt{summarise\_at()} to
+  get the min and max value.\\
+  \textbf{Note}: This variable is a bit counterintuitive.
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]{One-way descriptive stats student exercise
+solutions}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Using the object \texttt{hsls}, check the variable and value labels of
+  \texttt{x4ps1start}
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(x4ps1start) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{var_label}\NormalTok{()}
+\CommentTok{#> $x4ps1start}
+\CommentTok{#> [1] "X4 Month and year of enrollment at first postsecondary institution"}
+
+\NormalTok{hsls }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(x4ps1start) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{val_labels}\NormalTok{()}
+\CommentTok{#> $x4ps1start}
+\CommentTok{#>                                      Missing }
+\CommentTok{#>                                           -9 }
+\CommentTok{#>                            Unit non-response }
+\CommentTok{#>                                           -8 }
+\CommentTok{#>                      Item legitimate skip/NA }
+\CommentTok{#>                                           -7 }
+\CommentTok{#>                     Component not applicable }
+\CommentTok{#>                                           -6 }
+\CommentTok{#> Item not administered: abbreviated interview }
+\CommentTok{#>                                           -4 }
+\CommentTok{#>                        Carry through missing }
+\CommentTok{#>                                           -3 }
+\CommentTok{#>                                   Don't know }
+\CommentTok{#>                                           -1}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{One-way descriptive stats student exercise
+solutions}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Get a frequency count of the variable \texttt{x4ps1start}
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{count}\NormalTok{(x4ps1start)}
+\CommentTok{#> # A tibble: 9 x 2}
+\CommentTok{#>   x4ps1start     n}
+\CommentTok{#>   <dbl+lbl>  <int>}
+\CommentTok{#> 1 "    -9"     107}
+\CommentTok{#> 2 "    -8"    6168}
+\CommentTok{#> 3 "    -7"    4281}
+\CommentTok{#> 4 201100        57}
+\CommentTok{#> 5 201200       206}
+\CommentTok{#> 6 201300     10800}
+\CommentTok{#> 7 201400      1295}
+\CommentTok{#> 8 201500       471}
+\CommentTok{#> 9 201600       118}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{One-way descriptive stats student exercise
+solutions}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Get a frequency count of the variable, but this time checking for
+  negative values \textbf{hint}: use filter()
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(x4ps1start}\OperatorTok{<}\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{count}\NormalTok{(x4ps1start)}
+\CommentTok{#> # A tibble: 3 x 2}
+\CommentTok{#>   x4ps1start     n}
+\CommentTok{#>   <dbl+lbl>  <int>}
+\CommentTok{#> 1 -9           107}
+\CommentTok{#> 2 -8          6168}
+\CommentTok{#> 3 -7          4281}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{One-way descriptive stats student exercise
+solutions}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Create a new version \texttt{x4ps1start\_na} of the variable
+  \texttt{x4ps1start} that replaces negative values with NAs and use
+  \texttt{summarise\_at()} to get the min and max value.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{x4ps1start_na=}\KeywordTok{ifelse}\NormalTok{(x4ps1start}\OperatorTok{<}\DecValTok{0}\NormalTok{,}\OtherTok{NA}\NormalTok{,x4ps1start)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise_at}\NormalTok{(}
+    \DataTypeTok{.vars =} \KeywordTok{vars}\NormalTok{(x4ps1start_na),}
+    \DataTypeTok{.funs =} \KeywordTok{funs}\NormalTok{(min, max, }\DataTypeTok{.args=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{))}
+\NormalTok{  )}
+\CommentTok{#> # A tibble: 1 x 2}
+\CommentTok{#>      min    max}
+\CommentTok{#>    <dbl>  <dbl>}
+\CommentTok{#> 1 201100 201600}
+\end{Highlighting}
+\end{Shaded}
 
 \end{frame}
 
@@ -1886,10 +2323,11 @@ FACTOR LEVELS AFTER MUTATE{]}
 categorical}
 
 Two-way frequency table, sometimes called ``Cross tabulation'', is
-important for checking data quality - When you create categorical
-analysis var from single categorical ``input'' var - Two-way tables show
-us whether we did this correctly - Two-way tables helpful for
-understanding skip patterns in surveys
+important for checking data quality\\
+- When you create categorical analysis var from single categorical
+``input'' var\\
+- Two-way tables show us whether we did this correctly\\
+- Two-way tables helpful for understanding skip patterns in surveys
 
 Task: Create a two-way table between \texttt{s3classes} and
 \texttt{s3clglvl}
@@ -2048,10 +2486,7 @@ Replace \texttt{-8} with \texttt{NA} and re-calculate conditional stats
 
 \end{frame}
 
-\begin{frame}[fragile]{Relationship between variables, categorical by
-continuous}
-
-{[}MAKE THIS A STUDENT EXERCISE?{]}
+\begin{frame}[fragile]{Student exercise}
 
 Can use same approach to calculate conditional mean by multiple
 \texttt{group\_by()} variables
@@ -2062,17 +2497,38 @@ Can use same approach to calculate conditional mean by multiple
   Just add additional variables within \texttt{group\_by()}
 \end{itemize}
 
-Task: Calculate mean math test score (\texttt{x2txmtscor}), for each
-combination of parental education (\texttt{x2paredu}) and sex
-(\texttt{x2sex})
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Calculate mean math test score (\texttt{x2txmtscor}), for each
+  combination of parental education (\texttt{x2paredu}) and sex
+  (\texttt{x2sex}).
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]{Student exercise solution}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Calculate mean math test score (\texttt{x2txmtscor}), for each
+  combination of parental education (\texttt{x2paredu}) and sex
+  (\texttt{x2sex})
+\end{enumerate}
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{#hsls_small %>% }
+\CommentTok{#  count(x2sex)}
+
 \NormalTok{hsls_small }\OperatorTok{%>%}
-\StringTok{    }\KeywordTok{group_by}\NormalTok{(x2paredu,x2sex) }\OperatorTok{%>%}
-\StringTok{    }\KeywordTok{summarise_at}\NormalTok{(}\DataTypeTok{.vars =} \KeywordTok{vars}\NormalTok{(x2txmtscor),}
-                 \DataTypeTok{.funs =} \KeywordTok{funs}\NormalTok{(mean, }\DataTypeTok{.args =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{))) }\OperatorTok{%>%}
-\StringTok{    }\KeywordTok{as_factor}\NormalTok{()}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(x2paredu,x2sex) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise_at}\NormalTok{(}\DataTypeTok{.vars =} \KeywordTok{vars}\NormalTok{(x2txmtscor),}
+               \DataTypeTok{.funs =} \KeywordTok{funs}\NormalTok{(mean, }\DataTypeTok{.args =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{))) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{as_factor}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2099,7 +2555,7 @@ While this is not a linear process, these are the broad steps I follow
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Understand how inout data sources were created
+  Understand how input data sources were created
 
   \begin{itemize}
   \tightlist
@@ -2198,8 +2654,9 @@ How to identify which variable(s) uniquely identify observations
 \CommentTok{#>   <lgl>           <int>}
 \CommentTok{#> 1 TRUE            23503}
 
+
 \CommentTok{#hsls_small %>% count(stu_id) %>% filter(n> 1) ## Patricia's approach}
-\CommentTok{#Karina approaches using asserthat package}
+\CommentTok{#Karina approaches using assertthat package}
 \CommentTok{#library(assertthat)}
 \CommentTok{#stopifnot(length(unique(uga_pub$ncessch))==nrow(uga_pub))}
 \CommentTok{#assert_that(any(duplicated(uga_pub, by=c("ncessch", "var2")))==FALSE)}
@@ -2254,7 +2711,7 @@ Rules I follow for variable creation
 
 \begin{frame}[fragile]{Rules for variable creation}
 
-Task: Create analysis fir ses qunitile called \texttt{sesq5} based on
+Task: Create analysis for ses qunitile called \texttt{sesq5} based on
 \texttt{x4x2sesq5}
 
 \begin{Shaded}
@@ -2269,7 +2726,7 @@ Task: Create analysis fir ses qunitile called \texttt{sesq5} based on
 \NormalTok{hsls_small_temp <-}\StringTok{ }\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }
 \StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{sesq5=}\KeywordTok{ifelse}\NormalTok{(x4x2sesq5}\OperatorTok{==-}\DecValTok{8}\NormalTok{,}\OtherTok{NA}\NormalTok{,x4x2sesq5)) }\CommentTok{# approach 1}
 \NormalTok{hsls_small_temp <-}\StringTok{ }\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{sesq5=}\KeywordTok{ifelse}\NormalTok{(x4x2sesq5}\OperatorTok{<}\DecValTok{0}\NormalTok{,}\OtherTok{NA}\NormalTok{,x4x2sesq5)) }\CommentTok{# approach 1}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{sesq5=}\KeywordTok{ifelse}\NormalTok{(x4x2sesq5}\OperatorTok{<}\DecValTok{0}\NormalTok{,}\OtherTok{NA}\NormalTok{,x4x2sesq5)) }\CommentTok{# approach 2}
 
 \CommentTok{#verify}
 \NormalTok{hsls_small_temp }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(x4x2sesq5) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(sesq5)}
@@ -2295,7 +2752,7 @@ Harder to create analysis variables based on multiple input variables
   variables require multiple input variables due to ``skip patterns''
 \end{itemize}
 
-What are ``skip patterns''? {[}students answer{]}
+What are ``skip patterns''?
 
 \begin{itemize}
 \tightlist
@@ -2323,7 +2780,7 @@ Key to working with skip patterns
     Don't just blindly turn ``missing'' and ``skips'' from survey data
     to \texttt{NAs} in your analysis variable
   \item
-    Rahter, trace why these ``missing'' and ``skips'' appear and decide
+    Rather, trace why these ``missing'' and ``skips'' appear and decide
     how they should be coded in your analysis variable
   \end{itemize}
 \end{itemize}
@@ -2457,16 +2914,79 @@ Step 1b: Investigate relationship between input variables
 \NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat}\OperatorTok{==}\DecValTok{8}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl) }
 \NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat }\OperatorTok{!=}\DecValTok{8}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl)}
 
+\CommentTok{#continued on the next page}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Creating analysis variables in the presence of
+skip patterns}
+
+Step 1b: Investigate relationship between input variables
+continued\ldots{}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{#add filter for s3classes is "missing" [-9]}
-\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat }\OperatorTok{!=}\DecValTok{8}\NormalTok{,s3classes}\OperatorTok{==-}\DecValTok{9}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl)}
-\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat }\OperatorTok{!=}\DecValTok{8}\NormalTok{,s3classes}\OperatorTok{!=-}\DecValTok{9}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl)}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat }\OperatorTok{!=}\DecValTok{8}\NormalTok{,s3classes}\OperatorTok{==-}\DecValTok{9}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{count}\NormalTok{(s3clglvl)}
+\CommentTok{#> # A tibble: 1 x 3}
+\CommentTok{#> # Groups:   s3classes [1]}
+\CommentTok{#>   s3classes s3clglvl      n}
+\CommentTok{#>   <dbl+lbl> <dbl+lbl> <int>}
+\CommentTok{#> 1 -9        -9           59}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat }\OperatorTok{!=}\DecValTok{8}\NormalTok{,s3classes}\OperatorTok{!=-}\DecValTok{9}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{count}\NormalTok{(s3clglvl)}
+\CommentTok{#> # A tibble: 6 x 3}
+\CommentTok{#> # Groups:   s3classes [3]}
+\CommentTok{#>   s3classes s3clglvl      n}
+\CommentTok{#>   <dbl+lbl> <dbl+lbl> <int>}
+\CommentTok{#> 1 1         -9          428}
+\CommentTok{#> 2 1         " 1"       8894}
+\CommentTok{#> 3 1         " 2"       3929}
+\CommentTok{#> 4 1         " 3"        226}
+\CommentTok{#> 5 2         -7         3401}
+\CommentTok{#> 6 3         -7         1621}
 
 \CommentTok{#add filter for s3classes equal to "no" or "don't know"}
-\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat }\OperatorTok{!=}\DecValTok{8}\NormalTok{,s3classes}\OperatorTok{!=-}\DecValTok{9}\NormalTok{, s3classes }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl)}
-\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat }\OperatorTok{!=}\DecValTok{8}\NormalTok{,s3classes}\OperatorTok{!=-}\DecValTok{9}\NormalTok{, s3classes }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat }\OperatorTok{!=}\DecValTok{8}\NormalTok{,s3classes}\OperatorTok{!=-}\DecValTok{9}\NormalTok{, s3classes }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl)}
+\CommentTok{#> # A tibble: 2 x 3}
+\CommentTok{#> # Groups:   s3classes [2]}
+\CommentTok{#>   s3classes s3clglvl      n}
+\CommentTok{#>   <dbl+lbl> <dbl+lbl> <int>}
+\CommentTok{#> 1 2         -7         3401}
+\CommentTok{#> 2 3         -7         1621}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat }\OperatorTok{!=}\DecValTok{8}\NormalTok{,s3classes}\OperatorTok{!=-}\DecValTok{9}\NormalTok{, s3classes }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
+\CommentTok{#> # A tibble: 2 x 3}
+\CommentTok{#> # Groups:   s3classes [2]}
+\CommentTok{#>   s3classes  s3clglvl                    n}
+\CommentTok{#>   <fct>      <fct>                   <int>}
+\CommentTok{#> 1 No         Item legitimate skip/NA  3401}
+\CommentTok{#> 2 Don't know Item legitimate skip/NA  1621}
 
-\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat }\OperatorTok{!=}\DecValTok{8}\NormalTok{,s3classes}\OperatorTok{!=-}\DecValTok{9}\NormalTok{, s3classes}\OperatorTok{==}\DecValTok{1}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl)}
-\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat }\OperatorTok{!=}\DecValTok{8}\NormalTok{,s3classes}\OperatorTok{!=-}\DecValTok{9}\NormalTok{, s3classes}\OperatorTok{==}\DecValTok{1}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat }\OperatorTok{!=}\DecValTok{8}\NormalTok{,s3classes}\OperatorTok{!=-}\DecValTok{9}\NormalTok{, s3classes}\OperatorTok{==}\DecValTok{1}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl)}
+\CommentTok{#> # A tibble: 4 x 3}
+\CommentTok{#> # Groups:   s3classes [1]}
+\CommentTok{#>   s3classes s3clglvl      n}
+\CommentTok{#>   <dbl+lbl> <dbl+lbl> <int>}
+\CommentTok{#> 1 1         -9          428}
+\CommentTok{#> 2 1         " 1"       8894}
+\CommentTok{#> 3 1         " 2"       3929}
+\CommentTok{#> 4 1         " 3"        226}
+\NormalTok{hsls_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(x3sqstat }\OperatorTok{!=}\DecValTok{8}\NormalTok{,s3classes}\OperatorTok{!=-}\DecValTok{9}\NormalTok{, s3classes}\OperatorTok{==}\DecValTok{1}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(s3classes) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(s3clglvl) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_factor}\NormalTok{()}
+\CommentTok{#> # A tibble: 4 x 3}
+\CommentTok{#> # Groups:   s3classes [1]}
+\CommentTok{#>   s3classes s3clglvl                                n}
+\CommentTok{#>   <fct>     <fct>                               <int>}
+\CommentTok{#> 1 Yes       Missing                               428}
+\CommentTok{#> 2 Yes       4 or more years                      8894}
+\CommentTok{#> 3 Yes       At least 2 but less than 4 years     3929}
+\CommentTok{#> 4 Yes       Less than 2 years (below associate)   226}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2555,8 +3075,6 @@ variables}\label{appendix.-creating-factor-variables}
 
 \begin{frame}[fragile]{Create factors {[}from string variables{]}}
 
-PATRICIA THESE SLIDES IN THIS SECTION WILL NEED TO BE EDITED
-
 To create a factor variable from string variable
 
 \begin{enumerate}
@@ -2609,23 +3127,37 @@ Sorting differs
 
 \begin{frame}[fragile]{Create factors {[}from string variables{]}}
 
-Let's create a character version of variable \texttt{sex} and then turn
-it into a factor
+Let's create a character version of variable \texttt{hs\_state} and then
+turn it into a factor
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#Create character version of sex}
-\NormalTok{wwlist}\OperatorTok{$}\NormalTok{sex_char <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{sex)}
+\CommentTok{#wwlist %>%}
+\CommentTok{#  count(hs_state)}
+\CommentTok{#Subset obs to West Coast states }
+\NormalTok{wwlist_temp <-}\StringTok{ }\NormalTok{wwlist }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(hs_state }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"CA"}\NormalTok{, }\StringTok{"OR"}\NormalTok{, }\StringTok{"WA"}\NormalTok{))}
+
+\CommentTok{#Create character version of high school state for West Coast states only}
+\NormalTok{wwlist_temp}\OperatorTok{$}\NormalTok{hs_state_char <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(wwlist_temp}\OperatorTok{$}\NormalTok{hs_state)}
 
 \CommentTok{#investigate character variable}
-\KeywordTok{str}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{sex_char)}
-\KeywordTok{table}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{sex_char)}
+\KeywordTok{str}\NormalTok{(wwlist_temp}\OperatorTok{$}\NormalTok{hs_state_char)}
+\KeywordTok{table}\NormalTok{(wwlist_temp}\OperatorTok{$}\NormalTok{hs_state_char)}
 
 \CommentTok{#create new variable that assigns levels}
-\NormalTok{sex_fac <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{sex_char, }\DataTypeTok{levels =} \KeywordTok{c}\NormalTok{(}\StringTok{"F"}\NormalTok{,}\StringTok{"M"}\NormalTok{,}\StringTok{"U"}\NormalTok{))}
-\KeywordTok{str}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{sex_char)}
+\NormalTok{wwlist_temp}\OperatorTok{$}\NormalTok{hs_state_fac <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(wwlist_temp}\OperatorTok{$}\NormalTok{hs_state_char, }\DataTypeTok{levels =} \KeywordTok{c}\NormalTok{(}\StringTok{"CA"}\NormalTok{,}\StringTok{"OR"}\NormalTok{,}\StringTok{"WA"}\NormalTok{))}
+\KeywordTok{str}\NormalTok{(wwlist_temp}\OperatorTok{$}\NormalTok{hs_state_fac)}
+
+\CommentTok{#wwlist_temp %>%}
+\CommentTok{#  count(hs_state_fac)}
+\KeywordTok{rm}\NormalTok{(wwlist_temp)}
 \end{Highlighting}
 \end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{Create factors {[}from string variables{]}}
 
 How the \texttt{levels} argument works when underlying data is character
 
@@ -2684,27 +3216,33 @@ element of vector \texttt{a2}
 Let's turn an integer variable into a factor variable in the
 \texttt{wwlist} data frame
 
-Create integer version of \texttt{sex}
+Create integer version of \texttt{receive\_year}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{wwlist}\OperatorTok{$}\NormalTok{sex_int <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{sex)}
-\CommentTok{#> Warning: NAs introduced by coercion}
-\KeywordTok{str}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{sex_int)}
-\CommentTok{#>  int [1:268396] NA NA NA NA NA NA NA NA NA NA ...}
-\CommentTok{#wwlist %>% count(sex) %>% as_factor()}
+\CommentTok{#typeof(wwlist_temp$receive_year)}
+\NormalTok{wwlist}\OperatorTok{$}\NormalTok{receive_year_int <-}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{receive_year)}
+\KeywordTok{str}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{receive_year_int)}
+\CommentTok{#>  int [1:268396] 2016 2016 2016 2016 2016 2016 2016 2016 2016 2016 ...}
+\KeywordTok{typeof}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{receive_year_int)}
+\CommentTok{#> [1] "integer"}
 \end{Highlighting}
 \end{Shaded}
-
-Assume we know that 1=female, 2=male, 3=unknown
 
 Assign levels to values of integer variable
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{wwlist}\OperatorTok{$}\NormalTok{sex_int <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{sex_int, }\DataTypeTok{labels=}\KeywordTok{c}\NormalTok{(}\StringTok{"female"}\NormalTok{,}\StringTok{"male"}\NormalTok{,}\StringTok{"unknown"}\NormalTok{))}
-\KeywordTok{str}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{sex_int)}
-\KeywordTok{str}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{sex)}
+\NormalTok{wwlist}\OperatorTok{$}\NormalTok{receive_year_fac <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{receive_year_int, }\DataTypeTok{labels=}\KeywordTok{c}\NormalTok{(}\StringTok{"Twenty-sixteen"}\NormalTok{,}\StringTok{"Twenty-seventeen"}\NormalTok{,}\StringTok{"Twenty-eighteen"}\NormalTok{))}
+\KeywordTok{str}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{receive_year_fac)}
+\KeywordTok{str}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{receive_year)}
+
+\CommentTok{#Check variable}
+\NormalTok{wwlist }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{count}\NormalTok{(receive_year_fac)}
+
+\NormalTok{wwlist }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{count}\NormalTok{(receive_year)}
 \end{Highlighting}
 \end{Shaded}
 

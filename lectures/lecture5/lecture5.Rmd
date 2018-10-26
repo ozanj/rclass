@@ -71,13 +71,13 @@ PATRICIA ADD
 
 "Load" the package we will use today (output omitted)
 
-- __you must run this code chunk__
+- __you must run this code chunk after installing these packages__
 ```{r, message=FALSE}
 library(tidyverse)
 library(haven)
 library(labelled)
 ```
-If package not yet installed, then must install before you load. Install in "console" rather than .Rmd file
+__If package not yet installed__, then must install before you load. Install in "console" rather than .Rmd file
 
 - Generic syntax: `install.packages("package_name")`
 - Install "tidyverse": `install.packages("tidyverse")`
@@ -89,13 +89,13 @@ Note: when we load package, name of package is not in quotes; but when we instal
 
 # Augmented vectors
 
-### Data we will use to introduce augmented vecors
+### Data we will use to introduce augmented vectors
 
 ```{r}
 rm(list = ls()) # remove all objects
 
 #load("../../data/prospect_list/western_washington_college_board_list.RData")
-load("../../data/prospect_list/wwlist_merged.RData")
+load(url("https://github.com/ozanj/rclass/raw/master/data/prospect_list/wwlist_merged.RData"))
 
 ```
 
@@ -133,8 +133,8 @@ Can assign __names__ to vector elements, creating a __named atomic vector__
 
 ```{r}
 (b <- c(v1=1,v2=2,v3=3))
-length(a)
-typeof(a)
+length(b)
+typeof(b)
 str(b)
 ```
 
@@ -157,6 +157,7 @@ list_b <- list(1, c("apple", "orange"), list(1, 2))
 length(list_b)
 str(list_b)
 ```
+
 ### Review data structures: lists
 
 Like atomic vectors, elements within a list can be named, thereby creating a __named list__
@@ -291,7 +292,8 @@ sum(wwlist$med_inc_zip[1:10], na.rm = TRUE) # numeric function
 
 # load library with date functions
 library(lubridate) 
-year(wwlist$med_inc_zip[1:10]) # date function
+#Sys.setenv(TZ="America/Los_Angeles") #setting time zone to Los Angeles time
+year(wwlist$receive_date[1:10]) # date function
 ```
 ### Object class
 
@@ -335,7 +337,7 @@ Object __class__ is fundamental to object oriented programming because:
 Many different object classes exist in R
 
 - we can also create our own classes
-- but in thise cours we will work with classes that have been created by others
+- but in this course we will work with classes that have been created by others
 
 ## Class == factor
 
@@ -354,15 +356,15 @@ Below, I'll create a factor version of the character variable `ethn_code`
 - (don't worry about understanding this code; I'll explain it later)
 ```{r}
 str(wwlist$ethn_code)
-
-wwlist <- wwlist %>% mutate(ethn_code_fac = factor(ethn_code)) # create factor var; tidyverse approach
+# create factor var; tidyverse approach
+wwlist <- wwlist %>% mutate(ethn_code_fac = factor(ethn_code)) 
 #wwlist$ethn_code_fac <- factor(wwlist$ethn_code) # base r approach
 
 str(wwlist$ethn_code_fac)
 ```
 ### Factors
 
-A factor is an __augmented vector__ built by attaching a "levels" attribute to an (atomic) integer vectors
+A factor is an __augmented vector__ built by attaching a "levels" attribute to an (atomic) integer vector
 
 Compare (character) `ethn_code` to (factor) `ethn_code_fac` (output omitted)
 ```{r, results="hide"}
@@ -441,13 +443,70 @@ Or you can just filter based on value of __factor levels__
 wwlist %>% filter(psat_range=="1270-1520") %>% count()
 ```
 
-### Creating factor variables from characterer variables or from integer variables
+### Creating factor variables from character variables or from integer variables
 
 See Appendix
 
-### Some in-class exercise involving factors
+### Factor student exercise   
 
-PATRICIA, CREATE AN EXERCISE INVOLVING WHAT WE HAVE LEARNED THUS FAR ABOUT FACTORS
+1. After running the code below, use `typeof`, `class`, `str`, and `attributes` functions to check the new variable `receive_year`  
+2. Create a factor variable from the input variable `receive_year` and name it `receive_year_fac`  
+3. Run the same functions (`typeof`, `class`, etc.) from the first question using the new variable you created  
+4. Get a count of `receive_year_fac`. __hint:__ you could also run this in the console to see values associated with each factor
+
+Run this code to create a year variable from the input variable "receive_date"
+```{r, results="hide", message=FALSE}
+#wwlist %>% glimpse()
+
+library(lubridate) #load library if you haven't already
+wwlist <- wwlist %>%
+  mutate(receive_year = year(receive_date)) #creating year variable with the lubricate package
+
+#Check variable
+wwlist %>% 
+  count(receive_year)
+
+wwlist %>%
+  group_by(receive_year) %>% 
+  count(receive_date)
+
+```
+
+
+### Factor student exercise solutions   
+1. Use `typeof`, `class`, `str`, and `attributes` functions to check the new variable `receive_year`  
+```{r}
+typeof(wwlist$receive_year)
+class(wwlist$receive_year)
+str(wwlist$receive_year)
+attributes(wwlist$receive_year) 
+```
+
+### Factor student exercise solutions  
+2. Now create a factor variable from the input variable `receive_year` and name it `receive_year_fac` 
+```{r}
+# create factor var; tidyverse approach
+wwlist <- wwlist %>%
+  mutate(receive_year_fac = factor(receive_year))  
+
+```
+
+### Factor student exercise solutions 
+3. Run the same functions (`typeof`, `class`, etc.) from the first question using the new variable you created  
+```{r}
+typeof(wwlist$receive_year_fac)
+class(wwlist$receive_year_fac)
+str(wwlist$receive_year_fac)
+attributes(wwlist$receive_year_fac)   
+```
+
+### Factor student exercise solutions 
+4. Get a count of `receive_year_fac`. __hint:__ you could also run this in the console to see values associated with each factor
+```{r}
+wwlist %>%
+  count(receive_year_fac)
+```
+
 
 ## Class == labelled
 
@@ -490,7 +549,7 @@ When using `haven` to read data, resulting R objects have these characteristics:
 
 Use `read_dta()` function from `haven` to import Stata dataset into R
 ```{r, results="hide"}
-hsls <- read_dta(file="../../data/hsls/hsls_stu_small.dta")
+hsls <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/hsls/hsls_stu_small.dta")
 ```
 
 Let's examine the data
@@ -595,9 +654,9 @@ Create frequency tables with `labelled` class variables using `count()`
 
 - Default setting is to show variable __values__ not __value labels__
 ```{r, results="hide"}
-hsls %>% select(s3classes) %>% count(s3classes)
+hsls %>% count(s3classes)
 #investigate the object created
-hsls_freq_temp <- hsls %>% select(s3classes) %>% count(s3classes)
+hsls_freq_temp <- hsls %>% count(s3classes)
 hsls_freq_temp
 rm(hsls_freq_temp)
 ```
@@ -606,9 +665,9 @@ To make frequency table show __value labels__ add `%>% as_factor()` to pipe
 
 - `as_factor()` is function from `haven` that converts an object to a factor
 ```{r, results="hide"}
-hsls %>% select(s3classes) %>% count(s3classes) %>% as_factor()
+hsls %>% count(s3classes) %>% as_factor()
 #investigate the object created
-hsls_freq_temp <- hsls %>% select(s3classes) %>% count(s3classes)  %>% as_factor()
+hsls_freq_temp <- hsls %>% count(s3classes)  %>% as_factor()
 hsls_freq_temp
 rm(hsls_freq_temp)
 ```
@@ -632,19 +691,64 @@ Investigate object
 ```{r, results="hide"}
 class(hsls$s3classes)
 hsls %>% select(s3classes,s3clglvl) %>% var_label #show variable label
-hsls %>% select(s3classes) %>% count(s3classes) # freq table, values
-hsls %>% select(s3classes) %>% count(s3classes) %>% as_factor() # freq table, value labels
+hsls %>% count(s3classes) # freq table, values
+hsls %>% count(s3classes) %>% as_factor() # freq table, value labels
 ```
 
 filter specific values
 ```{r, results="hide"}
-hsls %>% select(s3classes) %>% filter(s3classes==-8) %>% count() # -8 = unit non-response
-hsls %>% select(s3classes) %>% filter(s3classes==1) %>% count() # 1 = yes
+hsls %>% filter(s3classes==-8) %>% count() # -8 = unit non-response
+hsls %>% filter(s3classes==1) %>% count() # 1 = yes
 ```
 
-### Student exercise
+### Labelled student exercise
 
-PATRICIA CREATE STUDENT EXERCISE; SHOULD INVOLVE FREQUENCY TABLES AND FILTERING; EXPERIMENT WITH FILTERS THAT FITLER MULTIPLE VALUES OF VARIABLE RATHER THAN JUST ONE
+1. Get variable and value labels of `s3hs`  
+2. Get a count of the variable showing the values and the value labels. __hint__ use factor()  
+3. Filter if value is associated with "Missing"  
+4. Filter if value is associated with "Missing" or "Unit non-response"
+
+### Labelled student exercise solutions
+1. Get variable and value labels of `s3hs` 
+```{r}
+hsls %>% 
+  select(s3hs) %>% 
+  var_label() 
+
+hsls %>% 
+  select(s3hs) %>% 
+  val_labels()
+```
+
+### Labelled student exercise solutions
+2. Get a count of the variable `s3hs` showing the value labels. __hint__ use factor()
+
+```{r}
+hsls %>% 
+  count(s3hs) 
+
+hsls %>% 
+  count(s3hs) %>% 
+  as_factor() 
+
+```
+
+### Labelled student exercise solutions
+3. Filter if value is associated with "Missing"
+```{r}
+hsls %>%
+  filter(s3hs== -9) %>% 
+  count()
+```
+
+### Labelled student exercise solutions  
+4. Filter if value is associated with "Missing" or "Unit non-response"
+```{r}
+hsls %>%
+  filter(s3hs== -9 | s3hs== -8) %>% 
+  count()
+```
+
 
 ## Comparing labelled class to factor class
 
@@ -687,12 +791,12 @@ hsls_f %>% select(s3classes) %>% val_labels()
 
 Showing values associated with factor levels
 ```{r}
-hsls_f %>% select(s3classes) %>% count(s3classes)
+hsls_f %>% count(s3classes)
 ```
 
 In code, refer `level` attribute not variable value
 ```{r}
-hsls_f %>% select(s3classes) %>% filter(s3classes=="Yes") %>% count(s3classes)
+hsls_f %>% filter(s3classes=="Yes") %>% count(s3classes)
 ```
 
 
@@ -743,10 +847,13 @@ I'll focus on the __tidyverse__ approach rather than __base R__
 First, Let's create a smaller version of the HSLS:09 dataset
 ```{r}
 #hsls %>% var_label()
-hsls_small <- hsls %>% select(stu_id,x3univ1,x3sqstat,x4univ1,x4sqstat,s3classes,       s3work,s3focus,s3clgft,s3workft,s3clgid,s3clgcntrl,s3clglvl,s3clgsel,s3clgstate,s3proglevel,
-  x4evrappclg,x4evratndclg,x4atndclg16fb,x4ps1sector,x4ps1level,x4ps1ctrl,x4ps1select,
-  x4refsector,x4reflevel,x4refctrl,x4refselect,
-  x2sex,x2race,x2paredu,x2txmtscor,x4x2ses,x4x2sesq5)
+hsls_small <- hsls %>%
+  select(stu_id,x3univ1,x3sqstat,x4univ1,x4sqstat,s3classes,
+         s3work,s3focus,s3clgft,s3workft,s3clgid,s3clgcntrl,
+         s3clglvl,s3clgsel,s3clgstate,s3proglevel,x4evrappclg,
+         x4evratndclg,x4atndclg16fb,x4ps1sector,x4ps1level,
+         x4ps1ctrl,x4ps1select,x4refsector,x4reflevel,x4refctrl,
+         x4refselect, x2sex,x2race,x2paredu,x2txmtscor,x4x2ses,x4x2sesq5)
 ```
 
 ### Tools of EDA: select, sort, filter, and print
@@ -767,7 +874,8 @@ Sometimes helpful to increase the number of observations printed
 class(hsls_small) #it's a tibble
 options(tibble.print_min=50) 
 # execute this in console
-hsls_small %>% arrange(desc(stu_id)) %>% select(stu_id,x3univ1,x3sqstat,s3classes,s3clglvl)
+hsls_small %>% arrange(desc(stu_id)) %>%
+  select(stu_id,x3univ1,x3sqstat,s3classes,s3clglvl)
 options(tibble.print_min=10) # set default printing back to 10 lines
 ```
 
@@ -838,14 +946,57 @@ How to identify these missing/skip values if you don't have a codebook?
 `count()` combined with `filter()` helpful for finding extreme values of continuous vars, which are often associated with missing or skip
 
 ```{r}
-hsls_small %>% filter(x2txmtscor<0) %>% count(x2txmtscor)
+hsls_small %>% filter(x2txmtscor<0) %>% 
+  count(x2txmtscor)
 
-hsls_small %>% filter(s3clglvl<0) %>% count(s3clglvl)
+hsls_small %>% filter(s3clglvl<0) %>%
+  count(s3clglvl)
 ```
 
-### Student exercise
+### One-way descriptive stats student exercise
 
-PATRICIA CREATE
+1. Using the object `hsls`, check the variable and value labels of `x4ps1start`  
+2. Get a frequency count of the variable `x4ps1start`  
+3. Get a frequency count of the variable, but this time checking for negative values __hint__: use filter()  
+4. Create a new version of the variable `x4ps1start_na` that replaces negative values with NAs and use `summarise_at()` to get the min and max value.  
+**Note**: This variable is a bit counterintuitive.
+
+### One-way descriptive stats student exercise solutions
+1. Using the object `hsls`, check the variable and value labels of `x4ps1start` 
+```{r}
+hsls %>%
+  select(x4ps1start) %>%
+  var_label()
+
+hsls %>%
+  select(x4ps1start) %>%
+  val_labels()
+```
+
+### One-way descriptive stats student exercise solutions  
+2. Get a frequency count of the variable `x4ps1start` 
+```{r}
+hsls %>%
+  count(x4ps1start)
+```
+
+### One-way descriptive stats student exercise solutions
+3. Get a frequency count of the variable, but this time checking for negative values __hint__: use filter() 
+```{r}
+hsls %>% 
+  filter(x4ps1start<0) %>% 
+  count(x4ps1start)
+```
+
+### One-way descriptive stats student exercise solutions
+4. Create a new version `x4ps1start_na` of the variable `x4ps1start` that replaces negative values with NAs and use `summarise_at()` to get the min and max value.
+```{r}
+hsls %>% mutate(x4ps1start_na=ifelse(x4ps1start<0,NA,x4ps1start)) %>%
+  summarise_at(
+    .vars = vars(x4ps1start_na),
+    .funs = funs(min, max, .args=list(na.rm=TRUE))
+  )
+```
 
 ### One-way descriptive stats for discrete/categorical vars, Tidyverse approach
 
@@ -894,9 +1045,9 @@ hsls_f %>% mutate(s3classes_f=ifelse(s3classes %in% c("Missing","Unit non-respon
 
 ### Relationship between variables, categorical by categorical
 
-Two-way frequency table, sometimes called "Cross tabulation", is important for checking data quality
-- When you create categorical analysis var from single categorical "input" var
-    - Two-way tables show us whether we did this correctly
+Two-way frequency table, sometimes called "Cross tabulation", is important for checking data quality  
+- When you create categorical analysis var from single categorical "input" var  
+    - Two-way tables show us whether we did this correctly  
 - Two-way tables helpful for understanding skip patterns in surveys
 
 Task: Create a two-way table between `s3classes` and `s3clglvl`
@@ -995,23 +1146,28 @@ hsls_small %>% select(x2paredu,x2txmtscor) %>%
                .funs = funs(mean, min, max, .args = list(na.rm = TRUE))) %>%
   as_factor()
 ```
-### Relationship between variables, categorical by continuous
-
-[MAKE THIS A STUDENT EXERCISE?]
+### Student exercise
 
 Can use same approach to calculate conditional mean by multiple `group_by()` variables
 
 - Just add additional variables within `group_by()`
 
-Task: Calculate mean math test score (`x2txmtscor`), for each combination of parental education (`x2paredu`) and sex (`x2sex`)
+1. Calculate mean math test score (`x2txmtscor`), for each combination of parental education (`x2paredu`) and sex (`x2sex`).  
 
+
+### Student exercise solution  
+1. Calculate mean math test score (`x2txmtscor`), for each combination of parental education (`x2paredu`) and sex (`x2sex`)
 ```{r, results="hide"}
+#hsls_small %>% 
+#  count(x2sex)
+
 hsls_small %>%
-    group_by(x2paredu,x2sex) %>%
-    summarise_at(.vars = vars(x2txmtscor),
-                 .funs = funs(mean, .args = list(na.rm = TRUE))) %>%
-    as_factor()
+  group_by(x2paredu,x2sex) %>%
+  summarise_at(.vars = vars(x2txmtscor),
+               .funs = funs(mean, .args = list(na.rm = TRUE))) %>%
+  as_factor()
 ```
+
 ## Guidelines for EDA
 
 ### Guidelines for "EDA for data quality"
@@ -1022,7 +1178,7 @@ Assme that your goal in "EDA for data quality" is to investigate "input" data so
 
 While this is not a linear process, these are the broad steps I follow 
 
-1. Understand how inout data sources were created
+1. Understand how input data sources were created
     - e.g., when working with survey data, have survey questionnaire and codebooks on hand
 1. For each input data source, identify the "unit of analysis" and which combination of variables uniquely identify observations
 1. Investigate patterns in input variables
@@ -1066,8 +1222,9 @@ hsls_small %>% group_by(stu_id) %>% # group_by our candidate
   ungroup() %>% # ungroup the data
   count(n_per_id==1) # count "true that only one obs per group"
 
+
 #hsls_small %>% count(stu_id) %>% filter(n> 1) ## Patricia's approach
-#Karina approaches using asserthat package
+#Karina approaches using assertthat package
 #library(assertthat)
 #stopifnot(length(unique(uga_pub$ncessch))==nrow(uga_pub))
 #assert_that(any(duplicated(uga_pub, by=c("ncessch", "var2")))==FALSE)
@@ -1089,7 +1246,7 @@ Rules I follow for variable creation
 
 ### Rules for variable creation
 
-Task: Create analysis fir ses qunitile called `sesq5` based on `x4x2sesq5`
+Task: Create analysis for ses qunitile called `sesq5` based on `x4x2sesq5`
 
 ```{r, results="hide"}
 #investigate input variable
@@ -1102,7 +1259,7 @@ hsls_small %>% select(x4x2sesq5) %>% count(x4x2sesq5) %>% as_factor()
 hsls_small_temp <- hsls_small %>% 
   mutate(sesq5=ifelse(x4x2sesq5==-8,NA,x4x2sesq5)) # approach 1
 hsls_small_temp <- hsls_small %>% 
-  mutate(sesq5=ifelse(x4x2sesq5<0,NA,x4x2sesq5)) # approach 1
+  mutate(sesq5=ifelse(x4x2sesq5<0,NA,x4x2sesq5)) # approach 2
 
 #verify
 hsls_small_temp %>% group_by(x4x2sesq5) %>% count(sesq5)
@@ -1117,7 +1274,7 @@ Harder to create analysis variables based on multiple input variables
 
 - When working with survey data, even seemingly simple analysis variables require multiple input variables due to "skip patterns"
 
-What are "skip patterns"? [students answer]
+What are "skip patterns"? 
 
 - [?DELETE OR DELAY?] Response on a particular survey item determines whether respondent answers some set of subsequent questions
 - What are some examples of this?
@@ -1127,7 +1284,7 @@ Key to working with skip patterns
 - Have the survey questionnaire on hand
 - Sometimes it appears that analysis variable requires only one input variable, but really depends on several input variables because of skip patterns
     - Don't just blindly turn "missing" and "skips" from survey data to `NAs` in your analysis variable
-    - Rahter, trace why these "missing" and "skips" appear and decide how they should be coded in your analysis variable
+    - Rather, trace why these "missing" and "skips" appear and decide how they should be coded in your analysis variable
 
 
 ### Creating analysis variables in the presence of skip patterns
@@ -1194,17 +1351,32 @@ hsls_small %>% group_by(s3classes) %>% count(s3clglvl) %>% as_factor()
 hsls_small %>% filter(x3sqstat==8) %>% group_by(s3classes) %>% count(s3clglvl) 
 hsls_small %>% filter(x3sqstat !=8) %>% group_by(s3classes) %>% count(s3clglvl)
 
+#continued on the next page
+```
+
+
+### Creating analysis variables in the presence of skip patterns
+
+Step 1b: Investigate relationship between input variables continued...
+```{r}
 #add filter for s3classes is "missing" [-9]
-hsls_small %>% filter(x3sqstat !=8,s3classes==-9) %>% group_by(s3classes) %>% count(s3clglvl)
-hsls_small %>% filter(x3sqstat !=8,s3classes!=-9) %>% group_by(s3classes) %>% count(s3clglvl)
+hsls_small %>% filter(x3sqstat !=8,s3classes==-9) %>% group_by(s3classes) %>%
+  count(s3clglvl)
+hsls_small %>% filter(x3sqstat !=8,s3classes!=-9) %>% group_by(s3classes) %>%
+  count(s3clglvl)
 
 #add filter for s3classes equal to "no" or "don't know"
-hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes %in% c(2,3)) %>% group_by(s3classes) %>% count(s3clglvl)
-hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes %in% c(2,3)) %>% group_by(s3classes) %>% count(s3clglvl) %>% as_factor()
+hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes %in% c(2,3)) %>%
+  group_by(s3classes) %>% count(s3clglvl)
+hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes %in% c(2,3)) %>% 
+  group_by(s3classes) %>% count(s3clglvl) %>% as_factor()
 
-hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes==1) %>% group_by(s3classes) %>% count(s3clglvl)
-hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes==1) %>% group_by(s3classes) %>% count(s3clglvl) %>% as_factor()
+hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes==1) %>% 
+  group_by(s3classes) %>% count(s3clglvl)
+hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes==1) %>% 
+  group_by(s3classes) %>% count(s3clglvl) %>% as_factor()
 ```
+
 
 # Brainstorm next assignment: create GPA from course-level data
 
@@ -1242,8 +1414,6 @@ PUT CODE FOR EDA INVESTIGATIONS OF NLS72 HERE? OR PUT LINK TO .R SCRIPT W/ NLS E
 
 ### Create factors [from string variables]
 
-PATRICIA THESE SLIDES IN THIS SECTION WILL NEED TO BE EDITED
-
 To create a factor variable from string variable
 
 1. create a character vector containing underlying data
@@ -1272,20 +1442,33 @@ sort(x2)
 
 ### Create factors [from string variables]
 
-Let's create a character version of variable `sex` and then turn it into a factor
+Let's create a character version of variable `hs_state` and then turn it into a factor
 
 ```{r, eval=FALSE}
-#Create character version of sex
-wwlist$sex_char <- as.character(wwlist$sex)
+#wwlist %>%
+#  count(hs_state)
+#Subset obs to West Coast states 
+wwlist_temp <- wwlist %>%
+  filter(hs_state %in% c("CA", "OR", "WA"))
+
+#Create character version of high school state for West Coast states only
+wwlist_temp$hs_state_char <- as.character(wwlist_temp$hs_state)
 
 #investigate character variable
-str(wwlist$sex_char)
-table(wwlist$sex_char)
+str(wwlist_temp$hs_state_char)
+table(wwlist_temp$hs_state_char)
 
 #create new variable that assigns levels
-sex_fac <- factor(wwlist$sex_char, levels = c("F","M","U"))
-str(wwlist$sex_char)
+wwlist_temp$hs_state_fac <- factor(wwlist_temp$hs_state_char, levels = c("CA","OR","WA"))
+str(wwlist_temp$hs_state_fac)
+
+#wwlist_temp %>%
+#  count(hs_state_fac)
+rm(wwlist_temp)
+
 ```
+
+### Create factors [from string variables]
 How the `levels` argument works when underlying data is character
 
 - Matches value of underlying data to value of the level attribute
@@ -1318,19 +1501,28 @@ Note: By default, `factor()` function attached "zero" to the lowest value of vec
 
 Let's turn an integer variable into a factor variable in the `wwlist` data frame
 
-Create integer version of `sex`
+Create integer version of `receive_year`
 ```{r}
-wwlist$sex_int <- as.integer(wwlist$sex)
-str(wwlist$sex_int)
-#wwlist %>% count(sex) %>% as_factor()
+#typeof(wwlist_temp$receive_year)
+wwlist$receive_year_int <- as.integer(wwlist$receive_year)
+str(wwlist$receive_year_int)
+typeof(wwlist$receive_year_int)
+
 ```
-Assume we know that 1=female, 2=male, 3=unknown
+
 
 Assign levels to values of integer variable
 ```{r, eval=FALSE}
-wwlist$sex_int <- factor(wwlist$sex_int, labels=c("female","male","unknown"))
-str(wwlist$sex_int)
-str(wwlist$sex)
+wwlist$receive_year_fac <- factor(wwlist$receive_year_int, labels=c("Twenty-sixteen","Twenty-seventeen","Twenty-eighteen"))
+str(wwlist$receive_year_fac)
+str(wwlist$receive_year)
+
+#Check variable
+wwlist %>%
+  count(receive_year_fac)
+
+wwlist %>%
+  count(receive_year)
 ```
 
 
