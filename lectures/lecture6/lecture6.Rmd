@@ -20,24 +20,53 @@ output:
     
 ---
 
+```{r, echo=FALSE, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
+  #comment = "#>" makes it so results from a code chunk start with "#>"; default is "##"
+```
+
 # Introduction
 
 ## Logistics
 
-__Reading to do before next class:__
+<br>
 
-ADD TEXT
+### Using `html_document` rather than `beamer_presentation` output for the next two lectures (lecture 6 and 7)
 
-__Using `html_document` output for the next two lectures__
+- What this means is that the lecture won't have "slides"; rather, I'll just scroll down
+- Should be easier for you to "knit" entire lecture [Try it!] because doesn't rely on latex
+- To see formatted version of lecture, open `lecture6.html` or knit and follow along in that version
+- you will be able to run code chunks within .Rmd file as usual
+- This is an experiment to see which you prefer; will inform revisions to next time I teach the class
+- For Lectures 8, 9, and 10 we will go back to `beamer_presentation` with 
 
-ADD TEXT
+### Mid-term course survey
 
-__Link to mid-term course survey__
-[LINK TO MIDTERM SURVEY WILL BE POSTED ON PROBLEM SET #6]
+- A link to mid-term course survey will be posted at beginning of lecture 6 problem set. It is short. please complete it!
+- focus is on how class is working for you; what is going well; how can class be improved
 
-\tableofcontents
+### Reading to do before next class
 
-## Overview
+- Work through slides from lecture 6 that we don't get to in class
+    - Assuming we get through the section on __tidying data__, the rest of the lecture focuses on missing values created by tidying and it is fine for you to read this __after__ you finish problem set
+- [OPTIONAL] GW chapter 12 (tidy data)
+    - Lecture 6 covers this material pretty closely, so read chapter if you can, but I get it if you don't have time
+- [OPTIONAL] Wickham, H. (2014). Tidy Data. _Journal of Statistical Software_, 59(10), 1-23. doi:10.18637/jss.v059.i10
+    - This is the journal article that introduced the data concepts covered in GW chapter 12 and created the packages related to tidying data
+    - Link to article here: [LINK](https://www.jstatsoft.org/article/view/v059i10)
+
+### Libraries we will use today 
+
+You must run this R code chunk (install packages first if you don't have them)
+```{r}
+library(tidyverse)
+library(haven)
+library(labelled)
+```
+
+
+
+## Lecture overview
 
 Creating analysis datasets often require __changing the organizational structure__ of data
 
@@ -48,30 +77,26 @@ Examples:
 
 Two common ways to change organizational structure of data
 
-1. Use `group_by` to perform calculations separately within groups and then use `summarise` to create an object with one observation per group
-    - We did this in week 5
+1. Use `group_by` to perform calculations separately within groups and then use `summarise` to create an object with one observation per group. Examples:
+    - Creating objects containing summary statistics that are basis for tables and graphs (focus of lecture 4)
+    - Creating student-transcript level GPA variable from student-transcript-course level data (focus of lecture 5 problem set)
 1. __Reshape__ your data -- called __tidying__ in the R tidyverse world -- by transforming columns (variables) into rows (observations) and vice-versa
     - Our topic for today
 
-This lecture is about changing the organizational structure of your data by transforming __untidy__ data into __tidy__ data.  Working with tidy data has many benefits, one of them is that all the packages in the tidyverse are designed to work with tidy data.
+This lecture is about changing the organizational structure of your data by transforming __untidy__ data into __tidy__ data.  
 
-Libraries we will use
-```{r}
-library(tidyverse)
-library(haven)
-library(labelled)
-```
-
-We will perform data __tidying__ using functions from the __tidyr__ package, which is a package within tidyverse. 
+- Working with tidy data has many benefits, one of them is that all the packages in the tidyverse are designed to work with tidy data.
+- We will perform data __tidying__ using functions from the __tidyr__ package, which is a package within tidyverse. 
 
 Show index and example datasets in __tidyr__ package
 ```{r, eval=FALSE}
 help(package="tidyr")
-# note that example datasets table1, table2, etc. are listed in the index alongside functions
 
+# note that example datasets table1, table2, etc. are listed in the index alongside functions
 table1
 tidyr::table1 # same same
-df1 <- table1
+
+df1 <- table1 # create an object from the "function" table1
 str(df1)
 
 table2
@@ -80,7 +105,7 @@ table3
 
 # Data "structure" vs data "concepts"
 
-Before we define tidy data, we should define the some core terms/concepts about datasets. 
+Before we define "tidy data", we will spend significant time defining and discussing the some core terms/concepts about datasets. 
 
 This discussion draws from the 2014 article [Tidy Data](https://www.jstatsoft.org/article/view/v059i10) by Hadley Wickham.
 
@@ -90,7 +115,7 @@ This discussion draws from the 2014 article [Tidy Data](https://www.jstatsoft.or
 
 ## Dataset structure
 
-Dataset structure refers to the "physical layout" of a dataset
+__Dataset structure__ refers to the "physical layout" of a dataset
 
 - Typically, datasets are "rectangular __tables__ made up of __rows__ and __columns__" (emphasis added).
 - a __cell__ is the intersection of one column and one row (think cells in Microsoft Excel)
@@ -124,11 +149,11 @@ __unit of analysis__ [my term, not Wickham's]:
 
 - What each row represents in a dataset (referring to physical layout of dataset). 
 
-For example:
+Examples of different units of analysis:
 
-    - if each row represents a student, you have student level data
-    - if each row represents a student-course, you have student-course level data
-    - if each row represents an organization-year, you have organization-year level data
+- if each row represents a student, you have student level data
+- if each row represents a student-course, you have student-course level data
+- if each row represents an organization-year, you have organization-year level data
  
 __Questions__: 
 
@@ -142,10 +167,75 @@ structure_a
 structure_b
 ```
 
-- What does each row represent in THE DATA FROME OBJECT `DATA_FRAME_NAME [BELOW] [WHAT DATA ARE YOU TRYING TO ADD HERE?]
+- What does each row represent in the data frame object `ipeds_hc_temp`?
+    - Below we load data on 12-month enrollment headcount for 2015-16 academic year from the Integrated Postsecondary Education Data System (IPEDS)
 ```{r}
-#INSERT OBJECT
+ipeds_hc_temp <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/ipeds/effy/ey15-16_hc.dta", encoding=NULL) %>% 
+  select(unitid,lstudy,efytotlt) %>% arrange(unitid,lstudy)
+
+#show variable labels and value labels
+ipeds_hc_temp %>% var_label()
+ipeds_hc_temp %>% val_labels()
+
+#print a few obs
+ipeds_hc_temp %>% head(n=10)
+
+#print a few obs, with value labels rather than variable values
+ipeds_hc_temp %>% head(n=10) %>% as_factor()
 ```
+### Which variable(s) uniquely identify rows in a data frame
+
+Identifying which combination of variables uniquely identifies rows in a data frame helps you understand the "structure" of your dataset
+
+- Said differently: for each value of this variable (or combination of variables), there is only one row
+- Very important for reshaping/tidying data (this week) and very important for joining/merging data frames (next week)
+- Sometimes a codebook will explicitly tell you which vars uniquely identify rows
+- sometimes you have to figure this out through investigation
+    - focus on ID variables and categorical variables that identify what each row represents; not continuous numeric variables like `total_enrollment` or `family_income`
+
+__Task__: Let's try to identify the variable(s) that uniquely identify rows in `ipeds_hc_temp`
+
+- Multiple ways of doing this
+- I'll give you some code for one approach; just try to follow along and understand
+```{r}
+names(ipeds_hc_temp)
+ipeds_hc_temp %>% head(n=10)
+```
+
+<br>
+First, Let's investigate whether the ID variable `unitid` uniquely identifies rows in data frame `ipeds_hc_temp`
+
+- I'll annotate code for each step
+```{r}
+ipeds_hc_temp %>% # start with data frame object ipeds_hc_temp
+  group_by(unitid) %>% # group by unitid
+  summarise(n_per_group=n()) %>% # create measure of number of obs per group
+  ungroup %>% # ungroup (otherwise frequency table [next step] created) separately for each group (i.e., separate frequency table for each value of unitid)
+  count(n_per_group) # frequency of number of observations per group
+```
+
+What does above output tell us?
+
+- There are 5,127 values of `unitid` that have 2 rows for that value of `unitid`
+- There are 1,824 values of `unitid` that have 3 rows for that value of `unitid`
+- Note: `2*5127+3*1824==` `r format(round(2*5127+3*1824),nsmall=0, big.mark=",")` which is the number of observations in `ipeds_hc_temp`
+- __Conclusion__: the variable `unitid` does not uniquely identify rows in the data frame `ipeds_hc_temp`
+
+<br>
+Second, Let's investigate whether the comination of `unitid` and `lstudy` uniquely identifies rows in data frame `ipeds_hc_temp`
+
+```{r}
+ipeds_hc_temp %>% # start with data frame object ipeds_hc_temp
+  group_by(unitid,lstudy) %>% # group by unitid and lstudy
+  summarise(n_per_group=n()) %>% # create measure of number of obs per group
+  ungroup %>% # ungroup (otherwise frequency table [next step] created) separately for each group (i.e., separate frequency table for each value of unitid)
+  count(n_per_group) # frequency of number of observations per group
+```
+
+What does above output tell us?
+
+- There is `1` row each unique combination of `unitid` and `lstudy` 
+- __Conclusion__: the variables `unitid` and `lstudy` uniquely identify rows in the data frame `ipeds_hc_temp`
 
 ## Dataset (semantics) concepts
 
@@ -161,7 +251,7 @@ The difference between data __structure__ and data __concepts__:
 
 Wickham (2014, p. 3): "A dataset is a collection of _values_, usually either numbers (if quantitative) or strings (if qualitative). Values are organized in two ways. Every value belongs to a _variable_ and an _observation_."
 
-Wickham (2014) definitions of dataset concepts: _values_, _variables_, and _observations_:
+Wickham (2014) definitions of dataset concepts: _values_, _variables_, and _observations_ [I Recommend writing these definitions down on a separate sheet of paper]:
 
 - __value__: A single element within some data structure (e.g., vector, list), usually a number or a character string.
     - e.g. the value of the variable `enrollment` for one organization in a dataset where each observation represents a postsecondary education institution
@@ -170,11 +260,23 @@ Wickham (2014) definitions of dataset concepts: _values_, _variables_, and _obse
 - __observations__: "An observation contains all values measured on the same unit (like a person, or a day)...across attributes"
     - e.g., the values of each variable for one organization in a dataset where each observation represents a postsecondary education institution
 
-I Recommend writing these definitions down on a separate sheet of paper  
-[NOT SURE WHY THIS DATASET IS HERE?]
+Example of a dataset that satisfies Wickham definitions
+```{r, echo=FALSE}
+#Ignore this code; we'll explain it later in lecture
+ipeds_hc_temp %>% 
+  mutate(level = recode(as.integer(lstudy),
+    `1` = "ug_enroll",
+    `3` = "grad_enroll",
+    `999` = "all_enroll")
+  ) %>% select(-lstudy) %>% # drop variable lstudy
+  spread(key = level, value = efytotlt) %>%
+  select(unitid,ug_enroll,grad_enroll,all_enroll) %>%
+  head(n=10)
+```
+<br>
+Remove object
 ```{r}
-#Dataset
-table1
+rm(ipeds_hc_temp)
 ```
 
 ### Tables and observational unit
@@ -194,6 +296,9 @@ Each of these data sources may use a different "level of observation" and each r
 __Observational unit/observational level__ [Wickham's term, not mine]
 
 > "In a given analysis, there may be multiple __levels of observations__. For example, in a trial of new allergy medication we might have three observational types: demographic data collected from each person (age, sex, race), medical data collected from each person on each day (number of sneezes, redness of eyes), and meteorological data collected on each day (temperature,pollen count) (Wickham 2014, p. 4)"
+
+<br>
+So Wickham defines __observational unit/observational level__ as what each row __should__ represent in an appropriately structured data frame
 
 ### Summary/parting thoughts
 
@@ -613,6 +718,15 @@ __Solution to student exercise__
     - Each observation _should_ be a state-year, with only one variable for enrollment
 2. Sketch out what the tidy data should look like    
 3. Transform untidy to tidy
+    - __names__ of the set of columns that represent values, not variables in your untidy data 
+        - `tot_2000,tot_2010,tot_2011,tot_2012`
+    - __key variable__ : variable name you will assign to columns you are gathering from the untidy data
+        - This var doesn't yet exist in untidy data, but will be a variable name in the tidy data
+        - In this example, __key__ var is year 
+    - __value variable__: The name of the variable that will contain values in the tidy dataset you create and whose values are spread across multiple columns in the untidy dataset
+        - This var doesn't yet exist in untidy data, but will be a variable name in the tidy data
+        - in this example, __value__ var is total_students
+    
 ```{r}
 total_tidy <- total %>% 
   gather(tot_2000,tot_2010,tot_2011,tot_2012, key = year, value = total_students)
@@ -648,24 +762,40 @@ total_tidyv2<- total_tidyv2 %>%
 
 head(total_tidyv2, n=10)
 ```
-PATRICIA - I HAVEN'T INVESTIGATED OUT HOW TO DO THIS BELOW TASK IN A WAY THAT DOESN'T REQUIRE ADVANCED PROGRAMMING. CAN YOU LOOK INTO THIS?
 
-__Task__
+### Gathering with multiple value variables
 
-- Complete the task above, keeping the free-reduced enrollment variables in addition to the total enrollment variables [ASK PATRICIA TO FIGURE OUT THE EASIEST WAY TO DO THIS THAT DOESN'T REQUIRE ADVANCED PROGRAMMING]
-```{r, eval=FALSE}
+Working with data from same data frame `table204_10`, but this time we have variables for total enrollment __and__ variables for total number of students on free/reduced lunch
+```{r}
 totfrl <- table204_10 %>% 
   select(state,tot_2000,tot_2010,tot_2011,tot_2012,frl_2000,frl_2010,frl_2011,frl_2012)
 
 #names(totalv2)<-c("state","2000","2010","2011","2012")
 head(totfrl)
 
-totfrl_tidy <- totfrl %>% 
-  gather(tot_2000,tot_2010,tot_2011,tot_2012, key = year, value = total_students)
+```
 
-total_tidyv2<- total_tidyv2 %>% arrange(state,year)
+__Task__: Tidy the dataset `totfrl` by converting columns to rows. Basically, we want to create "long" dataset with a `year` variable, a `total_students` variable, and a `frlunch_students` variable
 
-head(total_tidyv2, n=10)
+
+- __names__ of the set of columns that represent values, not variables in your untidy data 
+    - `tot_2000,tot_2010,tot_2011,tot_2012,frl_2000,frl_2010,frl_2011,frl_2012`
+- __key variable__ : variable name you will assign to columns you are gathering from the untidy data
+    - This var doesn't yet exist in untidy data, but will be a variable name in the tidy data
+    - In this example, __key__ var is year 
+- __value variable__: The name of the variable that will contain values in the tidy dataset you create and whose values are spread across multiple columns in the untidy dataset
+    - in this example, there would be two __value__ variables is `total_students` and `frlunch_students`
+
+Unfortunately, `gather()` function not set up to work with multiple __value__ variables, so we cannot do this task with our existing tools. 
+
+- but you could find several approaches through Googling
+
+```{r, eval=FALSE}
+
+#this code doesn't do what we want it to
+totfrl %>% 
+  gather(tot_2000,tot_2010,tot_2011,tot_2012,frl_2000,frl_2010,frl_2011,frl_2012, 
+         key = year, value = total_students)
 ```
 
 
@@ -835,11 +965,22 @@ ipeds_hcv2 %>% select(instnm,unitid,level,efytotlt) %>%
 
 
 
+### spreading with multiple value variables
 
+What if we want to spread a dataset that contains multiple __value__ variables?
 
-PATRICIA - SEE IF THERE IS EASY WAHT TO DO THIS; WANT TO SPREAD DATASET THAT INCLUDES MALE ENROLLMENT, FEMALE ENROLLMENT AND TOTAL ENROLLMENT
+Create dataset that has total enrollment, enrollment "men", and enrollment "women" [IPEDS terms]
+```{r}
+ipeds_hc_multi_val <- ipeds_hc_all %>%
+  select(unitid,lstudy,efytotlt,efytotlm,efytotlw)
 
-- Complete the task above, but having multiple value column (e.g., male enrollment, white male enrollment, etc)[ASK PATRICIA TO FIGURE OUT THE EASIEST WAY TO DO THIS THAT DOESN'T REQUIRE ADVANCED PROGRAMMING]
+ipeds_hc_multi_val %>% head(n=10)
+```
+Unfortunately, `spread()` function not set up to deal with multipel __value__ variables
+
+- completing this task would require alternative approaches/additional programming concepts
+- You can google this, but not required for homework
+
 
 # Missing values
 
