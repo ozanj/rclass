@@ -20,10 +20,6 @@ output:
     
 ---
 
-```{r, echo=FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
-```
-
 # Introduction
 
 ## Logistics
@@ -37,9 +33,8 @@ __Using `html_document` output for the next two lectures__
 ADD TEXT
 
 __Link to mid-term course survey__
+[LINK TO MIDTERM SURVEY WILL BE POSTED ON PROBLEM SET #6]
 
-
-PATRICIA - HOW TO ADD TABLE OF CONTENTS TO TEXT RIGHT HERE
 \tableofcontents
 
 ## Overview
@@ -147,7 +142,7 @@ structure_a
 structure_b
 ```
 
-- What does each row represent in THE DATA FROME OBJECT `DATA_FRAME_NAME [BELOW]
+- What does each row represent in THE DATA FROME OBJECT `DATA_FRAME_NAME [BELOW] [WHAT DATA ARE YOU TRYING TO ADD HERE?]
 ```{r}
 #INSERT OBJECT
 ```
@@ -175,9 +170,10 @@ Wickham (2014) definitions of dataset concepts: _values_, _variables_, and _obse
 - __observations__: "An observation contains all values measured on the same unit (like a person, or a day)...across attributes"
     - e.g., the values of each variable for one organization in a dataset where each observation represents a postsecondary education institution
 
-I Recommend writing these definitions down on a separate sheet of paper
+I Recommend writing these definitions down on a separate sheet of paper  
+[NOT SURE WHY THIS DATASET IS HERE?]
 ```{r}
-#INSERT SNIPPET OF SOME DATA DATASET HERE OR DIRECTLY BELOW
+#Dataset
 table1
 ```
 
@@ -244,7 +240,7 @@ While __all__ tidy datasets are organized the same way, untidy datasets can have
 <br>
 Here is an example of an untidy version of the same data shown in `table1`
 ```{r}
-#INSERT SNIPPETS OF SEVERAL DIFFERENT KINDS OF UNTIDY DATA HERE
+#Untidy data, table 2
 #help(package="tidyr")
 table2
 ```
@@ -422,7 +418,7 @@ In real world, we encounter many untidy datasets. We can still equate variables 
 
 Why should you create tidy datasets before conducting analyses?
 
-1. If you have a consistent organizational structure for analysis datasets, easier to learn tools that for analyzing data
+1. If you have a consistent organizational structure for analysis datasets, easier to learn tools for analyzing data
 
 2. tidy datasets are optimal for R
 - Base R functions and tidyverse functions are designed to work with vectors of values
@@ -461,24 +457,28 @@ Instead, researchers would "reshape" (verb) data from "long" (adjective) to "wid
 
 Think "wide" and "long" as alternative presentations of the exact same 
 
-__"wide" data__ Data represented with fewer rows and more columns
-__"long" data__ Data represented with more rows and fewer columns
+__"wide" data__ represented with fewer rows and more columns  
+__"long" data__ represented with more rows and fewer columns
 
 Example, Table 204.10 of the Digest for Education Statistics shows changer over time in the number and percentage of K-12 students on free/reduced lunch [LINK](http://nces.ed.gov/programs/digest/d14/tables/dt14_204.10.asp)
 
 - Wide form display of data:
 ```{r}
 #load("data/nces_digest/nces_digest_table_204_10.RData")
-load("../../data/nces_digest/nces_digest_table_204_10.RData")
+load(url("https://github.com/ozanj/rclass/raw/master/data/nces_digest/nces_digest_table_204_10.RData"))
 table204_10
 ```
 - Long form display of data: 
 ```{r}
-total<-table204_10%>%select(state,tot_2000,tot_2010,tot_2011,tot_2012)
-names(total)<-c("state","2000","2010","2011","2012")
-total_long<-total%>%gather(`2000`,`2010`,`2011`,`2012`,key=year,value=total_students)
-total_long<- total_long %>% arrange(state,year)
-head(total_long, n=10)
+total <- table204_10 %>%
+  select(state,tot_2000,tot_2010,tot_2011,tot_2012) #subset and assign to new object
+names(total)<-c("state","2000","2010","2011","2012") #change names for year "tot_2010" -> "2010"
+
+total_long <- total %>% 
+  gather(`2000`,`2010`,`2011`,`2012`,key=year,value=total_students) %>% #will discuss this function shortly
+  arrange(state, year) #arrange by state and year
+
+head(total_long, n=10) #view 10 obs
 ```
 
 Note that the concepts "wide" vs. "long" are relative rather than absolute
@@ -548,7 +548,7 @@ The solution to this problem is to transform the untidy columns (which represent
 - In the tidyverse, this process is called "gathering"
 - Outside the tidyverse, this process is called "reshaping" from "wide" to "long"
 
-In the above example, we want to transform `table4a` into something tha tlooks like this:
+In the above example, we want to transform `table4a` into something that looks like this:
 ```{r}
 table1 %>% select(country, year, cases)
 ```
@@ -575,7 +575,7 @@ Gathering requires knowing three parameters:
 table4a %>% gather(`1999`, `2000`, key = "year", value = "cases")
 #Note that we write `1999` rather than 1999 because the column name starts with a number
 
-#This would work not work
+#This would not work
 #table4a %>% gather(1999, 2000, key = "year", value = "cases")
 
 #But giving different names to the key variable and the value variable is fine
@@ -590,11 +590,12 @@ The following dataset is drawn from Table 204.10 of the NCES Digest for Educatio
 - The table shows  change over time in the number and percentage of K-12 students on free/reduced lunch for selected years.
 - [LINK to website with data](http://nces.ed.gov/programs/digest/d14/tables/dt14_204.10.asp)
 ```{r}
-load("../../data/nces_digest/nces_digest_table_204_10.RData")
+#Let's take a look at the data (we read in the data in the wide vs long section)
 glimpse(table204_10)
 
 #Create smaller version of data frame for purpose of student exercise
-total<-table204_10%>%select(state,tot_2000,tot_2010,tot_2011,tot_2012)
+total<- table204_10 %>% 
+  select(state,tot_2000,tot_2010,tot_2011,tot_2012)
 head(total)
 ```
 
@@ -614,10 +615,11 @@ __Solution to student exercise__
 3. Transform untidy to tidy
 ```{r}
 total_tidy <- total %>% 
-  gather(tot_2000,tot_2010,tot_2011,tot_2012,key=year,value=total_students)
+  gather(tot_2000,tot_2010,tot_2011,tot_2012, key = year, value = total_students)
 
 #sort data (optional)
-total_tidy<- total_tidy %>% arrange(state,year)
+total_tidy<- total_tidy %>%
+  arrange(state,year)
 
 #examine data
 head(total_tidy, n=10)
@@ -628,19 +630,21 @@ __Alternative solution to student exercise__
 ```{r}
 #create smaller version of data frame; same as before
 
-totalv2 <- table204_10%>%select(state,tot_2000,tot_2010,tot_2011,tot_2012)
+totalv2 <- table204_10 %>% 
+  select(state,tot_2000,tot_2010,tot_2011,tot_2012)
 
 #rename columns that represent values so that the column names are numbers
   #(e.g., rename tot_2000 to 2000)
-names(totalv2)<-c("state","2000","2010","2011","2012")
+names(totalv2)<- c("state","2000","2010","2011","2012")
 head(totalv2)
 
 #create tidy dataset by gathering, same as before
 total_tidyv2 <- totalv2 %>% 
-  gather(`2000`,`2010`,`2011`,`2012`,key=year,value=total_students)
+  gather(`2000`,`2010`,`2011`,`2012`, key = year, value = total_students)
 
 #sort data (optional)
-total_tidyv2<- total_tidyv2 %>% arrange(state,year)
+total_tidyv2<- total_tidyv2 %>%
+  arrange(state,year)
 
 head(total_tidyv2, n=10)
 ```
@@ -650,18 +654,22 @@ __Task__
 
 - Complete the task above, keeping the free-reduced enrollment variables in addition to the total enrollment variables [ASK PATRICIA TO FIGURE OUT THE EASIEST WAY TO DO THIS THAT DOESN'T REQUIRE ADVANCED PROGRAMMING]
 ```{r, eval=FALSE}
-totfrl <- table204_10%>%select(state,tot_2000,tot_2010,tot_2011,tot_2012,frl_2000,frl_2010,frl_2011,frl_2012)
+totfrl <- table204_10 %>% 
+  select(state,tot_2000,tot_2010,tot_2011,tot_2012,frl_2000,frl_2010,frl_2011,frl_2012)
 
 #names(totalv2)<-c("state","2000","2010","2011","2012")
 head(totfrl)
 
 totfrl_tidy <- totfrl %>% 
-  gather(tot_2000,tot_2010,tot_2011,tot_2012,key=year,value=total_students)
+  gather(tot_2000,tot_2010,tot_2011,tot_2012, key = year, value = total_students)
 
 total_tidyv2<- total_tidyv2 %>% arrange(state,year)
 
 head(total_tidyv2, n=10)
 ```
+
+
+
 ## Tidying data: spreading
 
 The second important and common cause of untidy data:
@@ -728,7 +736,7 @@ The Integrated Postsecondary Education Data System (IPEDS) collects data on coll
 #load these libraries if you haven't already
 #library(haven)
 #library(labelled)
-ipeds_hc_all <- read_dta(file="../../data/ipeds/effy/ey15-16_hc.dta", encoding=NULL)
+ipeds_hc_all <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/ipeds/effy/ey15-16_hc.dta", encoding=NULL)
 ```
 
 Create smaller version of dataset
@@ -813,7 +821,7 @@ ipeds_hc %>% select(lstudy) %>% val_labels()
 str(ipeds_hc$lstudy)
 
 ipeds_hcv2 <- ipeds_hc %>% 
-  mutate(level=recode(as.integer(lstudy),
+  mutate(level = recode(as.integer(lstudy),
     `1` = "ug",
     `3` = "grad",
     `999` = "all")
@@ -848,13 +856,14 @@ But first, it is helpful to create a new version of the IPEDS enrollment dataset
 ```{r}
 ipeds_hc_na <- ipeds_hc_all %>% filter(sector %in% c(3,6,9)) %>% #keep only for-profit colleges
   select(instnm,unitid,lstudy,efytotlt,efybkaam) %>% 
-  mutate(level=recode(as.integer(lstudy), # create recoded version of lstudy
+  mutate(level = recode(as.integer(lstudy), # create recoded version of lstudy
     `1` = "ug",
     `3` = "grad",
     `999` = "all")
   ) %>% select(instnm,unitid,level,efytotlt,efybkaam) %>% 
   arrange(unitid,desc(level))
 ```
+
 Now, let's print some rows
 
 - There is one row for each college-level_of_study
@@ -863,6 +872,7 @@ Now, let's print some rows
 ```{r}
 ipeds_hc_na
 ```
+
 Now let's create new versions of the enrollment variables, that replace `0` with `NA`
 ```{r}
 ipeds_hc_na <- ipeds_hc_na %>% 
@@ -873,6 +883,7 @@ ipeds_hc_na <- ipeds_hc_na %>%
 
 ipeds_hc_na %>% select(unitid,level,efytotlt,efytotltv2,efybkaam,efybkaamv2)
 ```
+
 Create dataset that drops the original enrollment variables, keeps enrollment vars that replace `0` with `NA`
 ```{r}
 ipeds_hc_nav2 <- ipeds_hc_na %>% select(-efytotlt,-efybkaam)
@@ -893,14 +904,14 @@ ipeds_hc_nav2 %>% head(, n=5)
 - variable `efytotltv2` has `0` explicit missing values and `0` implicit missing values
 - variable `efybkaamv2` has `0` explicit missing values and `0` implicit missing values
 
-`South University-Montgomery` has two rows (because they have no graduate students):
+`New Beginning College of Cosmetology` has two rows (because they have no graduate students):
 
 - variable `efytotltv2` has `0` explicit missing values and `1` implicit missing values (no row for grad students)
 - variable `efybkaamv2` has `2` explicit missing values and `1` implicit missing values (no row for grad students)
 
 Let's look at another dataset called `stocks`, which shows stock `return` for each year and quarter for some hypothetical company. 
 
-- Wickham uses this dataset introduce explicit and implicit missing values
+- Wickham uses this dataset to introduce explicit and implicit missing values
 
 ```{r}
 stocks <- tibble(
@@ -913,7 +924,7 @@ stocks # note: this data is already tidy
 The variable `return` has:
 
 - `1` _explicit_ missing value in `year==2015` and `qtr==4`
-- `1` _implicit_ missing value in `year==2016` and `qtr==4`; this row of data simply does not exist
+- `1` _implicit_ missing value in `year==2016` and `qtr==1`; this row of data simply does not exist
 
 
 ```{r}
@@ -952,6 +963,7 @@ ipeds_complete %>% group_by(unitid) %>% summarise(n=n()) %>% count(n)
 #Note that previous dataset did not
 ipeds_hc_nav2 %>% group_by(unitid) %>% summarise(n=n()) %>% count(n)
 ```
+
 Should you make _implicit_ missing values _explicit_?
 
 - No clear-cut answer; depends on many context-specific things about your project
@@ -972,12 +984,14 @@ stocks
 
 ipeds_hc_nav2 %>% select (instnm,unitid,level,efytotltv2) %>% head(n=5)
 ```
+
 Let's use `spread()` to tidy the IPEDS dataset, focusing on the total enrollment variable which has implicit missing values but no explicit missing values
 ```{r}
 ipeds_hc_nav2 %>% select (instnm,unitid,level,efytotltv2) %>%
   spread(key = level, value = efytotltv2) %>% 
   arrange(unitid) %>% head(n=5)
 ```
+
 The resulting dataset has explicint missing values (i.e,. `NAs`) for rows that had implicit missing values in the input data.
 
 Let's use `spread()` the IPEDS dataset again, this time focusing on the Black enrollment variable which has both explicit and implicit missing values
@@ -993,13 +1007,14 @@ The resulting dataset has explicit missing values (i.e,. `NAs`) for rows that ha
 
 What if we spread a dataset that has explicit missing values and no implicit missing values?
 
-- Resulting dataset has explicit missing values (i.e,. `NAs`) for rows that weere explicit missing values in the input data.
+- Resulting dataset has explicit missing values (i.e,. `NAs`) for rows that were explicit missing values in the input data.
     
 ```{r}
 ipeds_complete %>% select(unitid,level,efybkaamv2) %>%
   spread(key = level, value = efybkaamv2) %>% 
   arrange(unitid) %>% head(n=5)
 ```
+
 __Takeways about `spread()` and missing values__
 
 - Explicit missing values in the input data become explicit missing values in the resulting dataset
@@ -1036,8 +1051,7 @@ ipeds_gather %>% head(n=10)
 Let's use `gather()` to transform the columns `2016` and `2017` into rows
 ```{r}
 ipeds_gatherv2 <- ipeds_gather %>% 
-  gather(`2016`,`2017`,key=year,value=efybkaam) %>%
-  arrange(unitid,desc(level),year) %>%
+  gather(`2016`,`2017`,key = year, value = efybkaam) %>%
   arrange(unitid,desc(level),year) 
 
 ipeds_gatherv2 %>% head(n=10)
