@@ -164,7 +164,7 @@ Wickham (2014, p. 3): "A dataset is a collection of _values_, usually either num
 Wickham (2014) definitions of dataset concepts: _values_, _variables_, and _observations_:
 
 - __value__: A single element within some data structure (e.g., vector, list), usually a number or a character string.
-    - e.g. the value of the variable `enrollment` for a one organization in a dataset where each observation represents a postsecondary education institution
+    - e.g. the value of the variable `enrollment` for one organization in a dataset where each observation represents a postsecondary education institution
 - __variables__: "A variable contains all values that measure the same underlying attribute (like height, temperature, duration) across units"
     - e.g., the variable `enrollment` is a vector that contains total enrollment for each organization in the dataset
 - __observations__: "An observation contains all values measured on the same unit (like a person, or a day)...across attributes"
