@@ -47,10 +47,10 @@ names(tabn208_30v3)
 class(tabn208_30v3)
 str(tabn208_30v3)
 
-tabn208_30 <- tabn208_30v3
+table208_30 <- tabn208_30v3
 
 #save as .rdata file
-save(tabn208_30, file = "nces_digest_table_208_30.RData")
+save(table208_30, file = "nces_digest_table_208_30.RData")
 
 load("nces_digest_table_208_30.RData")
 head(tabn208_30)
