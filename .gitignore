@@ -3,6 +3,5 @@
 .RData
 .Ruserdata
 *.tex
-*.html
 *.md
 _site/
