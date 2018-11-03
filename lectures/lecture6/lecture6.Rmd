@@ -47,8 +47,9 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 
 ### Reading to do before next class
 
-- Work through slides from lecture 6 that we don't get to in class
-    - Assuming we get through the section on __tidying data__, the rest of the lecture focuses on missing values created by tidying and it is fine for you to read this __after__ you finish problem set
+- Work through slides we from lecture 6 that we don't get to in class
+    - [REQUIRED] slides from section 4 "Tidying data"
+    - [OPTIONAL] slides from section 5 "Missing data"
 - [OPTIONAL] GW chapter 12 (tidy data)
     - Lecture 6 covers this material pretty closely, so read chapter if you can, but I get it if you don't have time
 - [OPTIONAL] Wickham, H. (2014). Tidy Data. _Journal of Statistical Software_, 59(10), 1-23. doi:10.18637/jss.v059.i10
@@ -173,6 +174,7 @@ structure_b
 ipeds_hc_temp <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/ipeds/effy/ey15-16_hc.dta", encoding=NULL) %>% 
   select(unitid,lstudy,efytotlt) %>% arrange(unitid,lstudy)
 
+ipeds_hc_temp
 #show variable labels and value labels
 ipeds_hc_temp %>% var_label()
 ipeds_hc_temp %>% val_labels()
@@ -236,6 +238,14 @@ What does above output tell us?
 
 - There is `1` row each unique combination of `unitid` and `lstudy` 
 - __Conclusion__: the variables `unitid` and `lstudy` uniquely identify rows in the data frame `ipeds_hc_temp`
+
+What happens if we didn't ungroup?
+```{r}
+ipeds_hc_temp %>% # start with data frame object ipeds_hc_temp
+  group_by(unitid,lstudy) %>% # group by unitid and lstudy
+  summarise(n_per_group=n()) %>% # create measure of number of obs per group
+  count(n_per_group) # frequency of number of observations per group
+```
 
 ## Dataset (semantics) concepts
 
@@ -540,7 +550,7 @@ __Example__:
 - how would you calculate `rate` variable (`=cases/population*10000`) for `table1` (tidy) and `table2` (untidy)
 
 ```{r}
-#table1
+table1
 table1 %>% 
   mutate(rate = cases / population * 10000)
 
@@ -848,6 +858,7 @@ Spreading requires knowing two parameters, which are the parameters of `spread()
     - in `table2` the value column is `count`; the values of `count` will become the values of the new variables `cases` and `population` in the tidy data
 
 ```{r}
+table2
 table2 %>%
     spread(key = type, value = count)
 #compare to table 1

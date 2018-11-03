@@ -274,7 +274,15 @@ In the below schedule, I lecture on a topic, and then you do the reading about t
 ## `r advdate(fri, 5)`: Tidy data
 
 - Problem set due (before class): Yes
-- Reading (after class): GW 12
+- Reading (after class):
+    - Work through slides we from lecture 6 that we don't get to in class
+        - [REQUIRED] slides from section 4 "Tidying data"
+        - [OPTIONAL] slides from section 5 "Missing data"
+    - [OPTIONAL] GW chapter 12 (tidy data)
+        - Lecture 6 covers this material pretty closely, so read chapter if you can, but I get it if you don't have time
+    - [OPTIONAL] Wickham, H. (2014). Tidy Data. _Journal of Statistical Software_, 59(10), 1-23. doi:10.18637/jss.v059.i10
+        - This is the journal article that introduced the data concepts covered in GW chapter 12 and created the packages related to tidying data
+        - Link to article here: [LINK](https://www.jstatsoft.org/article/view/v059i10)
 
 ## `r advdate(fri, 6)`: Joining multiple datasets
 

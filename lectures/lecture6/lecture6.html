@@ -258,9 +258,10 @@ div.tocify {
 <div id="reading-to-do-before-next-class" class="section level3">
 <h3><span class="header-section-number">1.1.3</span> Reading to do before next class</h3>
 <ul>
-<li>Work through slides from lecture 6 that we don’t get to in class
+<li>Work through slides we from lecture 6 that we don’t get to in class
 <ul>
-<li>Assuming we get through the section on <strong>tidying data</strong>, the rest of the lecture focuses on missing values created by tidying and it is fine for you to read this <strong>after</strong> you finish problem set</li>
+<li>[REQUIRED] slides from section 4 “Tidying data”</li>
+<li>[OPTIONAL] slides from section 5 “Missing data”</li>
 </ul></li>
 <li>[OPTIONAL] GW chapter 12 (tidy data)
 <ul>
@@ -277,12 +278,12 @@ div.tocify {
 <h3><span class="header-section-number">1.1.4</span> Libraries we will use today</h3>
 <p>You must run this R code chunk (install packages first if you don’t have them)</p>
 <pre class="r"><code>library(tidyverse)
-#&gt; -- Attaching packages -------------------------------------------------- tidyverse 1.2.1 --
+#&gt; -- Attaching packages ------------------------------------- tidyverse 1.2.1 --
 #&gt; v ggplot2 3.0.0     v purrr   0.2.5
 #&gt; v tibble  1.4.2     v dplyr   0.7.6
 #&gt; v tidyr   0.8.1     v stringr 1.3.1
 #&gt; v readr   1.1.1     v forcats 0.3.0
-#&gt; -- Conflicts ----------------------------------------------------- tidyverse_conflicts() --
+#&gt; -- Conflicts ---------------------------------------- tidyverse_conflicts() --
 #&gt; x dplyr::filter() masks stats::filter()
 #&gt; x dplyr::lag()    masks stats::lag()
 library(haven)
@@ -418,6 +419,21 @@ structure_b
 <pre class="r"><code>ipeds_hc_temp &lt;- read_dta(file=&quot;https://github.com/ozanj/rclass/raw/master/data/ipeds/effy/ey15-16_hc.dta&quot;, encoding=NULL) %&gt;% 
   select(unitid,lstudy,efytotlt) %&gt;% arrange(unitid,lstudy)
 
+ipeds_hc_temp
+#&gt; # A tibble: 15,726 x 3
+#&gt;    unitid lstudy    efytotlt
+#&gt;     &lt;dbl&gt; &lt;dbl+lbl&gt;    &lt;dbl&gt;
+#&gt;  1 100654 &quot;  1&quot;         4865
+#&gt;  2 100654 &quot;  3&quot;         1292
+#&gt;  3 100654 999           6157
+#&gt;  4 100663 &quot;  1&quot;        13440
+#&gt;  5 100663 &quot;  3&quot;         8114
+#&gt;  6 100663 999          21554
+#&gt;  7 100690 &quot;  1&quot;          415
+#&gt;  8 100690 &quot;  3&quot;          415
+#&gt;  9 100690 999            830
+#&gt; 10 100706 &quot;  1&quot;         6994
+#&gt; # ... with 15,716 more rows
 #show variable labels and value labels
 ipeds_hc_temp %&gt;% var_label()
 #&gt; $unitid
@@ -540,6 +556,26 @@ ipeds_hc_temp %&gt;% head(n=10)
 <li>There is <code>1</code> row each unique combination of <code>unitid</code> and <code>lstudy</code></li>
 <li><strong>Conclusion</strong>: the variables <code>unitid</code> and <code>lstudy</code> uniquely identify rows in the data frame <code>ipeds_hc_temp</code></li>
 </ul>
+<p>What happens if we didn’t ungroup?</p>
+<pre class="r"><code>ipeds_hc_temp %&gt;% # start with data frame object ipeds_hc_temp
+  group_by(unitid,lstudy) %&gt;% # group by unitid and lstudy
+  summarise(n_per_group=n()) %&gt;% # create measure of number of obs per group
+  count(n_per_group) # frequency of number of observations per group
+#&gt; # A tibble: 6,951 x 3
+#&gt; # Groups:   unitid [6,951]
+#&gt;    unitid n_per_group     n
+#&gt;     &lt;dbl&gt;       &lt;int&gt; &lt;int&gt;
+#&gt;  1 100654           1     3
+#&gt;  2 100663           1     3
+#&gt;  3 100690           1     3
+#&gt;  4 100706           1     3
+#&gt;  5 100724           1     3
+#&gt;  6 100751           1     3
+#&gt;  7 100760           1     2
+#&gt;  8 100812           1     2
+#&gt;  9 100830           1     3
+#&gt; 10 100858           1     3
+#&gt; # ... with 6,941 more rows</code></pre>
 </div>
 </div>
 <div id="dataset-semantics-concepts" class="section level2">
@@ -953,7 +989,16 @@ str(table1$cases)
 <ul>
 <li>how would you calculate <code>rate</code> variable (<code>=cases/population*10000</code>) for <code>table1</code> (tidy) and <code>table2</code> (untidy)</li>
 </ul>
-<pre class="r"><code>#table1
+<pre class="r"><code>table1
+#&gt; # A tibble: 6 x 4
+#&gt;   country      year  cases population
+#&gt;   &lt;chr&gt;       &lt;int&gt;  &lt;int&gt;      &lt;int&gt;
+#&gt; 1 Afghanistan  1999    745   19987071
+#&gt; 2 Afghanistan  2000   2666   20595360
+#&gt; 3 Brazil       1999  37737  172006362
+#&gt; 4 Brazil       2000  80488  174504898
+#&gt; 5 China        1999 212258 1272915272
+#&gt; 6 China        2000 213766 1280428583
 table1 %&gt;% 
   mutate(rate = cases / population * 10000)
 #&gt; # A tibble: 6 x 5
@@ -1501,7 +1546,23 @@ table1</code></pre>
 <li>in <code>table2</code> the value column is <code>count</code>; the values of <code>count</code> will become the values of the new variables <code>cases</code> and <code>population</code> in the tidy data</li>
 </ul></li>
 </ol>
-<pre class="r"><code>table2 %&gt;%
+<pre class="r"><code>table2
+#&gt; # A tibble: 12 x 4
+#&gt;    country      year type            count
+#&gt;    &lt;chr&gt;       &lt;int&gt; &lt;chr&gt;           &lt;int&gt;
+#&gt;  1 Afghanistan  1999 cases             745
+#&gt;  2 Afghanistan  1999 population   19987071
+#&gt;  3 Afghanistan  2000 cases            2666
+#&gt;  4 Afghanistan  2000 population   20595360
+#&gt;  5 Brazil       1999 cases           37737
+#&gt;  6 Brazil       1999 population  172006362
+#&gt;  7 Brazil       2000 cases           80488
+#&gt;  8 Brazil       2000 population  174504898
+#&gt;  9 China        1999 cases          212258
+#&gt; 10 China        1999 population 1272915272
+#&gt; 11 China        2000 cases          213766
+#&gt; 12 China        2000 population 1280428583
+table2 %&gt;%
     spread(key = type, value = count)
 #&gt; # A tibble: 6 x 4
 #&gt;   country      year  cases population
