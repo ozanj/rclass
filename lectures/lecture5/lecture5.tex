@@ -861,7 +861,7 @@ Below, I'll create a factor version of the character variable
 \CommentTok{#wwlist$ethn_code_fac <- factor(wwlist$ethn_code) # base r approach}
 
 \KeywordTok{str}\NormalTok{(wwlist}\OperatorTok{$}\NormalTok{ethn_code_fac)}
-\CommentTok{#>  Factor w/ 10 levels "american indian or alaska native",..: 8 10 10 8 10 8 8 8 8 10 ...}
+\CommentTok{#>  Factor w/ 10 levels "american indian or alaska native",..: 7 10 10 7 10 7 7 7 7 10 ...}
 \end{Highlighting}
 \end{Shaded}
 
@@ -977,8 +977,8 @@ If you want to refer to underlying values, then apply
 \CommentTok{#>  [4] "cuban"                                             }
 \CommentTok{#>  [5] "mexican/mexican american"                          }
 \CommentTok{#>  [6] "not reported"                                      }
-\CommentTok{#>  [7] "other spanish/hispanic"                            }
-\CommentTok{#>  [8] "other-2 or more"                                   }
+\CommentTok{#>  [7] "other-2 or more"                                   }
+\CommentTok{#>  [8] "other spanish/hispanic"                            }
 \CommentTok{#>  [9] "puerto rican"                                      }
 \CommentTok{#> [10] "white"                                             }
 \CommentTok{#> }
@@ -2218,7 +2218,7 @@ What if you didn't include \texttt{.args=list(na.rm=TRUE)}?
 \CommentTok{#> # A tibble: 1 x 4}
 \CommentTok{#>    mean    sd   min   max}
 \CommentTok{#>   <dbl> <dbl> <dbl> <dbl>}
-\CommentTok{#> 1    NA    NA    NA    NA}
+\CommentTok{#> 1    NA   NaN    NA    NA}
 \end{Highlighting}
 \end{Shaded}
 

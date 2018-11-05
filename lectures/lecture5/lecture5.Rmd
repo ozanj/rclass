@@ -234,7 +234,7 @@ vector1 <- c(1,2,3,4)
 vector1
 attributes(vector1)
 
-#vector with attributes
+#vector with name attributes
 vector2 <- c(a = 1, b= 2, c= 3, d = 4)
 vector2
 attributes(vector2)
@@ -301,9 +301,9 @@ class(wwlist$med_inc_zip)
 sum(wwlist$med_inc_zip[1:10], na.rm = TRUE) # numeric function
 
 # load library with date functions
-library(lubridate) 
+library(lubridate)
 #Sys.setenv(TZ="America/Los_Angeles") #setting time zone to Los Angeles time
-year(wwlist$receive_date[1:10]) # date function
+year(wwlist$med_inc_zip[1:10]) # date function
 ```
 ### Object class
 
@@ -366,6 +366,7 @@ Below, I'll create a factor version of the character variable `ethn_code`
 - (don't worry about understanding this code; I'll explain it later)
 ```{r}
 str(wwlist$ethn_code)
+class(wwlist$ethn_code)
 # create factor var; tidyverse approach
 wwlist <- wwlist %>% mutate(ethn_code_fac = factor(ethn_code)) 
 #wwlist$ethn_code_fac <- factor(wwlist$ethn_code) # base r approach
@@ -441,6 +442,7 @@ wwlist <- wwlist %>% mutate(psat_range_fac = factor(psat_range)) # create factor
 Run below code in console rather than code chunk to see values associated with each factor
 ```{r, results="hide"}
 wwlist %>% count(psat_range_fac)
+attributes(wwlist$psat_range_fac)
 ```
 
 Once you know values associated with factor, you can filter based on values
@@ -594,8 +596,8 @@ Functions in `labelled` package
 ```{r, results="hide"}
 attributes(hsls$s3classes)
 
-hsls %>% select(s3classes) %>% var_label
-hsls %>% select(s3classes) %>% val_labels
+hsls %>% select(s3classes) %>% var_label()
+hsls %>% select(s3classes) %>% val_labels()
 ```
 ### Core concepts for understanding `labelled` class [SKIP]
 
