@@ -4,6 +4,7 @@ library(haven)
 library(sjlabelled)
 library(Hmisc)
 
+list.files('data/ccd/2015-16')
 characteristics <- read_sas('data/ccd/2015-16/ccd_1516_characteristics.sas7bdat')
 directory <- read_sas('data/ccd/2015-16/ccd_1516_directory.sas7bdat')
 lunch <- read_sas('data/ccd/2015-16/ccd_1516_lunch.sas7bdat')
