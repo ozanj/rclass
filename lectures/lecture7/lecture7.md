@@ -22,6 +22,10 @@ output:
 
 
 
+
+
+
+
 # Introduction
 
 ## Logistics
@@ -32,7 +36,7 @@ OTHER
 
 ## Lecture overview
 
-Rare for an analysis dataset to consist of data from only one input dataset. For most projects, each analysis dataset contains data from multiple data sources. Therefore, you must become proficient in combining data from multiple data sources.
+It is rare for an analysis dataset to consist of data from only one input dataset. For most projects, each analysis dataset contains data from multiple data sources. Therefore, you must become proficient in combining data from multiple data sources.
 
 Two broad topics today:
 
@@ -56,14 +60,14 @@ Libraries we will use
 
 ```r
 library(tidyverse)
-#> -- Attaching packages -------------------------------------------------- tidyverse 1.2.1 --
-#> v ggplot2 3.0.0     v purrr   0.2.5
-#> v tibble  1.4.2     v dplyr   0.7.6
-#> v tidyr   0.8.1     v stringr 1.3.1
-#> v readr   1.1.1     v forcats 0.3.0
-#> -- Conflicts ----------------------------------------------------- tidyverse_conflicts() --
-#> x dplyr::filter() masks stats::filter()
-#> x dplyr::lag()    masks stats::lag()
+#> ── Attaching packages ──────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+#> ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
+#> ✔ tibble  1.4.2     ✔ dplyr   0.7.6
+#> ✔ tidyr   0.8.1     ✔ stringr 1.3.1
+#> ✔ readr   1.1.1     ✔ forcats 0.3.0
+#> ── Conflicts ─────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+#> ✖ dplyr::filter() masks stats::filter()
+#> ✖ dplyr::lag()    masks stats::lag()
 library(haven)
 library(labelled)
 ```
@@ -88,9 +92,8 @@ Below, we'll read-in Stata data files and keep a small number of variables from 
 ```r
 rm(list = ls()) # remove all objects
 
-getwd()
-#> [1] "C:/Users/ozanj/Documents/rclass/lectures/lecture7"
-nls_stu <- read_dta(file="../../data/nls72/nls72stu_percontor_vars.dta") %>%
+#getwd()
+nls_stu <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/nls72/nls72stu_percontor_vars.dta") %>%
   select(id,schcode,bysex,csex,crace,cbirthm,cbirthd,cbirthyr)
 
 #get a feel for the data
@@ -175,7 +178,7 @@ nls_stu %>% count(bysex) %>% as_factor()
 
 
 ```r
-nls_stu_pets <- read_dta(file="../../data/nls72/nls72petsstu_v2.dta") %>%
+nls_stu_pets <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/nls72/nls72petsstu_v2.dta") %>%
   select(id,reqtrans,numtrans)
 
 names(nls_stu_pets)
@@ -201,7 +204,7 @@ nls_stu_pets %>% var_label()
 
 
 ```r
-nls_tran <- read_dta(file="../../data/nls72/nls72petstrn_v2.dta") %>%
+nls_tran <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/nls72/nls72petstrn_v2.dta") %>%
   select(id,transnum,findisp,trnsflag,terms,fice,state,cofcon,instype,itype)
 
 names(nls_tran)
@@ -305,7 +308,7 @@ nls_tran %>% val_labels()
 
 
 ```r
-nls_term <- read_dta(file="../../data/nls72/nls72petstrm_v2.dta") %>%
+nls_term <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/nls72/nls72petstrm_v2.dta") %>%
   select(id,transnum,termnum,courses,termtype,season,sortdate,gradcode,transfer)
 
 names(nls_term)
@@ -394,7 +397,7 @@ nls_term %>% val_labels()
 
 
 ```r
-nls_course <- read_dta(file="../../data/nls72/nls72petscrs_v2.dta") %>%
+nls_course <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/nls72/nls72petscrs_v2.dta") %>%
   select(id,transnum,termnum,crsecip,crsecred,gradtype,crsgrada,crsgradb)
 
 names(nls_course)
@@ -485,7 +488,7 @@ __Keys__ are "the variables used to connect each pair of tables" in a relational
 <br>
 __An important thing to keep in mind before we delve into an in-depth discussion of keys__
 
-- Even though relational databases often consit of many tables, __relations__ are always defined between a __pair__ of tables
+- Even though relational databases often consist of many tables, __relations__ are always defined between a __pair__ of tables
 - When joining tables, focus on joining __one__ table to __another__; you make this "join" using the __key variable(s)__ that define the relationship between these two tables
 - Even when your analysis requires variables from more than two tables, you proceed by joining one pair of tables at a time
 
@@ -663,7 +666,7 @@ nls_course %>% group_by(id,transnum,termnum,crsecip) %>% summarise(n_per_key=n()
 __Definition of foreign key__: 
 
 - A variable (or combination of variables) in a table that uniquely identify observations in another table
-- said differently, a foreign is key variable (or combination of variables) in a table that is the primary key in another table
+- Said differently, a foreign key is a variable (or combination of variables) in a table that is the primary key in another table
 
 Personally, I find the concept __foreign key__ a little bit slippery. Here is how I wrap my head around it: 
 
@@ -782,7 +785,7 @@ Observations in table `x` matched to observations in table `y` using a "key" var
 
 Two tables `x` and `y` can be "joined" when the primary key for table `x` can be found in table `y`; in other words, when table `y` contains the _foreign key_, which uniquely identifies observations in table `x`
  
-- e.g., use `id` to join `nls_stu` and `nls_tran` because `id` is the primary key for `nls_stu` (i.e., uniquely identifies obs in `nls_stu`) and `id` can be found on `nls_tran`
+- e.g., use `id` to join `nls_stu` and `nls_tran` because `id` is the primary key for `nls_stu` (i.e., uniquely identifies obs in `nls_stu`) and `id` can be found in `nls_tran`
 
 There are four types of joins between tables `x` and `y`:
 
@@ -1286,11 +1289,11 @@ There are two types of filtering joins, `semi_join()` and `anti_join()`. Here ar
 - `semi_join(x, y)`
     - return all rows from x where there are matching values in y, keeping just columns from x.
     
-Difference between a `semi_join()` and an `inner_join()` in terms of which observations are present in the resulting jobject:
+Difference between a `semi_join()` and an `inner_join()` in terms of which observations are present in the resulting object:
 
 - Imagine that if object `x` has one row with `key==4` and object `y` has two rows with `key==4`' 
 - __inner_join__: resulting object will have two rows with `key==4`
-- __semi_join__: resulting object will have one row with `kee==4`
+- __semi_join__: resulting object will have one row with `key==4`
     - Why? __because the rule for `semi_join` is to never duplicate rows of x__
 
 Note: syntax for `semi_join()` and `anti_join()` follows the exact same patterns as syntax for mutating joins (e.g., `inner_join()` `left_join`)
@@ -1402,9 +1405,9 @@ How to avoid join problems before they arise. How to overcome join problems when
 1. Start by investigating the data structure of tables you are going to merge
     - identify the primary key in each table.
         - This investigation should be based on your understanding of the data and reading data documentation rather than checking if each combination of variables is a primary key
-    - does either table have missing or strang values (e.g., `-8`) for the primary key; if so, these observations won't match
-1. Before joining, make sure that key you will use for joining uniquely identies observations in at least one of the datasets and that the key variable(s) is present in both datasets
-    - investigate whether key variables have different names across the two tables. if different, then you will have to adjust syntax of your join statement accordingly
+    - does either table have missing or strange values (e.g., `-8`) for the primary key; if so, these observations won't match
+1. Before joining, make sure that key you will use for joining uniquely identifies observations in at least one of the datasets and that the key variable(s) is present in both datasets
+    - investigate whether key variables have different names across the two tables. If different, then you will have to adjust syntax of your join statement accordingly
 1. Think about which observations you want retained after joining
     - think about which dataset should be the `x` table and which should be the `y` table
     - think about whether you want an inner, left, right, or full join
@@ -1415,7 +1418,7 @@ How to avoid join problems before they arise. How to overcome join problems when
 
 - Identify which observations don't match
     - `anti_join()` is your friend here
-- Investigate the reasons taht observations don't match
+- Investigate the reasons that observations don't match
     - Investigating joins is a craft that takes some practice getting good at; this is essentially an exercise in exploratory data analysis for the purpose of data quality
     - First, you have to _care_ about data quality
     - Identifying causes for non-matches usually involves consulting data documentation for both tables and performing basic descriptive statistics (e.g., frequency tables) on specific variables that documentation suggests may be relevant for whether obs match or not
@@ -1506,7 +1509,7 @@ Load annual IPEDS data on admissions characteristics
 
 ```r
 
-admit16_17 <- read_dta(file="../../data/ipeds/ic/ic16_17_admit.dta") %>%
+admit16_17 <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/ipeds/ic/ic16_17_admit.dta") %>%
   select(unitid,endyear,sector,contains("admcon"),contains("numapply"),contains("numadmit"))
 
 glimpse(admit16_17)
@@ -1587,16 +1590,129 @@ admit16_17 %>% var_label()
 #admit16_17 %>% val_labels()
 
 #read in previous two years of data
-admit15_16 <- read_dta(file="../../data/ipeds/ic/ic15_16_admit.dta") %>%
+admit15_16 <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/ipeds/ic/ic15_16_admit.dta") %>%
   select(unitid,endyear,sector,contains("admcon"),contains("numapply"),contains("numadmit"))
 
-admit14_15 <- read_dta(file="../../data/ipeds/ic/ic14_15_admit.dta") %>%
+admit14_15 <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/ipeds/ic/ic14_15_admit.dta") %>%
   select(unitid,endyear,sector,contains("admcon"),contains("numapply"),contains("numadmit"))
 ```
 
 
 Appending/Stack IPEDS datasets
 
+```r
+admit_append <- bind_rows(admit16_17,admit15_16,admit14_15)
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+
+#> Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not
+#> preserve their attributes
+#note that R complains about preserving "labelled" data; does not retain labels
+str(admit_append)
+#> Classes 'tbl_df', 'tbl' and 'data.frame':	6514 obs. of  18 variables:
+#>  $ unitid     : num  100654 100663 100706 100724 100751 ...
+#>  $ endyear    : num  2017 2017 2017 2017 2017 ...
+#>  $ sector     : num  1 1 1 1 1 1 1 2 2 2 ...
+#>  $ admcon1    : num  1 1 1 1 1 1 1 1 1 1 ...
+#>  $ admcon2    : num  2 3 2 3 2 2 2 1 2 2 ...
+#>  $ admcon3    : num  1 1 1 2 1 1 1 1 1 1 ...
+#>  $ admcon4    : num  2 1 1 3 1 3 1 3 3 3 ...
+#>  $ admcon5    : num  3 3 3 3 3 3 2 1 2 2 ...
+#>  $ admcon6    : num  2 3 2 3 3 3 3 3 3 3 ...
+#>  $ admcon7    : num  1 1 1 1 1 1 1 1 2 1 ...
+#>  $ admcon8    : num  1 3 1 1 1 1 1 1 1 2 ...
+#>  $ admcon9    : num  3 3 3 3 3 3 3 3 3 3 ...
+#>  $ numapplymen: num  2725 3510 2385 2967 14846 ...
+#>  $ numapplywom: num  4318 5949 2160 6086 23391 ...
+#>  $ numapplytot: num  7043 9459 4545 9053 38237 ...
+#>  $ numadmitmen: num  2276 2062 1930 1293 7819 ...
+#>  $ numadmitwom: num  3878 3437 1537 2862 12288 ...
+#>  $ numadmittot: num  6154 5499 3467 4155 20107 ...
+```
 
 Investigate structure
 

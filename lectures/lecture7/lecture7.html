@@ -267,7 +267,7 @@ div.tocify {
 </div>
 <div id="lecture-overview" class="section level2">
 <h2><span class="header-section-number">1.2</span> Lecture overview</h2>
-<p>Rare for an analysis dataset to consist of data from only one input dataset. For most projects, each analysis dataset contains data from multiple data sources. Therefore, you must become proficient in combining data from multiple data sources.</p>
+<p>It is rare for an analysis dataset to consist of data from only one input dataset. For most projects, each analysis dataset contains data from multiple data sources. Therefore, you must become proficient in combining data from multiple data sources.</p>
 <p>Two broad topics today:</p>
 <ol style="list-style-type: decimal">
 <li><strong>Joining</strong> datasets [big topic]
@@ -292,14 +292,14 @@ div.tocify {
 <p>Our main focus today is on <em>mutating joins</em>. But <em>Filtering joins</em> are useful for data quality checks of <em>mutating joins</em>.</p>
 <p>Libraries we will use</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
-<span class="co">#&gt; -- Attaching packages -------------------------------------------------- tidyverse 1.2.1 --</span>
-<span class="co">#&gt; v ggplot2 3.0.0     v purrr   0.2.5</span>
-<span class="co">#&gt; v tibble  1.4.2     v dplyr   0.7.6</span>
-<span class="co">#&gt; v tidyr   0.8.1     v stringr 1.3.1</span>
-<span class="co">#&gt; v readr   1.1.1     v forcats 0.3.0</span>
-<span class="co">#&gt; -- Conflicts ----------------------------------------------------- tidyverse_conflicts() --</span>
-<span class="co">#&gt; x dplyr::filter() masks stats::filter()</span>
-<span class="co">#&gt; x dplyr::lag()    masks stats::lag()</span>
+<span class="co">#&gt; ── Attaching packages ──────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</span>
+<span class="co">#&gt; ✔ ggplot2 3.0.0     ✔ purrr   0.2.5</span>
+<span class="co">#&gt; ✔ tibble  1.4.2     ✔ dplyr   0.7.6</span>
+<span class="co">#&gt; ✔ tidyr   0.8.1     ✔ stringr 1.3.1</span>
+<span class="co">#&gt; ✔ readr   1.1.1     ✔ forcats 0.3.0</span>
+<span class="co">#&gt; ── Conflicts ─────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──</span>
+<span class="co">#&gt; ✖ dplyr::filter() masks stats::filter()</span>
+<span class="co">#&gt; ✖ dplyr::lag()    masks stats::lag()</span>
 <span class="kw">library</span>(haven)
 <span class="kw">library</span>(labelled)</code></pre></div>
 </div>
@@ -321,9 +321,8 @@ div.tocify {
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rm</span>(<span class="dt">list =</span> <span class="kw">ls</span>()) <span class="co"># remove all objects</span>
 
-<span class="kw">getwd</span>()
-<span class="co">#&gt; [1] &quot;C:/Users/ozanj/Documents/rclass/lectures/lecture7&quot;</span>
-nls_stu &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class="dt">file=</span><span class="st">&quot;../../data/nls72/nls72stu_percontor_vars.dta&quot;</span>) <span class="op">%&gt;%</span>
+<span class="co">#getwd()</span>
+nls_stu &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class="dt">file=</span><span class="st">&quot;https://github.com/ozanj/rclass/raw/master/data/nls72/nls72stu_percontor_vars.dta&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(id,schcode,bysex,csex,crace,cbirthm,cbirthd,cbirthyr)
 
 <span class="co">#get a feel for the data</span>
@@ -406,7 +405,7 @@ nls_stu <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">
 <ul>
 <li><strong>Student level data, containing variables about completeness of postsecondary education transcripts (PETS)</strong></li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nls_stu_pets &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class="dt">file=</span><span class="st">&quot;../../data/nls72/nls72petsstu_v2.dta&quot;</span>) <span class="op">%&gt;%</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nls_stu_pets &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class="dt">file=</span><span class="st">&quot;https://github.com/ozanj/rclass/raw/master/data/nls72/nls72petsstu_v2.dta&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(id,reqtrans,numtrans)
 
 <span class="kw">names</span>(nls_stu_pets)
@@ -429,7 +428,7 @@ nls_stu_pets <span class="op">%&gt;%</span><span class="st"> </span><span class=
 <ul>
 <li><strong>Student-transcript level data</strong></li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nls_tran &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class="dt">file=</span><span class="st">&quot;../../data/nls72/nls72petstrn_v2.dta&quot;</span>) <span class="op">%&gt;%</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nls_tran &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class="dt">file=</span><span class="st">&quot;https://github.com/ozanj/rclass/raw/master/data/nls72/nls72petstrn_v2.dta&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(id,transnum,findisp,trnsflag,terms,fice,state,cofcon,instype,itype)
 
 <span class="kw">names</span>(nls_tran)
@@ -530,7 +529,7 @@ nls_tran <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"
 <ul>
 <li><strong>Student-transcript-term level data</strong></li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nls_term &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class="dt">file=</span><span class="st">&quot;../../data/nls72/nls72petstrm_v2.dta&quot;</span>) <span class="op">%&gt;%</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nls_term &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class="dt">file=</span><span class="st">&quot;https://github.com/ozanj/rclass/raw/master/data/nls72/nls72petstrm_v2.dta&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(id,transnum,termnum,courses,termtype,season,sortdate,gradcode,transfer)
 
 <span class="kw">names</span>(nls_term)
@@ -618,7 +617,7 @@ nls_term <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"
 <li>This is the file we worked with for the “create GPA” problem set</li>
 </ul></li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nls_course &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class="dt">file=</span><span class="st">&quot;../../data/nls72/nls72petscrs_v2.dta&quot;</span>) <span class="op">%&gt;%</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nls_course &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class="dt">file=</span><span class="st">&quot;https://github.com/ozanj/rclass/raw/master/data/nls72/nls72petscrs_v2.dta&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(id,transnum,termnum,crsecip,crsecred,gradtype,crsgrada,crsgradb)
 
 <span class="kw">names</span>(nls_course)
@@ -718,7 +717,7 @@ nls_course <span class="op">%&gt;%</span><span class="st"> </span><span class="k
 <p><strong>Keys</strong> are “the variables used to connect each pair of tables” in a relational database</p>
 <p><br> <strong>An important thing to keep in mind before we delve into an in-depth discussion of keys</strong></p>
 <ul>
-<li>Even though relational databases often consit of many tables, <strong>relations</strong> are always defined between a <strong>pair</strong> of tables</li>
+<li>Even though relational databases often consist of many tables, <strong>relations</strong> are always defined between a <strong>pair</strong> of tables</li>
 <li>When joining tables, focus on joining <strong>one</strong> table to <strong>another</strong>; you make this “join” using the <strong>key variable(s)</strong> that define the relationship between these two tables</li>
 <li>Even when your analysis requires variables from more than two tables, you proceed by joining one pair of tables at a time</li>
 </ul>
@@ -865,7 +864,7 @@ nls_course_temp <span class="op">%&gt;%</span><span class="st">  </span><span cl
 <p><strong>Definition of foreign key</strong>:</p>
 <ul>
 <li>A variable (or combination of variables) in a table that uniquely identify observations in another table</li>
-<li>said differently, a foreign is key variable (or combination of variables) in a table that is the primary key in another table</li>
+<li>Said differently, a foreign key is a variable (or combination of variables) in a table that is the primary key in another table</li>
 </ul>
 <p>Personally, I find the concept <strong>foreign key</strong> a little bit slippery. Here is how I wrap my head around it:</p>
 <ul>
@@ -985,7 +984,7 @@ y
 </ul>
 <p>Two tables <code>x</code> and <code>y</code> can be “joined” when the primary key for table <code>x</code> can be found in table <code>y</code>; in other words, when table <code>y</code> contains the <em>foreign key</em>, which uniquely identifies observations in table <code>x</code></p>
 <ul>
-<li>e.g., use <code>id</code> to join <code>nls_stu</code> and <code>nls_tran</code> because <code>id</code> is the primary key for <code>nls_stu</code> (i.e., uniquely identifies obs in <code>nls_stu</code>) and <code>id</code> can be found on <code>nls_tran</code></li>
+<li>e.g., use <code>id</code> to join <code>nls_stu</code> and <code>nls_tran</code> because <code>id</code> is the primary key for <code>nls_stu</code> (i.e., uniquely identifies obs in <code>nls_stu</code>) and <code>id</code> can be found in <code>nls_tran</code></li>
 </ul>
 <p>There are four types of joins between tables <code>x</code> and <code>y</code>:</p>
 <ul>
@@ -1480,11 +1479,11 @@ nls_stu_pets_stu_tran &lt;-<span class="st"> </span>nls_stu_pets_stu <span class
 <li>return all rows from x where there are matching values in y, keeping just columns from x.</li>
 </ul></li>
 </ul>
-<p>Difference between a <code>semi_join()</code> and an <code>inner_join()</code> in terms of which observations are present in the resulting jobject:</p>
+<p>Difference between a <code>semi_join()</code> and an <code>inner_join()</code> in terms of which observations are present in the resulting object:</p>
 <ul>
 <li>Imagine that if object <code>x</code> has one row with <code>key==4</code> and object <code>y</code> has two rows with <code>key==4</code>’</li>
 <li><strong>inner_join</strong>: resulting object will have two rows with <code>key==4</code></li>
-<li><strong>semi_join</strong>: resulting object will have one row with <code>kee==4</code>
+<li><strong>semi_join</strong>: resulting object will have one row with <code>key==4</code>
 <ul>
 <li>Why? <strong>because the rule for <code>semi_join</code> is to never duplicate rows of x</strong></li>
 </ul></li>
@@ -1598,11 +1597,11 @@ semi_tran_course &lt;-<span class="st"> </span>nls_tran <span class="op">%&gt;%<
 <ul>
 <li>This investigation should be based on your understanding of the data and reading data documentation rather than checking if each combination of variables is a primary key</li>
 </ul></li>
-<li>does either table have missing or strang values (e.g., <code>-8</code>) for the primary key; if so, these observations won’t match</li>
+<li>does either table have missing or strange values (e.g., <code>-8</code>) for the primary key; if so, these observations won’t match</li>
 </ul></li>
-<li>Before joining, make sure that key you will use for joining uniquely identies observations in at least one of the datasets and that the key variable(s) is present in both datasets
+<li>Before joining, make sure that key you will use for joining uniquely identifies observations in at least one of the datasets and that the key variable(s) is present in both datasets
 <ul>
-<li>investigate whether key variables have different names across the two tables. if different, then you will have to adjust syntax of your join statement accordingly</li>
+<li>investigate whether key variables have different names across the two tables. If different, then you will have to adjust syntax of your join statement accordingly</li>
 </ul></li>
 <li>Think about which observations you want retained after joining
 <ul>
@@ -1622,7 +1621,7 @@ semi_tran_course &lt;-<span class="st"> </span>nls_tran <span class="op">%&gt;%<
 <ul>
 <li><code>anti_join()</code> is your friend here</li>
 </ul></li>
-<li>Investigate the reasons taht observations don’t match
+<li>Investigate the reasons that observations don’t match
 <ul>
 <li>Investigating joins is a craft that takes some practice getting good at; this is essentially an exercise in exploratory data analysis for the purpose of data quality</li>
 <li>First, you have to <em>care</em> about data quality</li>
@@ -1707,7 +1706,7 @@ append_time <span class="op">%&gt;%</span><span class="st"> </span><span class="
 </ul>
 <p>Load annual IPEDS data on admissions characteristics</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
-admit16_<span class="dv">17</span> &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class="dt">file=</span><span class="st">&quot;../../data/ipeds/ic/ic16_17_admit.dta&quot;</span>) <span class="op">%&gt;%</span>
+admit16_<span class="dv">17</span> &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class="dt">file=</span><span class="st">&quot;https://github.com/ozanj/rclass/raw/master/data/ipeds/ic/ic16_17_admit.dta&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(unitid,endyear,sector,<span class="kw">contains</span>(<span class="st">&quot;admcon&quot;</span>),<span class="kw">contains</span>(<span class="st">&quot;numapply&quot;</span>),<span class="kw">contains</span>(<span class="st">&quot;numadmit&quot;</span>))
 
 <span class="kw">glimpse</span>(admit16_<span class="dv">17</span>)
@@ -1788,12 +1787,123 @@ admit16_<span class="dv">17</span> <span class="op">%&gt;%</span><span class="st
 <span class="co">#admit16_17 %&gt;% val_labels()</span>
 
 <span class="co">#read in previous two years of data</span>
-admit15_<span class="dv">16</span> &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class="dt">file=</span><span class="st">&quot;../../data/ipeds/ic/ic15_16_admit.dta&quot;</span>) <span class="op">%&gt;%</span>
+admit15_<span class="dv">16</span> &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class="dt">file=</span><span class="st">&quot;https://github.com/ozanj/rclass/raw/master/data/ipeds/ic/ic15_16_admit.dta&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(unitid,endyear,sector,<span class="kw">contains</span>(<span class="st">&quot;admcon&quot;</span>),<span class="kw">contains</span>(<span class="st">&quot;numapply&quot;</span>),<span class="kw">contains</span>(<span class="st">&quot;numadmit&quot;</span>))
 
-admit14_<span class="dv">15</span> &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class="dt">file=</span><span class="st">&quot;../../data/ipeds/ic/ic14_15_admit.dta&quot;</span>) <span class="op">%&gt;%</span>
+admit14_<span class="dv">15</span> &lt;-<span class="st"> </span><span class="kw">read_dta</span>(<span class="dt">file=</span><span class="st">&quot;https://github.com/ozanj/rclass/raw/master/data/ipeds/ic/ic14_15_admit.dta&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(unitid,endyear,sector,<span class="kw">contains</span>(<span class="st">&quot;admcon&quot;</span>),<span class="kw">contains</span>(<span class="st">&quot;numapply&quot;</span>),<span class="kw">contains</span>(<span class="st">&quot;numadmit&quot;</span>))</code></pre></div>
 <p>Appending/Stack IPEDS datasets</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">admit_append &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(admit16_<span class="dv">17</span>,admit15_<span class="dv">16</span>,admit14_<span class="dv">15</span>)
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+
+<span class="co">#&gt; Warning in bind_rows_(x, .id): Vectorizing 'labelled' elements may not</span>
+<span class="co">#&gt; preserve their attributes</span>
+<span class="co">#note that R complains about preserving &quot;labelled&quot; data; does not retain labels</span>
+<span class="kw">str</span>(admit_append)
+<span class="co">#&gt; Classes 'tbl_df', 'tbl' and 'data.frame':    6514 obs. of  18 variables:</span>
+<span class="co">#&gt;  $ unitid     : num  100654 100663 100706 100724 100751 ...</span>
+<span class="co">#&gt;  $ endyear    : num  2017 2017 2017 2017 2017 ...</span>
+<span class="co">#&gt;  $ sector     : num  1 1 1 1 1 1 1 2 2 2 ...</span>
+<span class="co">#&gt;  $ admcon1    : num  1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="co">#&gt;  $ admcon2    : num  2 3 2 3 2 2 2 1 2 2 ...</span>
+<span class="co">#&gt;  $ admcon3    : num  1 1 1 2 1 1 1 1 1 1 ...</span>
+<span class="co">#&gt;  $ admcon4    : num  2 1 1 3 1 3 1 3 3 3 ...</span>
+<span class="co">#&gt;  $ admcon5    : num  3 3 3 3 3 3 2 1 2 2 ...</span>
+<span class="co">#&gt;  $ admcon6    : num  2 3 2 3 3 3 3 3 3 3 ...</span>
+<span class="co">#&gt;  $ admcon7    : num  1 1 1 1 1 1 1 1 2 1 ...</span>
+<span class="co">#&gt;  $ admcon8    : num  1 3 1 1 1 1 1 1 1 2 ...</span>
+<span class="co">#&gt;  $ admcon9    : num  3 3 3 3 3 3 3 3 3 3 ...</span>
+<span class="co">#&gt;  $ numapplymen: num  2725 3510 2385 2967 14846 ...</span>
+<span class="co">#&gt;  $ numapplywom: num  4318 5949 2160 6086 23391 ...</span>
+<span class="co">#&gt;  $ numapplytot: num  7043 9459 4545 9053 38237 ...</span>
+<span class="co">#&gt;  $ numadmitmen: num  2276 2062 1930 1293 7819 ...</span>
+<span class="co">#&gt;  $ numadmitwom: num  3878 3437 1537 2862 12288 ...</span>
+<span class="co">#&gt;  $ numadmittot: num  6154 5499 3467 4155 20107 ...</span></code></pre></div>
 <p>Investigate structure</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">admit_append <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(unitid,endyear,admcon1,admcon2,numapplytot,numadmittot) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">arrange</span>(unitid,endyear) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dt">n=</span><span class="dv">10</span>)
