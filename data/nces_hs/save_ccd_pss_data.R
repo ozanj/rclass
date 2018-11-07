@@ -243,18 +243,6 @@ pss[['f_p665']] <- labelled(pss[['f_p665']], c('Not imputed (original data)'=0,'
 names(ccd) <- tolower(names(ccd))
 names(pss) <- tolower(names(pss))
 
-# Label Factor Variables
-
-vars <- list('statename')  # etc.
-for (var in vars) {
-  l <- attr(ccd[[var]], 'label')
-  ccd[[var]] <- to_labelled(as.factor(ccd[[var]]))
-  var_label(ccd[[var]]) <- l
-}
-
-View(ccd)  # underlying var changed from "ALABAMA" to 1
-ccd %>% select(statename) %>% count(statename) %>% haven::as_factor()  # but now labelled w/ "ALABAMA"
-
 # Check Labelled Variables
 
 for (item in names(ccd)) { print(class(ccd[[item]])) }  # 13 `labelled` vars
