@@ -4,7 +4,11 @@ library(haven)
 library(sjlabelled)
 library(Hmisc)
 
-list.files('data/ccd/2015-16')
+# Unzip + Read Data
+
+ccd_zip <- list.files('data/ccd/2015-16', pattern = '.zip', full.names = TRUE)
+sapply(ccd_zip, unzip, exdir = 'data/ccd/2015-16')
+
 characteristics <- read_sas('data/ccd/2015-16/ccd_1516_characteristics.sas7bdat')
 directory <- read_sas('data/ccd/2015-16/ccd_1516_directory.sas7bdat')
 lunch <- read_sas('data/ccd/2015-16/ccd_1516_lunch.sas7bdat')
@@ -14,7 +18,11 @@ staff <- read_sas('data/ccd/2015-16/ccd_1516_staff.sas7bdat')
 ccd <- Reduce(function(x,y) dplyr::full_join(x, y), 
               list(characteristics, directory, lunch, membership, staff))
 
+unzip('data/pss/2015-16/pss_1516_data.sas7bdat.zip', exdir = 'data/pss/2015-16')
+
 pss <- read_sas('data/pss/2015-16/pss_1516_data.sas7bdat')
+
+# Add Variable Labels
 
 ccd[['FIPST']] <- labelled(ccd[['FIPST']], c('Alabama'='01','Alaska'='02','Arizona'='04','Arkansas'='05','California'='06','Colorado'='08','Connecticut'='09','Delaware'='10','District of Columbia'='11','Florida'='12','Georgia'='13','Hawaii'='15','Idaho'='16','Illinois'='17','Indiana'='18','Iowa'='19','Kansas'='20','Kentucky'='21','Louisiana'='22','Maine'='23','Maryland'='24','Massachusetts'='25','Michigan'='26','Minnesota'='27','Mississippi'='28','Missouri'='29','Montana'='30','Nebraska'='31','Nevada'='32','New Hampshire'='33','New Jersey'='34','New Mexico'='35','New York'='36','North Carolina'='37','North Dakota'='38','Ohio'='39','Oklahoma'='40','Oregon'='41','Pennsylvania'='42','Puerto Rico'='43','Rhode Island'='44','South Carolina'='45','South Dakota'='46','Tennessee'='47','Texas'='48','Utah'='49','Vermont'='50','Virginia'='51','Washington'='53','West Virginia'='54','Wisconsin'='55','Wyoming'='56','Bureau of Indian Education'='59','American Samoa'='60','Department of Defense Education Activity'='63','Guam'='66','Northern Marianas'='69','Puerto Rico'='72','U.S. Virgin Islands'='78','Missing'='M','Not Applicable'='N'))
 ccd[['STABR']] <- labelled(ccd[['STABR']], c('Alabama'='AL','Alaska'='AK','Arizona'='AZ','Arkansas'='AR','California'='CA','Colorado'='CO','Connecticut'='CT','Delaware'='DE','District of Columbia'='DC','Florida'='FL','Georgia'='GA','Hawaii'='HI','Idaho'='ID','Illinois'='IL','Indiana'='IN','Iowa'='IA','Kansas'='KS','Kentucky'='KY','Louisiana'='LA','Maine'='ME','Maryland'='MD','Massachusetts'='MA','Michigan'='MI','Minnesota'='MN','Mississippi'='MS','Missouri'='MO','Montana'='MT','Nebraska'='NE','Nevada'='NV','New Hampshire'='NH','New Jersey'='NJ','New Mexico'='NM','New York'='NY','North Carolina'='NC','North Dakota'='ND','Ohio'='OH','Oklahoma'='OK','Oregon'='OR','Pennsylvania'='PA','Rhode Island'='RI','South Carolina'='SC','South Dakota'='SD','Tennessee'='TN','Texas'='TX','Utah'='UT','Vermont'='VT','Virginia'='VA','Washington'='WA','West Virginia'='WV','Wisconsin'='WI','Wyoming'='WY','Department of Defense Education Activity'='DD','Bureau of Indian Education'='BI','American Samoa'='AS','Guam'='GU','Northern Marianas'='MP','Puerto Rico'='PR','U.S. Virgin Islands'='VI','American Samoa'='AS','Northern Marianas'='MP','Missing'='M','Not Applicable'='N'))
@@ -230,15 +238,36 @@ pss[['f_p663']] <- labelled(pss[['f_p663']], c('Not imputed (original data)'=0,'
 pss[['f_p664']] <- labelled(pss[['f_p664']], c('Not imputed (original data)'=0,'Imputed using donor value from another record on 2015-16 PSS file or using data from the school'=4,'Data adjusted by analyst during review'=5))
 pss[['f_p665']] <- labelled(pss[['f_p665']], c('Not imputed (original data)'=0,'Imputed using donor value from another record on 2015-16 PSS file or using data from the school'=4,'Data adjusted by analyst during review'=5))
 
-for (item in names(pss)) { print(class(pss[[item]])) }  # 194 `labelled` vars
-for (item in names(ccd)) { print(class(ccd[[item]])) }  # 13 `labelled` vars
+# Rename Variable Names
 
-label(ccd$FIPST)
-class(ccd$FIPST)
-ccd %>% select(FIPST) %>% count(FIPST) %>% haven::as_factor()
+names(ccd) <- tolower(names(ccd))
+names(pss) <- tolower(names(pss))
+
+# Label Factor Variables
+
+vars <- list('statename')  # etc.
+for (var in vars) {
+  l <- attr(ccd[[var]], 'label')
+  ccd[[var]] <- to_labelled(as.factor(ccd[[var]]))
+  var_label(ccd[[var]]) <- l
+}
+
+View(ccd)  # underlying var changed from "ALABAMA" to 1
+ccd %>% select(statename) %>% count(statename) %>% haven::as_factor()  # but now labelled w/ "ALABAMA"
+
+# Check Labelled Variables
+
+for (item in names(ccd)) { print(class(ccd[[item]])) }  # 13 `labelled` vars
+for (item in names(pss)) { print(class(pss[[item]])) }  # 194 `labelled` vars
+
+label(ccd$fipst)
+class(ccd$fipst)
+ccd %>% select(fipst) %>% count(fipst) %>% haven::as_factor()
 
 label(pss$csource)
 class(pss$csource)
 pss %>% select(csource) %>% count(csource) %>% haven::as_factor()
 
-save(ccd, pss, file = "data/nces_hs/nces_hs_data.RData")
+# Save Data
+
+save(ccd, pss, file = 'data/nces_hs/nces_hs_data.RData')

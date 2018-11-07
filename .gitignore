@@ -4,4 +4,6 @@
 .Ruserdata
 *.tex
 *.md
+*.sas7bdat
 _site/
+__MACOSX/
