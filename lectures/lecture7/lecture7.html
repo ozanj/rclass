@@ -292,12 +292,12 @@ div.tocify {
 <p>Our main focus today is on <em>mutating joins</em>. But <em>Filtering joins</em> are useful for data quality checks of <em>mutating joins</em>.</p>
 <p>Libraries we will use</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
-<span class="co">#&gt; ── Attaching packages ──────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</span>
+<span class="co">#&gt; ── Attaching packages ──────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</span>
 <span class="co">#&gt; ✔ ggplot2 3.0.0     ✔ purrr   0.2.5</span>
 <span class="co">#&gt; ✔ tibble  1.4.2     ✔ dplyr   0.7.6</span>
 <span class="co">#&gt; ✔ tidyr   0.8.1     ✔ stringr 1.3.1</span>
 <span class="co">#&gt; ✔ readr   1.1.1     ✔ forcats 0.3.0</span>
-<span class="co">#&gt; ── Conflicts ─────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──</span>
+<span class="co">#&gt; ── Conflicts ─────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──</span>
 <span class="co">#&gt; ✖ dplyr::filter() masks stats::filter()</span>
 <span class="co">#&gt; ✖ dplyr::lag()    masks stats::lag()</span>
 <span class="kw">library</span>(haven)
@@ -1569,8 +1569,71 @@ tran_course_anti <span class="op">%&gt;%</span><span class="st"> </span><span cl
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#inner join</span>
 inner_tran_course &lt;-<span class="st"> </span>nls_tran <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">inner_join</span>(nls_course, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;id&quot;</span>,<span class="st">&quot;transnum&quot;</span>))
 
+
 <span class="co">#semi-join</span>
-semi_tran_course &lt;-<span class="st"> </span>nls_tran <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">semi_join</span>(nls_course, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;id&quot;</span>,<span class="st">&quot;transnum&quot;</span>))</code></pre></div>
+semi_tran_course &lt;-<span class="st"> </span>nls_tran <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">semi_join</span>(nls_course, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;id&quot;</span>,<span class="st">&quot;transnum&quot;</span>))
+
+
+<span class="co">#anti-join</span>
+anti_tran_course &lt;-<span class="st"> </span>nls_tran <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">anti_join</span>(nls_course, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;id&quot;</span>,<span class="st">&quot;transnum&quot;</span>))
+
+
+inner_tran_course <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(id, transnum) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">count</span>()
+<span class="co">#&gt; # A tibble: 18,855 x 3</span>
+<span class="co">#&gt; # Groups:   id, transnum [18,855]</span>
+<span class="co">#&gt;       id transnum     n</span>
+<span class="co">#&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;</span>
+<span class="co">#&gt;  1    67        1    17</span>
+<span class="co">#&gt;  2   315        1    68</span>
+<span class="co">#&gt;  3   315        2     4</span>
+<span class="co">#&gt;  4   802        1     2</span>
+<span class="co">#&gt;  5   836        2    30</span>
+<span class="co">#&gt;  6   935        1    49</span>
+<span class="co">#&gt;  7   935        2    20</span>
+<span class="co">#&gt;  8  1040        1     2</span>
+<span class="co">#&gt;  9  1040        2    60</span>
+<span class="co">#&gt; 10  1057        1    27</span>
+<span class="co">#&gt; # ... with 18,845 more rows</span>
+
+semi_tran_course <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(id, transnum) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">count</span>()
+<span class="co">#&gt; # A tibble: 18,855 x 3</span>
+<span class="co">#&gt; # Groups:   id, transnum [18,855]</span>
+<span class="co">#&gt;       id transnum     n</span>
+<span class="co">#&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;</span>
+<span class="co">#&gt;  1    67        1     1</span>
+<span class="co">#&gt;  2   315        1     1</span>
+<span class="co">#&gt;  3   315        2     1</span>
+<span class="co">#&gt;  4   802        1     1</span>
+<span class="co">#&gt;  5   836        2     1</span>
+<span class="co">#&gt;  6   935        1     1</span>
+<span class="co">#&gt;  7   935        2     1</span>
+<span class="co">#&gt;  8  1040        1     1</span>
+<span class="co">#&gt;  9  1040        2     1</span>
+<span class="co">#&gt; 10  1057        1     1</span>
+<span class="co">#&gt; # ... with 18,845 more rows</span>
+
+anti_tran_course <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(id, transnum) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">count</span>()
+<span class="co">#&gt; # A tibble: 5,398 x 3</span>
+<span class="co">#&gt; # Groups:   id, transnum [5,398]</span>
+<span class="co">#&gt;       id transnum     n</span>
+<span class="co">#&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;</span>
+<span class="co">#&gt;  1    18        1     1</span>
+<span class="co">#&gt;  2    83        1     1</span>
+<span class="co">#&gt;  3   414        1     1</span>
+<span class="co">#&gt;  4   430        1     1</span>
+<span class="co">#&gt;  5   802        2     1</span>
+<span class="co">#&gt;  6   836        1     1</span>
+<span class="co">#&gt;  7   935        3     1</span>
+<span class="co">#&gt;  8  1099        1     1</span>
+<span class="co">#&gt;  9  1099        2     1</span>
+<span class="co">#&gt; 10  1347        1     1</span>
+<span class="co">#&gt; # ... with 5,388 more rows</span></code></pre></div>
 <ul>
 <li>How do the results of these two joins differ?
 <ul>
@@ -1579,9 +1642,95 @@ semi_tran_course &lt;-<span class="st"> </span>nls_tran <span class="op">%&gt;%<
 </ul></li>
 <li>How can this semi-join be practically useful?
 <ul>
-<li>NOT 100% SURE YET…</li>
-<li>PATRICIA HELP IDENTIFYING PRACTICAL USE OF FILTERING JOINS</li>
+<li>semi-join could be useful when used in conjunction with anti-join to check observations that matched and did not match for <code>x</code><br />
+</li>
 </ul></li>
+<li>Let’s see how this works with a smaller dataframe:</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">tribble</span>(
+  <span class="op">~</span>key, <span class="op">~</span>val_x,
+  <span class="dv">1</span>, <span class="st">&quot;x1&quot;</span>,
+  <span class="dv">2</span>, <span class="st">&quot;x2&quot;</span>,
+  <span class="dv">2</span>, <span class="st">&quot;x3&quot;</span>,
+  <span class="dv">1</span>, <span class="st">&quot;x4&quot;</span>,
+  <span class="dv">3</span>, <span class="st">&quot;x5&quot;</span>,
+  <span class="dv">4</span>, <span class="st">&quot;x6&quot;</span>,
+  <span class="dv">5</span>, <span class="st">&quot;x7&quot;</span>,
+  <span class="dv">6</span>, <span class="st">&quot;x8&quot;</span>
+)
+y &lt;-<span class="st"> </span><span class="kw">tribble</span>(
+  <span class="op">~</span>key, <span class="op">~</span>val_y,
+  <span class="dv">1</span>, <span class="st">&quot;y1&quot;</span>,
+  <span class="dv">2</span>, <span class="st">&quot;y2&quot;</span>,
+  <span class="dv">3</span>, <span class="st">&quot;y3&quot;</span>,
+  <span class="dv">4</span>, <span class="st">&quot;y4&quot;</span>,
+  <span class="dv">9</span>, <span class="st">&quot;y5&quot;</span>
+)
+x
+<span class="co">#&gt; # A tibble: 8 x 2</span>
+<span class="co">#&gt;     key val_x</span>
+<span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;</span>
+<span class="co">#&gt; 1     1 x1   </span>
+<span class="co">#&gt; 2     2 x2   </span>
+<span class="co">#&gt; 3     2 x3   </span>
+<span class="co">#&gt; 4     1 x4   </span>
+<span class="co">#&gt; 5     3 x5   </span>
+<span class="co">#&gt; 6     4 x6   </span>
+<span class="co">#&gt; 7     5 x7   </span>
+<span class="co">#&gt; 8     6 x8</span>
+y
+<span class="co">#&gt; # A tibble: 5 x 2</span>
+<span class="co">#&gt;     key val_y</span>
+<span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;</span>
+<span class="co">#&gt; 1     1 y1   </span>
+<span class="co">#&gt; 2     2 y2   </span>
+<span class="co">#&gt; 3     3 y3   </span>
+<span class="co">#&gt; 4     4 y4   </span>
+<span class="co">#&gt; 5     9 y5</span></code></pre></div>
+<p>What are the differences between different joins?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">inner_join</span>(x,y, <span class="dt">by =</span> <span class="st">&quot;key&quot;</span>) <span class="co">#Return all rows from x where there are matching values in y</span>
+<span class="co">#&gt; # A tibble: 6 x 3</span>
+<span class="co">#&gt;     key val_x val_y</span>
+<span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;</span>
+<span class="co">#&gt; 1     1 x1    y1   </span>
+<span class="co">#&gt; 2     2 x2    y2   </span>
+<span class="co">#&gt; 3     2 x3    y2   </span>
+<span class="co">#&gt; 4     1 x4    y1   </span>
+<span class="co">#&gt; 5     3 x5    y3   </span>
+<span class="co">#&gt; 6     4 x6    y4</span>
+
+<span class="kw">left_join</span>(x, y, <span class="dt">by =</span> <span class="st">&quot;key&quot;</span>) <span class="co">#Return all rows from x, and all columns from x and y </span>
+<span class="co">#&gt; # A tibble: 8 x 3</span>
+<span class="co">#&gt;     key val_x val_y</span>
+<span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;</span>
+<span class="co">#&gt; 1     1 x1    y1   </span>
+<span class="co">#&gt; 2     2 x2    y2   </span>
+<span class="co">#&gt; 3     2 x3    y2   </span>
+<span class="co">#&gt; 4     1 x4    y1   </span>
+<span class="co">#&gt; 5     3 x5    y3   </span>
+<span class="co">#&gt; 6     4 x6    y4   </span>
+<span class="co">#&gt; 7     5 x7    &lt;NA&gt; </span>
+<span class="co">#&gt; 8     6 x8    &lt;NA&gt;</span>
+
+<span class="kw">semi_join</span>(x,y, <span class="dt">by =</span>  <span class="st">&quot;key&quot;</span>) <span class="co">#Return all rows from x where there are matching values in y, keeping just columns from x</span>
+<span class="co">#&gt; # A tibble: 6 x 2</span>
+<span class="co">#&gt;     key val_x</span>
+<span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;</span>
+<span class="co">#&gt; 1     1 x1   </span>
+<span class="co">#&gt; 2     2 x2   </span>
+<span class="co">#&gt; 3     2 x3   </span>
+<span class="co">#&gt; 4     1 x4   </span>
+<span class="co">#&gt; 5     3 x5   </span>
+<span class="co">#&gt; 6     4 x6</span>
+
+<span class="kw">anti_join</span>(x,y, <span class="dt">by =</span> <span class="st">&quot;key&quot;</span>) <span class="co">#Return all rows from x where there are not matching values in y, keeping just columns from x</span>
+<span class="co">#&gt; # A tibble: 2 x 2</span>
+<span class="co">#&gt;     key val_x</span>
+<span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;</span>
+<span class="co">#&gt; 1     5 x7   </span>
+<span class="co">#&gt; 2     6 x8</span></code></pre></div>
+<ul>
+<li>semi-join and anti-join could be particularly useful for inner and left joins.</li>
 </ul>
 </div>
 </div>
@@ -1601,7 +1750,16 @@ semi_tran_course &lt;-<span class="st"> </span>nls_tran <span class="op">%&gt;%<
 </ul></li>
 <li>Before joining, make sure that key you will use for joining uniquely identifies observations in at least one of the datasets and that the key variable(s) is present in both datasets
 <ul>
-<li>investigate whether key variables have different names across the two tables. If different, then you will have to adjust syntax of your join statement accordingly</li>
+<li>investigate whether key variables have different names across the two tables. If different, then you will have to adjust syntax of your join statement accordingly<br />
+</li>
+</ul></li>
+<li>Before joining, you also want to make sure the key variable in one table and key variable in another table are the same type (both numeric, or both string, etc.)
+<ul>
+<li>You could use the <code>typeof</code> function or the <code>str</code> function<br />
+</li>
+<li>Change type with this command <code>x$key &lt;- as.double(x$key)</code> or <code>x$key &lt;- as.character(x$key)</code></li>
+<li>If you try to join with key variables of different type, you will get this error message: <span style="color:red">Can’t join on ‘key’ x ‘key’ because of incompatible types (character / numeric)</span><br />
+</li>
 </ul></li>
 <li>Think about which observations you want retained after joining
 <ul>
@@ -1628,7 +1786,6 @@ semi_tran_course &lt;-<span class="st"> </span>nls_tran <span class="op">%&gt;%<
 <li>Identifying causes for non-matches usually involves consulting data documentation for both tables and performing basic descriptive statistics (e.g., frequency tables) on specific variables that documentation suggests may be relevant for whether obs match or not</li>
 </ul></li>
 </ul>
-<p>STUFF FOR PATRICIA TO CHECK - WHAT IF KEY VARIABLE IS STRING IN ONE TABLE AND NUMERIC IN ANOTHER TABLE? THIS IS A PROBLEM IN STATA. IS IT A PROBLEM IN R?</p>
 <p>POTENTIAL THING FOR PATRICIA TO ADD:</p>
 <ul>
 <li>[OWN: WHAT THIS LECTURE IS MISSING IS WALKING STUDENTS THROUGH INVESTIGATION OF WHY OBS DON’T MATCH; EITHER ADD THIS TO THE LECTURE OR MAKE THIS A BIG PART OF THE PROBLEM SET AND QUESTIONS YOU ASK WILL WALK THEM THROUGH STEPS OF A MERGING INVESTIGATION]</li>

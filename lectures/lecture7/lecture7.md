@@ -60,12 +60,12 @@ Libraries we will use
 
 ```r
 library(tidyverse)
-#> ── Attaching packages ──────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+#> ── Attaching packages ──────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
 #> ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
 #> ✔ tibble  1.4.2     ✔ dplyr   0.7.6
 #> ✔ tidyr   0.8.1     ✔ stringr 1.3.1
 #> ✔ readr   1.1.1     ✔ forcats 0.3.0
-#> ── Conflicts ─────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+#> ── Conflicts ─────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 #> ✖ dplyr::filter() masks stats::filter()
 #> ✖ dplyr::lag()    masks stats::lag()
 library(haven)
@@ -1385,16 +1385,169 @@ __Practical example__: perform an inner-join of `nls_tran` and `nls_course` and 
 #inner join
 inner_tran_course <- nls_tran %>% inner_join(nls_course, by = c("id","transnum"))
 
+
 #semi-join
 semi_tran_course <- nls_tran %>% semi_join(nls_course, by = c("id","transnum"))
+
+
+#anti-join
+anti_tran_course <- nls_tran %>% anti_join(nls_course, by = c("id","transnum"))
+
+
+inner_tran_course %>%
+  group_by(id, transnum) %>%
+  count()
+#> # A tibble: 18,855 x 3
+#> # Groups:   id, transnum [18,855]
+#>       id transnum     n
+#>    <dbl>    <dbl> <int>
+#>  1    67        1    17
+#>  2   315        1    68
+#>  3   315        2     4
+#>  4   802        1     2
+#>  5   836        2    30
+#>  6   935        1    49
+#>  7   935        2    20
+#>  8  1040        1     2
+#>  9  1040        2    60
+#> 10  1057        1    27
+#> # ... with 18,845 more rows
+
+semi_tran_course %>%
+  group_by(id, transnum) %>%
+  count()
+#> # A tibble: 18,855 x 3
+#> # Groups:   id, transnum [18,855]
+#>       id transnum     n
+#>    <dbl>    <dbl> <int>
+#>  1    67        1     1
+#>  2   315        1     1
+#>  3   315        2     1
+#>  4   802        1     1
+#>  5   836        2     1
+#>  6   935        1     1
+#>  7   935        2     1
+#>  8  1040        1     1
+#>  9  1040        2     1
+#> 10  1057        1     1
+#> # ... with 18,845 more rows
+
+anti_tran_course %>%
+  group_by(id, transnum) %>%
+  count()
+#> # A tibble: 5,398 x 3
+#> # Groups:   id, transnum [5,398]
+#>       id transnum     n
+#>    <dbl>    <dbl> <int>
+#>  1    18        1     1
+#>  2    83        1     1
+#>  3   414        1     1
+#>  4   430        1     1
+#>  5   802        2     1
+#>  6   836        1     1
+#>  7   935        3     1
+#>  8  1099        1     1
+#>  9  1099        2     1
+#> 10  1347        1     1
+#> # ... with 5,388 more rows
 ```
 
 - How do the results of these two joins differ?
     - semi-join contains obs from `x` that matched with `y` [nls_course] but does not repeat rows of x
     - semi-join only retains columns from `x`
 - How can this semi-join be practically useful?
-    - NOT 100% SURE YET...
-    - PATRICIA HELP IDENTIFYING PRACTICAL USE OF FILTERING JOINS
+    - semi-join could be useful when used in conjunction with anti-join to check observations that matched and did not match for `x`  
+- Let's see how this works with a smaller dataframe:
+
+```r
+x <- tribble(
+  ~key, ~val_x,
+  1, "x1",
+  2, "x2",
+  2, "x3",
+  1, "x4",
+  3, "x5",
+  4, "x6",
+  5, "x7",
+  6, "x8"
+)
+y <- tribble(
+  ~key, ~val_y,
+  1, "y1",
+  2, "y2",
+  3, "y3",
+  4, "y4",
+  9, "y5"
+)
+x
+#> # A tibble: 8 x 2
+#>     key val_x
+#>   <dbl> <chr>
+#> 1     1 x1   
+#> 2     2 x2   
+#> 3     2 x3   
+#> 4     1 x4   
+#> 5     3 x5   
+#> 6     4 x6   
+#> 7     5 x7   
+#> 8     6 x8
+y
+#> # A tibble: 5 x 2
+#>     key val_y
+#>   <dbl> <chr>
+#> 1     1 y1   
+#> 2     2 y2   
+#> 3     3 y3   
+#> 4     4 y4   
+#> 5     9 y5
+```
+
+What are the differences between different joins?
+
+```r
+inner_join(x,y, by = "key") #Return all rows from x where there are matching values in y
+#> # A tibble: 6 x 3
+#>     key val_x val_y
+#>   <dbl> <chr> <chr>
+#> 1     1 x1    y1   
+#> 2     2 x2    y2   
+#> 3     2 x3    y2   
+#> 4     1 x4    y1   
+#> 5     3 x5    y3   
+#> 6     4 x6    y4
+
+left_join(x, y, by = "key") #Return all rows from x, and all columns from x and y 
+#> # A tibble: 8 x 3
+#>     key val_x val_y
+#>   <dbl> <chr> <chr>
+#> 1     1 x1    y1   
+#> 2     2 x2    y2   
+#> 3     2 x3    y2   
+#> 4     1 x4    y1   
+#> 5     3 x5    y3   
+#> 6     4 x6    y4   
+#> 7     5 x7    <NA> 
+#> 8     6 x8    <NA>
+
+semi_join(x,y, by =  "key") #Return all rows from x where there are matching values in y, keeping just columns from x
+#> # A tibble: 6 x 2
+#>     key val_x
+#>   <dbl> <chr>
+#> 1     1 x1   
+#> 2     2 x2   
+#> 3     2 x3   
+#> 4     1 x4   
+#> 5     3 x5   
+#> 6     4 x6
+
+anti_join(x,y, by = "key") #Return all rows from x where there are not matching values in y, keeping just columns from x
+#> # A tibble: 2 x 2
+#>     key val_x
+#>   <dbl> <chr>
+#> 1     5 x7   
+#> 2     6 x8
+```
+- semi-join and anti-join could be particularly useful for inner and left joins.  
 
 # Join problems
 
@@ -1407,7 +1560,11 @@ How to avoid join problems before they arise. How to overcome join problems when
         - This investigation should be based on your understanding of the data and reading data documentation rather than checking if each combination of variables is a primary key
     - does either table have missing or strange values (e.g., `-8`) for the primary key; if so, these observations won't match
 1. Before joining, make sure that key you will use for joining uniquely identifies observations in at least one of the datasets and that the key variable(s) is present in both datasets
-    - investigate whether key variables have different names across the two tables. If different, then you will have to adjust syntax of your join statement accordingly
+    - investigate whether key variables have different names across the two tables. If different, then you will have to adjust syntax of your join statement accordingly  
+1. Before joining, you also want to make sure the key variable in one table and key variable in another table are the same type (both numeric, or both string, etc.)  
+    - You could use the `typeof` function or the `str` function  
+    - Change type with this command `x$key <- as.double(x$key)` or `x$key <- as.character(x$key)`
+    - If you try to join with key variables of different type, you will get this error message: <span style="color:red">Can't join on 'key' x 'key' because of incompatible types (character / numeric)</span>  
 1. Think about which observations you want retained after joining
     - think about which dataset should be the `x` table and which should be the `y` table
     - think about whether you want an inner, left, right, or full join
@@ -1421,10 +1578,8 @@ How to avoid join problems before they arise. How to overcome join problems when
 - Investigate the reasons that observations don't match
     - Investigating joins is a craft that takes some practice getting good at; this is essentially an exercise in exploratory data analysis for the purpose of data quality
     - First, you have to _care_ about data quality
-    - Identifying causes for non-matches usually involves consulting data documentation for both tables and performing basic descriptive statistics (e.g., frequency tables) on specific variables that documentation suggests may be relevant for whether obs match or not
+    - Identifying causes for non-matches usually involves consulting data documentation for both tables and performing basic descriptive statistics (e.g., frequency tables) on specific variables that documentation suggests may be relevant for whether obs match or not  
 
-STUFF FOR PATRICIA TO CHECK
-- WHAT IF KEY VARIABLE IS STRING IN ONE TABLE AND NUMERIC IN ANOTHER TABLE? THIS IS A PROBLEM IN STATA. IS IT A PROBLEM IN R?
 
 POTENTIAL THING FOR PATRICIA TO ADD:
 

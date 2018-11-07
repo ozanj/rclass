@@ -848,16 +848,71 @@ __Practical example__: perform an inner-join of `nls_tran` and `nls_course` and 
 #inner join
 inner_tran_course <- nls_tran %>% inner_join(nls_course, by = c("id","transnum"))
 
+
 #semi-join
 semi_tran_course <- nls_tran %>% semi_join(nls_course, by = c("id","transnum"))
+
+
+#anti-join
+anti_tran_course <- nls_tran %>% anti_join(nls_course, by = c("id","transnum"))
+
+
+inner_tran_course %>%
+  group_by(id, transnum) %>%
+  count()
+
+semi_tran_course %>%
+  group_by(id, transnum) %>%
+  count()
+
+anti_tran_course %>%
+  group_by(id, transnum) %>%
+  count()
+
 ```
 
 - How do the results of these two joins differ?
     - semi-join contains obs from `x` that matched with `y` [nls_course] but does not repeat rows of x
     - semi-join only retains columns from `x`
 - How can this semi-join be practically useful?
-    - NOT 100% SURE YET...
-    - PATRICIA HELP IDENTIFYING PRACTICAL USE OF FILTERING JOINS
+    - semi-join could be useful when used in conjunction with anti-join to check observations that matched and did not match for `x`  
+- Let's see how this works with a smaller dataframe:
+```{r}
+x <- tribble(
+  ~key, ~val_x,
+  1, "x1",
+  2, "x2",
+  2, "x3",
+  1, "x4",
+  3, "x5",
+  4, "x6",
+  5, "x7",
+  6, "x8"
+)
+y <- tribble(
+  ~key, ~val_y,
+  1, "y1",
+  2, "y2",
+  3, "y3",
+  4, "y4",
+  9, "y5"
+)
+x
+y
+```
+
+What are the differences between different joins?
+```{r}
+inner_join(x,y, by = "key") #Return all rows from x where there are matching values in y
+
+left_join(x, y, by = "key") #Return all rows from x, and all columns from x and y 
+
+semi_join(x,y, by =  "key") #Return all rows from x where there are matching values in y, keeping just columns from x
+
+anti_join(x,y, by = "key") #Return all rows from x where there are not matching values in y, keeping just columns from x
+
+```
+- semi-join and anti-join could be particularly useful for inner and left joins.  
 
 # Join problems
 
@@ -870,7 +925,11 @@ How to avoid join problems before they arise. How to overcome join problems when
         - This investigation should be based on your understanding of the data and reading data documentation rather than checking if each combination of variables is a primary key
     - does either table have missing or strange values (e.g., `-8`) for the primary key; if so, these observations won't match
 1. Before joining, make sure that key you will use for joining uniquely identifies observations in at least one of the datasets and that the key variable(s) is present in both datasets
-    - investigate whether key variables have different names across the two tables. If different, then you will have to adjust syntax of your join statement accordingly
+    - investigate whether key variables have different names across the two tables. If different, then you will have to adjust syntax of your join statement accordingly  
+1. Before joining, you also want to make sure the key variable in one table and key variable in another table are the same type (both numeric, or both string, etc.)  
+    - You could use the `typeof` function or the `str` function  
+    - Change type with this command `x$key <- as.double(x$key)` or `x$key <- as.character(x$key)`
+    - If you try to join with key variables of different type, you will get this error message: <span style="color:red">Can't join on 'key' x 'key' because of incompatible types (character / numeric)</span>  
 1. Think about which observations you want retained after joining
     - think about which dataset should be the `x` table and which should be the `y` table
     - think about whether you want an inner, left, right, or full join
@@ -884,10 +943,8 @@ How to avoid join problems before they arise. How to overcome join problems when
 - Investigate the reasons that observations don't match
     - Investigating joins is a craft that takes some practice getting good at; this is essentially an exercise in exploratory data analysis for the purpose of data quality
     - First, you have to _care_ about data quality
-    - Identifying causes for non-matches usually involves consulting data documentation for both tables and performing basic descriptive statistics (e.g., frequency tables) on specific variables that documentation suggests may be relevant for whether obs match or not
+    - Identifying causes for non-matches usually involves consulting data documentation for both tables and performing basic descriptive statistics (e.g., frequency tables) on specific variables that documentation suggests may be relevant for whether obs match or not  
 
-STUFF FOR PATRICIA TO CHECK
-- WHAT IF KEY VARIABLE IS STRING IN ONE TABLE AND NUMERIC IN ANOTHER TABLE? THIS IS A PROBLEM IN STATA. IS IT A PROBLEM IN R?
 
 POTENTIAL THING FOR PATRICIA TO ADD:
 
