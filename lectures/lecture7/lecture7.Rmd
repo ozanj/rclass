@@ -946,11 +946,6 @@ How to avoid join problems before they arise. How to overcome join problems when
     - Identifying causes for non-matches usually involves consulting data documentation for both tables and performing basic descriptive statistics (e.g., frequency tables) on specific variables that documentation suggests may be relevant for whether obs match or not  
 
 
-POTENTIAL THING FOR PATRICIA TO ADD:
-
-- [OWN: WHAT THIS LECTURE IS MISSING IS WALKING STUDENTS THROUGH INVESTIGATION OF WHY OBS DON'T MATCH; EITHER ADD THIS TO THE LECTURE OR MAKE THIS A BIG PART OF THE PROBLEM SET AND QUESTIONS YOU ASK WILL WALK THEM THROUGH STEPS OF A MERGING INVESTIGATION]
-- PATRICIA, DO YOU THINK THIS WOULD BE USEFUL AND WOULD YOU LIKE TO ADD THIS?
-
 # Appending/stacking data
 
 Often we want to "stack" multiple datasets on top of one another
