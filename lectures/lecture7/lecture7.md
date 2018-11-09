@@ -26,6 +26,7 @@ output:
 
 
 
+
 # Introduction
 
 ## Logistics
@@ -54,7 +55,7 @@ An R script is just a text file full of R commands
 - Output from commands executed from R script
     - Output will appear in the "console"
 - Link to a very simple R script
-    - PATRICIA: CAN YOU ADD A LINK TO THE SCRIPT CALLED LECTURE1.2.R IN THE LECTURE 1 FOLDER?
+    - [HERE](Lecture1.2.R) 
 
 ### Mid-quarter evaluation
 
@@ -91,14 +92,14 @@ Libraries we will use
 
 ```r
 library(tidyverse)
-#> -- Attaching packages -------------------------------------------------------------------------------------------------------- tidyverse 1.2.1 --
-#> v ggplot2 3.0.0     v purrr   0.2.5
-#> v tibble  1.4.2     v dplyr   0.7.6
-#> v tidyr   0.8.1     v stringr 1.3.1
-#> v readr   1.1.1     v forcats 0.3.0
-#> -- Conflicts ----------------------------------------------------------------------------------------------------------- tidyverse_conflicts() --
-#> x dplyr::filter() masks stats::filter()
-#> x dplyr::lag()    masks stats::lag()
+#> ── Attaching packages ──────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+#> ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
+#> ✔ tibble  1.4.2     ✔ dplyr   0.7.6
+#> ✔ tidyr   0.8.1     ✔ stringr 1.3.1
+#> ✔ readr   1.1.1     ✔ forcats 0.3.0
+#> ── Conflicts ─────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+#> ✖ dplyr::filter() masks stats::filter()
+#> ✖ dplyr::lag()    masks stats::lag()
 library(haven)
 library(labelled)
 ```

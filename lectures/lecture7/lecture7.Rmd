@@ -53,6 +53,13 @@ if(!file.exists('join-outer.png')){
                 mode = 'wb')
 }
 ```
+```{r echo=FALSE, include=FALSE}
+if(!file.exists('lecture1.2.R')){
+  download.file(url = 'https://github.com/ozanj/rclass/raw/master/lectures/lecture1/lecture1.2.R', 
+                destfile = 'lecture1.2.R',
+                mode = 'wb')
+}
+```
 
 # Introduction
 
@@ -82,7 +89,7 @@ An R script is just a text file full of R commands
 - Output from commands executed from R script
     - Output will appear in the "console"
 - Link to a very simple R script
-    - PATRICIA: CAN YOU ADD A LINK TO THE SCRIPT CALLED LECTURE1.2.R IN THE LECTURE 1 FOLDER?
+    - [HERE](Lecture1.2.R) 
 
 ### Mid-quarter evaluation
 
