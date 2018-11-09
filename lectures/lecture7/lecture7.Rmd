@@ -934,7 +934,7 @@ How to avoid join problems before they arise. How to overcome join problems when
     - think about which dataset should be the `x` table and which should be the `y` table
     - think about whether you want an inner, left, right, or full join
 1. Since mutating joins keep all variables in `x` and `y`, you may want to keep only specific variables in `x` and/or `y` as a prior step to joining
-    - Make sure that non-key variables from tables have different names; if duplicate names exist, the default is to CHECK ON DEFAULT
+    - Make sure that non-key variables from tables have different names; if duplicate names exist, the default is to add `.x and .y` to the end of the variable name. For example, if you have two tables with non-key variables with the name `type` and you join them, you will end up with variables(columns) `type.x` and `type.y`. 
 
 ## Overcoming join problems when they do arise
 
