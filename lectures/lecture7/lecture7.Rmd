@@ -8,9 +8,9 @@ output:
   html_document:
     toc: true
     toc_depth: 2
-    toc_float: # toc_float option to float the table of contents to the left of the main document content. floating table of contents will always be visible even when the document is scrolled
-      collapsed: false # collapsed (defaults to TRUE) controls whether the TOC appears with only the top-level (e.g., H2) headers. If collapsed initially, the TOC is automatically expanded inline when necessary
-      smooth_scroll: true # smooth_scroll (defaults to TRUE) controls whether page scrolls are animated when TOC items are navigated to via mouse clicks
+    #toc_float: # toc_float option to float the table of contents to the left of the main document content. floating table of contents will always be visible even when the document is scrolled
+      #collapsed: false # collapsed (defaults to TRUE) controls whether the TOC appears with only the top-level (e.g., H2) headers. If collapsed initially, the TOC is automatically expanded inline when necessary
+      #smooth_scroll: true # smooth_scroll (defaults to TRUE) controls whether page scrolls are animated when TOC items are navigated to via mouse clicks
     number_sections: true
     fig_caption: true # ? this option doesn't seem to be working for figure inserted below outside of r code chunk    
     highlight: tango # Supported styles include "default", "tango", "pygments", "kate", "monochrome", "espresso", "zenburn", and "haddock" (specify null to prevent syntax    
@@ -21,6 +21,7 @@ output:
 ---
 
 ```{r, echo=FALSE}
+#DON'T WORRY ABOUT THIS CODE
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 ```
 ```{r, echo=FALSE, include=FALSE}
@@ -57,9 +58,40 @@ if(!file.exists('join-outer.png')){
 
 ## Logistics
 
-READING
+### Reading
 
-OTHER
+- Work through slides we from lecture 7 that we don't get to in class
+    - [REQUIRED] slides through the section on "Join problems"
+    - [OPTIONAL] section on "Appending/stacking data"
+- [RECOMMENDED] GW chapter 13 (Relational data)
+    - Lecture 7 covers this material pretty closely. Please read chapter if you can, but I get it if you don't have time
+
+### Problem set
+
+For problem set due next week, you will submit an R "script" (has extension ".R") rather than an RMarkdown file (has extension ".Rmd")
+
+- For most research projects, people write scripts rather than .Rmd files, so we want to practice doing this.
+- We will give you an R script that have code created by us that you can run. And then you will write code answering questions posed in the problem set.
+
+An R script is just a text file full of R commands
+
+- Can create "comments" by using "#"
+- Shortcuts for executing commands
+    - __Cmd/Ctrl + Enter__: execute highlighted line(s)
+    - __Cmd/Ctrl + Shift + Enter__ (without highlighting any lines): run entire script
+- Output from commands executed from R script
+    - Output will appear in the "console"
+- Link to a very simple R script
+    - PATRICIA: CAN YOU ADD A LINK TO THE SCRIPT CALLED LECTURE1.2.R IN THE LECTURE 1 FOLDER?
+
+### Mid-quarter evaluation
+
+Some of the constructive criticism
+
+- Improve time management
+    - Last half of class feels rushed
+- Unfair to ask students to work through lecture material assessed in problem set on their own
+- Some problem sets (e.g., Lecture 5 problem set on GPA) too long, confusing instructions
 
 ## Lecture overview
 

@@ -8,9 +8,9 @@ output:
   html_document:
     toc: true
     toc_depth: 2
-    toc_float: # toc_float option to float the table of contents to the left of the main document content. floating table of contents will always be visible even when the document is scrolled
-      collapsed: false # collapsed (defaults to TRUE) controls whether the TOC appears with only the top-level (e.g., H2) headers. If collapsed initially, the TOC is automatically expanded inline when necessary
-      smooth_scroll: true # smooth_scroll (defaults to TRUE) controls whether page scrolls are animated when TOC items are navigated to via mouse clicks
+    #toc_float: # toc_float option to float the table of contents to the left of the main document content. floating table of contents will always be visible even when the document is scrolled
+      #collapsed: false # collapsed (defaults to TRUE) controls whether the TOC appears with only the top-level (e.g., H2) headers. If collapsed initially, the TOC is automatically expanded inline when necessary
+      #smooth_scroll: true # smooth_scroll (defaults to TRUE) controls whether page scrolls are animated when TOC items are navigated to via mouse clicks
     number_sections: true
     fig_caption: true # ? this option doesn't seem to be working for figure inserted below outside of r code chunk    
     highlight: tango # Supported styles include "default", "tango", "pygments", "kate", "monochrome", "espresso", "zenburn", and "haddock" (specify null to prevent syntax    
@@ -30,9 +30,40 @@ output:
 
 ## Logistics
 
-READING
+### Reading
 
-OTHER
+- Work through slides we from lecture 7 that we don't get to in class
+    - [REQUIRED] slides through the section on "Join problems"
+    - [OPTIONAL] section on "Appending/stacking data"
+- [RECOMMENDED] GW chapter 13 (Relational data)
+    - Lecture 7 covers this material pretty closely. Please read chapter if you can, but I get it if you don't have time
+
+### Problem set
+
+For problem set due next week, you will submit an R "script" (has extension ".R") rather than an RMarkdown file (has extension ".Rmd")
+
+- For most research projects, people write scripts rather than .Rmd files, so we want to practice doing this.
+- We will give you an R script that have code created by us that you can run. And then you will write code answering questions posed in the problem set.
+
+An R script is just a text file full of R commands
+
+- Can create "comments" by using "#"
+- Shortcuts for executing commands
+    - __Cmd/Ctrl + Enter__: execute highlighted line(s)
+    - __Cmd/Ctrl + Shift + Enter__ (without highlighting any lines): run entire script
+- Output from commands executed from R script
+    - Output will appear in the "console"
+- Link to a very simple R script
+    - PATRICIA: CAN YOU ADD A LINK TO THE SCRIPT CALLED LECTURE1.2.R IN THE LECTURE 1 FOLDER?
+
+### Mid-quarter evaluation
+
+Some of the constructive criticism
+
+- Improve time management
+    - Last half of class feels rushed
+- Unfair to ask students to work through lecture material assessed in problem set on their own
+- Some problem sets (e.g., Lecture 5 problem set on GPA) too long, confusing instructions
 
 ## Lecture overview
 
@@ -60,14 +91,14 @@ Libraries we will use
 
 ```r
 library(tidyverse)
-#> ── Attaching packages ──────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
-#> ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
-#> ✔ tibble  1.4.2     ✔ dplyr   0.7.6
-#> ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-#> ✔ readr   1.1.1     ✔ forcats 0.3.0
-#> ── Conflicts ─────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-#> ✖ dplyr::filter() masks stats::filter()
-#> ✖ dplyr::lag()    masks stats::lag()
+#> -- Attaching packages -------------------------------------------------------------------------------------------------------- tidyverse 1.2.1 --
+#> v ggplot2 3.0.0     v purrr   0.2.5
+#> v tibble  1.4.2     v dplyr   0.7.6
+#> v tidyr   0.8.1     v stringr 1.3.1
+#> v readr   1.1.1     v forcats 0.3.0
+#> -- Conflicts ----------------------------------------------------------------------------------------------------------- tidyverse_conflicts() --
+#> x dplyr::filter() masks stats::filter()
+#> x dplyr::lag()    masks stats::lag()
 library(haven)
 library(labelled)
 ```
@@ -1569,7 +1600,7 @@ How to avoid join problems before they arise. How to overcome join problems when
     - think about which dataset should be the `x` table and which should be the `y` table
     - think about whether you want an inner, left, right, or full join
 1. Since mutating joins keep all variables in `x` and `y`, you may want to keep only specific variables in `x` and/or `y` as a prior step to joining
-    - Make sure that non-key variables from tables have different names; if duplicate names exist, the default is to CHECK ON DEFAULT
+    - Make sure that non-key variables from tables have different names; if duplicate names exist, the default is to add `.x and .y` to the end of the variable name. For example, if you have two tables with non-key variables with the name `type` and you join them, you will end up with variables(columns) `type.x` and `type.y`. 
 
 ## Overcoming join problems when they do arise
 
@@ -1580,11 +1611,6 @@ How to avoid join problems before they arise. How to overcome join problems when
     - First, you have to _care_ about data quality
     - Identifying causes for non-matches usually involves consulting data documentation for both tables and performing basic descriptive statistics (e.g., frequency tables) on specific variables that documentation suggests may be relevant for whether obs match or not  
 
-
-POTENTIAL THING FOR PATRICIA TO ADD:
-
-- [OWN: WHAT THIS LECTURE IS MISSING IS WALKING STUDENTS THROUGH INVESTIGATION OF WHY OBS DON'T MATCH; EITHER ADD THIS TO THE LECTURE OR MAKE THIS A BIG PART OF THE PROBLEM SET AND QUESTIONS YOU ASK WILL WALK THEM THROUGH STEPS OF A MERGING INVESTIGATION]
-- PATRICIA, DO YOU THINK THIS WOULD BE USEFUL AND WOULD YOU LIKE TO ADD THIS?
 
 # Appending/stacking data
 
