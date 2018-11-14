@@ -27,9 +27,12 @@
 }{}
 \newif\ifbibliography
 \hypersetup{
-            pdftitle={Managing and Manipulating Data Using R},
+            pdftitle={Lecture 8: Acquiring data},
             pdfauthor={Patricia Martin},
-            pdfborder={0 0 0},
+            colorlinks=true,
+            linkcolor=Maroon,
+            citecolor=Blue,
+            urlcolor=blue,
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
 \usepackage{color}
@@ -130,10 +133,14 @@
 
 %
 \setbeamertemplate{navigation symbols}{} % get rid of navigation icons:
+\setbeamertemplate{footline}[page number]
 
 %\setbeamertemplate{frametitle}{\thesection \hspace{0.2cm} \insertframetitle}
 \setbeamertemplate{section in toc}[sections numbered]
-\setbeamertemplate{subsection in toc}[subsections numbered]
+%\setbeamertemplate{subsection in toc}[subsections numbered]
+\setbeamertemplate{subsection in toc}{%
+  \leavevmode\leftskip=3.2em\color{gray}\rlap{\hskip-2em\inserttocsectionnumber.\inserttocsubsectionnumber}\inserttocsubsection\par
+}
 
 %define colors
 %\definecolor{uva_orange}{RGB}{216,141,42} % UVa orange (Rotunda orange)
@@ -167,22 +174,78 @@
 % Reduce space before lists
 \addtobeamertemplate{itemize/enumerate body begin}{}{\vspace*{-8pt}}
 
-\title{Managing and Manipulating Data Using R}
-\subtitle{Lecture 8, Acquiring data in R}
+\let\olditem\item
+\renewcommand{\item}{%
+  \olditem\vspace{4pt}
+}
+
+% decreasing space before and after level-2 bullet block
+\addtobeamertemplate{itemize/enumerate subbody begin}{}{\vspace*{-3pt}}
+\addtobeamertemplate{itemize/enumerate subbody end}{}{\vspace*{-3pt}}
+
+% decreasing space before and after level-3 bullet block
+\addtobeamertemplate{itemize/enumerate subsubbody begin}{}{\vspace*{-2pt}}
+\addtobeamertemplate{itemize/enumerate subsubbody end}{}{\vspace*{-2pt}}
+
+%Section numbering
+\setbeamertemplate{section page}{%
+    \begingroup
+        \begin{beamercolorbox}[sep=10pt,center,rounded=true,shadow=true]{section title}
+        \usebeamerfont{section title}\thesection~\insertsection\par
+        \end{beamercolorbox}
+    \endgroup
+}
+
+\setbeamertemplate{subsection page}{%
+    \begingroup
+        \begin{beamercolorbox}[sep=6pt,center,rounded=true,shadow=true]{subsection title}
+        \usebeamerfont{subsection title}\thesection.\thesubsection~\insertsubsection\par
+        \end{beamercolorbox}
+    \endgroup
+}
+
+%modifying back ticks to add grey background
+\let\OldTexttt\texttt
+\renewcommand{\texttt}[1]{\OldTexttt{\hlg{#1}}}
+
+\title{Lecture 8: Acquiring data}
+\subtitle{EDUC 263: Managing and Manipulating Data Using R}
 \author{Patricia Martin}
 \date{}
 
 \begin{document}
 \frame{\titlepage}
 
-\begin{frame}
-\tableofcontents[hideallsubsections]
-\end{frame}
-
 \section{Introduction}\label{introduction}
 
-\begin{frame}[fragile]{Libraries we will use today {[}install if you
-don't have them{]}}
+\begin{frame}{Logistics}
+
+\textbf{Reading to do before next class:}
+
+\begin{itemize}
+\tightlist
+\item
+  ADD
+\end{itemize}
+
+\textbf{Questions on Problem set \#7}
+
+\end{frame}
+
+\begin{frame}{What we will do today}
+
+\tableofcontents
+
+\end{frame}
+
+\begin{frame}[fragile]{Load the packages we will use today (output
+omitted)}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{you must run this code chunk after installing these packages}
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -194,123 +257,147 @@ don't have them{]}}
 \end{Highlighting}
 \end{Shaded}
 
-\end{frame}
-
-\begin{frame}{Data we will use today}
+\textbf{If package not yet installed}, then must install before you
+load. Install in ``console'' rather than .Rmd file
 
 \begin{itemize}
 \tightlist
 \item
-  Integrated Postsecondary Education Data System (IPEDS)\\
+  Generic syntax: \texttt{install.packages("package\_name")}
 \item
-  High School Longitudinal Surveys (HSLS)\\
+  Install ``tidyverse'': \texttt{install.packages("tidyverse")}
+\end{itemize}
+
+Note: when we load package, name of package is not in quotes; but when
+we install package, name of package is in quotes:
+
+\begin{itemize}
+\tightlist
 \item
-  Federal Student Aid Data\\
+  \texttt{install.packages("tidyverse")}
 \item
-  Equality of Opportunity Project
+  \texttt{library(tidyverse)}
 \end{itemize}
 
 \end{frame}
 
-\begin{frame}{Integrated Postsecondary Education Data System (IPEDS)}
+\section{Relative file paths}\label{relative-file-paths}
+
+\begin{frame}[fragile]{Save data for lecture}
 
 \begin{itemize}
 \tightlist
 \item
-  Postsecondary education data from NCES\\
-\item
-  There are
-  \href{https://nces.ed.gov/ipeds/resource/download/IPEDS_DataReleaseProcedures.pdf}{12
-  survey components} and 3 collection periods
-\end{itemize}
-
-We will be working with
-\href{https://nces.ed.gov/ipeds/datacenter/DataFiles.aspx}{Institutional
-Characteristics data of 2017}
-
-\end{frame}
-
-\begin{frame}{High school longitudinal surveys from National Center for
-Education Statistics (NCES)}
-
-\begin{itemize}
-\tightlist
-\item
-  Follow U.S. students from high school through college, labor market
-\end{itemize}
-
-We will be working with
-\href{https://nces.ed.gov/surveys/hsls09/index.asp}{High School
-Longitudinal Study of 2009 (HSLS:09)}
-
-\begin{itemize}
-\tightlist
-\item
-  Follows 9th graders from 2009
-\item
-  Data collection waves
+  First make sure to save \textbf{lecture8.Rmd} in your lectures folder
 
   \begin{itemize}
   \tightlist
   \item
-    Base Year (2009)
+    If you do not have class folder structure, you can download it
+    \href{https://github.com/ozanj/rclass/raw/master/rclass_directory.zip}{here}
+  \end{itemize}
+\item
+  Download and unzip data folder we are using for this lecture
+  \href{https://github.com/ozanj/rclass/raw/master/lectures/lecture8/lecture8_data.zip}{here}
+\item
+  Save data files in the corresponding data folder
+
+  \begin{itemize}
+  \tightlist
   \item
-    First Follow-up (2012)
+    \texttt{ipeds\_hd\_2017\_small.csv} should go in the \textbf{ic}
+    folder inside the ipeds folder\\
   \item
-    2013 Update (2013)
+    \texttt{peps300.xlsx} should go in the \textbf{fsa} folder\\
   \item
-    High School Transcripts (2013-2014)
-  \item
-    Second Follow-up (2016)
+    \texttt{hsls\_sch\_small.dta} should go in the \textbf{hsls} folder
   \end{itemize}
 \end{itemize}
 
 \end{frame}
 
-\begin{frame}{Federal Student Aid}
+\begin{frame}[fragile]{Working directory}
 
 \begin{itemize}
 \tightlist
 \item
-  Federal Student Aid Data Center provides information for federal
-  assistance programs and is divided into four categories:
+  Your working directory will change depending on if you are using an R
+  script or R markdown.
+\item
+  \textbf{R script}
 
   \begin{itemize}
   \tightlist
   \item
-    Student Aid Data\\
+    The default working directory is your computer's home directory
   \item
-    School Data\\
+    You only need to set your working directory \texttt{setwd()} in an r
+    script once.\\
+  \end{itemize}
+\item
+  \textbf{R markdown}
+
+  \begin{itemize}
+  \tightlist
   \item
-    Federal Family Education Loan (FFEL) Program\\
+    The default working directory is where the current r markdown file
+    you are using is saved.\\
   \item
-    Business Information Resources
+    If you set your working directory in a code chunk, it will be reset
+    to the default directory after the code chunk is finished running.\\
+  \item
+    To avoid setting your working directory every time you read in data,
+    you can read in data using a link to the data file or use the
+    relative file path to save time.
   \end{itemize}
 \end{itemize}
 
-We will be working with
-\href{https://studentaid.ed.gov/sa/node/105}{School Data}
+\end{frame}
+
+\begin{frame}[fragile]{Absolute vs.~relative filepath}
+
+\textbf{Absolute file path}: The absolute file path is the complete list
+of directories needed to locate a file or folder.\\
+\texttt{setwd("/Users/pm/Desktop/rclass/lectures/lecture8")}
+
+\textbf{Relative file path}: The relative file path is the path relative
+to your current location/directory. Assuming your current working
+directory is in the ``lecture8'' folder and you want to change your
+directory to the data folder, your relative file path would look
+something like this:\\
+\texttt{setwd("../../data")}
+
+\textbf{File path shortcuts}
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+\textbf{Key} & \textbf{Description}\tabularnewline
+\midrule
+\endhead
+\textasciitilde{} & tilde is a shortcut for user's home directory (mine
+is my name pm)\tabularnewline
+../ & moves up a level\tabularnewline
+../../ & moves up two level\tabularnewline
+\bottomrule
+\end{longtable}
 
 \end{frame}
 
-\begin{frame}{Equality of Opportunity Project}
+\begin{frame}[fragile]{Practice using relative file paths}
 
-\begin{itemize}
-\tightlist
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
 \item
-  \href{http://www.equality-of-opportunity.org/papers/coll_mrc_paper.pdf}{Equality
-  of Opportunity Project} uses two data sources-- federal tax recoards
-  and Department of Education records (1999-2013)-- to investigate
-  intergenerational income mobility at colleges in the US.
-\end{itemize}
-
-We will use
-\href{http://www.equality-of-opportunity.org/documents/}{Mobility Report
-Cards: The Role of Colleges in Intergenerational Mobility data}
-
-\textbf{Not sure if to simply list datasets. Lecture will go over
-acquiring data and not so much about manipulating data. Not sure if
-students need to know each dataset in detail?}
+  Using the code chunk below, get your working directory
+  \texttt{getwd()}
+\item
+  Using your relative file path, set your working directory to fsa
+  folder inside the data folder. \texttt{setwd("filepath")}
+\item
+  Using your relative file path, set your working directory to the ef
+  folder inside the ipeds folder inside the data folder.
+  \texttt{setwd("filepath")}
+\end{enumerate}
 
 \end{frame}
 
@@ -318,63 +405,52 @@ students need to know each dataset in detail?}
 
 \begin{frame}{Common data formats}
 
+\begin{longtable}[]{@{}llll@{}}
+\toprule
+\textbf{Format} & \textbf{Package} & \textbf{Function} &\tabularnewline
+\midrule
+\endhead
+Comma-separated values (.csv) & readr & read\_csv &\tabularnewline
+Text-formated data (.txt) & readr & read\_table &\tabularnewline
+Tab-separated values (.tsv) & readr & read\_tsv &\tabularnewline
+Stata (.dta) & haven & read\_dta &\tabularnewline
+SPSS (.sav) & haven & read\_sav &\tabularnewline
+SAS (.sas) & haven & read\_sas &\tabularnewline
+Excel (.xls or .xlsx) & readxl & read\_excel &\tabularnewline
+R (.Rdata or .rds) & base R & load() &\tabularnewline
+\bottomrule
+\end{longtable}
+
 \begin{itemize}
 \tightlist
 \item
-  Comma-separated values (.csv)\\
-\item
-  Excel (.xls or .xlsx)\\
-\item
-  Text-formated data (.txt)\\
-\item
-  Tab-separated values (.tsv)
-\item
-  R (.Rdata or .rds)\\
-\item
-  Stata (.dta)
-\item
-  SPSS (.sav)\\
-\item
-  SAS (.sas)
+  Source: Professor Darin Christensen
 \end{itemize}
 
 \end{frame}
 
-\section{\texorpdfstring{\texttt{readr}
-package}{readr package}}\label{readr-package}
+\section{readr package}\label{readr-package}
 
-\begin{frame}[fragile]{\texttt{readr}}
+\begin{frame}{readr}
 
-The \href{https://readr.tidyverse.org/index.html}{\texttt{readr}}
-package is part of tidyverse, which is designed to read in flat data
-files in R and transform them into data frames.\\[2\baselineskip]- We
-could load \textbf{library(tidyverse)} if we wanted to load all packages
-in tidyverse (e.g.~ggplot2, dplyr, tidyr, stringr, readr, etc\ldots{})
+The readr package is part of
+\href{https://readr.tidyverse.org/index.html}{tidyverse}, which is
+designed to read in flat data files in R and transform them into data
+frames.\\[2\baselineskip]- We could load \textbf{library(tidyverse)} if
+we wanted to load all packages in tidyverse (e.g.~ggplot2, dplyr, tidyr,
+stringr, readr, etc\ldots{})
 
-\includegraphics{~/Desktop/GitHub/rclass/lectures/lecture8/tidyverse.png}\\
+\includegraphics{tidyverse.png}\\
 - For the purpose of this lecture, we will just need to load
 \textbf{library(readr)}
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readr}}
+\subsection{readr functions}\label{readr-functions}
 
-No matter the flat file format you are working with, there are two
-important steps for reading in data with \texttt{readr}:
+\begin{frame}[fragile]{readr functions}
 
-\begin{enumerate}
-\def\labelenumi{(\arabic{enumi})}
-\item
-  \textbf{a function to parse the file (read\_csv)}
-\item
-  \textbf{column specification}
-\end{enumerate}
-
-\end{frame}
-
-\begin{frame}[fragile]{\texttt{readr\ functions}}
-
-\textbf{readr's} (tidyverse) functions
+\texttt{readr} (tidyverse) functions
 
 \begin{longtable}[]{@{}ll@{}}
 \toprule
@@ -393,11 +469,14 @@ Web log files & \texttt{read\_log}\tabularnewline
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readr\ column\ specification}}
+\subsection{readr column
+specification}\label{readr-column-specification}
 
-\texttt{readr} is pretty good at guessing each column's data type
-(e.g.~character, double, etc.), however it is good practice to manually
-specify the data type for each column.
+\begin{frame}[fragile]{readr column specification}
+
+\texttt{readr} is pretty good at guessing each column's data type by
+looking at the first 1,000 rows (e.g.~character, double, etc.), however
+it is good practice to manually specify the data type for each column.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -421,7 +500,7 @@ specify the data type for each column.
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readr\ column\ specification}}
+\begin{frame}[fragile]{readr column specification}
 
 The output of the previous example shows us the column specification
 readr gave us. However, we could manually change column specification if
@@ -449,7 +528,9 @@ we do not like readr's guess.
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readr} features}
+\subsection{readr arguments}\label{readr-arguments}
+
+\begin{frame}[fragile]{readr arguments}
 
 \begin{itemize}
 \tightlist
@@ -460,11 +541,18 @@ we do not like readr's guess.
 \item
   \textbf{col\_names}: \texttt{read\_csv}(csv file, col\_names =
   c(``x'', ``y'', ``z''))
+
+  \begin{itemize}
+  \tightlist
+  \item
+    To save csv data use the function
+    \texttt{write\_csv(dataframe,\ "path")}
+  \end{itemize}
 \end{itemize}
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readr} demonstration csv}
+\begin{frame}[fragile]{readr demonstration csv}
 
 \texttt{readr} automatically treats the first line of data as column
 names.
@@ -488,7 +576,7 @@ reading in data.
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readr} demonstration csv}
+\begin{frame}[fragile]{readr skip argument}
 
 Notice the example below. The first two lines are comments about the
 data. We would need to use \textbf{skip = n} to skip n lines.
@@ -511,7 +599,7 @@ data. We would need to use \textbf{skip = n} to skip n lines.
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readr} demonstration csv}
+\begin{frame}[fragile]{readr comment argument}
 
 We could also tell R to drop lines we specify as comments. With
 \textbf{comment = n}
@@ -548,7 +636,7 @@ We could also tell R to drop lines we specify as comments. With
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readr} column names}
+\begin{frame}[fragile]{readr column names argument}
 
 We could tell R there are no column names with \textbf{col\_names =
 FALSE} or we could manually give R column names with \textbf{col\_names
@@ -582,32 +670,168 @@ FALSE} or we could manually give R column names with \textbf{col\_names
 
 \end{frame}
 
-\begin{frame}{\texttt{readr} Student exercise}
+\begin{frame}[fragile]{readr Student exercise}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Create a 3x3 tibble like the examples above
+  (e.g.~read\_csv(``a,b,c\ldots{}.'')), treating the first line as
+  column names
+\item
+  Now on the first line add a sentence and use the \texttt{skip}
+  argument to skip this line
+\item
+  This time add a special character ( *, \#, ! ) at the beginning of the
+  sentence and indicate it is a comment
+\item
+  Delete the sentence and column names (should have a 2x2 tibble) and
+  manually tell R column names
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]{readr Student exercise solutions}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Create a 3x3 tibble like the examples above
+  (e.g.~read\_csv(``a,b,c\ldots{}.'')), treating the first line as
+  column names
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{read_csv}\NormalTok{(}\StringTok{"a, b, c}
+\StringTok{         1,2,3}
+\StringTok{         4,5,6"}
+\NormalTok{         )}
+\CommentTok{#> # A tibble: 2 x 3}
+\CommentTok{#>       a     b     c}
+\CommentTok{#>   <int> <int> <int>}
+\CommentTok{#> 1     1     2     3}
+\CommentTok{#> 2     4     5     6}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Now on the first line add a sentence and use the \texttt{skip}
+  argument to skip this line
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{read_csv}\NormalTok{(}\StringTok{"Do not read this sentence}
+\StringTok{         a, b, c}
+\StringTok{         1,2,3}
+\StringTok{         4,5,6"}\NormalTok{, }\DataTypeTok{skip =} \DecValTok{1}
+\NormalTok{         )}
+\CommentTok{#> # A tibble: 2 x 3}
+\CommentTok{#>       a     b     c}
+\CommentTok{#>   <int> <int> <int>}
+\CommentTok{#> 1     1     2     3}
+\CommentTok{#> 2     4     5     6}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{readr Student exercise solutions continued}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  This time add a special character ( *, \#, ! ) at the beginning of the
+  sentence and indicate it is a comment
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{read_csv}\NormalTok{(}\StringTok{"#This is a comment}
+\StringTok{         a, b, c}
+\StringTok{         1,2,3}
+\StringTok{         4,5,6"}\NormalTok{,}\DataTypeTok{comment =} \StringTok{"#"}
+\NormalTok{         )}
+\CommentTok{#> # A tibble: 2 x 3}
+\CommentTok{#>       a     b     c}
+\CommentTok{#>   <int> <int> <int>}
+\CommentTok{#> 1     1     2     3}
+\CommentTok{#> 2     4     5     6}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Delete the sentence and column names (should have a 2x3 tibble) and
+  manually tell R column names
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{read_csv}\NormalTok{(}\StringTok{"1,2,3}
+\StringTok{         4,5,6"}\NormalTok{,}\DataTypeTok{col_names =} \KeywordTok{c}\NormalTok{(}\StringTok{"a"}\NormalTok{, }\StringTok{"b"}\NormalTok{, }\StringTok{"c"}\NormalTok{)}
+\NormalTok{         )}
+\CommentTok{#> # A tibble: 2 x 3}
+\CommentTok{#>       a     b     c}
+\CommentTok{#>   <int> <int> <int>}
+\CommentTok{#> 1     1     2     3}
+\CommentTok{#> 2     4     5     6}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{1. readr Running into errors}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Make sure you have downloaded and saved flat file\\
+\item
+  Make sure to know the file path of where data is downloaded or saved
+  (``../../data'')
+\item
+  Make sure you set your working \textbf{\texttt{setwd()}} directory in
+  R. To check your current working directory type
+  \textbf{\texttt{getwd()}} in console.
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{read\_csv demonstration using IPEDS data}
+
+Integrated Postsecondary Education Data System (IPEDS)
 
 \begin{itemize}
 \tightlist
 \item
-  Get in your homework groups\\
+  Postsecondary education data from NCES\\
 \item
-  Create a 3x3 tibble like the examples above
-  (e.g.~read\_csv(``a,b,c\ldots{}.'')), treating the first line as
-  column names\\
-\item
-  Now on the first line add a sentence\\
-\item
-  This time add a special character ( *, \#, ! ) at the beginning of the
-  sentence and indicate it is a comment\\
-\item
-  Delete the sentence and column names (should have a 2x2 tibble) and
-  manually tell R column names
+  There are
+  \href{https://nces.ed.gov/ipeds/resource/download/IPEDS_DataReleaseProcedures.pdf}{12
+  survey components} and 3 collection periods
 \end{itemize}
+
+We will be working with
+\href{https://nces.ed.gov/ipeds/datacenter/DataFiles.aspx}{Institutional
+Characteristics data of 2017}
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readr} demonstration csv}
+\begin{frame}[fragile]{read\_csv demonstration using IPEDS data}
 
-\textbf{NOT SURE IF TO MAKE THIS A DEMONSTRATION WHERE STUDENTS FOLLOW
-ALONG OR ANOTHER STUDENT EXERCISE}\\
 \textbf{Tying it all together}
 
 Use \texttt{read\_csv()} function from \texttt{readr} to import csv
@@ -632,18 +856,17 @@ computers.
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readr} demonstration csv}
+\begin{frame}[fragile]{read\_csv demonstration using IPEDS data}
 
 Use \texttt{read\_csv()} function from \texttt{readr} to import csv
-dataset into R with column specification \textbf{{[}Would it be better
-to change to integer or double?{]}}
+dataset into R with column specification
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{ipeds <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\DataTypeTok{file=}\StringTok{"~/Desktop/GitHub/rclass/data/ipeds/ic/ipeds_hd_2017_small.csv"}\NormalTok{,}
                   \DataTypeTok{col_types =}
                     \KeywordTok{cols}\NormalTok{(}
-                      \DataTypeTok{unitid =} \KeywordTok{col_number}\NormalTok{(), }
+                      \DataTypeTok{unitid =} \KeywordTok{col_character}\NormalTok{(), }
                       \DataTypeTok{instnm =} \KeywordTok{col_character}\NormalTok{(),}
                       \DataTypeTok{stabbr =} \KeywordTok{col_character}\NormalTok{(),}
                       \DataTypeTok{sector =} \KeywordTok{col_integer}\NormalTok{(),}
@@ -659,7 +882,7 @@ character type for example.
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readr} variable and value labels}
+\begin{frame}[fragile]{readr variable and value labels}
 
 Let's view variable and value labels
 
@@ -681,20 +904,52 @@ separate do file with variable and value labels.\\
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readr} labelled data}
+\section{Set variable and value
+labels}\label{set-variable-and-value-labels}
+
+\begin{frame}[fragile]{Set variable and value labels}
+
+Use these functions from the \texttt{labelled} package to manually set
+variable and value labels
 
 \begin{itemize}
 \tightlist
 \item
-  Open the data dictionary file for hd2017 data and select
-  ``Frequencies'' sheet
+  Use \texttt{set\_variable\_labels} function to manually set variable
+  labels
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{df\ \%\textgreater{}\%\ set\_variable\_labels(variable\ =\ "Variable\ label")}\\
+  \item
+    \texttt{ipeds\ \%\textgreater{}\%\ set\_variable\_labels(unitid\ =\ "Unit\ identification\ number")}
+  \end{itemize}
+\item
+  Use \texttt{set\_value\_labels} function to manually set value labels
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{df\ \%\textgreater{}\%\ set\_value\_labels(variable\ =\ c("Value\ label"\ =\ 1,\ "Value\ label"\ =\ 2))}\\
+  \item
+    \texttt{ipeds\ \%\textgreater{}\%\ set\_value\_labels(sector\ =\ "Administrative\ Unit"\ =\ 0)}
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{readr labelled data}
+
+\begin{itemize}
+\tightlist
+\item
+  Open the data dictionary file for
+  \href{https://nces.ed.gov/ipeds/datacenter/data/HD2017_Dict.zip}{hd2017}
+  data and select ``Frequencies'' sheet
 \item
   We are only working with these 6 variables (unitid, instnm, stabbr,
-  sector, iclevel, control)\\
-\item
-  We need to add variable labels for all 6 variables\\
-\item
-  We need to add value labels for sector, iclevel, and control
+  sector, iclevel, control)
 \end{itemize}
 
 \begin{Shaded}
@@ -721,8 +976,21 @@ separate do file with variable and value labels.\\
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readr} manually add variable and value
-labels}
+\begin{frame}{readr variable and value labels student exercise}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Using the codebook for hd2017 data, add variable labels for all 6
+  variables (unitid, instnm, stabbr, sector, iclevel, control)
+\item
+  Add value labels for sector, iclevel, and control
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]{readr variable and value labels student exercise
+solution}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -757,7 +1025,7 @@ labels}
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readr} Let's view new labelled data}
+\begin{frame}[fragile]{readr Let's view new labelled data}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -780,13 +1048,11 @@ labels}
 \end{Highlighting}
 \end{Shaded}
 
-Let's change class to factor
-
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readr} Class to factor}
+\begin{frame}[fragile]{readr labelled data to factor}
 
-Approach \#1
+Let's change class to factor
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -819,271 +1085,43 @@ Approach \#1
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readr} Class to factor}
+\section{readxl package}\label{readxl-package}
 
-Approach \#2
+\begin{frame}[fragile]{readxl}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{ipeds_factor2 <-}\StringTok{ }\KeywordTok{to_factor}\NormalTok{(ipeds_labelled, }\DataTypeTok{ordered =} \OtherTok{TRUE}\NormalTok{)}
-\KeywordTok{typeof}\NormalTok{(ipeds_factor2}\OperatorTok{$}\NormalTok{sector)}
-\CommentTok{#> [1] "integer"}
-\KeywordTok{class}\NormalTok{(ipeds_factor2}\OperatorTok{$}\NormalTok{sector)}
-\CommentTok{#> [1] "ordered" "factor"}
-\KeywordTok{attributes}\NormalTok{(ipeds_factor2}\OperatorTok{$}\NormalTok{sector)}
-\CommentTok{#> $levels}
-\CommentTok{#>  [1] "Administrative Unit"                     }
-\CommentTok{#>  [2] "Public, 4-year or above"                 }
-\CommentTok{#>  [3] "Private not-for-profit, 4-year or above" }
-\CommentTok{#>  [4] "Private for-profit, 4-year or above"     }
-\CommentTok{#>  [5] "Public, 2-year"                          }
-\CommentTok{#>  [6] "Private not-for-profit, 2-year"          }
-\CommentTok{#>  [7] "Private for-profit, 2-year"              }
-\CommentTok{#>  [8] "Public, less-than 2-year"                }
-\CommentTok{#>  [9] "Private not-for-profit, less-than 2-year"}
-\CommentTok{#> [10] "Private for-profit, less-than 2-year"    }
-\CommentTok{#> [11] "Sector unknown (not active)"             }
-\CommentTok{#> }
-\CommentTok{#> $class}
-\CommentTok{#> [1] "ordered" "factor" }
-\CommentTok{#> }
-\CommentTok{#> $label}
-\CommentTok{#> [1] "Sector of institution"}
-\end{Highlighting}
-\end{Shaded}
-
-\end{frame}
-
-\begin{frame}[fragile]{1. \texttt{readr\ Running\ into\ errors}}
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Make sure you have downloaded and saved flat file\\
-\item
-  Make sure to know the file path of where data is downloaded or saved
-  (\textasciitilde{}/Desktop/educ263/data)
-\item
-  Make sure you set your working \textbf{\texttt{setwd()}} directory in
-  R. To check your current working directory type
-  \textbf{\texttt{getwd()}} in console.
-\end{enumerate}
-
-\end{frame}
-
-\section{\texorpdfstring{\texttt{haven}
-package}{haven package}}\label{haven-package}
-
-\begin{frame}[fragile]{\texttt{haven}}
-
-Recap from lecture 5
-
-\href{https://haven.tidyverse.org/}{\texttt{haven}} is part of
-\textbf{tidyverse}, which enables users to import and export data from
-the following statistical packages:
+The \texttt{readxl}package is part of
+\href{https://readxl.tidyverse.org/}{tidyverse}, which is designed to
+read data from Excel and into R.
 
 \begin{itemize}
 \tightlist
 \item
-  SAS
-\item
-  SPSS
-\item
-  Stata\\[2\baselineskip]
-\end{itemize}
-
-Similar to \texttt{readr}, we could load the entire
-\textbf{library(tidyverse)} package to get \texttt{haven}. For the
-purpose of this lecture, we will just need to load
-\textbf{library(haven)}.
-
-\end{frame}
-
-\begin{frame}[fragile]{\texttt{haven\ functions}}
-
-\textbf{haven's} (tidyverse) functions
-
-\begin{longtable}[]{@{}ll@{}}
-\toprule
-\textbf{Format} & \textbf{Function}\tabularnewline
-\midrule
-\endhead
-SPSS & \texttt{read\_sav}\tabularnewline
-SAS & \texttt{read\_sas}\tabularnewline
-Stata & \texttt{read\_dta}\tabularnewline
-\bottomrule
-\end{longtable}
-
-\end{frame}
-
-\begin{frame}[fragile]{\texttt{haven} read and write Stata arguments}
-
-\texttt{read\_dta(file,\ encoding\ =\ NULL)}\\
-\texttt{write\_data(data,\ path,\ version\ =\ 14)}
-
-Arguments\\
-- \textbf{file}: file path to data\\
-- \textbf{encoding}: files prior to Stata 14 did not declare text
-encoding, files after Stata 14 do not need to declare encoding value\\
-- \textbf{data}: data frame to save (write)\\
-- \textbf{path}: file path to where data will be saved\\
-- \textbf{version}: file version
-
-\href{https://haven.tidyverse.org/reference/read_dta.html}{Link}
-
-\end{frame}
-
-\begin{frame}[fragile]{\texttt{haven} Student exercise}
-
-\begin{itemize}
-\tightlist
-\item
-  Use \texttt{read\_dta()} function from \texttt{haven} to import Stata
-  dataset into R\\
-\item
-  Use \texttt{write\_dta()} funtction from \texttt{haven} to save Stata
-  dataset\\
-\item
-  If you have time, explore data (View, glimpse, head, etc.)
+  We could install tidyverse \textbf{install.package(``tidyverse'')} to
+  access \texttt{readxl}, but have to explicitly load \texttt{readxl}
+  because it is not a core tidyverse package
 
   \begin{itemize}
   \tightlist
   \item
-    View variable and value labels\\
-  \item
-    Change class == labelled to class == factor
+    \texttt{library(readxl)}\\
   \end{itemize}
+\item
+  Or install \texttt{readxl}\textbf{install.packages(``readxl'')} and
+  load it
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{library(readxl)}\\
+  \end{itemize}
+\item
+  For the purpose of this lecture, we just need to load
+  \textbf{library(readxl)}.
 \end{itemize}
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{haven} Student exercise Solution}
-
-Use \texttt{read\_dta} function from \texttt{haven} to import State data
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{hsls <-}\StringTok{ }\KeywordTok{read_dta}\NormalTok{(}\StringTok{"~/Desktop/GitHub/rclass/data/hsls/hsls_sch_small.dta"}\NormalTok{, }\DataTypeTok{encoding=}\OtherTok{NULL}\NormalTok{)}
-
-\CommentTok{# View data}
-\KeywordTok{head}\NormalTok{(hsls)}
-\KeywordTok{glimpse}\NormalTok{(hsls)}
-\end{Highlighting}
-\end{Shaded}
-
-Use \texttt{write\_dta} function from \texttt{haven} to write State data
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{write_dta}\NormalTok{(hsls, }\DataTypeTok{path =} \StringTok{"~/Desktop/GitHub/rclass/data/hsls/hsls_sch_small.dta"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\end{frame}
-
-\begin{frame}[fragile]{\texttt{haven} Student exercise Solution
-cont\ldots{}}
-
-Variable and Value labels
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# View variable labels}
-\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{var_label}\NormalTok{()}
-\CommentTok{#> $sch_id}
-\CommentTok{#> [1] "School ID"}
-\CommentTok{#> }
-\CommentTok{#> $x1control}
-\CommentTok{#> [1] "X1 School control"}
-\CommentTok{#> }
-\CommentTok{#> $x1locale}
-\CommentTok{#> [1] "X1 School locale (urbanicity)"}
-\CommentTok{#> }
-\CommentTok{#> $x1region}
-\CommentTok{#> [1] "X1 School geographic region"}
-\CommentTok{#> }
-\CommentTok{#> $a1schcontrol}
-\CommentTok{#> [1] "A1 A02 School control"}
-\end{Highlighting}
-\end{Shaded}
-
-\end{frame}
-
-\begin{frame}[fragile]{\texttt{haven} Student exercise Solution
-cont\ldots{}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#View value label for x1locale}
-\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(x1locale) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{val_labels}\NormalTok{()}
-\CommentTok{#> $x1locale}
-\CommentTok{#>                                    Missing }
-\CommentTok{#>                                          1 }
-\CommentTok{#> Unit non-response/component not applicable }
-\CommentTok{#>                                          2 }
-\CommentTok{#>                    Item legitimate skip/NA }
-\CommentTok{#>                                          3 }
-\CommentTok{#>                                       City }
-\CommentTok{#>                                          4 }
-\CommentTok{#>                                     Suburb }
-\CommentTok{#>                                          5 }
-\CommentTok{#>                                       Town }
-\CommentTok{#>                                          6 }
-\CommentTok{#>                                      Rural }
-\CommentTok{#>                                          7}
-\end{Highlighting}
-\end{Shaded}
-
-\end{frame}
-
-\begin{frame}[fragile]{\texttt{haven} Student exercise Solution
-cont\ldots{}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# Change class == labelled to class == factor}
-\NormalTok{hsls <-}\StringTok{ }\KeywordTok{as_factor}\NormalTok{(hsls, }\DataTypeTok{only_labelled =} \OtherTok{TRUE}\NormalTok{)}
-
-\KeywordTok{typeof}\NormalTok{(hsls}\OperatorTok{$}\NormalTok{x1region)}
-\CommentTok{#> [1] "integer"}
-\KeywordTok{class}\NormalTok{(hsls}\OperatorTok{$}\NormalTok{x1region)}
-\CommentTok{#> [1] "factor"}
-\KeywordTok{attributes}\NormalTok{(hsls}\OperatorTok{$}\NormalTok{x1region)}
-\CommentTok{#> $levels}
-\CommentTok{#> [1] "Missing"                                   }
-\CommentTok{#> [2] "Unit non-response/component not applicable"}
-\CommentTok{#> [3] "Item legitimate skip/NA"                   }
-\CommentTok{#> [4] "Northeast"                                 }
-\CommentTok{#> [5] "Midwest"                                   }
-\CommentTok{#> [6] "South"                                     }
-\CommentTok{#> [7] "West"                                      }
-\CommentTok{#> }
-\CommentTok{#> $class}
-\CommentTok{#> [1] "factor"}
-\CommentTok{#> }
-\CommentTok{#> $label}
-\CommentTok{#> [1] "X1 School geographic region"}
-\end{Highlighting}
-\end{Shaded}
-
-\end{frame}
-
-\section{\texorpdfstring{\texttt{readxl}
-package}{readxl package}}\label{readxl-package}
-
-\begin{frame}[fragile]{\texttt{readxl}}
-
-The \href{https://readxl.tidyverse.org/}{\texttt{readxl}} package is
-part of tidyverse, which is designed to easily read data from Excel and
-into R.\\
-- We could load \textbf{library(tidyverse)} if we wanted to load all
-packages in tidyverse. For the purpose of this lecture, we just need to
-load \textbf{library(readxl)}.
-
-\end{frame}
-
-\begin{frame}[fragile]{\texttt{readxl}}
+\begin{frame}[fragile]{readxl}
 
 \texttt{readxl} supports both .xls and .xlsx formats and is designed to
 work with tabular data. It does not require dependencies-- making
@@ -1111,7 +1149,7 @@ For now, lets use ``datasets.xlsx''
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readxl} features}
+\subsection{readxl arguments}\label{readxl-arguments}
 
 \begin{itemize}
 \tightlist
@@ -1132,9 +1170,9 @@ For now, lets use ``datasets.xlsx''
   \textbf{na}: \texttt{read\_excel}(excel file, na = ``n'')
 \end{itemize}
 
-\end{frame}
+\begin{frame}[fragile]{readxl sheet}
 
-\begin{frame}[fragile]{\texttt{readxl} sheet}
+Select the excel sheet you want to work with.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1149,36 +1187,40 @@ For now, lets use ``datasets.xlsx''
 \NormalTok{xl_example <-}\StringTok{ }\KeywordTok{read_excel}\NormalTok{(excel_example, }\DataTypeTok{sheet =} \StringTok{"quakes"}\NormalTok{)}
 \KeywordTok{head}\NormalTok{(xl_example)}
 \CommentTok{#> # A tibble: 6 x 5}
-\CommentTok{#>      lat   long depth   mag stations}
-\CommentTok{#>    <dbl>  <dbl> <dbl> <dbl>    <dbl>}
-\CommentTok{#> 1 -20.42 181.62   562   4.8       41}
-\CommentTok{#> 2 -20.62 181.03   650   4.2       15}
-\CommentTok{#> 3 -26.00 184.10    42   5.4       43}
-\CommentTok{#> 4 -17.97 181.66   626   4.1       19}
-\CommentTok{#> 5 -20.42 181.96   649   4.0       11}
-\CommentTok{#> 6 -19.68 184.31   195   4.0       12}
+\CommentTok{#>     lat  long depth   mag stations}
+\CommentTok{#>   <dbl> <dbl> <dbl> <dbl>    <dbl>}
+\CommentTok{#> 1 -20.4  182.   562   4.8       41}
+\CommentTok{#> 2 -20.6  181.   650   4.2       15}
+\CommentTok{#> 3 -26    184.    42   5.4       43}
+\CommentTok{#> 4 -18.0  182.   626   4.1       19}
+\CommentTok{#> 5 -20.4  182.   649   4         11}
+\CommentTok{#> 6 -19.7  184.   195   4         12}
 \end{Highlighting}
 \end{Shaded}
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readxl} n\_max}
+\begin{frame}[fragile]{readxl n\_max}
+
+Maximum number of rows to read
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{read_excel}\NormalTok{(excel_example, }\DataTypeTok{sheet =} \StringTok{"quakes"}\NormalTok{, }\DataTypeTok{n_max =} \DecValTok{3}\NormalTok{)}
 \CommentTok{#> # A tibble: 3 x 5}
-\CommentTok{#>      lat   long depth   mag stations}
-\CommentTok{#>    <dbl>  <dbl> <dbl> <dbl>    <dbl>}
-\CommentTok{#> 1 -20.42 181.62   562   4.8       41}
-\CommentTok{#> 2 -20.62 181.03   650   4.2       15}
-\CommentTok{#> 3 -26.00 184.10    42   5.4       43}
+\CommentTok{#>     lat  long depth   mag stations}
+\CommentTok{#>   <dbl> <dbl> <dbl> <dbl>    <dbl>}
+\CommentTok{#> 1 -20.4  182.   562   4.8       41}
+\CommentTok{#> 2 -20.6  181.   650   4.2       15}
+\CommentTok{#> 3 -26    184.    42   5.4       43}
 \end{Highlighting}
 \end{Shaded}
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readxl} range}
+\begin{frame}[fragile]{readxl range}
+
+A cell range to read from
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1192,146 +1234,217 @@ For now, lets use ``datasets.xlsx''
 
 \KeywordTok{read_excel}\NormalTok{(excel_example, }\DataTypeTok{sheet =} \StringTok{"quakes"}\NormalTok{, }\DataTypeTok{range =} \KeywordTok{cell_rows}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{))}
 \CommentTok{#> # A tibble: 2 x 5}
-\CommentTok{#>      lat   long depth   mag stations}
-\CommentTok{#>    <dbl>  <dbl> <dbl> <dbl>    <dbl>}
-\CommentTok{#> 1 -20.42 181.62   562   4.8       41}
-\CommentTok{#> 2 -20.62 181.03   650   4.2       15}
+\CommentTok{#>     lat  long depth   mag stations}
+\CommentTok{#>   <dbl> <dbl> <dbl> <dbl>    <dbl>}
+\CommentTok{#> 1 -20.4  182.   562   4.8       41}
+\CommentTok{#> 2 -20.6  181.   650   4.2       15}
 
 \KeywordTok{head}\NormalTok{(}\KeywordTok{read_excel}\NormalTok{(excel_example, }\DataTypeTok{sheet =} \StringTok{"quakes"}\NormalTok{, }\DataTypeTok{range =} \KeywordTok{cell_cols}\NormalTok{(}\StringTok{"A:C"}\NormalTok{)))}
 \CommentTok{#> # A tibble: 6 x 3}
-\CommentTok{#>      lat   long depth}
-\CommentTok{#>    <dbl>  <dbl> <dbl>}
-\CommentTok{#> 1 -20.42 181.62   562}
-\CommentTok{#> 2 -20.62 181.03   650}
-\CommentTok{#> 3 -26.00 184.10    42}
-\CommentTok{#> 4 -17.97 181.66   626}
-\CommentTok{#> 5 -20.42 181.96   649}
-\CommentTok{#> 6 -19.68 184.31   195}
+\CommentTok{#>     lat  long depth}
+\CommentTok{#>   <dbl> <dbl> <dbl>}
+\CommentTok{#> 1 -20.4  182.   562}
+\CommentTok{#> 2 -20.6  181.   650}
+\CommentTok{#> 3 -26    184.    42}
+\CommentTok{#> 4 -18.0  182.   626}
+\CommentTok{#> 5 -20.4  182.   649}
+\CommentTok{#> 6 -19.7  184.   195}
 \CommentTok{# using head() to only view first 6 rows }
 \end{Highlighting}
 \end{Shaded}
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readxl} na}
+\begin{frame}[fragile]{readxl na}
+
+Character vector of strings to interpret as missing values
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{read_excel}\NormalTok{(excel_example, }\DataTypeTok{sheet =} \StringTok{"quakes"}\NormalTok{, }\DataTypeTok{na =} \StringTok{"-20.42"}\NormalTok{)}
 \CommentTok{#> # A tibble: 1,000 x 5}
-\CommentTok{#>       lat   long depth   mag stations}
-\CommentTok{#>     <dbl>  <dbl> <dbl> <dbl>    <dbl>}
-\CommentTok{#>  1     NA 181.62   562   4.8       41}
-\CommentTok{#>  2 -20.62 181.03   650   4.2       15}
-\CommentTok{#>  3 -26.00 184.10    42   5.4       43}
-\CommentTok{#>  4 -17.97 181.66   626   4.1       19}
-\CommentTok{#>  5     NA 181.96   649   4.0       11}
-\CommentTok{#>  6 -19.68 184.31   195   4.0       12}
-\CommentTok{#>  7 -11.70 166.10    82   4.8       43}
-\CommentTok{#>  8 -28.11 181.93   194   4.4       15}
-\CommentTok{#>  9 -28.74 181.74   211   4.7       35}
-\CommentTok{#> 10 -17.47 179.59   622   4.3       19}
+\CommentTok{#>      lat  long depth   mag stations}
+\CommentTok{#>    <dbl> <dbl> <dbl> <dbl>    <dbl>}
+\CommentTok{#>  1  NA    182.   562   4.8       41}
+\CommentTok{#>  2 -20.6  181.   650   4.2       15}
+\CommentTok{#>  3 -26    184.    42   5.4       43}
+\CommentTok{#>  4 -18.0  182.   626   4.1       19}
+\CommentTok{#>  5  NA    182.   649   4         11}
+\CommentTok{#>  6 -19.7  184.   195   4         12}
+\CommentTok{#>  7 -11.7  166.    82   4.8       43}
+\CommentTok{#>  8 -28.1  182.   194   4.4       15}
+\CommentTok{#>  9 -28.7  182.   211   4.7       35}
+\CommentTok{#> 10 -17.5  180.   622   4.3       19}
 \CommentTok{#> # ... with 990 more rows}
 \end{Highlighting}
 \end{Shaded}
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readxl} Student exercise}
+\begin{frame}{read\_excel using FSA data}
 
-\textbf{Save data} - Download and save Federal Student Financial Aid
-Data\\
-- Read in data using \texttt{readxl} function\\
-- Read in first four rows (n\_max) - Read in column Names to column
-State \textbf{hint} \texttt{cell\_cols} - Set value ``A'' to missing
-(na) \textbf{note} : you need to investigate in detail before setting
-anything to missing
+Federal Student Aid
+
+\begin{itemize}
+\tightlist
+\item
+  Federal Student Aid Data Center provides information for federal
+  assistance programs and is divided into four categories:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Student Aid Data\\
+  \item
+    School Data\\
+  \item
+    Federal Family Education Loan (FFEL) Program\\
+  \item
+    Business Information Resources
+  \end{itemize}
+\end{itemize}
+
+We will be working with
+\href{https://studentaid.ed.gov/sa/node/105}{School Data}
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readxl} Student exercise solution}
+\begin{frame}[fragile]{read\_excel student exercise using FSA data}
+
+Read in Federal Student Aid data using \texttt{readxl} function\\
+- Excel file ``peps300.xlsx'' is saved in the fsa folder inside the data
+folder\\
+1. Use relative file path to read in data\\
+- \texttt{read\_excel("filepath/excelfile")}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Read in first four rows (n\_max)
+\item
+  Read in columns from range Names to State \textbf{hint}
+  \texttt{cell\_cols}
+\item
+  Set value ``A'' to missing (na) \textbf{note} : you need to
+  investigate in detail before setting anything to missing
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]{read\_excel Student exercise solutions}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Use relative file path to read in data
+\end{enumerate}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{#Read in data using readxl function}
-\KeywordTok{setwd}\NormalTok{(}\StringTok{"~/Desktop/GitHub/rclass/data/fsa"}\NormalTok{)}
-\NormalTok{fsa <-}\StringTok{ }\KeywordTok{read_excel}\NormalTok{(}\StringTok{"peps300.xlsx"}\NormalTok{)}
+\CommentTok{#getwd()}
+\NormalTok{fsa <-}\StringTok{ }\KeywordTok{read_excel}\NormalTok{(}\StringTok{"../../data/fsa/peps300.xlsx"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Read in first four rows (n\_max)
+\end{enumerate}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{#Read in first four rows (n_max)}
-\KeywordTok{setwd}\NormalTok{(}\StringTok{"~/Desktop/GitHub/rclass/data/fsa"}\NormalTok{)}
-\KeywordTok{read_excel}\NormalTok{(}\StringTok{"peps300.xlsx"}\NormalTok{, }\DataTypeTok{n_max =} \DecValTok{4}\NormalTok{)}
+\CommentTok{#setwd("~/Desktop/GitHub/rclass/data/fsa")}
+\KeywordTok{read_excel}\NormalTok{(}\StringTok{"../../data/fsa/peps300.xlsx"}\NormalTok{, }\DataTypeTok{n_max =} \DecValTok{4}\NormalTok{)}
 \CommentTok{#> # A tibble: 4 x 29}
-\CommentTok{#>    OPEID                                         Name}
-\CommentTok{#>    <chr>                                        <chr>}
-\CommentTok{#> 1 001002 ALABAMA AGRICULTURAL & MECHANICAL UNIVERSITY}
-\CommentTok{#> 2 001003                          FAULKNER UNIVERSITY}
-\CommentTok{#> 3 001004                     UNIVERSITY OF MONTEVALLO}
-\CommentTok{#> 4 001005                     ALABAMA STATE UNIVERSITY}
-\CommentTok{#> # ... with 27 more variables: Address <chr>, City <chr>, State <chr>,}
-\CommentTok{#> #   `State Desc` <chr>, `Zip Code` <chr>, `Zip Ext` <chr>,}
-\CommentTok{#> #   `Prog\textbackslash{}r\textbackslash{}nLength` <dbl>, `School\textbackslash{}r\textbackslash{}nType` <dbl>, `Year 1` <dbl>,}
-\CommentTok{#> #   `Dual\textbackslash{}r\textbackslash{}nNum 1` <dbl>, `Dual\textbackslash{}r\textbackslash{}nDenom 1` <dbl>, `DRate 1` <dbl>,}
-\CommentTok{#> #   `PRate 1` <chr>, `Ethnic Code` <chr>, Program <chr>, `Cong Dis` <chr>,}
-\CommentTok{#> #   Region <chr>, `Year 2` <dbl>, `Dual\textbackslash{}r\textbackslash{}nNum 2` <dbl>, `Dual\textbackslash{}r\textbackslash{}nDenom}
-\CommentTok{#> #   2` <dbl>, `DRate 2` <dbl>, `PRate 2` <chr>, `Year 3` <dbl>,}
-\CommentTok{#> #   `Dual\textbackslash{}r\textbackslash{}nNum 3` <dbl>, `Dual\textbackslash{}r\textbackslash{}nDenom 3` <dbl>, `DRate 3` <dbl>,}
-\CommentTok{#> #   `PRate 3` <chr>}
+\CommentTok{#>   OPEID Name  Address City  State `State Desc` `Zip Code` `Zip Ext`}
+\CommentTok{#>   <chr> <chr> <chr>   <chr> <chr> <chr>        <chr>      <chr>    }
+\CommentTok{#> 1 0010~ ALAB~ 4900 M~ NORM~ AL    ALABAMA      35762      1357     }
+\CommentTok{#> 2 0010~ FAUL~ 5345 A~ MONT~ AL    ALABAMA      36109      3398     }
+\CommentTok{#> 3 0010~ UNIV~ PALMER~ MONT~ AL    ALABAMA      35115      6000     }
+\CommentTok{#> 4 0010~ ALAB~ 915 SO~ MONT~ AL    ALABAMA      36104      5714     }
+\CommentTok{#> # ... with 21 more variables: `Prog\textbackslash{}r\textbackslash{}nLength` <dbl>,}
+\CommentTok{#> #   `School\textbackslash{}r\textbackslash{}nType` <dbl>, `Year 1` <dbl>, `Dual\textbackslash{}r\textbackslash{}nNum 1` <dbl>,}
+\CommentTok{#> #   `Dual\textbackslash{}r\textbackslash{}nDenom 1` <dbl>, `DRate 1` <dbl>, `PRate 1` <chr>, `Ethnic}
+\CommentTok{#> #   Code` <chr>, Program <chr>, `Cong Dis` <chr>, Region <chr>, `Year}
+\CommentTok{#> #   2` <dbl>, `Dual\textbackslash{}r\textbackslash{}nNum 2` <dbl>, `Dual\textbackslash{}r\textbackslash{}nDenom 2` <dbl>, `DRate}
+\CommentTok{#> #   2` <dbl>, `PRate 2` <chr>, `Year 3` <dbl>, `Dual\textbackslash{}r\textbackslash{}nNum 3` <dbl>,}
+\CommentTok{#> #   `Dual\textbackslash{}r\textbackslash{}nDenom 3` <dbl>, `DRate 3` <dbl>, `PRate 3` <chr>}
 \end{Highlighting}
 \end{Shaded}
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readxl} Student exercise solution
-cont\ldots{}}
+\begin{frame}[fragile]{read\_excel Student exercise solutions continued}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Read in columns from range Names to State \textbf{hint}
+  \texttt{cell\_cols}
+\end{enumerate}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{#Read in column Names to column State}
-\KeywordTok{setwd}\NormalTok{(}\StringTok{"~/Desktop/GitHub/rclass/data/fsa"}\NormalTok{)}
-\KeywordTok{head}\NormalTok{(}\KeywordTok{read_excel}\NormalTok{(}\StringTok{"peps300.xlsx"}\NormalTok{, }\DataTypeTok{range =} \KeywordTok{cell_cols}\NormalTok{(}\StringTok{"B:E"}\NormalTok{)))}
+\CommentTok{#setwd("~/Desktop/GitHub/rclass/data/fsa")}
+\KeywordTok{head}\NormalTok{(}\KeywordTok{read_excel}\NormalTok{(}\StringTok{"../../data/fsa/peps300.xlsx"}\NormalTok{, }\DataTypeTok{range =} \KeywordTok{cell_cols}\NormalTok{(}\StringTok{"B:E"}\NormalTok{)))}
 \CommentTok{#> # A tibble: 6 x 4}
-\CommentTok{#>                                           Name                  Address}
-\CommentTok{#>                                          <chr>                    <chr>}
-\CommentTok{#> 1 ALABAMA AGRICULTURAL & MECHANICAL UNIVERSITY     4900 MERIDIAN STREET}
-\CommentTok{#> 2                          FAULKNER UNIVERSITY     5345 ATLANTA HIGHWAY}
-\CommentTok{#> 3                     UNIVERSITY OF MONTEVALLO            PALMER CIRCLE}
-\CommentTok{#> 4                     ALABAMA STATE UNIVERSITY 915 SOUTH JACKSON STREET}
-\CommentTok{#> 5            CENTRAL ALABAMA COMMUNITY COLLEGE       1675 CHEROKEE ROAD}
-\CommentTok{#> 6                      ATHENS STATE UNIVERSITY   300 NORTH BEATY STREET}
-\CommentTok{#> # ... with 2 more variables: City <chr>, State <chr>}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{setwd}\NormalTok{(}\StringTok{"~/Desktop/GitHub/rclass/data/fsa"}\NormalTok{)}
-\KeywordTok{read_excel}\NormalTok{(}\StringTok{"peps300.xlsx"}\NormalTok{, }\DataTypeTok{n_max =} \DecValTok{4}\NormalTok{,  }\DataTypeTok{na =} \StringTok{"A"}\NormalTok{)}
-\CommentTok{#> # A tibble: 4 x 29}
-\CommentTok{#>    OPEID                                         Name}
-\CommentTok{#>    <chr>                                        <chr>}
-\CommentTok{#> 1 001002 ALABAMA AGRICULTURAL & MECHANICAL UNIVERSITY}
-\CommentTok{#> 2 001003                          FAULKNER UNIVERSITY}
-\CommentTok{#> 3 001004                     UNIVERSITY OF MONTEVALLO}
-\CommentTok{#> 4 001005                     ALABAMA STATE UNIVERSITY}
-\CommentTok{#> # ... with 27 more variables: Address <chr>, City <chr>, State <chr>,}
-\CommentTok{#> #   `State Desc` <chr>, `Zip Code` <chr>, `Zip Ext` <chr>,}
-\CommentTok{#> #   `Prog\textbackslash{}r\textbackslash{}nLength` <dbl>, `School\textbackslash{}r\textbackslash{}nType` <dbl>, `Year 1` <dbl>,}
-\CommentTok{#> #   `Dual\textbackslash{}r\textbackslash{}nNum 1` <dbl>, `Dual\textbackslash{}r\textbackslash{}nDenom 1` <dbl>, `DRate 1` <dbl>,}
-\CommentTok{#> #   `PRate 1` <chr>, `Ethnic Code` <chr>, Program <chr>, `Cong Dis` <chr>,}
-\CommentTok{#> #   Region <chr>, `Year 2` <dbl>, `Dual\textbackslash{}r\textbackslash{}nNum 2` <dbl>, `Dual\textbackslash{}r\textbackslash{}nDenom}
-\CommentTok{#> #   2` <dbl>, `DRate 2` <dbl>, `PRate 2` <chr>, `Year 3` <dbl>,}
-\CommentTok{#> #   `Dual\textbackslash{}r\textbackslash{}nNum 3` <dbl>, `Dual\textbackslash{}r\textbackslash{}nDenom 3` <dbl>, `DRate 3` <dbl>,}
-\CommentTok{#> #   `PRate 3` <chr>}
+\CommentTok{#>   Name                               Address             City        State}
+\CommentTok{#>   <chr>                              <chr>               <chr>       <chr>}
+\CommentTok{#> 1 ALABAMA AGRICULTURAL & MECHANICAL~ 4900 MERIDIAN STRE~ NORMAL      AL   }
+\CommentTok{#> 2 FAULKNER UNIVERSITY                5345 ATLANTA HIGHW~ MONTGOMERY  AL   }
+\CommentTok{#> 3 UNIVERSITY OF MONTEVALLO           PALMER CIRCLE       MONTEVALLO  AL   }
+\CommentTok{#> 4 ALABAMA STATE UNIVERSITY           915 SOUTH JACKSON ~ MONTGOMERY  AL   }
+\CommentTok{#> 5 CENTRAL ALABAMA COMMUNITY COLLEGE  1675 CHEROKEE ROAD  ALEXANDER ~ AL   }
+\CommentTok{#> 6 ATHENS STATE UNIVERSITY            300 NORTH BEATY ST~ ATHENS      AL}
 \end{Highlighting}
 \end{Shaded}
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{readxl} Running into problems}
+\begin{frame}[fragile]{read\_excel Student exercise solutions continued}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Set value ``P'' to missing (na) \textbf{note} : you need to
+  investigate in detail before setting anything to missing
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#setwd("~/Desktop/GitHub/rclass/data/fsa")}
+\KeywordTok{read_excel}\NormalTok{(}\StringTok{"../../data/fsa/peps300.xlsx"}\NormalTok{, }\DataTypeTok{n_max =} \DecValTok{4}\NormalTok{,  }\DataTypeTok{na =} \StringTok{"P"}\NormalTok{)}
+\CommentTok{#> # A tibble: 4 x 29}
+\CommentTok{#>   OPEID Name  Address City  State `State Desc` `Zip Code` `Zip Ext`}
+\CommentTok{#>   <chr> <chr> <chr>   <chr> <chr> <chr>        <chr>      <chr>    }
+\CommentTok{#> 1 0010~ ALAB~ 4900 M~ NORM~ AL    ALABAMA      35762      1357     }
+\CommentTok{#> 2 0010~ FAUL~ 5345 A~ MONT~ AL    ALABAMA      36109      3398     }
+\CommentTok{#> 3 0010~ UNIV~ PALMER~ MONT~ AL    ALABAMA      35115      6000     }
+\CommentTok{#> 4 0010~ ALAB~ 915 SO~ MONT~ AL    ALABAMA      36104      5714     }
+\CommentTok{#> # ... with 21 more variables: `Prog\textbackslash{}r\textbackslash{}nLength` <dbl>,}
+\CommentTok{#> #   `School\textbackslash{}r\textbackslash{}nType` <dbl>, `Year 1` <dbl>, `Dual\textbackslash{}r\textbackslash{}nNum 1` <dbl>,}
+\CommentTok{#> #   `Dual\textbackslash{}r\textbackslash{}nDenom 1` <dbl>, `DRate 1` <dbl>, `PRate 1` <chr>, `Ethnic}
+\CommentTok{#> #   Code` <chr>, Program <chr>, `Cong Dis` <chr>, Region <chr>, `Year}
+\CommentTok{#> #   2` <dbl>, `Dual\textbackslash{}r\textbackslash{}nNum 2` <dbl>, `Dual\textbackslash{}r\textbackslash{}nDenom 2` <dbl>, `DRate}
+\CommentTok{#> #   2` <dbl>, `PRate 2` <chr>, `Year 3` <dbl>, `Dual\textbackslash{}r\textbackslash{}nNum 3` <dbl>,}
+\CommentTok{#> #   `Dual\textbackslash{}r\textbackslash{}nDenom 3` <dbl>, `DRate 3` <dbl>, `PRate 3` <chr>}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{readxl Running into problems}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -1340,7 +1453,7 @@ cont\ldots{}}
   Make sure you have downloaded and saved excel file\\
 \item
   Make sure to know the file path of where data is downloaded or saved
-  (\textasciitilde{}/Desktop/educ263/data)
+  (``../../data'')
 \item
   Make sure you set your working \textbf{\texttt{setwd()}} directory in
   R. To check your current working directory type
@@ -1353,9 +1466,10 @@ cont\ldots{}}
 
 \end{frame}
 
-\section{Downloading data from web}\label{downloading-data-from-web}
+\section{Reading in data from the
+web}\label{reading-in-data-from-the-web}
 
-\begin{frame}{Downloading data from web}
+\begin{frame}{Reading in data from the web}
 
 \begin{itemize}
 \tightlist
@@ -1374,12 +1488,31 @@ cont\ldots{}}
   \end{itemize}
 \end{itemize}
 
-For example, rather than downloading ipeds data and saving it in a
+For example, rather than downloading Raj Chetty data and saving it in a
 folder, we could download the data directly from the web.
 
 \end{frame}
 
-\begin{frame}{Downloading data from web example using Raj Chetty data}
+\begin{frame}{Reading in data from web example using Raj Chetty data}
+
+Equality of Opportunity Project
+
+\begin{itemize}
+\tightlist
+\item
+  \href{http://www.equality-of-opportunity.org/papers/coll_mrc_paper.pdf}{Equality
+  of Opportunity Project} uses two data sources-- federal tax recoards
+  and Department of Education records (1999-2013)-- to investigate
+  intergenerational income mobility at colleges in the US.
+\end{itemize}
+
+We will use
+\href{http://www.equality-of-opportunity.org/documents/}{Mobility Report
+Cards: The Role of Colleges in Intergenerational Mobility data}
+
+\end{frame}
+
+\begin{frame}{Reading in data from web example using Raj Chetty data}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -1395,13 +1528,13 @@ folder, we could download the data directly from the web.
   a csv file)
 \end{enumerate}
 
-\includegraphics{~/Desktop/GitHub/rclass/lectures/lecture8/mrc_table1.png}~
+\includegraphics{mrc_table1.png}~
 
 \end{frame}
 
-\begin{frame}[fragile]{Downloading data from web}
+\begin{frame}[fragile]{Reading in data from the web}
 
-{[}FIX OUTPUT (CUTTING OFF){]}
+Approach \#1
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1414,20 +1547,20 @@ folder, we could download the data directly from the web.
 \CommentTok{#View first 4 rows and 4 columns }
 \NormalTok{mrc[}\DecValTok{1}\OperatorTok{:}\DecValTok{4}\NormalTok{, }\DecValTok{1}\OperatorTok{:}\DecValTok{4}\NormalTok{]}
 \CommentTok{#> # A tibble: 4 x 4}
-\CommentTok{#>   super_opeid                                         name   czname state}
-\CommentTok{#>         <int>                                        <chr>    <chr> <chr>}
-\CommentTok{#> 1        2665 Vaughn College Of Aeronautics And Technology New York    NY}
-\CommentTok{#> 2        7273               CUNY Bernard M. Baruch College New York    NY}
-\CommentTok{#> 3        2688              City College Of New York - CUNY New York    NY}
-\CommentTok{#> 4        7022                          CUNY Lehman College New York    NY}
+\CommentTok{#>   super_opeid name                                         czname   state}
+\CommentTok{#>         <int> <chr>                                        <chr>    <chr>}
+\CommentTok{#> 1        2665 Vaughn College Of Aeronautics And Technology New York NY   }
+\CommentTok{#> 2        7273 CUNY Bernard M. Baruch College               New York NY   }
+\CommentTok{#> 3        2688 City College Of New York - CUNY              New York NY   }
+\CommentTok{#> 4        7022 CUNY Lehman College                          New York NY}
 \end{Highlighting}
 \end{Shaded}
 
 \end{frame}
 
-\begin{frame}[fragile]{Downloading data from web}
+\begin{frame}[fragile]{Reading in data from the web}
 
-Alternative approach
+Approach \#2
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1456,19 +1589,19 @@ Alternative approach
 
 \end{frame}
 
-\begin{frame}[fragile]{Downloading data from web}
+\begin{frame}[fragile]{Reading in data from the web}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{#View first 4 rows and 4 columns }
 \NormalTok{mrc[}\DecValTok{1}\OperatorTok{:}\DecValTok{4}\NormalTok{, }\DecValTok{1}\OperatorTok{:}\DecValTok{4}\NormalTok{]}
 \CommentTok{#> # A tibble: 4 x 4}
-\CommentTok{#>   super_opeid                                         name   czname state}
-\CommentTok{#>         <int>                                        <chr>    <chr> <chr>}
-\CommentTok{#> 1        2665 Vaughn College Of Aeronautics And Technology New York    NY}
-\CommentTok{#> 2        7273               CUNY Bernard M. Baruch College New York    NY}
-\CommentTok{#> 3        2688              City College Of New York - CUNY New York    NY}
-\CommentTok{#> 4        7022                          CUNY Lehman College New York    NY}
+\CommentTok{#>   super_opeid name                                         czname   state}
+\CommentTok{#>         <int> <chr>                                        <chr>    <chr>}
+\CommentTok{#> 1        2665 Vaughn College Of Aeronautics And Technology New York NY   }
+\CommentTok{#> 2        7273 CUNY Bernard M. Baruch College               New York NY   }
+\CommentTok{#> 3        2688 City College Of New York - CUNY              New York NY   }
+\CommentTok{#> 4        7022 CUNY Lehman College                          New York NY}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1488,30 +1621,59 @@ Alternative approach
   Right click and copy link address for ``IC2017\_AY''
 \end{enumerate}
 
-\includegraphics{~/Desktop/GitHub/rclass/lectures/lecture8/ic2017_ay.png}~
+\begin{figure}
+\centering
+\includegraphics{ic2017_ay.png}
+\caption{ipeds data center}
+\end{figure}
 
 \end{frame}
 
 \begin{frame}[fragile]{Downloading data (zip files) using IPEDS}
 
-Paste url and read in using \texttt{read\_csv}\\
-What happens when you try reading in this zip file?\\
+\begin{itemize}
+\tightlist
+\item
+  Paste url and read in using \texttt{read\_csv}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{ipeds\ \textless{}-\ read\_csv("link")} What happens when
+    you try reading in this file?
+  \end{itemize}
+\end{itemize}
+
 Need to download \textbf{and} unzip
 
 \end{frame}
+
+\subsection{download.file function}\label{download.file-function}
+
+\subsection{download.file function}\label{download.file-function-1}
+
+\texttt{download.file} is a function use to download a file from the
+internet.
+
+Some arguments\\
+- \textbf{url}: the url to be downloaded\\
+- \textbf{destfile}: name of file after file is downloaded -
+\textbf{method}: method to be used for downloading files (``wininet''
+for Windows only) - \textbf{mode}: the mode in which to write the file
+(use ``wb'') -
+\texttt{download.file(url,\ destfile,\ method,\ mode\ =\ "")}
 
 \begin{frame}[fragile]{Downloading data (zip files) using IPEDS}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{#Set path to where data will be saved}
-\KeywordTok{setwd}\NormalTok{(}\StringTok{"~/Desktop/lecture8"}\NormalTok{)}
+\CommentTok{#setwd("~/Desktop/lecture8")}
 \CommentTok{#download file and pa}
 \KeywordTok{download.file}\NormalTok{(}\StringTok{"https://nces.ed.gov/ipeds/datacenter/data/IC2017_AY.zip"}\NormalTok{,}
-              \DataTypeTok{destfile =} \StringTok{"ic2017_ay"}\NormalTok{, }\DataTypeTok{mode =} \StringTok{'wb'}\NormalTok{)}
+              \DataTypeTok{destfile =} \StringTok{"ic2017_ay"}\NormalTok{, }\DataTypeTok{mode =} \StringTok{"wb"}\NormalTok{)}
 \CommentTok{#unzip zip file and keep original name}
 \KeywordTok{unzip}\NormalTok{(}\DataTypeTok{zipfile =} \StringTok{"ic2017_ay"}\NormalTok{ , }\DataTypeTok{unzip =} \StringTok{"unzip"}\NormalTok{)}
-\CommentTok{#> arguments 'minimized' and 'invisible' are for Windows only}
 
 \NormalTok{ic2017_ay <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"ic2017_ay.csv"}\NormalTok{)}
 \CommentTok{#> Parsed with column specification:}
@@ -1553,6 +1715,235 @@ Need to download \textbf{and} unzip
 
 \end{frame}
 
-\section{Data sources (maybe)}\label{data-sources-maybe}
+\section{haven package}\label{haven-package}
+
+\begin{frame}[fragile]{haven}
+
+Recap from lecture 5
+
+haven is part of \href{https://haven.tidyverse.org/}{tidyverse}, which
+enables users to import and export data from the following statistical
+packages:
+
+\begin{itemize}
+\tightlist
+\item
+  SAS
+\item
+  SPSS
+\item
+  Stata\\[2\baselineskip]
+\end{itemize}
+
+Similar to \texttt{readr}, we could load the entire
+\textbf{library(tidyverse)} package to get \texttt{haven}. For the
+purpose of this lecture, we will just need to load
+\textbf{library(haven)}.
+
+\end{frame}
+
+\begin{frame}[fragile]{haven functions}
+
+\textbf{haven's} (tidyverse) functions
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+\textbf{Format} & \textbf{Function}\tabularnewline
+\midrule
+\endhead
+SPSS & \texttt{read\_sav}\tabularnewline
+SAS & \texttt{read\_sas}\tabularnewline
+Stata & \texttt{read\_dta}\tabularnewline
+\bottomrule
+\end{longtable}
+
+\end{frame}
+
+\begin{frame}[fragile]{haven read and write Stata arguments}
+
+\texttt{read\_dta(file,\ encoding\ =\ NULL)}\\
+\texttt{write\_data(data,\ path,\ version\ =\ 14)}
+
+Arguments\\
+- \textbf{file}: file path to data\\
+- \textbf{encoding}: files prior to Stata 14 did not declare text
+encoding, files after Stata 14 do not need to declare encoding value\\
+- \textbf{data}: data frame to save (write)\\
+- \textbf{path}: file path to where data will be saved\\
+- \textbf{version}: file version
+
+\href{https://haven.tidyverse.org/reference/read_dta.html}{Link}
+
+\end{frame}
+
+\begin{frame}[fragile]{haven Student exercise using HSLS data}
+
+High school longitudinal surveys from National Center for Education
+Statistics (NCES)
+
+\begin{itemize}
+\tightlist
+\item
+  Follow U.S. students from high school through college, labor market
+\end{itemize}
+
+We will be working with
+\href{https://nces.ed.gov/surveys/hsls09/index.asp}{High School
+Longitudinal Study of 2009 (HSLS:09)}
+
+\begin{itemize}
+\tightlist
+\item
+  Follows 9th graders from 2009
+\item
+  Data collection waves
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Base Year (2009)
+  \item
+    First Follow-up (2012)
+  \item
+    2013 Update (2013)
+  \item
+    High School Transcripts (2013-2014)
+  \item
+    Second Follow-up (2016)
+  \end{itemize}
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Use \texttt{read\_dta()} function from \texttt{haven} to import Stata
+  dataset into R
+\item
+  Use \texttt{write\_dta()} funtction from \texttt{haven} to save Stata
+  dataset
+\item
+  If you have time, explore data (View, glimpse, head, etc.)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    View variable and value labels\\
+  \item
+    Change class == labelled to class == factor
+  \end{itemize}
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]{haven Student exercise solutions}
+
+Use \texttt{read\_dta} function from \texttt{haven} to import State data
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hsls <-}\StringTok{ }\KeywordTok{read_dta}\NormalTok{(}\StringTok{"https://github.com/ozanj/rclass/raw/master/data/hsls/hsls_sch_small.dta"}\NormalTok{, }\DataTypeTok{encoding=}\OtherTok{NULL}\NormalTok{)}
+
+\CommentTok{# View data}
+\KeywordTok{head}\NormalTok{(hsls)}
+\KeywordTok{glimpse}\NormalTok{(hsls)}
+\end{Highlighting}
+\end{Shaded}
+
+Use \texttt{write\_dta} function from \texttt{haven} to write State data
+
+\texttt{write\_dta(dataframe,\ path\ =\ ""}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{write_dta}\NormalTok{(hsls, }\DataTypeTok{path =} \StringTok{"~/Desktop/hsls_sch_small.dta"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{haven Student exercise Solution
+continued\ldots{}}
+
+Variable and Value labels
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# View variable labels}
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{var_label}\NormalTok{()}
+\CommentTok{#> $sch_id}
+\CommentTok{#> [1] "School ID"}
+\CommentTok{#> }
+\CommentTok{#> $x1control}
+\CommentTok{#> [1] "X1 School control"}
+\CommentTok{#> }
+\CommentTok{#> $x1locale}
+\CommentTok{#> [1] "X1 School locale (urbanicity)"}
+\CommentTok{#> }
+\CommentTok{#> $x1region}
+\CommentTok{#> [1] "X1 School geographic region"}
+\CommentTok{#> }
+\CommentTok{#> $a1schcontrol}
+\CommentTok{#> [1] "A1 A02 School control"}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{haven Student exercise Solution cont\ldots{}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#View value label for x1locale}
+\NormalTok{hsls }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(x1locale) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{val_labels}\NormalTok{()}
+\CommentTok{#> $x1locale}
+\CommentTok{#>                                    Missing }
+\CommentTok{#>                                          1 }
+\CommentTok{#> Unit non-response/component not applicable }
+\CommentTok{#>                                          2 }
+\CommentTok{#>                    Item legitimate skip/NA }
+\CommentTok{#>                                          3 }
+\CommentTok{#>                                       City }
+\CommentTok{#>                                          4 }
+\CommentTok{#>                                     Suburb }
+\CommentTok{#>                                          5 }
+\CommentTok{#>                                       Town }
+\CommentTok{#>                                          6 }
+\CommentTok{#>                                      Rural }
+\CommentTok{#>                                          7}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\begin{frame}[fragile]{haven Student exercise Solution cont\ldots{}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Change class == labelled to class == factor}
+\NormalTok{hsls <-}\StringTok{ }\KeywordTok{as_factor}\NormalTok{(hsls, }\DataTypeTok{only_labelled =} \OtherTok{TRUE}\NormalTok{)}
+
+\KeywordTok{typeof}\NormalTok{(hsls}\OperatorTok{$}\NormalTok{x1region)}
+\CommentTok{#> [1] "integer"}
+\KeywordTok{class}\NormalTok{(hsls}\OperatorTok{$}\NormalTok{x1region)}
+\CommentTok{#> [1] "factor"}
+\KeywordTok{attributes}\NormalTok{(hsls}\OperatorTok{$}\NormalTok{x1region)}
+\CommentTok{#> $levels}
+\CommentTok{#> [1] "Missing"                                   }
+\CommentTok{#> [2] "Unit non-response/component not applicable"}
+\CommentTok{#> [3] "Item legitimate skip/NA"                   }
+\CommentTok{#> [4] "Northeast"                                 }
+\CommentTok{#> [5] "Midwest"                                   }
+\CommentTok{#> [6] "South"                                     }
+\CommentTok{#> [7] "West"                                      }
+\CommentTok{#> }
+\CommentTok{#> $class}
+\CommentTok{#> [1] "factor"}
+\CommentTok{#> }
+\CommentTok{#> $label}
+\CommentTok{#> [1] "X1 School geographic region"}
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
 
 \end{document}

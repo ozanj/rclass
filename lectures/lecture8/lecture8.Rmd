@@ -114,7 +114,7 @@ Note: when we load package, name of package is not in quotes; but when we instal
 ### Save data for lecture
 - First make sure to save __lecture8.Rmd__ in your lectures folder  
     - If you do not have class folder structure, you can download it [here](https://github.com/ozanj/rclass/raw/master/rclass_directory.zip)
-- Download and unzip data folder we are using for this lecture [here]() 
+- Download and unzip data folder we are using for this lecture [here](https://github.com/ozanj/rclass/raw/master/lectures/lecture8/lecture8_data.zip) 
 - Save data files in the corresponding data folder  
     - `ipeds_hd_2017_small.csv` should go in the __ic__ folder inside the ipeds folder  
     - `peps300.xlsx` should go in the __fsa__ folder  
