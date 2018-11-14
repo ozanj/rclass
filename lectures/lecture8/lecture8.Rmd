@@ -6,10 +6,10 @@ date:
 fontsize: 8pt
 classoption: dvipsnames  # for colors
 urlcolor: blue
-output: 
+output:
   beamer_presentation:
     keep_tex: true
-    toc: true
+    toc: false
     slide_level: 3
     theme: default # AnnArbor # push to header?
     #colortheme: "dolphin" # push to header?
@@ -18,7 +18,7 @@ output:
     df_print: default #default # tibble # push to header?    
     latex_engine: xelatex #  Available engines are pdflatex [default], xelatex, and lualatex; The main reasons you may want to use xelatex or lualatex are: (1) They support Unicode better; (2) It is easier to make use of system fonts.
     includes:
-      in_header: ~/Desktop/GitHub/rclass/lectures/beamer_header.tex
+      in_header: ../beamer_header.tex
       #after_body: table-of-contents.txt 
 ---
 
@@ -28,10 +28,69 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
   #comment = "#>" makes it so results from a code chunk start with "#>"; default is "##"
 ```
 
+```{r, echo=FALSE, include=FALSE}
+#THIS CODE DOWNLOADS THE MOST RECENT VERSION OF THE FILE beamder_header.tex AND SAVES IT TO THE DIRECTORY ONE LEVEL UP FROM THIS .RMD LECTURE FILE
+download.file(url = 'https://raw.githubusercontent.com/ozanj/rclass/master/lectures/beamer_header.tex', 
+              destfile = '../beamer_header.tex',
+              mode = 'wb')
+```
+
+```{r, echo=FALSE, include=FALSE}
+#DO NOT WORRY ABOUT THIS
+if(!file.exists('tidyverse.png')){
+  download.file(url = 'https://github.com/ozanj/rclass/raw/master/lectures/lecture8/tidyverse.png', 
+                destfile = 'tidyverse.png',
+                mode = 'wb')
+}
+```
+
+```{r, echo=FALSE, include=FALSE}
+#DO NOT WORRY ABOUT THIS
+if(!file.exists('mrc_table1.png')){
+  download.file(url = 'https://github.com/ozanj/rclass/raw/master/lectures/lecture8/mrc_table1.png', 
+                destfile = 'mrc_table1.png',
+                mode = 'wb')
+}
+```
+
+```{r, echo=FALSE, include=FALSE}
+#DO NOT WORRY ABOUT THIS
+if(!file.exists('ic2017_ay.png')){
+  download.file(url = 'https://github.com/ozanj/rclass/raw/master/lectures/lecture8/ic2017_ay.png', 
+                destfile = 'ic2017_ay.png',
+                mode = 'wb')
+}
+```
+
 # Introduction
 
-### Libraries we will use today [install if you don't have them]
 
+### Logistics
+
+__Reading to do before next class:__
+
+- ADD
+
+__Questions on Problem set #7__
+
+
+
+
+### What we will do today
+
+\tableofcontents
+
+```{r, eval=FALSE, echo=FALSE}
+#Use this if you want TOC to show level 2 headings
+\tableofcontents
+#Use this if you don't want TOC to show level 2 headings
+\tableofcontents[subsectionstyle=hide/hide/hide]
+```
+
+
+### Load the packages we will use today (output omitted) 
+
+- __you must run this code chunk after installing these packages__
 ```{r warning=FALSE, message=FALSE}
 library(dplyr)
 library(readr)
@@ -39,100 +98,117 @@ library(haven)
 library(readxl)
 library(labelled)
 ```
+__If package not yet installed__, then must install before you load. Install in "console" rather than .Rmd file
 
-### Data we will use today  
+- Generic syntax: `install.packages("package_name")`
+- Install "tidyverse": `install.packages("tidyverse")`
 
-- Integrated Postsecondary Education Data System (IPEDS)  
-- High School Longitudinal Surveys (HSLS)  
-- Federal Student Aid Data  
-- Equality of Opportunity Project
+Note: when we load package, name of package is not in quotes; but when we install package, name of package is in quotes:
 
-### Integrated Postsecondary Education Data System (IPEDS)
-
-- Postsecondary education data from NCES  
-- There are [12 survey components](https://nces.ed.gov/ipeds/resource/download/IPEDS_DataReleaseProcedures.pdf) and 3 collection periods  
-
-We will be working with [Institutional Characteristics data of 2017](https://nces.ed.gov/ipeds/datacenter/DataFiles.aspx)  
+- `install.packages("tidyverse")`
+- `library(tidyverse)`
 
 
-### High school longitudinal surveys from National Center for Education Statistics (NCES)
+# Relative file paths
 
-- Follow U.S. students from high school through college, labor market
+### Save data for lecture
+- First make sure to save __lecture8.Rmd__ in your lectures folder  
+    - If you do not have class folder structure, you can download it [here](https://github.com/ozanj/rclass/raw/master/rclass_directory.zip)
+- Download and unzip data folder we are using for this lecture [here]() 
+- Save data files in the corresponding data folder  
+    - `ipeds_hd_2017_small.csv` should go in the __ic__ folder inside the ipeds folder  
+    - `peps300.xlsx` should go in the __fsa__ folder  
+    - `hsls_sch_small.dta` should go in the __hsls__ folder
 
-We will be working with [High School Longitudinal Study of 2009 (HSLS:09)](https://nces.ed.gov/surveys/hsls09/index.asp)
+### Working directory  
+- Your working directory will change depending on if you are using an R script or R markdown.
+- **R script**  
+    - The default working directory is your computer's home directory 
+    - You only need to set your working directory `setwd()` in an r script once.  
+- **R markdown**  
+    - The default working directory is where the current r markdown file you are using is saved.  
+    - If you set your working directory in a code chunk, it will be reset to the default directory after the code chunk is finished running.  
+    - To avoid setting your working directory every time you read in data, you can read in data using a link to the data file or use the relative file path to save time.  
 
-- Follows 9th graders from 2009
-- Data collection waves
-      - Base Year (2009)
-      - First Follow-up (2012)
-      - 2013 Update (2013)
-      - High School Transcripts (2013-2014)
-      - Second Follow-up (2016) 
-      
-      
-### Federal Student Aid  
+```{r}
 
-- Federal Student Aid Data Center provides information for federal assistance programs and is divided into four categories: 
-      - Student Aid Data  
-      - School Data  
-      - Federal Family Education Loan (FFEL) Program  
-      - Business Information Resources  
-      
-We will be working with [School Data](https://studentaid.ed.gov/sa/node/105)  
+```
+
+### Absolute vs. relative filepath  
+**Absolute file path**:  The absolute file path is the complete list of directories needed to locate a file or folder.  
+`setwd("/Users/pm/Desktop/rclass/lectures/lecture8")`
 
 
-### Equality of Opportunity Project  
+**Relative file path**:  The relative file path is the path relative to your current location/directory. Assuming your current working directory is in the "lecture8" folder and you want to change your directory to the data folder, your relative file path would look something like this:  
+`setwd("../../data")`  
 
-- [Equality of Opportunity Project](http://www.equality-of-opportunity.org/papers/coll_mrc_paper.pdf) uses two data sources-- federal tax recoards and Department of Education records (1999-2013)-- to investigate intergenerational income mobility at colleges in the US.  
+  **File path shortcuts**  
+            
+| **Key** | **Description** |
+| ------ | -------- |
+| ~    | tilde is a shortcut for user's home directory (mine is my name pm)   |
+| ../    | moves up a level   |
+| ../../    | moves up two level   |
 
-We will use [Mobility Report Cards: The Role of Colleges in Intergenerational Mobility data](http://www.equality-of-opportunity.org/documents/)
+```{r}
 
-**Not sure if to simply list datasets. Lecture will go over acquiring data and not so much about manipulating data. Not sure if students need to know each dataset in detail?**
+```
+
+### Practice using relative file paths  
+
+1. Using the code chunk below, get your working directory `getwd()`   
+```{r}
+
+```
+2. Using your relative file path, set your working directory to fsa folder inside the data folder. `setwd("filepath")` 
+```{r}
+
+```
+3. Using your relative file path, set your working directory to the ef folder inside the ipeds folder inside the data folder. `setwd("filepath")`  
+```{r}
+
+```
 
 
 # Common data formats  
 ### Common data formats  
-- Comma-separated values (.csv)  
-- Excel (.xls or .xlsx)  
-- Text-formated data (.txt)  
-- Tab-separated values (.tsv)
-- R (.Rdata or .rds)  
-- Stata (.dta) 
-- SPSS (.sav)  
-- SAS (.sas)  
+
+| **Format** | **Package** | **Function** |
+| ------ | -------- | ------- | ------- |
+| Comma-separated values (.csv) | readr | read_csv |
+| Text-formated data (.txt) | readr | read_table |
+| Tab-separated values (.tsv) | readr | read_tsv | 
+| Stata (.dta) | haven | read_dta |
+| SPSS (.sav) | haven | read_sav |
+| SAS (.sas) | haven | read_sas |
+| Excel (.xls or .xlsx) | readxl | read_excel |
+| R (.Rdata or .rds) | base R | load() |  
+
+- Source: Professor Darin Christensen
 
 
 
-# `readr` package
+# readr package
 
-### `readr`  
+### readr 
 
-The [`readr`](https://readr.tidyverse.org/index.html) package is part of tidyverse, which is designed to read in flat data files in R and transform them into data frames.  
+The readr package is part of [tidyverse](https://readr.tidyverse.org/index.html), which is designed to read in flat data files in R and transform them into data frames.  
 \
 - We could load **library(tidyverse)** if we wanted to load all packages in tidyverse (e.g. ggplot2, dplyr, tidyr, stringr, readr, etc...)  
 
-![Caption for the picture.](~/Desktop/GitHub/rclass/lectures/lecture8/tidyverse.png)
+![Caption for the picture.](tidyverse.png)
 \
 - For the purpose of this lecture, we will just need to load **library(readr)**  
 
-### `readr`
 
+## readr functions
 
-No matter the flat file format you are working with, there are two important steps for reading in data with `readr`:  
-
-(1) **a function to parse the file (read_csv)**  
-
-(2) **column specification**  
-
-
-
-### `readr functions`
-
-**readr's** (tidyverse) functions
+### readr functions
+`readr` (tidyverse) functions
 
 | **Format** | **Function** |
 | ------ | -------- |
-| Comma-separated values (csv)    | `read_csv`   |
+| Comma-separated values (csv)   | `read_csv`   |
 | Semicolon separated files    | `read_csv2`   |
 | Tab-separated values (tsv)    | `read_tsv`   |
 | Any delimiter    | `read_delim`   |
@@ -142,16 +218,17 @@ No matter the flat file format you are working with, there are two important ste
 
 
 
-### `readr column specification`
+## readr column specification
 
-`readr` is pretty good at guessing each column's data type (e.g. character, double, etc.), however it is good practice to manually specify the data type for each column.
+### readr column specification
+`readr` is pretty good at guessing each column's data type by looking at the first 1,000 rows (e.g. character, double, etc.), however it is good practice to manually specify the data type for each column.
 
 ```{r}
 mtcars <- read_csv(readr_example("mtcars.csv"))
 ```
 
 
-### `readr column specification`
+### readr column specification
 The output of the previous example shows us the column specification readr gave us. However, we could manually change column specification if we do not like readr's guess.
 ```{r}
 mtcars <- read_csv(readr_example("mtcars.csv"), col_types = 
@@ -171,12 +248,15 @@ mtcars <- read_csv(readr_example("mtcars.csv"), col_types =
 )
 ```
 
-### `readr` features
+## readr arguments  
+
+### readr arguments
 - **skip**:  `read_csv`(csv file, skip = n)  
 - **comment**: `read_csv`(csv file, comment = "#")  
 - **col_names**: `read_csv`(csv file, col_names = c("x", "y", "z"))
-
-### `readr` demonstration csv
+    - To save csv data use the function `write_csv(dataframe, "path")`
+    
+### readr demonstration csv
 
 `readr` automatically treats the first line of data as column names. 
 ```{r}
@@ -190,7 +270,7 @@ read_csv("column 1, column 2, column 3
 There are instances where you may want to tell R from what line to begin reading in data.
 
 
-### `readr` demonstration csv
+### readr skip argument
 
 Notice the example below. The first two lines are comments about the data. We would need to use **skip = n** to skip n lines. 
 
@@ -204,7 +284,7 @@ read_csv("This file contains data on student charges for the acdemic year.
 ```
 
 
-### `readr` demonstration csv
+### readr comment argument
 
 We could also tell R to drop lines we specify as comments. With **comment = n**
 ```{r}
@@ -223,7 +303,7 @@ read_csv("* This file contains data on student charges for the acdemic year.
          )
 ```
 
-### `readr` column names
+### readr column names argument
 
 We could tell R there are no column names with **col_names = FALSE** or we could manually give R column names with **col_names = c("", "", "")**
 
@@ -240,16 +320,83 @@ read_csv("1,2,3
 ```
 
 
-### `readr` Student exercise
+### readr Student exercise
 
-- Get in your homework groups  
-- Create a 3x3 tibble like the examples above  (e.g. read_csv("a,b,c....")), treating the first line as column names  
-- Now on the first line add a sentence  
-- This time add a special character ( *, #, ! ) at the beginning of the sentence and indicate it is a comment  
-- Delete the sentence and column names (should have a 2x2 tibble) and manually tell R column names
+1. Create a 3x3 tibble like the examples above  (e.g. read_csv("a,b,c....")), treating the first line as column names  
+```{r}
 
-### `readr` demonstration csv
-**NOT SURE IF TO MAKE THIS A DEMONSTRATION WHERE STUDENTS FOLLOW ALONG OR ANOTHER STUDENT EXERCISE**  
+```
+
+1. Now on the first line add a sentence and use the `skip` argument to skip this line
+```{r}
+
+```
+
+1. This time add a special character ( *, #, ! ) at the beginning of the sentence and indicate it is a comment  
+```{r}
+
+```
+
+1. Delete the sentence and column names (should have a 2x2 tibble) and manually tell R column names
+```{r}
+
+```
+
+
+### readr Student exercise solutions
+
+1. Create a 3x3 tibble like the examples above  (e.g. read_csv("a,b,c....")), treating the first line as column names  
+```{r}
+read_csv("a, b, c
+         1,2,3
+         4,5,6"
+         )
+```
+
+2. Now on the first line add a sentence and use the `skip` argument to skip this line  
+```{r}
+read_csv("Do not read this sentence
+         a, b, c
+         1,2,3
+         4,5,6", skip = 1
+         )
+
+```
+
+### readr Student exercise solutions continued 
+3. This time add a special character ( *, #, ! ) at the beginning of the sentence and indicate it is a comment  
+```{r}
+read_csv("#This is a comment
+         a, b, c
+         1,2,3
+         4,5,6",comment = "#"
+         )
+```
+4. Delete the sentence and column names (should have a 2x3 tibble) and manually tell R column names
+```{r}
+read_csv("1,2,3
+         4,5,6",col_names = c("a", "b", "c")
+         )
+```
+
+
+
+### 1. readr Running into errors
+1. Make sure you have downloaded and saved flat file  
+2. Make sure to know the file path of where data is downloaded or saved ("../../data")
+3. Make sure you set your working **`setwd()`** directory in R. To check your current working directory type **`getwd()`** in console. 
+
+
+### read_csv demonstration using IPEDS data
+
+Integrated Postsecondary Education Data System (IPEDS)
+
+- Postsecondary education data from NCES  
+- There are [12 survey components](https://nces.ed.gov/ipeds/resource/download/IPEDS_DataReleaseProcedures.pdf) and 3 collection periods  
+
+We will be working with [Institutional Characteristics data of 2017](https://nces.ed.gov/ipeds/datacenter/DataFiles.aspx)  
+
+### read_csv demonstration using IPEDS data
 **Tying it all together**
 
 Use `read_csv()` function from `readr` to import csv dataset into R without column specification. Follow along on your computers.
@@ -259,15 +406,15 @@ ipeds <- read_csv(file="~/Desktop/GitHub/rclass/data/ipeds/ic/ipeds_hd_2017_smal
 ```
 
 
-### `readr` demonstration csv
+### read_csv demonstration using IPEDS data
 
 Use `read_csv()` function from `readr` to import csv dataset into R with column specification
-**[Would it be better to change to integer or double?]** 
+
 ```{r, results='hide'}
 ipeds <- read_csv(file="~/Desktop/GitHub/rclass/data/ipeds/ic/ipeds_hd_2017_small.csv",
                   col_types =
                     cols(
-                      unitid = col_number(), 
+                      unitid = col_character(), 
                       instnm = col_character(),
                       stabbr = col_character(),
                       sector = col_integer(),
@@ -278,7 +425,7 @@ ipeds <- read_csv(file="~/Desktop/GitHub/rclass/data/ipeds/ic/ipeds_hd_2017_smal
 ```
 We changed unitid to number, but could be left as is or changed to character type for example.  
 
-### `readr` variable and value labels
+### readr variable and value labels
 
 Let's view variable and value labels
 ```{r}
@@ -287,13 +434,25 @@ ipeds %>% select(sector) %>% val_labels()
 ```
 
 There are no variable and value labels for this data. IPEDS has a separate do file with variable and value labels.  
-- Let's practice manually adding variable and value labels using the `labelled` package. 
+- Let's practice manually adding variable and value labels using the `labelled` package.  
 
-### `readr` labelled data
-- Open the data dictionary file for hd2017 data and select "Frequencies" sheet 
+# Set variable and value labels  
+
+### Set variable and value labels
+Use these functions from the `labelled` package to manually set variable and value labels  
+
+- Use `set_variable_labels` function to manually set variable labels  
+    - `df %>% set_variable_labels(variable = "Variable label")`   
+    - `ipeds %>% set_variable_labels(unitid = "Unit identification number")`
+    
+- Use `set_value_labels` function to manually set value labels  
+    - `df %>% set_value_labels(variable = c("Value label" = 1, "Value label" = 2))`  
+    - `ipeds %>% set_value_labels(sector = "Administrative Unit" = 0)`  
+
+ 
+### readr labelled data
+- Open the data dictionary file for [hd2017](https://nces.ed.gov/ipeds/datacenter/data/HD2017_Dict.zip) data and select "Frequencies" sheet 
 - We are only working with these 6 variables (unitid, instnm, stabbr, sector, iclevel, control)  
-- We need to add variable labels for all 6 variables  
-- We need to add value labels for sector, iclevel, and control  
 
 ```{r}
 # Lets view values for sector
@@ -302,7 +461,18 @@ ipeds %>%
 ```
 
 
-### `readr` manually add variable and value labels
+### readr variable and value labels student exercise  
+1. Using the codebook for hd2017 data, add variable labels for all 6 variables (unitid, instnm, stabbr, sector, iclevel, control)  
+
+1. Add value labels for sector, iclevel, and control  
+
+```{r}
+
+```
+
+
+
+### readr variable and value labels student exercise solution
 ```{r}
 # Need to manually assign variable and value labels using labelled package 
 ipeds_labelled <- ipeds %>%
@@ -333,18 +503,18 @@ ipeds_labelled <- ipeds %>%
 
 ```
 
-### `readr` Let's view new labelled data
+### readr Let's view new labelled data
 ```{r}
 typeof(ipeds_labelled$iclevel)
 class(ipeds_labelled$iclevel)
 attributes(ipeds_labelled$iclevel)
 ```
 
+
+
+### readr labelled data to factor
+
 Let's change class to factor
-
-### `readr` Class to factor
-
-Approach #1
 ```{r}
 ipeds_factor <- as_factor(ipeds_labelled, only_labelled = TRUE)
 typeof(ipeds_factor$sector)
@@ -353,125 +523,18 @@ attributes(ipeds_factor$sector)
 ```
 
 
-### `readr` Class to factor
-Approach #2
-```{r}
-ipeds_factor2 <- to_factor(ipeds_labelled, ordered = TRUE)
-typeof(ipeds_factor2$sector)
-class(ipeds_factor2$sector)
-attributes(ipeds_factor2$sector)
-```
+# readxl package
 
+### readxl 
+The `readxl`package is part of [tidyverse](https://readxl.tidyverse.org/), which is designed to read data from Excel and into R.  
 
-### 1. `readr Running into errors`
-1. Make sure you have downloaded and saved flat file  
-2. Make sure to know the file path of where data is downloaded or saved (~/Desktop/educ263/data)
-3. Make sure you set your working **`setwd()`** directory in R. To check your current working directory type **`getwd()`** in console. 
+- We could install tidyverse **install.package("tidyverse")** to access `readxl`, but have to explicitly load `readxl` because it is not a core tidyverse package  
+    - `library(readxl)`  
+- Or install `readxl`**install.packages("readxl")** and load it  
+    - `library(readxl)`  
+- For the purpose of this lecture, we just need to load **library(readxl)**.
 
-
-
-
-# `haven` package
-
-### `haven`
-
-Recap from lecture 5   
-    
-
-[`haven`](https://haven.tidyverse.org/) is part of **tidyverse**, which enables users to import and export data from the following statistical packages:  
-
-- SAS
-- SPSS
-- Stata  
-\
-
-Similar to `readr`, we could load the entire **library(tidyverse)** package to get `haven`. 
-For the purpose of this lecture, we will just need to load **library(haven)**.  
-
-### `haven functions`
-
-**haven's** (tidyverse) functions
-
-| **Format** | **Function** |
-| ------ | -------- |
-| SPSS    | `read_sav`   |
-| SAS    | `read_sas`   |
-| Stata    | `read_dta`   |
-
-
-### `haven` read and write Stata arguments
-
-`read_dta(file, encoding = NULL)`  
-`write_data(data, path, version = 14)`  
-
-Arguments  
-- **file**: file path to data  
-- **encoding**: files prior to Stata 14 did not declare text encoding, files after Stata 14 do not need to declare encoding value  
-- **data**: data frame to save (write)  
-- **path**: file path to where data will be saved  
-- **version**: file version  
-
-[Link](https://haven.tidyverse.org/reference/read_dta.html)
-
-
-### `haven` Student exercise
-
-- Use `read_dta()` function from `haven` to import Stata dataset into R  
-- Use `write_dta()` funtction from `haven` to save Stata dataset  
-- If you have time, explore data (View, glimpse, head, etc.)  
-    - View variable and value labels  
-    - Change class == labelled to class == factor
-
-### `haven` Student exercise Solution
-
-Use `read_dta` function from `haven` to import State data
-```{r, results="hide"}
-hsls <- read_dta("~/Desktop/GitHub/rclass/data/hsls/hsls_sch_small.dta", encoding=NULL)
-
-# View data
-head(hsls)
-glimpse(hsls)
-```
-
-Use `write_dta` function from `haven` to write State data
-```{r}
-write_dta(hsls, path = "~/Desktop/GitHub/rclass/data/hsls/hsls_sch_small.dta")
-```
-
-### `haven` Student exercise Solution cont...
-Variable and Value labels
-```{r}
-# View variable labels
-hsls %>% var_label()
-
-```
-
-### `haven` Student exercise Solution cont...
-```{r}
-#View value label for x1locale
-hsls %>% select(x1locale) %>% val_labels()
-```
-
-### `haven` Student exercise Solution cont...
-```{r}
-# Change class == labelled to class == factor
-hsls <- as_factor(hsls, only_labelled = TRUE)
-
-typeof(hsls$x1region)
-class(hsls$x1region)
-attributes(hsls$x1region)
-```
-
-
-
-# `readxl` package
-
-### `readxl` 
-The [`readxl`](https://readxl.tidyverse.org/) package is part of tidyverse, which is designed to easily read data from Excel and into R. 
-\
-- We could load **library(tidyverse)** if we wanted to load all packages in tidyverse. For the purpose of this lecture, we just need to load **library(readxl)**.
-
-### `readxl`
+### readxl
 
 `readxl` supports both .xls and .xlsx formats and is designed to work with tabular data. It does not require dependencies-- making installing and operating fairly simple.  
 
@@ -486,7 +549,7 @@ excel_example <- readxl_example("datasets.xlsx")
 ```
 
 
-### `readxl` features
+## readxl arguments
 - **sheet**: `read_excel`(excel file, sheet = "sheet name")
 - **n_max**: `read_excel`(excel file, n_max = n)
 - **range**: `read_excel`(excel file, range = "A:D")  
@@ -494,7 +557,9 @@ excel_example <- readxl_example("datasets.xlsx")
 - **cell_cols**: `read_excel`(excel file, range = cell_cols("A:D"))
 - **na**: `read_excel`(excel file, na = "n")
 
-### `readxl` sheet
+### readxl sheet  
+
+Select the excel sheet you want to work with.
 ```{r, warning=FALSE}
 #To view sheets in excel file
 excel_sheets(excel_example)
@@ -504,12 +569,16 @@ xl_example <- read_excel(excel_example, sheet = "quakes")
 head(xl_example)
 ```
 
-### `readxl` n_max 
+### readxl n_max  
+
+Maximum number of rows to read
 ```{r}
 read_excel(excel_example, sheet = "quakes", n_max = 3)
 ```
 
-### `readxl` range
+### readxl range  
+
+A cell range to read from
 ```{r}
 read_excel(excel_example, sheet = "quakes", range = "C1:E4")
 
@@ -519,77 +588,123 @@ head(read_excel(excel_example, sheet = "quakes", range = cell_cols("A:C")))
 # using head() to only view first 6 rows 
 ```
 
-### `readxl` na
+### readxl na  
+
+Character vector of strings to interpret as missing values
 ```{r}
 read_excel(excel_example, sheet = "quakes", na = "-20.42")
 ```
 
 
-### `readxl` Student exercise
-**Save data**
-- Download and save Federal Student Financial Aid Data  
-- Read in data using `readxl` function  
-- Read in first four rows (n_max)
-- Read in column Names to column State **hint** `cell_cols`
-- Set value "A" to missing (na) **note** : you need to investigate in detail before setting anything to missing
+### read_excel using FSA data
+
+Federal Student Aid  
+
+- Federal Student Aid Data Center provides information for federal assistance programs and is divided into four categories: 
+      - Student Aid Data  
+      - School Data  
+      - Federal Family Education Loan (FFEL) Program  
+      - Business Information Resources  
+      
+We will be working with [School Data](https://studentaid.ed.gov/sa/node/105)  
 
 
-### `readxl` Student exercise solution
+### read_excel student exercise using FSA data
+Read in Federal Student Aid data using `readxl` function  
+    - Excel file "peps300.xlsx" is saved in the fsa folder inside the data folder  
+1. Use relative file path to read in data  
+    - `read_excel("filepath/excelfile")`
+```{r}
+
+```
+    
+1. Read in first four rows (n_max)
+```{r}
+
+```
+
+1. Read in columns from range Names to State **hint** `cell_cols`
+```{r}
+
+```
+
+1. Set value "A" to missing (na) **note** : you need to investigate in detail before setting anything to missing
+```{r}
+
+```
+
+
+
+### read_excel Student exercise solutions  
+1. Use relative file path to read in data 
 ```{r}
 #Read in data using readxl function
-setwd("~/Desktop/GitHub/rclass/data/fsa")
-fsa <- read_excel("peps300.xlsx")
+#getwd()
+fsa <- read_excel("../../data/fsa/peps300.xlsx")
 ```
-
+2. Read in first four rows (n_max)
 ```{r}
 #Read in first four rows (n_max)
-setwd("~/Desktop/GitHub/rclass/data/fsa")
-read_excel("peps300.xlsx", n_max = 4)
+#setwd("~/Desktop/GitHub/rclass/data/fsa")
+read_excel("../../data/fsa/peps300.xlsx", n_max = 4)
 ```
 
-### `readxl` Student exercise solution cont...
+### read_excel Student exercise solutions continued
+3. Read in columns from range Names to State **hint** `cell_cols`
 ```{r}
 #Read in column Names to column State
-setwd("~/Desktop/GitHub/rclass/data/fsa")
-head(read_excel("peps300.xlsx", range = cell_cols("B:E")))
+#setwd("~/Desktop/GitHub/rclass/data/fsa")
+head(read_excel("../../data/fsa/peps300.xlsx", range = cell_cols("B:E")))
 
 ```
 
+### read_excel Student exercise solutions continued
+4. Set value "P" to missing (na) **note** : you need to investigate in detail before setting anything to missing
 ```{r}
-setwd("~/Desktop/GitHub/rclass/data/fsa")
-read_excel("peps300.xlsx", n_max = 4,  na = "A")
+#setwd("~/Desktop/GitHub/rclass/data/fsa")
+read_excel("../../data/fsa/peps300.xlsx", n_max = 4,  na = "P")
 ```
 
-### `readxl` Running into problems
+### readxl Running into problems
 1. Make sure you have downloaded and saved excel file  
-2. Make sure to know the file path of where data is downloaded or saved (~/Desktop/educ263/data)
+2. Make sure to know the file path of where data is downloaded or saved ("../../data")
 3. Make sure you set your working **`setwd()`** directory in R. To check your current working directory type **`getwd()`** in console.  
 4. Make sure to choose the correct sheet (if applicable)  
 5. Pay attention to column names when setting range
 
 
 
-# Downloading data from web
+# Reading in data from the web
 
-### Downloading data from web
+### Reading in data from the web
 
 - Save time  
     - Reduce the steps of downloading, saving, and reading in data  
     - Read in data directly from internet  
     - **note** not all packages will working with downloading data from the web (read_excel)
  
-For example, rather than downloading ipeds data and saving it in a folder, we could download the data directly from the web.  
+For example, rather than downloading Raj Chetty data and saving it in a folder, we could download the data directly from the web.  
 
-### Downloading data from web example using Raj Chetty data
+### Reading in data from web example using Raj Chetty data  
+
+Equality of Opportunity Project  
+
+- [Equality of Opportunity Project](http://www.equality-of-opportunity.org/papers/coll_mrc_paper.pdf) uses two data sources-- federal tax recoards and Department of Education records (1999-2013)-- to investigate intergenerational income mobility at colleges in the US.  
+
+We will use [Mobility Report Cards: The Role of Colleges in Intergenerational Mobility data](http://www.equality-of-opportunity.org/documents/)
+
+
+### Reading in data from web example using Raj Chetty data  
 
 1. Follow this [link](http://www.equality-of-opportunity.org/data/) and under the "Mobility Report Cards..." tab select "click to view data".  
 2. Choose "Online Data Table 1" 
 3. Right click and copy link address for "Excel" (Note: it is actually a csv file)
 
-![mobility report cards](~/Desktop/GitHub/rclass/lectures/lecture8/mrc_table1.png)\  
+![mobility report cards](mrc_table1.png)\  
 
-### Downloading data from web  
-[FIX OUTPUT (CUTTING OFF)]
+### Reading in data from the web  
+
+Approach #1
 ```{r, message=FALSE}
 #Paste url to excel "csv" file
 data_url <- "http://www.equality-of-opportunity.org/data/college/mrc_table1.csv"
@@ -602,16 +717,16 @@ mrc[1:4, 1:4]
 ```
 
 
-### Downloading data from web
+### Reading in data from the web 
 
-Alternative approach
+Approach #2
 ```{r}
 #Download data and read in link directly using read_csv (readr)
 mrc <- read_csv("http://www.equality-of-opportunity.org/data/college/mrc_table1.csv")
 
 ```
 
-### Downloading data from web
+### Reading in data from the web 
 ```{r}
 #View first 4 rows and 4 columns 
 mrc[1:4, 1:4]
@@ -623,22 +738,39 @@ mrc[1:4, 1:4]
 2. Choose "All years" and "All surveys" and click continue  
 3. Right click and copy link address for "IC2017_AY" 
 
-![ipeds data center](~/Desktop/GitHub/rclass/lectures/lecture8/ic2017_ay.png)\  
+![ipeds data center](ic2017_ay.png) 
 
 ### Downloading data (zip files) using IPEDS
 
-Paste url and read in using `read_csv`  
-What happens when you try reading in this zip file?  
+- Paste url and read in using `read_csv`  
+    - `ipeds <- read_csv("link")`
+What happens when you try reading in this file?  
+```{r}
+
+```
 Need to download **and** unzip
+
+## download.file function  
+
+## download.file function
+
+`download.file` is a function use to download a file from the internet.  
+
+Some arguments  
+- **url**: the url to be downloaded  
+- **destfile**: name of file after file is downloaded
+- **method**: method to be used for downloading files ("wininet" for Windows only) 
+- **mode**: the mode in which to write the file (use "wb") 
+    - `download.file(url, destfile, method, mode = "")`
 
 
 ### Downloading data (zip files) using IPEDS
 ```{r}
 #Set path to where data will be saved
-setwd("~/Desktop/lecture8")
+#setwd("~/Desktop/lecture8")
 #download file and pa
 download.file("https://nces.ed.gov/ipeds/datacenter/data/IC2017_AY.zip",
-              destfile = "ic2017_ay", mode = 'wb')
+              destfile = "ic2017_ay", mode = "wb")
 #unzip zip file and keep original name
 unzip(zipfile = "ic2017_ay" , unzip = "unzip")
 
@@ -659,7 +791,128 @@ ic2017_ay <- read_csv("ic2017_ay.csv")
 - Create a subset of your data (filter, select, etc.)
 
 
-# Data sources (maybe)
+
+
+# haven package
+
+### haven
+
+Recap from lecture 5   
+    
+
+haven is part of [tidyverse](https://haven.tidyverse.org/), which enables users to import and export data from the following statistical packages:  
+
+- SAS
+- SPSS
+- Stata  
+\
+
+Similar to `readr`, we could load the entire **library(tidyverse)** package to get `haven`. 
+For the purpose of this lecture, we will just need to load **library(haven)**.  
+
+### haven functions
+
+**haven's** (tidyverse) functions
+
+| **Format** | **Function** |
+| ------ | -------- |
+| SPSS    | `read_sav`   |
+| SAS    | `read_sas`   |
+| Stata    | `read_dta`   |
+
+
+### haven read and write Stata arguments
+
+`read_dta(file, encoding = NULL)`  
+`write_data(data, path, version = 14)`  
+
+Arguments  
+- **file**: file path to data  
+- **encoding**: files prior to Stata 14 did not declare text encoding, files after Stata 14 do not need to declare encoding value  
+- **data**: data frame to save (write)  
+- **path**: file path to where data will be saved  
+- **version**: file version  
+
+[Link](https://haven.tidyverse.org/reference/read_dta.html)
+
+
+### haven Student exercise using HSLS data
+
+High school longitudinal surveys from National Center for Education Statistics (NCES)
+
+- Follow U.S. students from high school through college, labor market
+
+We will be working with [High School Longitudinal Study of 2009 (HSLS:09)](https://nces.ed.gov/surveys/hsls09/index.asp)
+
+- Follows 9th graders from 2009
+- Data collection waves
+      - Base Year (2009)
+      - First Follow-up (2012)
+      - 2013 Update (2013)
+      - High School Transcripts (2013-2014)
+      - Second Follow-up (2016) 
+      
+      
+
+1. Use `read_dta()` function from `haven` to import Stata dataset into R  
+```{r}
+
+```
+
+1. Use `write_dta()` funtction from `haven` to save Stata dataset  
+```{r}
+
+```
+
+1. If you have time, explore data (View, glimpse, head, etc.)  
+    - View variable and value labels  
+    - Change class == labelled to class == factor
+```{r}
+
+```
+    
+    
+### haven Student exercise solutions
+
+Use `read_dta` function from `haven` to import State data
+```{r, results="hide"}
+hsls <- read_dta("https://github.com/ozanj/rclass/raw/master/data/hsls/hsls_sch_small.dta", encoding=NULL)
+
+# View data
+head(hsls)
+glimpse(hsls)
+```
+
+Use `write_dta` function from `haven` to write State data
+
+`write_dta(dataframe, path = ""`
+```{r eval=FALSE}
+write_dta(hsls, path = "~/Desktop/hsls_sch_small.dta")
+```
+
+### haven Student exercise Solution continued...
+Variable and Value labels
+```{r}
+# View variable labels
+hsls %>% var_label()
+
+```
+
+### haven Student exercise Solution cont...
+```{r}
+#View value label for x1locale
+hsls %>% select(x1locale) %>% val_labels()
+```
+
+### haven Student exercise Solution cont...
+```{r}
+# Change class == labelled to class == factor
+hsls <- as_factor(hsls, only_labelled = TRUE)
+
+typeof(hsls$x1region)
+class(hsls$x1region)
+attributes(hsls$x1region)
+```
 
 
 
