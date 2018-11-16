@@ -586,7 +586,7 @@ class(df$sch)
 
  
 ### readr labelled data
-- Open the data dictionary file for [hd2017](https://nces.ed.gov/ipeds/datacenter/data/HD2017_Dict.zip) data and select "Description" sheet 
+- Open the data dictionary file for [hd2017](https://nces.ed.gov/ipeds/datacenter/data/HD2017_Dict.zip) data and select "Frequencies" sheet 
 - We are only working with these 6 variables (unitid, instnm, stabbr, sector, iclevel, control)  
 
 ```{r}
