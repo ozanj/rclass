@@ -9,7 +9,7 @@ urlcolor: blue
 output:
   beamer_presentation:
     keep_tex: true
-    toc: true
+    toc: false
     slide_level: 3
     theme: default # AnnArbor # push to header?
     #colortheme: "dolphin" # push to header?
@@ -26,14 +26,49 @@ output:
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 ```
 
+### What we will do today
+
+\tableofcontents
+
+```{r, eval=FALSE, echo=FALSE}
+#Use this if you want TOC to show level 2 headings
+\tableofcontents
+#Use this if you don't want TOC to show level 2 headings
+\tableofcontents[subsectionstyle=hide/hide/hide]
+```
+
 # Introduction
 
-### Libraries
+### Libraries we will use today
 
 ```{r}
 library(tidyverse)
 library(haven)
 ```
+
+### Logistics
+
+__Remaining lectures__
+
+- Lecture 9 (today): Functions
+- Lecture 10: Accessing object elements and looping
+
+These topics are important, but challenging. 
+
+- __Learning goals__: Develop strong conceptual understanding of the basics; some practice applying these skills
+
+__Problem sets__
+
+- The final two problem sets will be very "scaffolded"; we walk you through process of using functions/loops to do useful things
+    - Will give big hints; less emphasis on "figure it out on your own"
+    - More about following steps, undestand "why these steps," how each step works 
+
+__Reading to do before next class:__
+
+- Grolemund and Wickham chapter 19 (Functions)
+- [OPTIONAL] Any slides from lecture we don't cover
+    - I wrote this lecture knowing we won't have time to get through all sections
+    - Slides we don't cover are mainly for your future reference
 
 ### Data we will work with
 
@@ -46,9 +81,7 @@ load("../../data/recruiting/recruit_school_somevars.Rdata")
 
 ```
 
-# Why and when to write a function
-
-
+## What are functions
 
 ### What are functions
 
@@ -56,68 +89,91 @@ __Functions__ are pre-written bits of code that accomplish some task. Functions 
 
 1. take in an __input__ object(s)
 2. __process__ the input.
-3. __return__ (A) a new object or (B) a visualizatoin (e.g., plot)
+3. __return__.  Returns a new object, which may be a vector, data-frame, plot, etc.
 
-We've been working with functions all quarter. For example, the `select()` function (type `?select` in console):
+We've been working with functions all quarter. 
 
+\medskip
+__Example__: the `select()` function:
+
+```{r, results="hide"}
+#type ?select in console
+#?select
+```
 1. __input__. takes in a data frame object as the input
 2. __processing__. keeps selected variables that you specify
-3. __return__. Returns a new object, which may be a vector, a data-frame, a plot, etc.
+3. __return__. Returns a new object, which is a data frame containing variables you specify
 ```{r, results="hide"}
-#?select
 select(df_event,event_type,event_state,zip) %>% str() 
-#df_event %>% select(event_type,event_state,zip) %>% str() # same result
+df_event %>% select(event_type,event_state,zip) %>% str() # same result
 ```
-The `sum()` function (`?sum` in console):
 
-1. __input__. takes in a vector of elements (numeric or logical)
-2. __processing__. Calculates the sum of elements
-3. __return__. Returns a numeric vector of length=1 whose value is the sum of input vector
+### What are functions
+
+__Functions__ are pre-written bits of code that accomplish some task. Functions generally follow three sequential steps:
+
+1. take in an __input__ object(s)
+2. __process__ the input.
+3. __return__. Returns a new object, which may be a vector, data-frame, plot, etc.
+
+__Example__: The `sum()` function:
+
 ```{r, results="hide"}
+#?sum
+```
+
+1. __input__. takes in a vector of elements (_class_ must be numeric or logical)
+2. __processing__. Calculates the sum of elements
+3. __return__. Returns numeric vector: length=1; value is sum of input vector
+```{r}
 sum(c(1,2,3))
 sum(c(1,2,3)) %>% str()
 ```
 
 ### What are user-written functions
 
-__user-written functions__ [my term] are functions you write to perform some specific task, usually a data-manipulation or analysis task specific to your project
+"__user-written functions__" [my term]
 
-Like all functions, user-written functions follow three steps:
+- functions you write to perform some specific task, often a data-manipulation or analysis task specific to your project
 
-1. take in one or more inputs
-2. process the inputs (this may include using pre-written functions like `select()` or `sum()`)
-3. return a new object
+Like all functions, user-written functions usually follow three steps:
 
-Before showing you how to write your own functions, let's see an example of a function in action [FIX]
+1. take in one or more __inputs__
+2. __process__ the inputs
+    - this may include using pre-written functions like `select()` or `sum()`
+3. __return__ a new object
 
-POTENTIAL EXAMPLES:
+Things we might want to write a function to do:
 
-- SOME SPECIFIC TABULATION LIKE COUNT OF EVENT BY TYPE FOR EACH UNIVERSITY
-- READ IN DATA
-- FIX MISSING VALUES https://www.btskinner.me/rworkshop/modules/programming_one.html
+- Given total population in zip-code and population for each race/ethnicity group, write function that create variables for percent of people in each race/ethnicity group in each zip-code?
+- Modify this function, so that it can create zip-code level variables AND statelevel variables 
+- Write function to read in annual data; call function for each year
+- Create new version of variable that converts negative values to `NAs`
 
+## When and why write functions
 
 ### When should you write a function
 
-Wickham chapter 19 has some practical advice about when to write your own function.
+\medskip
+Let's introduce task we might want to achieve by writing a function
 
-Before stating this, let's introduce a task from the "off-campus recruiting project" that we might want to achieve by writing a function
+- Dataset `df_event`: one observation for each university-recruiting_event
+    - Variable `event_type`: location type of recruiting event (e.g., public high school)
 
-Task:
+__Task__:
 
-- Dataset `df_event` has one observation for each university-recruiting_event for several public universities
-    - Variable `event_type` identifies location type of recruiting event (e.g., public high school, private high school)
-- We want to create the following descriptive statistics tables for each university
-    - Table A: count of number of recruiting events by event type and the average of median income at each event type
-    - Table B: same as Table A, but separately for in-state and out-of-state events
+- Create the following descriptive statistics tables for each university
+    - __Table A__: count of number of recruiting events by event type and the average of median income at each event type
+    - __Table B__: same as Table A, but separately for in-state and out-of-state events
     
 Here is some code to create these tables for Stonybrook University in New York
 ```{r, results="hide"}
+#Table A
 df_event %>% filter(univ_id==196097) %>% group_by(event_type) %>% 
   summarise(
     n_events=n(),
     mean_inc=mean(med_inc, na.rm = TRUE))
-
+#Table B
 df_event %>% filter(univ_id==196097) %>% group_by(event_inst, event_type) %>% 
   summarise(
     n_events=n(),
@@ -125,20 +181,21 @@ df_event %>% filter(univ_id==196097) %>% group_by(event_inst, event_type) %>%
 ```
 ### When should you write a function
 
-A function is a self-contained bit of code that performs some specific task. Functions allow you to "automate" tasks that you perform more than once
+__To write a function or not__
 
-The alternative to writing a function to perform some specific task is to copy and paste the code each time you want to perform a task
+- A function is a self-contained bit of code that performs some specific task; functions allow you to "automate" tasks that you perform more than once
+    - e.g., for off-campus recruiting descriptive stats (above): we would write a function, then "call" the function separately for each university
+- The alternative to writing a function to perform some specific task is to copy and paste the code each time you want to perform a task
+    - e.g., for off-campus recruiting descriptive stats: we would copy above code for each university and change the university ID
 
-- e.g., for the off-campus recruiting descriptive stats, we would copy above code for each university and change the university ID
+__Advice about when to write a function from experts__
 
-Grolemund and Wickham say:
+- Grolemund and Wickham chapter 19:
+    - "You should consider writing a function whenever you’ve copied and pasted a block of code more than twice (i.e. you now have three copies of the same code)."
 
-> "You should consider writing a function whenever you’ve copied and pasted a block of code more than twice (i.e. you now have three copies of the same code)."
-
-Darin Christenson refers to the programming mantra __DRY__
-
-> Do not Repeat Yourself (DRY)
-- Functions enable you to perform multiple tasks (that are similar to one another) without copying the same code over and over
+- Darin Christenson refers to the programming mantra __DRY__
+    - "Do not Repeat Yourself (DRY)"
+    - "Functions enable you to perform multiple tasks (that are similar to one another) without copying the same code over and over"
 
 ### Why write functions
 
@@ -146,25 +203,32 @@ Advantages of writing functions to complete a task compared to the copy-and-past
 
 - As task requirements change (and they always do!), you only need to revise code in one place rather than many places
 - Functions give you an opportunity to make continual improvements to the way you complete a task
-    - Often, I have two tasks and I write a separate function for each task. Over time, I realize that these two tasks have many things and common and that I can write a single function that completes both tasks.
+    - Often, I have two tasks and I write a separate function for each task. 
+    - Over time, I realize that these two tasks have many things and common and that I can write a single function that completes both tasks.
 - Reduce errors that are common in copy-and-paste approach (e.g., forgetting to change variable name or variable value)
 
-### Why write functions
+\medskip 
+Learning how to write functions is a requirement for anybody working on my research projects
+
+- When the RAs move on, I need to be able to efficiently modify tasks they completed. This is only possible when they write functions.
+
+### Why write functions (my own experience)
 
 How I use functions in my research (acquiring, processing, and analyzing data)
+
+\medskip 
 
 1. __Acquiring data__. Since I often create longitudinal datasets from annual "input data," I usually write a function or loop to read-in the data and do initial processing
     - After writing a function for a specific data source, I generalize the function to read-in other data sources that share commonalities
 2. __Processing data__ (the big step between acquiring data and analyzing data). Write functions for data processing steps:
-    - sometimes these are small/quick steps that I do over and over (e.g., cleaning a "string" ID variable)
-    - sometimes these are big/multi-step processes (e.g., writing a general function that takes-in longitudinal data on number of degrees degrees awarded by field an award-level for each university, and creates measures of "degree adoption")
+    - sometimes these are small/quick steps that I do over and over
+        - e.g., cleaning a "string" ID variable
+    - sometimes these are big/multi-step processes
+        - e.g., write function that takes-in longitudinal data on number of degrees awarded by field an award-level for each university, and creates measures of "degree adoption"
 3. __Analyzing data__ (after creating analysis datasets). I __ALWAYS__ write functions to automate analyses and the creation of tables/graphs
     - As a young research assistant, bosses were always asking me to change the variables and then recreate the regression tables
-    - Functions flexible in terms of which models to run, variables to include, etc.
+    - Write functions that allow me to specify which which models to run, which variables to include, etc and then "spit out" polished, publication-ready tables
 
-Learning how to write functions is a requirement for anybody working on my research projects
-
-- When the RAs move on, I need to be able to efficiently modify tasks they completed. This is only possible when they write functions.
 
 # Function basics
 
@@ -190,11 +254,12 @@ __Central theme is the importance of continually revising your functions__
 
 The `function()` function tells R that you are writing a function
 ```{r, eval=FALSE}
-#to get help type "?base" in console and scroll index for "function", but help file not very helpful
 function_name <- function(x,y,z) {
   #function body
 }
+#?base #for help on `function()` type "`?base`" in console, click on "index," and scroll to "function," but help file not very helpful!
 ```
+
 Three components of a function:
 
 1. __function name__
@@ -211,9 +276,12 @@ Three components of a function:
 
 ### Hello function
 
-Our first example is to write a function that simply prints "Hello!"
+__Task__: First example is to write a function that simply prints "Hello!"
 
-First step in writing a function to perform a task is always to perform the task outside of a function
+\medskip
+__Perform task outside of function__
+
+- First step in writing a function to perform a task is always to perform the task outside of a function
 ```{r}
 "Hello!"
 ```
@@ -229,8 +297,7 @@ print_hello <- function() {
     - function name is `print_hello`
 2. __function arguments__ (sometimes called "inputs")
     - the `print_hello` function doesn't take any arguments
-3. __function body__
-    - What the function does to the inputs
+3. __function body__ (what the function does to the inputs)
     - body of `print_hello` simply prints "Hello!"
 
 __Call the function__
@@ -239,45 +306,44 @@ print_hello()
 ```
 ### Hello function
 
-Task:
+__Task__: modify `print_hello` function so it also prints our name, which we specify as an input.
 
-- modify the `print_hello` function so that it also prints our name, which we specify as an input.
-- first, perform task outside a function. A few approaches we could take
+\medskip
+__First, perform task outside a function__. A few approaches we could take:
 
-This seems wrong because my name is not an input
-
+1. This seems wrong because my name is not an input
 ```{r}
 "Hello! My name is Ozan Jaquette"
 ```
-Why doesn't this work?
+2. Why doesn't this approach work?
 ```{r}
 x <- "Ozan Jaquette"
 x
 "Hello! My name is x"
 ```
-Why doesn't this work?
+3. Why doesn't this approach work?
 ```{r, eval=FALSE}
 "Hello! My name is " x
 ```
-This sort of works
+4. This approach sort of works
 ```{r}
 "Hello! My name is "
 x
 ```
 ### Hello function
 
-Task:
+__Task__: modify `print_hello` function so it also prints our name, which we specify as an input.
 
-- modify the `print_hello` function so that it also prints our name, which we specify as an input.
-- first, perform task outside a function. A few approaches we could take
+\medskip
+__First, perform task outside a function__. 
 
-Let's take another approach. Experiment with the `print()` function
+- Let's take another approach. Experiment with the `print()` function
 ```{r}
 #?print
 print("Hello! My name is")
 print(x)
 ```
-Want our `print_hello` function to print everything on one line. Why doesn't this work?
+- Want our `print_hello` function to print everything on one line. Why doesn't this work?
 ```{r, eval=FALSE}
 print("Hello! My name is") print(x)
 print("Hello! My name is"), print(x)
@@ -290,14 +356,13 @@ What went wrong? seems like `print()` function:
 
 ### Hello function
 
-Task:
+__Task__: modify `print_hello` function so it also prints our name, which we specify as an input.
 
-- modify the `print_hello` function so that it also prints our name, which we specify as an input.
-- first, perform task outside a function. A few approaches we could take
+\medskip
+__First, perform task outside a function__. 
 
-We need to find an alternative to `print()` that can print multiple objects on the same line
-
-Let's experiment with `cat()` function [I had to Google this]
+- We need to find an alternative to `print()` that can print multiple objects on the same line
+- Let's experiment with `cat()` function [I had to Google this]
 ```{r}
 #?cat
 cat("Hello! My name is ")
@@ -310,9 +375,9 @@ Success! Now we can write a function for this task
 
 ### Hello function
 
-Task: modify `print_hello` function so that it also prints our name
+__Task__: modify `print_hello` function so that it also prints our name
 
-Task outside of function
+__Perform task outside a function__. 
 ```{r}
 x <- "Ozan Jaquette"
 cat("Hello! My name is",x)
@@ -328,9 +393,8 @@ print_hello <- function(name) {
 
 1. __function name__ is `print_hello`
 2. __function arguments__. "inputs" to the function
-    - `print_hello` function takes one argument, `name`
-    - Instead of `name`, we could have named this argument `x` or `Ralph`
-3. __function body__.What function does to the inputs
+    - takes one argument, `name`; could have named this argument `x` or `Ralph`
+3. __function body__. What function does to the inputs
     - `cat("Hello! My name is",name)`
     
 __Call function__
@@ -341,34 +405,38 @@ print_hello("Patricia Martin")
 ```
 ### Hello function
 
-Task: modify `print_hello` function so that it also takes our year of birth as an input and states our age
+__Task__: modify `print_hello` function so that it also takes our year of birth as an input and states our age
 
-Perform task outside of function
+__Perform task outside of function__
 ```{r}
 x <- "Ozan Jaquette"
 y <- 1979
 z <- 2018 - 1979
-z
 cat("Hello! My name is",x,". In 2018 I will turn",z,"years old")
 ```
 
-Improvements we could make:
+__Improvements we could make__ (before writing function):
 
-- use __date functions__ to: 
-    1. specify current date (rather than manually typing "2018")
-    2. calculate age exactly (rather than as current year minus birth year)
+1. Remove extra space between name and the period
+    - `sep` argument of `cat()` defines what to put after each element
+    - default is `sep = " "`; change to `sep=""` and specify spaces manually
+```{r}
+#?cat
+cat("Hello! My name is ",x,". In 2018 I will turn ",z," years old", sep="")
+```
+2. use __date functions__ to: 
+    - specify current date (rather than manually typing "2018")
+    - calculate age exactly (rather than as current year minus birth year)
     - But we haven't learned date functions, so hold off
-- use __string functions__ to:
-    - remove extra space between name and the period
-    - but we haven't learned string functions, so hold off
+
 
 ### Hello function
 
-Task: modify `print_hello` function so that it also takes our year of birth as an input and states our age
+__Task__: modify `print_hello` so it takes year of birth as input and states our age
 
-Perform task outside of function
+__Perform task outside of function__
 ```{r}
-cat("Hello! My name is",x,"and in 2018 I will turn",z,"years old")
+cat("Hello! My name is ",x,". In 2018 I will turn ",z," years old", sep="")
 ```
 
 __Create function__
@@ -376,7 +444,7 @@ __Create function__
 ```{r}
 print_hello <- function(name,birth_year) {
   age <- 2018 - birth_year
-  cat("Hello! My name is",name,"and in 2018 I will turn",age,"years old")
+  cat("Hello! My name is ",x,". In 2018 I will turn ",age," years old", sep="")  
 }
 ```
 
@@ -393,6 +461,7 @@ print_hello("Ozan Jaquette",1979)
 ```
 ### Recipe for writing a function
 
+Recipe for first version of a function:
 
 1. Experiment with performing the task outside of a function
     - experiment with performing task with different sets of inputs
@@ -400,26 +469,27 @@ print_hello("Ozan Jaquette",1979)
 1. Write the function
 1. Test the function; try to "break" it
 
+\medskip
+As you use this function, make continual improvements going back-and-forth between steps 1-3
 
-## Practice: the `z_score` function
+## Practice: z_score function
 
 ### `z_score` function
 
-The z-score for observation _i_ is number of standard deviations from mean:
+__Task__: Write function that calculates `z-score` for each element of a vector
 
-$z_i = \frac{x_i - \bar{x}}{sd(x)}$
+- Z-score for observation _i_ `=` number of standard deviations from mean
+- $z_i = \frac{x_i - \bar{x}}{sd(x)}$
 
-Task:
-
-- Write a function that calculates z-score for each element of a vector
-
-Let's create a vector of numbers
-```{r, results="hide"}
+Create a vector of numbers we'll use to develop `z_score` function
+```{r}
 v=c(seq(5,15))
 v
-length(v)
-v[1]
-v[10]
+typeof(v) # type==integer vector
+class(v) # class == integer
+length(v) # number of elements in object v
+v[1] # 1st element of v
+v[10] # 10th element of v
 ```
 
 Components of z-score using `mean()` and `sd()` functions
@@ -430,13 +500,16 @@ sd(v)
 
 ### `z_score` function, $z_i = \frac{x_i - \bar{x}}{sd(x)}$
 
-First, experiment calculating z-score without writing function. Calculate z-score for some value
+\medskip
+__First experiment calculating z-score without writing function__
+
+- Calculate z-score for some value
 ```{r}
 (5-mean(v))/sd(v)
 (10-mean(v))/sd(v)
 ```
 
-Calculate z-score for particular elements of vector `v`
+- Calculate z-score for particular elements of vector `v`
 ```{r}
 v[1]
 (v[1]-mean(v))/sd(v)
@@ -444,7 +517,7 @@ v[8]
 (v[8]-mean(v))/sd(v)
 ```
 
-Calculate `z_i` for multiple elements of vector `v`
+- Calculate `z_i` for multiple elements of vector `v`
 ```{r}
 c(v[1],v[8],v[11])
 c((v[1]-mean(v))/sd(v),(v[8]-mean(v))/sd(v),(v[11]-mean(v))/sd(v))
@@ -466,7 +539,7 @@ z_score(c(seq(20,25)))
 ```
 __Components of function__
 
-1. __function name__ is `z_score``
+1. __function name__ is `z_score`
 2. __function arguments__. Takes one input, which we named `x`
     - inputs can be vectors, dataframes, logical statements, etc.
 3. __function body__.What function does to the inputs
@@ -481,8 +554,10 @@ w=c(NA,seq(1:5),NA)
 w
 z_score(w)
 ```
-What went wrong?
 
+- What went wrong?
+
+\medskip
 Let's revise our function
 ```{r}
 z_score <- function(x) {
@@ -493,60 +568,106 @@ z_score(w)
 
 ### `z_score` function, $z_i = \frac{x_i - \bar{x}}{sd(x)}$
 
+\medskip
 Does our `z_score` function work when applied to variables from a data frame?
 
-Create data frame
+- Create data frame called `df`
 ```{r, results="hide"}
-set.seed(12345) # so we all get the same "random" numbers
+set.seed(12345) # set "seed" so we all get the same "random" numbers
 df <- tibble(
   a = c(NA,rnorm(9)),
   b = c(NA,rnorm(9)),
-  c = c(NA,rnorm(9)),
-  d = c(NA,rnorm(9))
+  c = c(NA,rnorm(9))
 )
-df
-df
-class(df)
-
-df$a
-str(df$a)
+class(df) # class of object df
+df # print data frame
+df$a # print element "a" (i.e., variable "a") of object df (data frame)
+str(df$a) # structure of element "a" of df: a numeric vector
 ```
 
-Apply `z_score` function to variables in data frame
+- Apply `z_score` function to variables in data frame
 ```{r, results="hide"}
-mean(df$a, na.rm=TRUE)
-df$a
-z_score(df$a)
+mean(df$a, na.rm=TRUE) # mean of variable "a"
+sd(df$a, na.rm=TRUE) # std dev of variable "a"
 
-z_score(df$b)
+df$a # print variable "a"
+z_score(df$a) # z_score function to calculate z-score for each obs of variable "a"
+(df$a[2] - mean(df$a, na.rm=TRUE))/sd(df$a, na.rm=TRUE) # check result
+
+z_score(df$b) # z-score for each obs of variable "b"
 ```
 
 ### `z_score` function, $z_i = \frac{x_i - \bar{x}}{sd(x)}$
 
-We can use our function to create a new variable that is the z-score version of a variable
+__Task__
+
+- Use our `z_score` function to create a new variable that is the z-score version of a variable
 
 __Base R approach__
-```{r}
-#same function as before
-z_score <- function(x) {
+
+Why learn "Base R" approach?
+
+- For some tasks, using Tidyverse functions within a user-written function or within a loop (next week) requires more advanced programming skills
+
+Show how to create and delete variables using "Base R" approach
+
+```{r, results="hide"}
+df # print data frame df
+
+df$one <- 1 # create variable "one" that always equals 1
+df # print data frame df
+df$one <- NULL # remove variable "one"
+df 
+
+df$c_plus2 <- df$c+2 #create variable equal to "c" plus 2
+df
+df$c_plus2 <- NULL # remove variable "c_plus2"
+df
+```
+
+
+### `z_score` function, $z_i = \frac{x_i - \bar{x}}{sd(x)}$
+
+__Task__
+
+- Use our `z_score` function to create a new variable that is the z-score version of a variable
+
+__Base R approach__
+
+```{r, results="hide"}
+z_score <- function(x) { # note: same function as before
   (x - mean(x, na.rm=TRUE))/sd(x, na.rm=TRUE)
 }
 
-#call function
+#Simply calling function doesn't create new variable
 z_score(df$c)
+```
 
-#assign new variable [base R approach to creating new variables]
+Assign new variable, using z_score function to create variable values
+
+- __Note__: Preferred approach is to not create new variable within the function
+```{r}
 df$c_z <- z_score(df$c)
 df$c_z
 ```
+
+Examine data frame
+```{r, results="hide"}
+df
+df$c_z <- NULL # remove variable
+```
+
+
+
 ### `z_score` function, $z_i = \frac{x_i - \bar{x}}{sd(x)}$
 
-We can use our function to create a new variable that is the z-score version of a variable
+__Task__
+
+- Use our `z_score` function to create a new variable that is the z-score version of a variable
 
 __Tidyverse approach__
 ```{r}
-#same function as before
-z_score <- function(x) {
+z_score <- function(x) { #same function as before
   (x - mean(x, na.rm=TRUE))/sd(x, na.rm=TRUE)
 }
 
@@ -554,72 +675,92 @@ df %>% mutate(
   a_z = z_score(a),
   c_z = z_score(c)
   ) %>% select(a_z,c_z) %>% str()
+```
 
-#changes not retained  unless we assign
+Changes not retained  unless we assign
+```{r, results="hide"}
+names(df)
 df <- df %>% mutate(
   a_z = z_score(a),
   c_z = z_score(c)
   )
-names(df)
+df
 ```
 
 ### `z_score` function, $z_i = \frac{x_i - \bar{x}}{sd(x)}$
 
+\medskip
 We can apply our function to a "real" dataset too
 
 ```{r}
-df_event_small <- df_event[1:10,] # first 10 observations
-df_event_small <- df_event_small %>% select(instnm,univ_id,event_type,med_inc) # 4 vars
+df_event_small <- df_event[1:10,] %>% # keep first 10 observations
+  select(instnm,univ_id,event_type,med_inc) # keep 4 vars
 #df_event_small
 
+#show mean, std dev for variable med_inc
+df_event_small %>% summarise_at(
+  .vars = vars(med_inc),
+  .funs = funs(mean, sd, .args=list(na.rm=TRUE)))
+
+#use z_score function to create new variable
 df_event_small %>% mutate(
-    med_inc_z = z_score(med_inc)) 
+    med_inc_z = z_score(med_inc)) %>% head(n=5)
 ```
 
-## Practice: the `count_events` function
+## Practice: count_events function
 
 ### `count_events` function
 
 Let's write a function for a practical data analysis task
 
-The dataset `df_event` has one obs for each university-recruiting_event
+- Dataset `df_event`: one observation for each university-recruiting_event
+- Variable `event_type`: location type of recruiting event (e.g., public HS)
 
-- Variable `event_type` identifies location type of recruiting event (e.g., public high school, private high school)
+__Task__: Create the following descriptive statistics tables for each university
 
-Task: ceate the following tables for each university
+- __Table A__: count of number of recruiting events by event type and the average of median income at each event type
+- __Table B__: same as Table A, but separately for in-state and out-of-state
 
-- Table A: count of number of recruiting events by event type and the average of median income at each event type
-- Table B: same as Table A, but separately for in-state and out-of-state events
+Before writing function, we perform task outside a function. 
 
-Before writing function, we perform task outside a function. But first, we should figure out how we can identify each university
+\medskip
+First, identify value of ID variable for each university (this took me some time)
 ```{r, results="hide"}
 names(df_event)
-#looks like "univ_id" is id var associated with each public university
-df_event %>% count(univ_id)
-#"instnm" is the name of each public university
-df_event %>% count(instnm)
-#need to identify univ_id value assoicated with each university name
-df_event %>% select(instnm,univ_id) %>% group_by(univ_id) %>% 
-  filter(row_number()==1) %>% arrange(univ_id)
+df_event %>% count(univ_id) # "univ_id" is id var for each university
+df_event %>% count(instnm) #"instnm" is the name for university
+
+#identify univ_id value assoicated with each university name
+df_event %>% select(instnm,univ_id) %>% 
+  group_by(univ_id) %>% # group by university ID
+  filter(row_number()==1) %>% # grab first row for each group (univ_id)
+  arrange(univ_id) # sort by univ_id
 ```
 
 ### `count_events` function
 
-Task: calculate number of events and avg. household income by:
+__Task__: calculate number of events and avg. household income by:
 
-1. event-type and
-1. event-type and whether event is in-state/out-of-state
+1. event-type (Table A)
+1. event-type and whether event is in-state/out-of-state (Table B)
 
-Create "by event-type" table outside function
+__Create "by event-type" table outside function (Table A)__
+
+- Number of events by type
 ```{r, results="hide"}
-df_event %>% count(event_type)
+df_event %>% count(event_type) 
+```
 
-#For all public universities
+- Number of events by type and avg. income for all public universities
+```{r, results="hide"}
 df_event %>% group_by(event_type) %>% summarise(
     n_events=n(),
     mean_inc=mean(med_inc, na.rm = TRUE))
+```
 
-#For a particular public university; e/g/. U. Arkansas is univ_id==106397
+- Number of events by type and avg. income for particular university
+    - e.g., U. Arkansas univ_id==106397
+```{r, results="hide"}
 df_event %>% filter(univ_id==106397) %>% group_by(event_type) %>% 
   summarise(
     n_events=n(),
@@ -628,33 +769,42 @@ df_event %>% filter(univ_id==106397) %>% group_by(event_type) %>%
 
 ### `count_events` function
 
-Task: calculate number of events and avg. household income by:
+__Task__: calculate number of events and avg. household income by:
 
-1. event-type and
-1. event-type and whether event is in-state/out-of-state
+1. event-type (Table A)
+1. event-type and whether event is in-state/out-of-state (Table B)
 
-Create "by event-type and in/out of state" table outside function
+__Create "by event-type and in/out state" table outside function (Table B)__
+
+- Number of events by type and in/out state
 ```{r, results="hide"}
-df_event %>% count(event_inst,event_type)
+df_event %>% count(event_inst,event_type) 
+```
 
-#For all public universities
+- Number of events and avg. income by type and in/out state for all universities
+```{r, results="hide"}
 df_event %>% group_by(event_inst,event_type) %>% summarise(
     n_events=n(),
     mean_inc=mean(med_inc, na.rm = TRUE))
+```
 
-#For a particular public university; e/g/. U. Arkansas is univ_id==106397
-df_event %>% filter(univ_id==106397) %>% group_by(event_inst,event_type) %>% 
+- Number of events and avg. income by type and in/out state for particular universities
+    - e.g., U. Arkansas univ_id==106397
+```{r, results="hide"}
+df_event %>% filter(univ_id==106397) %>%
+  group_by(event_inst,event_type) %>% 
   summarise(
     n_events=n(),
     mean_inc=mean(med_inc, na.rm = TRUE))
 ```
 
+
 ### `count_events` function
 
-Task: calculate number of events and avg. household income by:
+__Task__: calculate number of events and avg. household income by:
 
-1. event-type and
-1. event-type and whether event is in-state/out-of-state
+1. event-type (Table A)
+1. event-type and whether event is in-state/out-of-state (Table B)
 
 __Create function__
 ```{r}
@@ -818,7 +968,7 @@ prop_missing(df$parage,c(-4,-7,-8))
 ### Student task: `fix_missing` function [PUT BEN'S TASK LATER?]
 
 Perform task outside of function
-```{r}
+```{r, results="hide"}
 df_temp <- df
 names(df_temp)
 
@@ -828,7 +978,7 @@ df_temp %>% mutate(
 ```
 
 Write function
-```{r}
+```{r, results="hide"}
 fix_missing <- function(x, miss_vals) {
 
   #df <- df %>% mutate(age_na = ifelse(x %in% mss_vals,NA,x))
@@ -852,7 +1002,7 @@ From Grolemund and Wickham (http://r4ds.had.co.nz/functions.html#functions-are-f
 
 Functions you write are processed by computers, but important for humans to be able to understand your function too.
 
-Be careful about
+Be thoughtful about
 
 - function names
 - names of arguments/inputs
@@ -863,7 +1013,7 @@ Be careful about
 
 Grolemund and Wickham recommendations:
 
-- functions perform actions on inputs, so name of function should be verbs name of inputs/arguments should be nouns
+- functions __perform actions__ on __inputs__, so name of function should be verbs name of inputs/arguments should be nouns
     - e.g, we named functions `print_hello` and `count_events`
 - But better to name the function a noun if the verb that comes to mind feels too generic
     - e.g., the name `z_score` is better than `calculate_z_score`
@@ -886,7 +1036,7 @@ Ozan recommendations
     
 ### Coding style
 
-PUT THIS LATER?
+See Grolemund and Wickham 19.4.3 for recommendations about coding style
 
 # Conditional execution
 
@@ -1070,7 +1220,7 @@ go_to_daycare(weekday=1,fever=0)
 go_to_daycare(weekday=1,fever=1)
 go_to_daycare(weekday=1)
 ```
-## Dot-dot-dot (`...`)
+## Dot-dot-dot (...)
 
 ### Dot-dot-dot (`...`)
 
@@ -1202,7 +1352,7 @@ mtcars %>%
 
 
 
-## Practice: the `read_admit` function
+## Practice: the read_admit function
 
 ### `read_admit` function
 
