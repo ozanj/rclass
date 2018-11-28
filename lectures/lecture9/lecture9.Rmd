@@ -39,11 +39,20 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 
 # Introduction
 
-### Libraries we will use today
+### Libraries and data we will use today
 
+Libraries
 ```{r}
 library(tidyverse)
 library(haven)
+```
+Data frames
+```{r}
+#load dataset with one obs per recruiting event
+load("../../data/recruiting/recruit_event_somevars.Rdata")
+
+#load dataset with one obs per high school
+load("../../data/recruiting/recruit_school_somevars.Rdata")
 ```
 
 ### Logistics
@@ -69,17 +78,6 @@ __Reading to do before next class:__
 - [OPTIONAL] Any slides from lecture we don't cover
     - I wrote this lecture knowing we won't have time to get through all sections
     - Slides we don't cover are mainly for your future reference
-
-### Data we will work with
-
-```{r}
-#load dataset with one obs per recruiting event
-load("../../data/recruiting/recruit_event_somevars.Rdata")
-
-#load dataset with one obs per high school
-load("../../data/recruiting/recruit_school_somevars.Rdata")
-
-```
 
 ## What are functions
 
@@ -994,60 +992,17 @@ fix_missing(df$age, c(-97,-98,-99))
 df
 ```
 
-# Functions are for humans and computers
-
-### Functions are for humans and computers
-
-From Grolemund and Wickham (http://r4ds.had.co.nz/functions.html#functions-are-for-humans-and-computers)
-
-Functions you write are processed by computers, but important for humans to be able to understand your function too.
-
-Be thoughtful about
-
-- function names
-- names of arguments/inputs
-- commenting your code
-- coding style
-
-### Function names
-
-Grolemund and Wickham recommendations:
-
-- functions __perform actions__ on __inputs__, so name of function should be verbs name of inputs/arguments should be nouns
-    - e.g, we named functions `print_hello` and `count_events`
-- But better to name the function a noun if the verb that comes to mind feels too generic
-    - e.g., the name `z_score` is better than `calculate_z_score`
-- Recommend using "snake_case" to separate words
-    - e.g., `print_hello` rather than `print.hello` or `PrintHello`
-
-
-### Commenting code
-
-Grolemund and Wickham recommendations:
-
-> "Use comments, lines starting with #, to explain the “why” of your code. You generally should avoid comments that explain the “what” or the “how”. If you can’t understand what the code does from reading it, you should think about how to rewrite it to be more clear"
-
-Ozan recommendations
-
-- I use comments to explain why
-- I also use comments to explain what the code does and/or how it works
-    - Writing these comments help me work through each step of a problem
-    - These comments help me/others understand code when I return to it after several months
-    
-### Coding style
-
-See Grolemund and Wickham 19.4.3 for recommendations about coding style
 
 # Conditional execution
 
 ### Conditional execution
 
-From (http://r4ds.had.co.nz/functions.html#conditional-execution)
-
 __`if`__ statements allow you to conditionally execute certain blocks of code depending on whether some condition is satisfied
 
+- From (http://r4ds.had.co.nz/functions.html#conditional-execution)
+
 ```{r, eval=FALSE}
-if (condition) {
+if (TRUE/FALSE condition) {
   # code executed when condition is TRUE
 } else {
   # code executed when condition is FALSE
@@ -1055,32 +1010,41 @@ if (condition) {
 ```
 
 Review `TRUE`/`FALSE` conditions and `type==logical`
+
+- Examples of `TRUE`/`FALSE` conditions
 ```{r}
 (2+2==4)
 (2+2==5)
+```
 
+- How do you know if "condition" is `TRUE`/`FALSE`? It has `type==logical`
+```{r}
 typeof(2+2==4)
 typeof(2+2==5)
 typeof(2+2)
 ```
 
-### Conditional execution
+### Conditional execution, simple example
 
-Example
 
-- Imagine some administrative software program that sends students an email about their cumulative GPA and whether they are on academic probation
+
+__Task__
+
+- Imagine you are developing an administrative software program that sends students an email about whether they are on academic probation
+- Write a function that takes `gpa` as an input and does the following: 
+    - if `gpa` is less than `2`, function prints GPA and says they are on probation; 
+    - otherwise, function prints GPA and says they are not on probation
 
 ```{r}
 email_gpa <- function(gpa) {
-  
   if (gpa<2) {
     
-    cat("All students with a GPA below 2.0 are on academic probation. Your GPA is",gpa,"and you are on academic probation. You must follow these steps...")
+    cat("Students with a GPA below 2.0 are on academic probation. Your GPA is",
+        gpa,"and you are on academic probation. You must follow these steps...")
     
   } else {
     cat("Your GPA is",gpa,"and you are not on academic probation.")
   }
-  
 }
 email_gpa(1.9)
 email_gpa(3)
@@ -1091,18 +1055,22 @@ The condition must evaluate to either `TRUE` or `FALSE`. This means:
 
 1. condition must evaluate to `type==logical`
 1. condition must have `length==1`
+
+To demonstrate, we write function that takes one input, `x`, and does this:
+
+- prints the `type` and `length` of `x`
+- if condition `x` evaluates to `TRUE`, prints: "condition is true"
+- otherwise, prints: "condition is not true"
 ```{r, eval=FALSE}
 eval_condition <- function(x) {
   cat("condition type is:",typeof(x), fill=TRUE)
   cat("condition length is:",length(x), fill=TRUE)
-  
   if (x) {
     "condition is true"
   } else {
-    "condition is false"
+    "condition is not true"
   }
 }
-
 eval_condition(4==4)
 eval_condition(4==3)
 eval_condition("hello")
@@ -1113,13 +1081,20 @@ eval_condition(c(4==4,4==3))
 
 ### Conditions with multiple logical expressions
 
-The `condition` can have multiple logical expressions as long as it evaluates to either `TRUE` or `FALSE`
+A `condition` can have multiple logical expressions as long as the `condition` evaluates to `TRUE`/`FALSE`
 
-Use `||` (or) and `&&` (and) to combine multiple logical expressions
-```{r}
+- Use `||` (or) and `&&` (and) to combine multiple logical expressions
+- GW: "Never use | or & in an if statement: these are __vectorised__ operations that apply to multiple values (that’s why you use them in filter())"
+
+\medskip
+
+__Task__. Write function `go_to_daycare` that takes two inputs: `weekday` (0/1 indicator); and `temp`
+
+- if `weekday==1` __and__ `temp` less than `99`, print: "Kid goes to daycare!"
+- otherwise, print: "Kid stays home"
+```{r, results="hide"}
 go_to_daycare <- function(weekday,temp) {
-  
-  if (weekday==1 && temp<99) {
+   if (weekday==1 && temp<99) {
     "Kid goes to daycare!"
   } else {
     "Kid stays home"
@@ -1130,9 +1105,7 @@ go_to_daycare(1,101)
 go_to_daycare(1,99)
 go_to_daycare(0,98)
 ```
-Make sure to use `||` (or) `&&` (and) to combine conditions; don't use `|` (or), `&` (and)
 
-> "You should never use | or & in an if statement: these are __vectorised__ operations that apply to multiple values (that’s why you use them in filter())"
 
 ### Multiple conditions
 
@@ -1147,7 +1120,23 @@ if (condition) {
 }
 ```
 
-Example: create text for email to students about their GPA
+__Student exercise__. Write function `email_gpa` that takes one input, `gpa`, and prints the following text based on `gpa` (text would go in email to student):
+
+- if `gpa` less than 2, prints: "Your GPA is [INSERT `gpa`]. You are on academic probation."
+- else if `gpa` is greater than or equal to 3.5, prints: "Your GPA is [INSERT `gpa`]. You made the Dean's list. Congratulations!"
+- otherwise, prints: "Your GPA is [INSERT `gpa`]"
+
+SOLUTION ON NEXT SLIDE
+
+### Multiple conditions
+
+__Student exercise__. Write function `email_gpa` that takes one input, `gpa`, and prints the following text based on `gpa` (text would go in email to student):
+
+- if `gpa` less than 2, prints: "Your GPA is [INSERT `gpa`]. You are on academic probation."
+- else if `gpa` is greater than or equal to 3.5, prints: "Your GPA is [INSERT `gpa`]. You made the Dean's list. Congratulations!"
+- otherwise, prints: "Your GPA is [INSERT `gpa`]"
+
+Solution
 ```{r, results="hide"}
 email_gpa <- function(gpa) {
   if (gpa<2) {
@@ -1164,25 +1153,33 @@ email_gpa(3)
 ```
 ### Conditional execution: coding style?
 
-  IS THERE TIME TO GO OVER THIS? OR JUST POINT STUDENTS TO THIS
-
-### Conditional execution: practical example
-
-  IS THERE TIME FOR THIS? IF SO, ASK PATRICIA TO HELP THINK OF AN EXAMPLE
+  PATRICIA - DO YOU THINK WE SHOULD HAVE A SLIDE ON THIS EITHER HERE OR ABOVE? OR JUST POINT STUDENTS TO TO WHERE THEY CAN FIND RECOMMENDATIONS ON CODING STYLE FOR CONDITIONAL EXECUTION?
 
 # Function arguments
 
-### Types of arguments
+### Types of function arguments
 
-Grolemund and Wickham broadly distinguish between two types of function arguments:
+\medskip
+Recall that user-written functions have three components
+
+1. __function name__
+2. __function arguments__ (sometimes called "inputs")
+    - Inputs that the function takes
+    - In "function call," you specify values to assign to these function arguments
+3. __function body__
+    - What the function does to the inputs
+
+\medskip
+
+Two broad types of arguments (according to Grolemund and Wickham):
 
 1. __Data arguments__. Arguments that supply the data that will be processed by the function
 1. __Detail arguments__. Arguments that control details of the computation
 
-Grolemund and Wickham recommendations about order of arguments:
+Recommended order of arguments (according to Grolemund and Wickham):
 
-- data arguments come first
-- detail arguments should come at the end and should often have a `default` value
+- __data arguments__ come first
+- __detail arguments__ should come at the end and should often have a `default` value
 
 ## Default values
 
@@ -1190,7 +1187,9 @@ Grolemund and Wickham recommendations about order of arguments:
 
 A __default value__ is the value that will be assigned to a function argument if the function call does not explicitly assign a value to that argument
 
-Example: the help file for the `mean()` function shows the default values
+- Most functions we have been working with have default values
+
+__Example__: help file for the `mean()` function shows the default values
 
 - `mean(x, trim = 0, na.rm = FALSE, ...)`
 - `na.rm` is an argument of `mean()`
@@ -1203,12 +1202,15 @@ mean(c(2,4,6,NA), na.rm=TRUE)
 ```
 ### Default values for arguments
 
-When writing a function, specify default values for an argument the same way you would specify values for that argument when calling the function
+When writing function, specify __default values__ for an argument the same way you would specify values for that argument when calling the function
 
+__Task__. Modify `go_to_daycare` function that says whether kid goes to daycare
+
+- Replace input `temp` with input `fever` (0/1 indicator)
+- `fever` should have default value of `0`
 ```{r}
 go_to_daycare <- function(weekday,fever = 0) {
   cat("weekday==",weekday,"; fever==",fever,sep="", fill=TRUE)
-
   if (weekday==1 && fever==0) {
     "Kid goes to daycare!"
   } else {
@@ -1220,6 +1222,11 @@ go_to_daycare(weekday=1,fever=0)
 go_to_daycare(weekday=1,fever=1)
 go_to_daycare(weekday=1)
 ```
+
+### Default values for arguments
+
+PATRICIA - SHOULD WE ADD A STUDENT EXERCISE?
+
 ## Dot-dot-dot (...)
 
 ### Dot-dot-dot (`...`)
@@ -1500,3 +1507,46 @@ admit_14_15 <- read_admit(ayear="14_15")
 admit_append <- bind_rows(admit_16_17,admit_15_16,admit_14_15)
 ```
 
+# Functions are for humans and computers
+
+### Functions are for humans and computers
+
+From Grolemund and Wickham (http://r4ds.had.co.nz/functions.html#functions-are-for-humans-and-computers)
+
+Functions you write are processed by computers, but important for humans to be able to understand your function too.
+
+Be thoughtful about
+
+- function names
+- names of arguments/inputs
+- commenting your code
+- coding style
+
+### Function names
+
+Grolemund and Wickham recommendations:
+
+- functions __perform actions__ on __inputs__, so name of function should be verbs name of inputs/arguments should be nouns
+    - e.g, we named functions `print_hello` and `count_events`
+- But better to name the function a noun if the verb that comes to mind feels too generic
+    - e.g., the name `z_score` is better than `calculate_z_score`
+- Recommend using "snake_case" to separate words
+    - e.g., `print_hello` rather than `print.hello` or `PrintHello`
+
+
+### Commenting code
+
+Grolemund and Wickham recommendations:
+
+> "Use comments, lines starting with #, to explain the “why” of your code. You generally should avoid comments that explain the “what” or the “how”. If you can’t understand what the code does from reading it, you should think about how to rewrite it to be more clear"
+
+Ozan recommendations
+
+- I use comments to explain why
+- I also use comments to explain what the code does and/or how it works
+    - Writing these comments help me work through each step of a problem
+    - These comments help me/others understand code when I return to it after several months
+    
+### Coding style
+
+See Grolemund and Wickham 19.4.3 for recommendations about coding style
