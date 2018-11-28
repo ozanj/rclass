@@ -1239,15 +1239,15 @@ These functions rely on a special argument `...` (pronounced dot-dot-dot)
 
 - the `...` argument captures any number of arguments that aren't otherwise matched
 
-CUT THIS OR PUT IN AN EASIER EXAMPLE
+`filter()` function also uses `...`:
+
+- syntax: `filter(.data,...)`
+- First argument is data frame; remaining arguments are any number of filters you apply to the data
 ```{r}
-letters[1:10]
-commas <- function(...) {
-  stringr::str_c(..., collapse = ", ")
-}
-commas(letters[1:10])
-letters[1:10]
+filter(df_event, event_state=="CA",med_inc>100000,event_type=="public hs") %>% 
+  count()
 ```
+
 
 ### Dot-dot-dot (`...`) example:`count_events` function revisited
 
@@ -1262,19 +1262,73 @@ count_events <- function(id) {
 count_events(106397)
 ```
 
-Want to revise our function so to specify `group_by()` variables at program call
+__Task__
 
-- Problem: number of `group_by()` variables indeterminate (e.g., `group_by(event_type)` or `group_by(event_inst,event_type)`)
+- Revise `count_events` function so that `group_by()` variables can be specified at program call
+
+Challenge in completing this task: 
+
+- number of `group_by()` variables indeterminate 
+    - e.g., `group_by(event_type)` or `group_by(event_inst,event_type)`
 
 ### Dot-dot-dot (`...`) example:`count_events` function revisited
 
-Solution
+__Task__. Revise `count_events()` so `group_by()` vars specified at program call
+
+\medskip
+As a first step, revise `count_event` function so that we specify __one__ `group_by()` variable at  program call
+
+```{r, eval=FALSE}
+count_events <- function(id, group_by_var) {
+  df_event %>% filter(univ_id==id) %>% group_by(group_by_var) %>%
+    summarise(n_events=n(), mean_inc=mean(med_inc, na.rm = TRUE))
+}
+
+count_events(id=106397, "event_type")
+count_events(id=106397, event_type)
+```
+Why didn't this work?
+
+- Answer is complicated
+    - basically `group_by()` wants variable names [without quotes] listed within `group_by()`
+    - but our function passes `group_by_var` (Here `event_type`) as a string
+- More complete explanation [HERE](https://www.r-bloggers.com/data-frame-columns-as-arguments-to-dplyr-functions/)
+
+### Dot-dot-dot (`...`) example:`count_events` function revisited
+
+__Task__. As a first step, revise `count_event` function so that we specify __one__ `group_by()` variable at  program call
+
+\medskip
+
+Solution:
+
+- use `group_by_()` within your function instead of `group_by`
+    - `group_by_()` uses "standard evaluation" [Google it later]
+
+```{r, eval=FALSE}
+count_events <- function(id, group_by_var) {
+  df_event %>% filter(univ_id==id) %>% group_by_(group_by_var) %>%
+    summarise(n_events=n(), mean_inc=mean(med_inc, na.rm = TRUE))
+}
+
+count_events(id=106397, "event_type")
+```
+Note: when writing functions, this approach works for all `dplyr` functions
+
+- e.g., when writing function, use `summarise_()` rather than `summarise()`
+- e.g., when writing function, use `fulter_()` rather than `filter()`
+
+### Dot-dot-dot (`...`) example:`count_events` function revisited
+
+Now, we can complete our __Task__. 
+
+- Revise `count_events()` so `group_by()` vars specified at program call
+
 ```{r, results="hide"}
 count_events <- function(id, ...) {
   df_event %>% filter(univ_id==id) %>% group_by_(...) %>%
     summarise(n_events=n(), mean_inc=mean(med_inc, na.rm = TRUE))
 }
-
 count_events(id=106397, "event_type")
 count_events(id=106397, "event_inst", "event_type")
 count_events(id=106397, "event_state")
@@ -1286,11 +1340,8 @@ count_events(id=106397, "event_state")
     - `%>% group_by_(...)` means substitute the un-named arguments (which you specify in function call) as inputs to `group_by_()` function
 4. __function call__
     - `count_events(id=106397, "event_inst", "event_type")`: insert `"event_inst"` and `"event_type"` as values for unnamed arguments
-    - Program body `group_by_(...)` is executed as `group_by_(event_inst,event_type)`
+    - Program body `group_by_(...)` executed as `group_by_(event_inst,event_type)`
 
-Note: `group_by_()` differs from `group_by()`
-
-- Explanation [HERE](https://www.r-bloggers.com/data-frame-columns-as-arguments-to-dplyr-functions/)
 
 # Return values
 
