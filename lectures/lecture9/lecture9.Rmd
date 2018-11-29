@@ -53,6 +53,7 @@ load("../../data/recruiting/recruit_event_somevars.Rdata")
 
 #load dataset with one obs per high school
 load("../../data/recruiting/recruit_school_somevars.Rdata")
+#PATRICIA - I THINK WE MIGHT NOT USE THE RECRUIT_SCHOOL_SOMEVARS DATASET; YOU CHECK; IF NOT, YOU CAN DELETE THIS LOAD
 ```
 
 ### Logistics
