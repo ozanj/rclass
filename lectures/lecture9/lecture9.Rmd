@@ -36,10 +36,10 @@ library(tidyverse)
 library(haven)
 library(labelled)
 ```
-Data frames
+Data frame
 ```{r}
 #load dataset with one obs per recruiting event
-load("../../data/recruiting/recruit_event_somevars.Rdata")
+load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData"))
 
 ```
 
