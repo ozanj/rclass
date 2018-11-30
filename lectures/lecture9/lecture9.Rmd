@@ -140,13 +140,14 @@ Like all functions, user-written functions usually follow three steps:
     - this may include using pre-written functions like `select()` or `sum()`
 3. __return__ a new object
 
-Things we might want to write a function to do:
+Example things we might want to write a function to do:
 
-- Using total population in zip-code and population for each race/ethnicity group, write function that create variables for percent of people in each race/ethnicity group for each zip-code?
-- Modify this function, so that it can create zip-code level variables AND statelevel variables 
+- Using total population in zip-code and population for each race/ethnicity group, write function that create variables for percent of people in each race/ethnicity group for each zip-code
+    - Modify function so it can create zip-code level variables AND statelevel variables 
 - Write function to read in annual data; call function for each year
-- Create new version of variable that converts negative values to `NAs`
-
+- Create interactive maps: [NAED_presentation](https://ozanj.github.io/naed_presentation)
+    - see "deep dive" results
+    
 ## When and why write functions
 
 ### When should you write a function
