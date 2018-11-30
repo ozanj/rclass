@@ -41,9 +41,6 @@ Data frames
 #load dataset with one obs per recruiting event
 load("../../data/recruiting/recruit_event_somevars.Rdata")
 
-#load dataset with one obs per high school
-load("../../data/recruiting/recruit_school_somevars.Rdata")
-#PATRICIA - I THINK WE MIGHT NOT USE THE RECRUIT_SCHOOL_SOMEVARS DATASET; YOU CHECK; IF NOT, YOU CAN DELETE THIS LOAD
 ```
 
 ### Logistics
@@ -145,7 +142,7 @@ Like all functions, user-written functions usually follow three steps:
 
 Things we might want to write a function to do:
 
-- Given total population in zip-code and population for each race/ethnicity group, write function that create variables for percent of people in each race/ethnicity group in each zip-code?
+- Using total population in zip-code and population for each race/ethnicity group, write function that create variables for percent of people in each race/ethnicity group for each zip-code?
 - Modify this function, so that it can create zip-code level variables AND statelevel variables 
 - Write function to read in annual data; call function for each year
 - Create new version of variable that converts negative values to `NAs`
@@ -202,9 +199,9 @@ __Advice about when to write a function from experts__
 Advantages of writing functions to complete a task compared to the copy-and-paste approach
 
 - As task requirements change (and they always do!), you only need to revise code in one place rather than many places
-- Functions give you an opportunity to make continual improvements to the way you complete a task
+- Functions give you an opportunity to make continual improvements to completing a task 
     - Often, I have two tasks and I write a separate function for each task. 
-    - Over time, I realize that these two tasks have many things and common and that I can write a single function that completes both tasks.
+    - Over time, I realize that these two tasks have many things in common and that I can write a single function that completes both tasks.
 - Reduce errors that are common in copy-and-paste approach (e.g., forgetting to change variable name or variable value)
 
 \medskip 
@@ -224,10 +221,10 @@ How I use functions in my research (acquiring, processing, and analyzing data)
     - sometimes these are small/quick steps that I do over and over
         - e.g., cleaning a "string" ID variable
     - sometimes these are big/multi-step processes
-        - e.g., write function that takes-in longitudinal data on number of degrees awarded by field an award-level for each university, and creates measures of "degree adoption"
+        - e.g., write function that takes-in longitudinal data on number of degrees awarded by field and award-level for each university, and creates measures of "degree adoption"
 3. __Analyzing data__ (after creating analysis datasets). I __ALWAYS__ write functions to automate analyses and the creation of tables/graphs
     - As a young research assistant, bosses were always asking me to change the variables and then recreate the regression tables
-    - Write functions that allow me to specify which which models to run, which variables to include, etc and then "spit out" polished, publication-ready tables
+    - Write functions that allow me to specify which models to run, which variables to include, etc and then "spit out" polished, publication-ready tables
 
 
 # Function basics
@@ -1092,7 +1089,7 @@ go_to_daycare(0,98)
 
 ### Multiple conditions
 
-Can chain multiple `if` statements together you want to specify code for more than two conditions
+Can use multiple `if` statements together if you have two or more conditions you want to specify in the code
 ```{r, eval=FALSE}
 if (condition) {
   # run this code if condition TRUE
@@ -1134,9 +1131,9 @@ email_gpa(1.9)
 email_gpa(3.5)
 email_gpa(3)
 ```
-### Conditional execution: coding style?
+### Conditional execution: coding style
 
-  PATRICIA - DO YOU THINK WE SHOULD HAVE A SLIDE ON THIS EITHER HERE OR ABOVE? OR JUST POINT STUDENTS TO TO WHERE THEY CAN FIND RECOMMENDATIONS ON CODING STYLE FOR CONDITIONAL EXECUTION?
+See [Grolemund and Wickham 19.4.3](https://r4ds.had.co.nz/functions.html#code-style) for recommendations about coding style
 
 # Function arguments
 
@@ -1206,9 +1203,6 @@ go_to_daycare(weekday=1,fever=1)
 go_to_daycare(weekday=1)
 ```
 
-### Default values for arguments
-
-PATRICIA - SHOULD WE ADD A STUDENT EXERCISE?
 
 ## Dot-dot-dot (...)
 
@@ -1299,7 +1293,7 @@ count_events(id=106397, "event_type")
 Note: when writing functions, this approach works for all `dplyr` functions
 
 - e.g., when writing function, use `summarise_()` rather than `summarise()`
-- e.g., when writing function, use `fulter_()` rather than `filter()`
+- e.g., when writing function, use `filter_()` rather than `filter()`
 
 ### Dot-dot-dot (`...`) example:`count_events` function revisited
 
@@ -1485,7 +1479,7 @@ Be thoughtful about
 
 Grolemund and Wickham recommendations:
 
-- functions __perform actions__ on __inputs__, so name of function should be verbs name of inputs/arguments should be nouns
+- functions __perform actions__ on __inputs__, so name of function should be verbs name and inputs/arguments should be nouns
     - e.g, we named functions `print_hello` and `count_events`
 - But better to name the function a noun if the verb that comes to mind feels too generic
     - e.g., the name `z_score` is better than `calculate_z_score`
@@ -1506,6 +1500,3 @@ Ozan recommendations
     - Writing these comments help me work through each step of a problem
     - These comments help me/others understand code when I return to it after several months
     
-### Coding style
-
-See Grolemund and Wickham 19.4.3 for recommendations about coding style
