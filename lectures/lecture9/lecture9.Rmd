@@ -26,17 +26,6 @@ output:
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 ```
 
-### What we will do today
-
-\tableofcontents
-
-```{r, eval=FALSE, echo=FALSE}
-#Use this if you want TOC to show level 2 headings
-\tableofcontents
-#Use this if you don't want TOC to show level 2 headings
-\tableofcontents[subsectionstyle=hide/hide/hide]
-```
-
 # Introduction
 
 ### Libraries and data we will use today
@@ -45,6 +34,7 @@ Libraries
 ```{r, results="hide"}
 library(tidyverse)
 library(haven)
+library(labelled)
 ```
 Data frames
 ```{r}
@@ -79,6 +69,17 @@ __Reading to do before next class:__
 - [OPTIONAL] Any slides from lecture we don't cover
     - I wrote this lecture knowing we won't have time to get through all sections
     - Slides we don't cover are mainly for your future reference
+
+### What we will do today
+
+\tableofcontents
+
+```{r, eval=FALSE, echo=FALSE}
+#Use this if you want TOC to show level 2 headings
+\tableofcontents
+#Use this if you don't want TOC to show level 2 headings
+\tableofcontents[subsectionstyle=hide/hide/hide]
+```
 
 ## What are functions
 
@@ -565,7 +566,7 @@ z_score <- function(x) {
 z_score(w)
 ```
 
-### `z_score` function, $z_i = \frac{x_i - \bar{x}}{sd(x)}$
+### `z_score` function, $z_i = \frac{x_i - \bar{x}}{sd(x)}$ [STUDENTS WORK ON THEIR OWN]
 
 \medskip
 Does our `z_score` function work when applied to variables from a data frame?
@@ -596,7 +597,7 @@ z_score(df$a) # z_score function to calculate z-score for each obs of variable "
 z_score(df$b) # z-score for each obs of variable "b"
 ```
 
-### `z_score` function, $z_i = \frac{x_i - \bar{x}}{sd(x)}$
+### `z_score` function, $z_i = \frac{x_i - \bar{x}}{sd(x)}$ [STUDENTS WORK ON THEIR OWN]
 
 __Task__
 
@@ -625,7 +626,7 @@ df
 ```
 
 
-### `z_score` function, $z_i = \frac{x_i - \bar{x}}{sd(x)}$
+### `z_score` function, $z_i = \frac{x_i - \bar{x}}{sd(x)}$ [STUDENTS WORK ON THEIR OWN]
 
 __Task__
 
@@ -658,7 +659,7 @@ df$c_z <- NULL # remove variable
 
 
 
-### `z_score` function, $z_i = \frac{x_i - \bar{x}}{sd(x)}$
+### `z_score` function, $z_i = \frac{x_i - \bar{x}}{sd(x)}$ [STUDENTS WORK ON THEIR OWN]
 
 __Task__
 
@@ -686,7 +687,7 @@ df <- df %>% mutate(
 df
 ```
 
-### `z_score` function, $z_i = \frac{x_i - \bar{x}}{sd(x)}$
+### `z_score` function, $z_i = \frac{x_i - \bar{x}}{sd(x)}$ [STUDENTS WORK ON THEIR OWN]
 
 \medskip
 We can apply our function to a "real" dataset too
