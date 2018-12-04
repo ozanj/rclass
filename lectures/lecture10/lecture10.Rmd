@@ -9,7 +9,7 @@ urlcolor: blue
 output:
   beamer_presentation:
     keep_tex: true
-    toc: true
+    toc: false
     slide_level: 3
     theme: default # AnnArbor # push to header?
     #colortheme: "dolphin" # push to header?
@@ -28,15 +28,51 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 
 # Introduction
 
+### What we will do today
+
+\tableofcontents
+
+```{r, eval=FALSE, echo=FALSE}
+#Use this if you want TOC to show level 2 headings
+\tableofcontents
+#Use this if you don't want TOC to show level 2 headings
+\tableofcontents[subsectionstyle=hide/hide/hide]
+```
+
 ### Libraries
 
 ```{r}
 library(tidyverse)
 ```
 
+Data frame
+```{r}
+#load dataset with one obs per recruiting event
+load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData"))
+```
+
+### Logistics
+
+
+__Problem set__
+
+- ADD TEXT
+    - Will give big hints; less emphasis on "figure it out on your own"
+
+__Reading:__
+
+- Grolemund and Wickham 20.4 - 20.5 (Chapter 20 is on "Vectors")
+- Grolemund and Wickham 21.1 - 21.3 (Chapter 21 is on "Iteration")
+- [OPTIONAL] Any slides from lecture we don't cover
+    - I wrote this lecture knowing we won't have time to get through all sections
+    - Slides we don't cover are mainly for your future reference
+
+
 # Accessing elements of vectors and lists
 
-### Types of vectors
+## Review: Types of vectors
+
+### Review: Types of vectors
 
 Recall that there are two broad types of vectors, __atomic vectors__ and __lists__
 
@@ -45,6 +81,8 @@ Recall that there are two broad types of vectors, __atomic vectors__ and __lists
 
 2. __lists__. "sometimes called recursive vectors lists can contain other lists"
 
+\medskip
+
 Main difference between atomic vectors and lists:
 
 - atomic vectors are "homogenous," meaning each element in vector must have same type (e.g., integer, logical, character)
@@ -52,7 +90,6 @@ Main difference between atomic vectors and lists:
 
 Link to figure of data structures overview [HERE](http://r4ds.had.co.nz/diagrams/data-structures-overview.png)
 
-## Accessing elements of (atomic) vectors
 
 ### Review: Types of atomic vectors
 
@@ -76,7 +113,14 @@ typeof(c(1L,2L,1L))
 typeof(c("element of character vector","another element"))
 length(c("element of character vector","another element"))
 ```
-### Review: functions that identify type of vector
+### `TRUE/FALSE` functions that identify __type__ of vector
+
+\medskip
+Identifying vector __type__, Grolemund and Wickham:
+
+- "Sometimes you want to do different things based on the type of vector. One option is to use `typeof()`. Another is to use a test function which returns a `TRUE` or `FALSE`"
+
+`is_*()` functions are provided by `purrr` package within `Tidyverse`:
 
 Function | logical | int | dbl | chr | list
 ---------|---------|-----|-----|-----|-----
@@ -89,10 +133,17 @@ Function | logical | int | dbl | chr | list
 `is_list()` |  | | | | X
 `is_vector()` |X  |X |X |X |X
 
+```{r}
+is_numeric(c(5,6,7))
+```
+
+
+### `TRUE/FALSE` functions that identify __type__ of vector
+
 Recall that elements of a vector must have the same type
 
-    - if vector contains elements of different type, the vector type will be the most "complex"
-    - from simplest to most complex: logical, integer, double, character
+- if vector contains elements of different type, type will be most "complex"
+- from simplest to most complex: logical, integer, double, character
 
 ```{r, results="hide"}
 is_logical(c(TRUE,TRUE,NA))
@@ -104,9 +155,123 @@ is_integer(c(TRUE,1L))
 typeof(c(TRUE,1L,1.5,"b"))
 is_character(c(TRUE,1L,1.5,"b"))
 ```
-### Review: naming vectors
 
-All vectors can be "named" (i.e., you name individual elements within the vector)
+### `TRUE/FALSE` functions that identify __type__ vs. __class__ of vector
+
+\medskip
+Comparing `is_*()` vs. `is.*()` functions
+
+- `is_*()` functions (e.g., `is_numeric()`) identifies vector __type__
+    - They are the `TRUE/FALSE` versions of `typeof()` function
+- `is.*()` functions (e.g., `is.numeric()`) refer to both __type__ and __class__
+    - Review: class__ is an object __attribute__ that defines how object can be treated by object oriented programming language (e.g., which functions you can apply)
+    - Recall that R functions care about __class__, not __type__
+
+\medskip
+```{r, results="hide", warning= FALSE}
+df_event %>% select(instnm,univ_id,event_date,med_inc,titlei_status_pub) %>% str()
+```
+
+Variable = `univ_id`
+```{r, results="hide", warning= FALSE}
+typeof(df_event$univ_id)
+class(df_event$univ_id)
+is_numeric(df_event$univ_id)
+is.numeric(df_event$univ_id)
+```
+Variable = `event_date`
+```{r, results="hide", warning= FALSE}
+typeof(df_event$event_date)
+class(df_event$event_date)
+is_numeric(df_event$event_date)
+is.numeric(df_event$event_date)
+```
+
+### `TRUE/FALSE` functions that identify __type__ vs. __class__ of vector
+
+Comparing `is_*()` vs. `is.*()` functions
+
+- `is_*()` functions (e.g., `is_numeric()`) identifies vector __type__
+- `is.*()` functions (e.g., `is.numeric()`) refer to both __type__ and __class__
+
+\medskip
+Variable = `med_inc`
+```{r, results="hide", warning= FALSE}
+typeof(df_event$med_inc)
+class(df_event$med_inc)
+is_numeric(df_event$med_inc)
+is.numeric(df_event$med_inc)
+```
+
+Variable = `titlei_status_pub`
+```{r, results="hide", warning= FALSE}
+typeof(df_event$titlei_status_pub)
+class(df_event$titlei_status_pub)
+is_numeric(df_event$titlei_status_pub)
+is.numeric(df_event$titlei_status_pub)
+```
+
+
+
+## Accessing elements of (atomic) vectors
+
+### Subsetting elements of vector
+
+"Subsetting" a vector, refers to isolating particular elements of a vector
+
+- I sometimes refer to this as "accessing elements of a vector"
+- subsestting elements of a vector is similar to "filtering" rows of a data-frame
+
+`[]` is the subsetting function for vectors
+
+- contents inside `[]` can refer to element number (also called "position"). 
+    - e.g., `[3]` refers to contents of 3rd element (or position 3)
+- contents inside `[]` can also refer to name of element
+    - e.g., `["a"]` refers to contents inside an element named "a"
+
+### Subsetting elements of vector, based on position number    
+
+`[]` is the subsetting function for vectors
+
+- contents inside `[]` can refer to element number (also called "position"). 
+    - e.g., `[3]` refers to contents of 3rd element (or position 3)
+
+__Examples of referring to elements based on element position number__
+```{r}
+x <- c("a","b","c","d","e")
+x # all elements
+
+x[1] # 1st element
+x[5] # 5th element
+
+c(x[1],x[2],x[2]) # 1st, 2nd, and 2nd element
+
+x[c(1,2,2)] # 1st, 2nd, and 2nd element
+```
+
+### Subsetting elements of vector, based on position number
+
+__Examples of referring to elements based on position number, continued__
+
+```{r}
+y <- c(4,5,10,29,15,12)
+length(y)
+
+y[c(1,3,6)]
+y[c(3,6,1)]
+```
+While subsetting with positive numbers keeps elements in those positions, subsetting with negative numbers drops elements at those positions
+```{r}
+y
+
+y[c(-3,-4,-5,-6)] # show elements except 3rd, 4th, 5th and 6th elements
+```
+
+### Subsetting elements of named vector, by element name
+
+__Review: naming vectors__
+
+- All vectors can be "named" (i.e., you name individual elements within the vector)
 
 Unamed vector
 ```{r}
@@ -121,86 +286,55 @@ y
 str(y)
 ```
 
-### Subsetting elements of vector, based on position number
-
-"Subsetting" a vector, refers to isolating particular elements of a vector
-
-- I sometimes refer to this as "accessing elements of a vector"
-- subsestting elements of a vector is similar to "filtering" rows of a data-frame
-
-`[]` is the subsetting function for vectors
-
-- contents inside `[]` can refer to element number (also called "position"). 
-    - e.g., `[3]` refers to contents of 3rd element (or position 3)
-- contents inside `[]` can also refer to name of element
-    - e.g., `["a"]` refers to contents inside an element named "a"
-    
-Referring to elements based on position
-```{r}
-x <- c("a","b","c","d","e")
-x[1]
-x[5]
-
-c(x[1],x[2],x[2])
-
-x[c(1,2,2)]
-```
-
-### Subsetting elements of vector, based on position number
-
-Referring to elements based on position, continued
-
-```{r}
-y <- c(4,5,10,29,15,12)
-length(y)
-
-y[c(1,3,6)]
-y[c(3,6,1)]
-```
-While subsetting with positive numbers keeps elements in those positions, subsetting with negative numbers drops elements at those positions
-```{r}
-y
-y[c(-3,-4,-5,-6)]
-```
-
-### Subsetting elements of vector, with a logical vector
-
-Grolemund and Wickham (chapter 20): "Subsetting with a logical vector keeps all values corresponding to a TRUE value"
-
-```{r}
-x <- c(10, 3, NA, 5, 8, 1, NA,"Hi!")
-
-typeof(x)
-
-x[is.na(x)]
-x[!is.na(x)]
-
-x[is.numeric(x)]
-x[is.character(x)]
-
-y <- c(10, 3, NA, 5, 8, 1, NA)
-typeof(y)
-y[is.numeric(y)]
-```
 ### Subsetting elements of named vector, by element name
 
-If you have a named vector, you can subset it with a character vector:
+If you have a __named vector__, you can subset it with a character vector:
+
+- i.e., access __element values__ based on __element names__
 
 ```{r}
 x <- c(abc = 1, def = 2, xyz = 5)
 x
-x[c("xyz", "def")]
+
+x["xyz"] # show value of element named "xyz"
+
+x[c("xyz", "def")] # show value of element named "xyz" and element named "def"
+```
+
+### Subsetting elements of vector, with a logical vector
+
+Subsetting elements with a logical vector
+
+- i.e., access elements that satisfy some `TRUE/FALSE` condition
+
+
+```{r, warning=FALSE}
+(x <- c(10, 3, NA, 5, 8, 1, NA,"Hi!"))
+
+typeof(x)
+
+x[is_character(x)] # since vector type is character, all elements are character
+x[is_numeric(x)] # since vector type is character, no elements are numeric
+
+(y <- c(10, 3, NA, 5, 8, 1, NA))
+
+typeof(y)
+y[is_numeric(y)]
 ```
 
 ## Accessing elements of lists
 
 ### Review: Lists
 
-Like atomic vectors, lists are objects that contain elements. However, the "type" of elements can very within a list and elements of a list can contain another list
+\medskip
+
+Like atomic vectors, lists are objects that contain elements. However:
+
+- "type" of elements can vary within a list
+- elements of a list can contain another list
 
 Examples:
 ```{r}
-rm(list = ls())
 x1 <- list(c(1, 2), c(3, 4))
 x2 <- list(list(1, 2), list(3, 4))
 x3 <- list(1, list(2, list(3)))
@@ -214,29 +348,30 @@ str(x2)
 
 ### Review: Data frames are lists
 
+\medskip
 Recall the relationship between "lists" and "data frames"
 
 - data frames have "type==list"
 - data frames are lists with these additional structure requirements
     - each element of data frame must be a vector (not a list)
     - each element (i.e., vector) in data frame must have the same length
-- data frames have additional attributes
-    - e.g., each vector is named
+- data frames have additional attributes (e.g., each vector is named)
 
 ```{r}
 (df <- tibble(x = 1:3, y = 3:1))
 typeof(df)
 str(df)
 
-load("../../data/recruiting/recruit_event_somevars.Rdata")
 typeof(df_event)
 ```
 
 ### Subsetting/accessing elements of a list
 
-Accessing elements of a list important for looping and many applications in R
+__Accessing elements of a list important for looping and many applications in R__
 
-Will demonstrate accessing elements of a list using two lists:
+\medskip
+
+I will demonstrate accessing elements of a list using two lists:
 
 1. \medskip A list that has more complicated structure than a data frame (from Grolemund and Wickham example)
 ```{r, results="hide"}
@@ -256,36 +391,41 @@ str(df_bama)
 ```
 ### Subsetting/accessing elements of a list
 
-Three ways to "subset" (access elements of) a list (from http://r4ds.had.co.nz/vectors.html#subsetting-1):
+__Accessing elements of a list important for looping and many applications in R__
 
-1. `[` "extracts a sub-list. The result will always be a list"
+\medskip
+
+GW [20.5.2](https://r4ds.had.co.nz/vectors.html#subsetting-1) ("Subsetting"): 3 ways to "subset" (i.e., access elements of) list
+
+1. `[]` "extracts a sub-list. The result will always be a list"
     - like subsetting vectors, you can subset with a logical, integer, or character vector
 2. `[[]]` "extracts a single component from a list. It removes a level of hierarchy from the list"
-3. `$` "shorthand for extracting named elements of a list. It works similarly to [[ except that you don’t need to use quotes."
+3. `$` "shorthand for extracting named elements of a list. It works similarly to `[[]]` except that you don’t need to use quotes."
 
 ### Subset a list using `[]`
 
-`[` "extracts a sub-list"
+`[]` "extracts a sub-list"
 
-    - contents of `[]` can be position number, name of element in list, logical vector, etc.
+- contents of `[]` can be position number, name of element in list, logical vector, etc.
 
 ```{r, results="hide"}
 str(list_a)
 length(list_a)
 
-str(list_a[1])
-str(list_a["a"])
+list_a[1] # extract first element of list
+str(list_a[1]) # extract first element of list
+str(list_a["a"]) # extract element named "a"
 
-str(list_a[1:2])
-str(list_a[c(1,2)])
+str(list_a[1:2]) # extract first two elements of list
+str(list_a[c(1,2)]) # extract first two elements of list
 
-str(list_a[c("a","c")])
+str(list_a[c("a","c")]) # extract element named "a" and element named "c"
 ```
 
 Key takeaway about subsetting a list using `[]`: __The result will always be a list__
 
-- that is, `[` does not remove a level of hierarchy
-- structure and attributes of object you isolate using `[` will be the same as its structure and attributes in the list it is taken from
+- that is, `[]` does not remove a level of hierarchy
+- structure and attributes of object you isolate using `[]` will be the same as its structure and attributes in the list it is taken from
 
 ### Subset a list using `[]`: Student task
 
@@ -318,28 +458,33 @@ df_bama[c("event_type","med_inc")]
 ```
 ### Subset a list using `[[]]`
 
-[[ extracts a single component from a list. It removes a level of hierarchy from the list.
+GW: "`[[]]` extracts a single component from a list." More specifically, `[[]]`:
+
+1. Extracts a __single__ element of the list __AND__
+1. Removes a "level of hierarchy"" from the list
 
 ```{r, results="hide"}
 str(list_a)
 
-str(list_a[1]) # []
-str(list_a[[1]]) # [[]]
+str(list_a[1]) # []; result is a one-element list [length=1]; this list contains a numeric vector with 3 elements
+str(list_a[[1]]) # [[]]; result is a numeric vector with 3 elements
 
-str(list_a["a"])
-str(list_a[["a"]])
+str(list_a["a"]) # []; result is a one-element list [length=1]; this list contains a numeric vector with 3 elements
+str(list_a[["a"]]) # [[]]; result is a numeric vector with 3 elements
 
-str(list_a[4]) # []
-str(list_a[[4]]) # [[]]
+str(list_a[4]) # []; result is a one-element list, which contains a two-element list
+str(list_a[[4]]) # [[]]; result is a two-element list
 ```
 ### Subset a list using `[[]]`, data frames
 
-Comparing `[]` to `[[]]` when working with lists that are data frames, `df`
+\medskip
+Comparing `[]` to `[[]]` when working with lists that are data frames
 
-- Data frame object always has type=list and each element a vector
+- Data frame object always has type=list and each element is a vector
 - If you subset using `[]` the result will always have type==list
 - If you subset using `[[]]` the result will always have type==vector
 
+`[]` vs. `[[]]`: Subsetting data frame using __element position number__
 ```{r, results="hide"}
 df_bama[1]
 df_bama[[1]]
@@ -355,38 +500,85 @@ class(df_bama[[1]])
 
 attributes(df_bama[3])
 attributes(df_bama[[3]])
-
-#can perform all of same above tasks with any element, accessed by position number or element name
-str(df_bama["event_type"])
-str(df_bama[["event_type"]])
-
-attributes(df_bama["event_type"])
-attributes(df_bama[["event_type"]])
-
 ```
+
+### Subset a list using `[[]]`, data frames
+
+\medskip
+Comparing `[]` to `[[]]` when working with lists that are data frames
+
+- If you subset using `[]` the result will always have type==list
+- If you subset using `[[]]` the result will always have type==vector
+
+\medskip
+`[]` vs. `[[]]`: Subsetting data frame using __element name__ (i.e., variable name)
+
+- note: whether using `[]` or `[[]]`, element name must be in quotes
+```{r, results="hide"}
+str(df_bama["event_type"]) # a "tibble" data frame with one variable
+str(df_bama[["event_type"]]) # a character vector with 5 elements
+
+attributes(df_bama["event_type"]) # contains attributes (e.g., variiable name)
+attributes(df_bama[["event_type"]]) # no attributes; just the data
+
+str(df_bama["event_date"]) # a "tibble" data frame with one variable
+str(df_bama[["event_date"]]) # a numeric "date" vector with 5 elements
+
+attributes(df_bama["event_date"]) # attributes of the data frame
+attributes(df_bama[["event_date"]]) # class=date
+```
+
 
 ### Subset a list using `$`
 
-`$` is a shorthand for extracting __named__ elements of a list. It works similarly to `[[` except that you don’t need to use quotes.
+`$` is a shorthand for extracting __named__ elements of a list. 
 
-- note: we have been using this method of subsetting variables in a data frame all quarter!
+- works similarly to `[[]]` except that you don’t need to use quotes.
 - Like `[[]]`, subsetting using `$` removes a level of hierarchy
 
+
+Note: we have been using this method of subsetting variables in a data frame all quarter!
 ```{r, results="hide"}
 str(list_a)
 
-list_a$a
-list_a[["a"]]
+list_a["a"] # list of one element, which contains integer vector of 3 elements
+list_a[["a"]] # integer vector of 3 elements
+list_a$a # integer vector of 3 elements
 ```
-
+These two approaches yield the same result:
 ```{r}
-df_bama$med_inc
 df_bama[["med_inc"]]
+df_bama$med_inc
 ```
-## Key concepts for loops
+### Extracting multiple elemens of a list using `[[]]` and `$`
 
-### Review Key concepts for loops
+Each instance of `[[]]` or `$` can only extract a __single__ element from the list
 
+\medskip
+Using `[[]]` to extract multiple elements of list
+```{r}
+c(df_bama[["med_inc"]],df_bama[["event_type"]])
+```
+
+Using `$` to extract multiple elements of list
+```{r}
+c(df_bama$med_inc,df_bama$event_type)
+```
+\medskip
+By contrast, `[]` can extract multiple elements within each instance of `[]`
+```{r, results="hide"}
+str(df_bama[c("instnm","med_inc")]) # "tibble" data frame with two variables
+
+#df_bama[[c("instnm","med_inc")]] # this code will yield an error
+```
+
+### STUDENT EXERCISE
+
+PATRICIA ADD SHORT STUDENT EXERCISE ABOUT SUBSETTING LISTS/DATA FRAMES USING [[]] AS OPPOSED TO []
+
+- BASICALLY SOME EXERCISE THAT ASSESSES THE SLIDES AFTER THE PREVIOUS STUDENT EXERCISE
+
+## Review key concepts for loops
 
 ### Sequences
 
@@ -412,29 +604,32 @@ seq(10,15)
 seq(from=10,to=15,by=1)
 seq(from=100,to=150,by=10)
 ```
-### Length, vectors
+### Length of atomic vectors
 
-\medskip The __length__ of an object is its number of elements
+\medskip 
+Definition: __length__ of an object is its number of elements
 
+\medskip 
 Length of vectors, using `length()` function
 ```{r}
 x <- c(1,2,3,4,"ha ha"); length(x)
 y <- seq(1,10); length(y)
 z <- c(seq(1,10),"ho ho"); length(z)
 ```
-Once vector length known, isolate element contents based on position number using `[`
+Once vector length known, isolate element contents based on position number using `[]`
 ```{r}
 x[5]
 z[1]
 ```
-Applying `[[` to vector gives same result as applying `[`
+For atomic vectors, applying `[[]]` to vector gives same result as  `[]`
 ```{r}
 x[[5]]
 z[[1]]
 ```
 ### Length of lists
 
-The __length__ of an object is its number of elements
+\medskip 
+Definition: __length__ of an object is its number of elements
 
 ```{r}
 typeof(df_bama); length(df_bama)
@@ -457,6 +652,8 @@ df_bama$med_inc; typeof(df_bama$med_inc); length(df_bama$med_inc)
 ```
 
 ### Combine sequences and length
+
+\medskip
 
 When writing loops, very common to create a sequence from 1 to the length (i.e., number of elements) of an object
 
