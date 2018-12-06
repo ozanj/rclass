@@ -877,6 +877,8 @@ for (i in vec) {
 
 ```{r}
 df # print list/data frame object
+#class(df) 
+#attributes(df)
 for (i in df) {
   cat("value of object i=",i, fill=TRUE)
   cat("object type=",typeof(i),"; length=",length(i),"; class=",class(i),
