@@ -30,6 +30,8 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 
 ### What we will do today
 
+\medskip
+
 \tableofcontents
 
 ```{r, eval=FALSE, echo=FALSE}
@@ -367,7 +369,7 @@ typeof(df_event)
 
 ### Subsetting/accessing elements of a list
 
-__Accessing elements of a list important for looping and many applications in R__
+__Accessing elements of a list important for writing loops, writing functions, and many other applications in R__
 
 \medskip
 
@@ -391,7 +393,7 @@ str(df_bama)
 ```
 ### Subsetting/accessing elements of a list
 
-__Accessing elements of a list important for looping and many applications in R__
+__Accessing elements of a list important for writing loops, writing functions, and many other applications in R__
 
 \medskip
 
@@ -679,14 +681,16 @@ seq(2,length(df_bama))
 
 ### Simple loop example
 
-__Loops__ execute some set of commands multiple times
+\medskip
+What are loops?: __Loops__ execute some set of commands multiple times
 
 - we build loops using the `for()` function
 - each time the loop executes the set of commands is an __iteration__
 - the below loop iterates 4 times
 
+__Example__
 
-Create loop that prints each value of vector `c(1,2,3,4)`, one at a time
+- Create loop that prints each value of vector `c(1,2,3,4)`, one at a time
 ```{r}
 c(1,2,3,4)
 
@@ -694,7 +698,9 @@ for(i in c(1,2,3,4)) { # Loop sequence
   print(i) # Loop body
 }
 ```
+I use loops to perform practical tasks more efficienlty (e.g., read in data)
 
+- But we'll introduce loop concepts by doing things that aren't very useful
 
 ### Components of a loop
 
@@ -709,7 +715,8 @@ Components of a loop
 
 1. __Sequence__. Determines what to "loop over" (e.g., from 1 to 4 by 1)
     - sequence in above loop is `for(i in c(1,2,3,4))`
-    - this creates a temporary object called `i`
+    - this creates a temporary/local object named `i`; could name it anything
+        - `i` will no longer exist after the loop is finished running
     - each iteration of loop will assign a different value to `i`
     - c(1,2,3,4) is the set of values that will be assigned to `i` 
           - in first iteration, value of `i` is `1`
@@ -718,31 +725,75 @@ Components of a loop
     - Body in above loop is `print(i)`
     - Each time (i.e., iteration) through the loop, body prints the value of object `i`
 
+### Using `cat()` to print value of sequence var for each iteration
+
+\medskip
+__When building a loop, I always include a line like `cat("z=",z, fill=TRUE)` to help me understand what loop is doing__
+
+\medskip
+Below two loops essentially the same; I prefer second approach. Why?:
+
+- Writing name of sequence var object (here `z`) and seeing value of sequence var object for each iteration helps me understand loop better
+```{r}
+for(z in c(1,2,3)) { # Loop sequence
+  print(z) # Loop body
+}
+for(z in c(1,2,3)) { # Loop sequence
+  cat("object z=",z, fill=TRUE) # "fill=TRUE" forces line break after each iteration
+}
+```
+
+Without `fill=TRUE` [not recommended]
+```{r}
+for(z in c(1,2,3)) { # Loop sequence
+  cat("object z=",z) # "Loop body
+}
+```
+
 ### Components of a loop
 
-These three loops all do the same thing
+\medskip
+
+Note that these three loops all do the same thing
+
+- __Loop body__ is the same in each loop
+- __Loop sequence__ written slightly differently in each loop
 
 ```{r}
-for(z in c(1,2,3,4)) { # Loop sequence
+for(z in c(1,2,3)) { # Loop sequence
   cat("object z=",z, fill=TRUE) # Loop body
 }
-for(z in 1:4) { # Loop sequence
+
+for(z in 1:3) { # Loop sequence
   cat("object z=",z, fill=TRUE) # Loop body
 }
-num_sequence <- 1:4
+
+num_sequence <- 1:3
 for(z in num_sequence) { # Loop sequence
   cat("object z=",z, fill=TRUE) # Loop body
 }
 ```
-__When building loops, I always include a line like `cat("i=",i, fill=TRUE)` to help me understand what loop is doing__
 
-### Student task
 
-1. Create a numeric vector that has year of birth of members of your family (you decide who to include)
-    e.g., for my mom, dad, wife, son: `birth_years <- c(1944,1950,1981,2016)`
-2. Write a loop that calculates current year minus birth year and prints this number for each member of your family 
+### Student exercise
 
-### Student task [SOLUTION]
+Try on your own or just follow along.
+
+\medskip
+
+__Task__
+
+1. Create a numeric vector that has year of birth of members of your family
+    - you decide who to include
+    - e.g., for my mom, dad, wife, son: `birth_years <- c(1944,1950,1981,2016)`
+2. Write a loop that calculates current year minus birth year and prints this number for each member of your family
+    - Within this loop, you will create a new variable that calculates current year minus birth year
+
+\medskip
+
+Note: multiple correct ways to complete this task
+
+### Student exercise [SOLUTION]
 
 1. Create a numeric vector that has year of birth of members of your family (you decide who to include)
 2. Write a loop that calculates current year minus birth year and prints this number for each member of your family 
@@ -757,7 +808,7 @@ for(y in birth_years) { # Loop sequence
   cat("value of",y,"minus",2018,"is",z, fill=TRUE)
 }
 ```
-# Different ways to loop over a vector
+# Three ways to loop over a vector (atomic vector or a list)
 
 ### Plan for learning more about loops
 
@@ -772,91 +823,138 @@ Throughout, I'll try to give you lots of examples and practice
 
 ### Three ways to loop over an object
 
-There are three ways to loop over elements of an object
+\medskip
+
+There are 3 ways to loop over elements of an object
 
 1. __Loop over the elements__ [approach we have used so far]
 2. __Loop over names of the elements__
 3. __Loop over numeric indices associated with element position__ [approach recommended by Grolemnund and Wickham]
 
-Will demonstrate these approaches on a named vector and list/data frame
+Will demonstrate 3 approaches on a named atomic vector and list/data frame
 
 - Create named vector
 ```{r}
-vec=c("a"=5,"b"=10,"c"=-5,"d"=30)
+vec=c("a"=5,"b"=-10,"c"=30)
 vec
 ```
-- Create data frame, with 4 columns of fictitious data
+- Create data frame with fictitious data, 3 columns (vars) and 4 rows (obs)
 ```{r}
-set.seed(12345)
-df <- tibble(a = rnorm(10),b = rnorm(10),c = rnorm(10),d = rnorm(10))
+set.seed(12345) # so we all get the same variable values
+df <- tibble(a = rnorm(4),b = rnorm(4),c = rnorm(4))
 str(df)
 ```
 
 ## Loop over elements
 
-### Approach 1: loop over elements of object
+### Approach 1: loop over elements of object [object=atomic vector]
+
+\medskip
 
 - \medskip __sequence__ syntax: `for (i in object_name)`
     - Sequence iterates through each element of the object
-    - that is, sequence iterates through _value_ of each element, rather than _name_ or _position_ of element
+    - that is, __sequence iterates through _value_ of each element, rather than _name_ or _position_ of element__
 - in __body__.
     - value of `i` is equal to the contents of the `ith` element of the object
     
-Example, object is a vector    
-```{r, results="hide"}
-vec
+```{r}
+vec # print atomic vector object
+
 for (i in vec) {
-  cat("\n","value of object i=",i, fill=TRUE)
-  cat("object type=",typeof(i),"; length=",length(i),"; class=",class(i),
-      "; attributes=",attributes(i),sep="",fill=TRUE)
+  cat("value of object i=",i, fill=TRUE) 
+  cat("object i has: type=",typeof(i),"; length=",length(i),"; class=",class(i),
+      "; attributes=",attributes(i),"\n",sep="",fill=TRUE) # "\n" adds line break
 }
 ```
-Example, object is a list/data frame
-```{r, results="hide"}
+### Approach 1: loop over elements of object [object=list]
+
+\medskip
+
+- \medskip __sequence__ syntax: `for (i in object_name)`
+    - Sequence iterates through each element of the object
+    - that is, __sequence iterates through _value_ of each element__
+- in __body__: value of `i` is equal to __contents__ of `ith` element of object
+
+```{r}
+df # print list/data frame object
 for (i in df) {
-  cat("\n","value of object i=",i, fill=TRUE)
+  cat("value of object i=",i, fill=TRUE)
   cat("object type=",typeof(i),"; length=",length(i),"; class=",class(i),
-      "; attributes=",attributes(i),sep="",fill=TRUE)
+      "; attributes=",attributes(i),"\n",sep="",fill=TRUE)
 }
 ```
 ### Approach 1: loop over elements of object
 
-Example task:
+\medskip
+
+__Example task__:
 
 - calculate mean value of each element of list object `df`
 
 ```{r}
+df # print list/data frame object
+
 for (i in df) { # sequence
-  
-  cat("\n","value of object i=",i, fill=TRUE)
-  cat("mean value of object i=",mean(i), fill=TRUE)
+  cat("value of object i=",i, fill=TRUE)
+  cat("mean value of object i=",mean(i),"\n", fill=TRUE)
 }
 ```
 ## Loop over element names
 
-### Approach 2: loop over names of elements in object
+### Approach 2: loop over names of object elements
+
+\medskip
 
 To use this approach, elements in object must have name attributes
 
-- \medskip __sequence__ syntax: `for (i in names(object_name))`
-    - Sequence iterates through the _name_ of each element in object
-- in __body__, value of `i` is equal to _name_ of `ith` element in object
-    - Access element contents using `object_name[i]`
-        - same object type as `object_name`; retains attributes (e.g., _name_)
-    - Access element contents using `object_name[[i]]`
-        - removes level of hierarchy, thereby removing attributes
-        - Approach recommended by Wickham because isolates value of element
+__sequence__ syntax: `for (i in names(object_name))`
 
-Example, object is a vector    
+- Sequence iterates through the _name_ of each element in object
+
+in __body__, value of `i` is equal to _name_ of `ith` element in object
+
+- Access element contents using `object_name[i]`
+    - same object type as `object_name`; retains attributes (e.g., _name_)
+- Access element contents using `object_name[[i]]`
+    - removes level of hierarchy, thereby removing attributes
+    - Approach recommended by Wickham because isolates value of element
+
+Example: Object= atomic vector
+```{r}
+vec  # print atomic vector object
+names(vec)
+```
+
 ```{r, results="hide"}
-vec
 for (i in names(vec)) {
   cat("\n","value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)
   print(str(vec[i])) # "Access element contents using []"
   print(str(vec[[i]])) # "Access element contents using [[]]"
 }
 ```
+
+### Approach 2: loop over names of object elements [object = list]
+
+\medskip
+
+__sequence__ syntax: `for (i in names(object_name))`
+
+- Sequence iterates through the _name_ of each element in object
+
+in __body__, value of `i` is equal to _name_ of `ith` element in object
+
+- Access element contents using `object_name[i]`
+    - same object type as `object_name`; retains attributes (e.g., _name_)
+- Access element contents using `object_name[[i]]`
+    - removes level of hierarchy, thereby removing attributes
+    - Approach recommended by Wickham because isolates value of element
+
+\medskip
+
 Example, object is a list
+```{r}
+names(df)
+```
 ```{r, results="hide"}
 for (i in names(df)) {
   cat("\n","value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)
@@ -866,17 +964,19 @@ for (i in names(df)) {
 ```
 ### Approach 2: loop over names of elements in object
 
-Example task:
+\medskip
 
-- calculate mean value of each element of list object `df`, using `[[]]` to access element contents
+__Example task__: calculate mean value of each element of list object `df`, using `[[]]` to access element contents
 
 ```{r}
+str(df)
+
 for (i in names(df)) {
   cat("mean of element named",i,"is",mean(df[[i]]),fill=TRUE)
 }
 ```
 
-What happens if we try to complete task using , using `[]` to access element contents?
+What if we try to complete task using , `[]` to access element contents?
 ```{r, eval=FALSE}
 for (i in names(df)) {
   cat("mean of element named",i,"is",mean(df[i]),fill=TRUE)
@@ -889,21 +989,47 @@ for (i in names(df)) {
 
 ### Approach 3: Loop over numeric indices of element position
 
-__sequence__ syntax: `for (i in 1:length(object_name))`
-    
-```{r, results="hide"}
+\medskip
+
+First explain sequence syntax, using atomic vector `vec` as object
+
+- __sequence__ syntax: `for (i in 1:length(object_name))`
+
+```{r}
+vec # print named atomic vector vec
 length(vec)
 1:length(vec)
 
+for (i in 1:length(vec)) { # loop sequence
+  cat("value of object i=",i,fill=TRUE) # loop body
+}
+```
+Note: These two approaches yield same result as above
+```{r, results="hide"}
+for (i in c(1,2,3)) {
+  cat("value of object i=",i,fill=TRUE)
+}
+for (i in 1:3) {
+  cat("value of object i=",i,fill=TRUE)
+}
+```
+
+
+### Approach 3: Loop over numeric indices of element position
+
+\medskip
+
+Loop over element position number: Simple sequence syntax
+```{r}
 for (i in 1:length(vec)) {
   cat("value of object i=",i,fill=TRUE)
 }
 ```
 
-Wickham's preferred __sequence__ syntax: `for (i in seq_along(object_name))`
+__Wickham's preferred sequence syntax__: `for (i in seq_along(object_name))`
 
-- `seq_along(x)` returns a sequence from 1 value of `length(x)`
-```{r, results="hide"}
+- `seq_along(x)` function returns a sequence from 1 value of `length(x)`
+```{r}
 length(vec)
 seq_along(vec)
 
@@ -911,7 +1037,9 @@ for (i in seq_along(vec)) {
   cat("value of object i=",i,fill=TRUE)
 }
 ```
-### Approach 3: Loop over numeric indices [SKIP/SKIM]
+### Approach 3: Loop over numeric indices [SKIP]
+
+\medskip
 
 Why Wickham prefers `seq_along(object_name)` over `1:length(object_name)`
 
@@ -936,17 +1064,25 @@ Personally, I find `1:length(object_name)` much more intuitive
 
 ### Approach 3: Loop over numeric indices of element position
 
-- \medskip __sequence__ syntax: `for (i in 1:length(object_name))` OR `for (i in seq_along(object_name))`
-    - Sequence iterates through _position number_ of each element in the object
-- in __body__, value of `i` equals the _position number_ of `ith` element in object
-    - Access element contents using `object_name[i]`
-        - same object type as `object_name`; retains attributes (e.g., _name_)
-    - Access element contents using `object_name[[i]]` [RECOMMENDED]
-        - removes level of hierarchy, thereby removing attributes
+\medskip
 
-Example, object is a vector    
-```{r, results="hide"}
+__sequence__ syntax: `for (i in 1:length(object_name))` __OR__ `for (i in seq_along(object_name))`
+
+- Sequence iterates through _position number_ of each element in the object
+
+in __body__, value of `i` equals the _position number_ of `ith` element in object
+
+- Access element contents using `object_name[i]`
+    - same object type as `object_name`; retains attributes (e.g., _name_)
+- Access element contents using `object_name[[i]]` [RECOMMENDED]
+    - removes level of hierarchy, thereby removing attributes
+
+__Example, object is atomic vector__
+```{r}
 vec
+```
+
+```{r, results="hide"}
 for (i in 1:length(vec)) {
   cat("\n","value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)
   print(str(vec[i])) # "Access element contents using []"
@@ -954,7 +1090,26 @@ for (i in 1:length(vec)) {
 }
 ```
 
-Example, object is a list
+### Approach 3: Loop over numeric indices of element position
+
+\medskip
+
+__sequence__: `for (i in 1:length(object_name))` __OR__ `for (i in seq_along(object_name))`
+
+- Sequence iterates through _position number_ of each element in the object
+
+in __body__, value of `i` equals the _position number_ of `ith` element in object
+
+- Access element contents using `object_name[i]`
+    - same object type as `object_name`; retains attributes (e.g., _name_)
+- Access element contents using `object_name[[i]]` [RECOMMENDED]
+    - removes level of hierarchy, thereby removing attributes
+
+__Example, object is a list__
+```{r}
+df %>% head(n=3)
+```
+
 ```{r, results="hide"}
 for (i in 1:length(df)) {
   cat("\n","value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)
@@ -965,7 +1120,7 @@ for (i in 1:length(df)) {
 
 ### Approach 3: Loop over numeric indices of element position
 
-Example task:
+__Example task__:
 
 - calculate mean value of each element of list object `df`, using `for (i in seq_along(df))` to create sequence and using `[[]]` to access element contents
 
@@ -982,24 +1137,45 @@ for (i in seq_along(df)) {
   #print(typeof(df[i]))
   #print(class(df[i]))  
 }
+#?mean # mean(object) requires object to be numeric or logical
 ```
 ### Approach 3: Loop over numeric indices of element position
 
-\medskip When looping over numeric indices, you can extract element names based on element position
+\medskip 
 
-- First, let's experiment w/ `names()` function
+__When looping over numeric indices, you can extract element names based on element position__
+
+- First, let's experiment w/ `attributes()` and `names()` functions
+
+`attributes()` function [output omitted]
 ```{r, results="hide"}
 attributes(df)
-attributes(df[1])
-attributes(df[[1]]) # null because removing level of hierarchy removes attributes
-
-names(df)
-names(df[1])
-names(df[[1]]) # null because object df[[1]] has no attributes
-
-names(df)[[1]] # not null because we extract names of object df and then select only first element
+attributes(df[1]) # not null
+attributes(df[[1]]) # null: removing level of hierarchy removes attributes
 ```
-- Next, apply what we learned to the loop
+
+`names()` functions
+```{r}
+names(df)
+names(df[1]) # not null
+names(df[[1]]) # null: object df[[1]] has no attributes; just values
+
+names(df)[[1]] # not null: we extract names of df, then select first element
+```
+
+### Approach 3: Loop over numeric indices of element position
+
+\medskip 
+
+__When looping over numeric indices, you can extract element names based on element position__
+
+- First, experiment w/ `names()` function
+```{r}
+names(df)
+names(df)[[1]] # not null: we extract names of df, then select first element
+```
+
+- Second, apply what we learned to loop
 ```{r}
 for (i in seq_along(df)) {
   #print(names(df)[[i]])
@@ -1014,118 +1190,71 @@ for (i in seq_along(df)) {
 1. Loop over element names
 1. Loop over numeric indices of element position
 
-Grolemund and Wickham prefer "loop over numeric indices" approach. Why?
+Why Wickham prefers "loop over numeric indices of element" approach [3]:
 
-> "Iteration over the numeric indices is the most general form, because given the position you can extract both the name [approach 2] and the value [approach 1"
+- given element position number, can extract element name[2] and value[1]
 
 
-```{r, results="hide"}
+```{r}
 for (i in seq_along(df)) {
-  cat("\n","i=",i,sep="",fill=TRUE)
+  cat("i=",i,sep="",fill=TRUE)
   
   name <- names(df)[[i]] # value of object "name" is what we loop over in approach 2
   cat("name=",name,sep="",fill=TRUE)
   
   value <- df[[i]] # value of object "value" is what we loop over in approach 1
-  cat("value=",value,sep="",fill=TRUE)
+  cat("value=",value,"\n",sep="",fill=TRUE)
 }
 ```
-
-# Loop tips
-
-### When to write a loop
-
-Broadly, the rationale for writing a loop is the same as rationale for writing a function:
-
-- do not duplicate code
-- can make changes to code in one place rather than many
-
-When to write a loop:
-
-- Grolemund and Wickham say __don't copy and paste more than twice__; if you find yourself doing this, consider writing a loop or a function
-
-
-Don't worry about knowing all the situations you should write a loop
-
-- rather, You'll be creating analysis dataset or analyzing data and you will notice there is some task that you are repeting over and over, and then you'll say "oh, I should write a loop or function for this"
-
-### When to write a loop vs a functions
-
-Usually it is obvious when you are duplicating, but unclear whether you should write a loop or a whether you should write a function.
-
-- Often, a repeated task can be completed with a loop or a function
-
-In my experience, loops are better for repeated tasks when the invidual tasks are __very__ similar to one another
-
-- e.g., a loop that reads in data sets from individual years; each dataset you read in differs only by directory and name
-- e.g., a loop that converts negative values to `NA` for a set of variables
-
-Because functions can have many arguments, functions are better when the individual tasks differ substantially from one another 
-
-- e.g., a function that runs a regression and spits out a nice table and allows you to specify the dependent variable, the independent variables, what model to run, etc. as function arguments
-
-__Note__
-
-- you can embed loops within functions; and you can call functions within loops
-- But for now, just try to understand basics of functions and loops, and then these things will not seem overwhelming
-
-
-
-### Recipe for how to write loop
-
-The general recipe for how to write a loop is very similar to the recipe for writing a function:
-
-1. Complete the task for one instance outside a loop (this is akin to writing the __body__ of the loop)
-
-2. Write the __sequence__ 
-
-3. Which parts of the body need to change with each iteration
-
-4. _if_ you are creating a new object store output of the loop, create this outside of the loop
-
-5. Construct the loop
 
 # Modfifying vs. creating new object
 
 ### Modify object or create new object
 
-Loops can be used to complete all sorts of data manipulation tasks (e.g., read-in data, tidy data, create variables) and data analysis tasks (e.g., run regressions, create plots)
-
-Grolemund and Wickham differentiate between two types of tasks that loops accomplish: Modify an existing object; and create a new object
+Grolemund and Wickham differentiate between two types of tasks loops accomplish: (1) modify existing object; and (2) create new object
 
 1. __Modify an existing object__
-    - examples: looping through a set of variables in a data frame and modifying these variables or creating new ones
-    - When writing loops in Stata/SAS/SPSS, we are usually modifying an existing object because Stata/SAS/SPSS typically only has one object - a dataset - open at a time)    
-2. Create a new object
+    - example: looping through a set of variables in a data frame to:
+        - Modifying these variables OR
+        - Creating new variables (within the existing data frame object)
+    - When writing loops in Stata/SAS/SPSS, we are usually modifying an existing object because these programs typically only have one object - a dataset - open at a time)    
+2. __Create a new object__
     - Example: Create an object that has summary statistics for each variable; this object will be the basis for a table or graph
     - Often the new object will be a vector of results based on looping through elements of a data frame
     - In R (as opposed to Stata/SAS/SPSS) creating a new object is very common because R can hold many objects at the same time
 
+## Loops that create new object
+
 ### Creating a new object
 
-So far our loops have two components: sequence and body
+So far our loops have two components: 
+
+1. sequence
+1. body
 
 When we create a new object to store the results of a loop, our loops have three components
 
 1. sequence
-2. body
-3. output
+1. body
+1. output
     - this is the new object that will store results created from your loop
 
 Grolemund and Wickham recommend creating this new object __prior__ to writing the loop (rather than creating the new object within the loop)
 
-> "Before you start the loop, you must always allocate sufficient space for the output. This is very important for efficiency: if you grow the for loop at each iteration using c() (for example), your for loop will be very slow."
+> "Before you start loop...allocate sufficient space for the output. This is very important for efficiency: if you grow the for loop at each iteration using c() (for example), your for loop will be very slow."
 
 ### Creating a new object
 
-Task: 
-
-- Using the data frame `df`, which contained data on four numeric variables, create a new object that contains the mean value of each variable
-
+Create sample data frame named `df`
 ```{r}
-set.seed(12345)
+set.seed(54321)
 df <- tibble(a = rnorm(10),b = rnorm(10),c = rnorm(10),d = rnorm(10))
 ```
+
+__Task__: 
+
+- Using the data frame `df`, which contains data on four numeric variables, create a new object that contains the mean value of each variable
+
 
 In a previous example, we calculated mean for each variable
 ```{r}
@@ -1137,25 +1266,32 @@ Now we just have to create an object to store these results
 
 ### Creating a new object
 
-Task: Create a new object that contains the mean value of each variable in `df`
+__Task__: Create a new object that contains mean value of each variable in `df`
 
+\medskip
 Wickham recommends creating new object __prior__ to creating loop
 
 - You must specify type and length of new object
-- New object will contain the mean for each variable, so it should be a numeric vector with number of elements (length) equal to number of variables in `df`
+- New object will contain mean for each variable; should be numeric vector with number of elements (length) equal to number of variables in `df`
+
+\medskip
+Create object to hold output; we'll name this object `output`
 ```{r}
 output <- vector("double", ncol(df)) # create object
 typeof(output)
-length(output); length(df)
+length(output)
+length(df)
 ```
-Now we can create a loop that uses position number to assign variable means to elements of the vector `output`
+Create loop; use position number to assign variable means to elements of vector `output`
 ```{r}
 for (i in seq_along(df)) {
-  cat("i=",i,fill=TRUE)
+  #cat("i=",i,fill=TRUE)
   output[[i]] <- mean(df[[i]]) # mean of df[[1]] assigned to output[[1]], etc.
 }
 output
 ```
+## Loops that modify existing object
+
 ### Example of modifying an object: z-score loop
 
 __Task__ (from Christenson lecture):
@@ -1178,42 +1314,51 @@ z_score(df[[1]]) # same
 
 ### Example of modifying an object: z-score loop
 
-__Task__ (from Christenson lecture): 
+__Task__: write loop that replaces variables with z-scores of those variables
 
-- Write loop that replaces variables with z-scores of those variables
+\medskip
 
 When modifying existing object, we only need to write __sequence__ and __body__
 
-- __sequence__. Data frame `df` has 4 variables and all are quantitative, so write a sequence that loops across each element of `df`
-    - `for (i in seq_along(df))`
-- Modify __body__.
-    - body of z-score function: `(x - mean(x, na.rm=TRUE))/sd(x, na.rm=TRUE)`
+- __sequence__. 
+    - data frame `df` has 4 variables and all are quantitative
+    - so write a sequence that loops across each element of `df`
+        - `for (i in seq_along(df))`
+- __body__.
+    - body of z-score function:
+        - `(x - mean(x, na.rm=TRUE))/sd(x, na.rm=TRUE)`
     - Substitute `df[[i]]` for  `x`: 
         - `(df[[i]] - mean(df[[i]], na.rm=TRUE))/sd(df[[i]], na.rm=TRUE)`
     - Assign (replace) each observation the value of its z-score: 
         - `df[[i]] <- (df[[i]] - mean(df[[i]], na.rm=TRUE))/sd(df[[i]], na.rm=TRUE)`
 
 ```{r, results="hide"}
-set.seed(12345)
-df <- tibble(a = rnorm(10),b = rnorm(10),c = rnorm(10),d = rnorm(10))
-df
+set.seed(54321)
+(df <- tibble(a = rnorm(10),b = rnorm(10),c = rnorm(10),d = rnorm(10)))
+
 for (i in seq_along(df)) {
   cat("i=",i,"; mean=",mean(df[[i]], na.rm=TRUE),"; sd=",sd(df[[i]], na.rm=TRUE),sep="",fill=TRUE)
-  #print((df[[i]] - mean(df[[i]], na.rm=TRUE))/sd(df[[i]], na.rm=TRUE))
-  df[[i]] <- (df[[i]] - mean(df[[i]], na.rm=TRUE))/sd(df[[i]], na.rm=TRUE)
+  #print((df[[i]] - mean(df[[i]], na.rm=TRUE))/sd(df[[i]], na.rm=TRUE)) # show z-score for each obs
+  df[[i]] <- (df[[i]] - mean(df[[i]], na.rm=TRUE))/sd(df[[i]], na.rm=TRUE) # modify values
 }
-df
+str(df)
 ```
 
-### Example of modifying an object: z-score loop
+### Modify z-score loop to work with non-numeric variables
 
-```{r, results="hide", echo=FALSE}
+What happens if we apply our loop to the data frame `df_bama`, which has both string and numeric variables?
+
+\medskip
+Create data frame `df_bama`
+```{r, results="hide"}
 load("../../data/recruiting/recruit_event_somevars.Rdata")
 df_bama <- df_event %>% arrange(univ_id,event_date) %>% 
   select(instnm,univ_id,event_date,event_type,event_state,zip,med_inc) %>% 
   filter(row_number()<6)
+str(df_bama)
 ```
-What happens if we apply our loop to the data frame `df_bama`, which has both string and numeric variables?
+
+Attempt to run loop; what went wrong?
 ```{r, eval=FALSE}
 for (i in seq_along(df_bama)) {
   cat("i=",i,"; mean=",mean(df_bama[[i]], na.rm=TRUE),"; sd=",sd(df_bama[[i]], na.rm=TRUE),sep="",fill=TRUE)
@@ -1222,9 +1367,15 @@ for (i in seq_along(df_bama)) {
 }
 df_bama
 ```
+### Modify z-score loop to work with non-numeric variables
+
+What happens if we apply our loop to the data frame `df_bama`, which has both string and numeric variables?
+
+\medskip
+
 Let's modify our loop so that it only calculates z-score if for non-integer, numeric variables
 ```{r, results="hide"}
-df_bama
+str(df_bama)
 for (i in seq_along(df_bama)) {
   cat("i=",i,"; var name=",names(df_bama)[[i]],"; type=",typeof(df_bama[[i]]),
       "; class=",class(df_bama[[i]]),sep="",fill=TRUE)
@@ -1235,10 +1386,11 @@ for (i in seq_along(df_bama)) {
     # do nothing
   }
 }
-df_bama
+str(df_bama)
 ```
-### Example of modifying an object: z-score loop
+### Modify object:  embed z-score loop in function [SKIP]
 
+Recreate `df` and `df_bama` [ouput and code omitted]
 ```{r, results="hide", echo=FALSE}
 #recreate df
 set.seed(12345)
@@ -1250,6 +1402,8 @@ df_bama <- df_event %>% arrange(univ_id,event_date) %>%
   select(instnm,univ_id,event_date,event_type,event_state,zip,med_inc) %>% 
   filter(row_number()<6)
 ```
+\medskip
+
 Can we embed this loop in a function that takes the data frame as an argument so we don't have to modify loop for each data frame?
 
 ```{r, results="hide"}
@@ -1266,28 +1420,74 @@ z_score <- function(x) {
     }
   }
 }
-
 #apply to data frame df
 df_z <- z_score(df)
 df; df_z
-
 #apply to data frame df_bama
 df_bama_z <- z_score(df_bama)
 df_bama; df_bama_z
 ```
 
-# More Practice
+# When to write a loop (vs. a function); recipe for writing loops
 
-## Count of events for each university
+### When to write a loop
 
-### Count of events for each university
+__Broadly, rationale for writing loop same as rationale for writing function__:
 
-EITHER CUT OR MAKE THIS LATER
+- do not duplicate code
+- can make changes to code in one place rather than many
 
-This would use the df_event dataframe
-- loop that uses df_event and creates event table of number of events for each institution
+\medskip
+__When to write a loop__:
 
-## How well do public universities cover in-state public high schools?
+- Grolemund and Wickham say __don't copy and paste more than twice__
+- if you find yourself doing this, consider writing a loop or function
+
+\medskip
+__Don't worry about knowing all the situations you should write a loop__
+
+- Rather, you'll be creating analysis dataset or analyzing data and you will notice there is some task that you are repeting over and over
+- then you'll think "oh, I should write a loop or function for this"
+
+### When to write a loop vs a functions
+
+\medskip
+Usually obvious when you are duplicating code, but unclear whether you should write a loop or a whether you should write a function.
+
+- Often, a repeated task can be completed with a loop or a function
+
+In my experience, loops are better for repeated tasks when the invidual tasks are __very__ similar to one another
+
+- e.g., a loop that reads in data sets from individual years; each dataset you read in differs only by directory and name
+- e.g., a loop that converts negative values to `NA` for a set of variables
+
+Because functions can have many arguments, functions are better when the individual tasks differ substantially from one another 
+
+- Example: function that runs regression and creates formatted results table
+    - function allows you to specify (as function arguments): dependent variable; independent variables; what model to run, etc.
+
+__Note__
+
+- Can embed loops within functions; can call functions within loops
+- But for now, just try to understand basics of functions and loops
+
+
+
+### Recipe for how to write loop
+
+The general recipe for how to write a loop is very similar to the recipe for writing a function:
+
+1. Complete the task for one instance outside a loop (this is akin to writing the __body__ of the loop)
+
+2. Write the __sequence__ 
+
+3. Which parts of the body need to change with each iteration
+
+4. _if_ you are creating a new object store output of the loop, create this outside of the loop
+
+5. Construct the loop
+
+# Practice: How well do public universities cover in-state public high schools?
 
 ### Load recruiting data
 
