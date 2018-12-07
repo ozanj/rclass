@@ -55,6 +55,14 @@ load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_eve
 
 ### Logistics
 
+__Evaluations__  
+
+Please take a few minutes to complete instructor and T.A. evaluations
+
+- Complete online evaluation for Ozan  
+    - Should have received an email or log on to your MyUCLA account
+- Complete online evaluation for Patricia (TA)  
+    - Link [here](https://goo.gl/forms/tnBwfR2Ot29NXR023)
 
 __Problem set__
 
@@ -144,8 +152,8 @@ is_numeric(c(5,6,7))
 
 Recall that elements of a vector must have the same type
 
-- if vector contains elements of different type, type will be most "complex"
-- from simplest to most complex: logical, integer, double, character
+- If vector contains elements of different type, type will be most "complex"
+- From simplest to most complex: logical, integer, double, character
 
 ```{r, results="hide"}
 is_logical(c(TRUE,TRUE,NA))
@@ -275,13 +283,13 @@ __Review: naming vectors__
 
 - All vectors can be "named" (i.e., you name individual elements within the vector)
 
-Unamed vector
+Unnamed vector
 ```{r}
 x <- c(1,2,3,"hi!")
 x
 str(x)
 ```
-named vector
+Named vector
 ```{r}
 y <- c(a=1,b=2,3,c="hi!")
 y
@@ -369,7 +377,7 @@ typeof(df_event)
 
 ### Subsetting/accessing elements of a list
 
-__Accessing elements of a list important for writing loops, writing functions, and many other applications in R__
+__Accessing elements of a list is important for writing loops, writing functions, and many other applications in R__
 
 \medskip
 
@@ -393,7 +401,7 @@ str(df_bama)
 ```
 ### Subsetting/accessing elements of a list
 
-__Accessing elements of a list important for writing loops, writing functions, and many other applications in R__
+__Accessing elements of a list is important for writing loops, writing functions, and many other applications in R__
 
 \medskip
 
@@ -552,7 +560,7 @@ These two approaches yield the same result:
 df_bama[["med_inc"]]
 df_bama$med_inc
 ```
-### Extracting multiple elemens of a list using `[[]]` and `$`
+### Extracting multiple elements of a list using `[[]]` and `$`
 
 Each instance of `[[]]` or `$` can only extract a __single__ element from the list
 
@@ -574,11 +582,36 @@ str(df_bama[c("instnm","med_inc")]) # "tibble" data frame with two variables
 #df_bama[[c("instnm","med_inc")]] # this code will yield an error
 ```
 
-### STUDENT EXERCISE
 
-PATRICIA ADD SHORT STUDENT EXERCISE ABOUT SUBSETTING LISTS/DATA FRAMES USING [[]] AS OPPOSED TO []
+### Subset a vector using `[[]]`: Student task
 
-- BASICALLY SOME EXERCISE THAT ASSESSES THE SLIDES AFTER THE PREVIOUS STUDENT EXERCISE
+Applying `[[]]` to the object `df_bama`:
+
+- Isolate the 5th element of `df_bama`
+- Isolate the element `"event_type"` of `df_bama`
+- Isolate the element `"zip"` of `df_bama` using `$`
+- Isolate the elements named `"event_date"` and `"event_type"`
+
+
+### Subset a vector using `[]`: Student task [SOLUTIONS]
+
+Applying `[[]]` to the object `df_bama`:
+
+```{r, results="hide"}
+#- Isolate the 5th element of `df_bama`
+df_bama[[5]]
+str(df_bama[[5]])
+#- Isolate the element `"event_type"` of `df_bama`
+df_bama[["event_type"]]
+str(df_bama[["event_type"]])
+#- Isolate the element `"zip"` of `df_bama` using `$`
+df_bama$zip
+#- Isolate the elements named `"event_date"` and `"event_type"`
+c(df_bama[["event_date"]],df_bama[["event_type"]])
+str(c(df_bama[["event_date"]],df_bama[["event_type"]]))
+
+```
+
 
 ## Review key concepts for loops
 
@@ -643,7 +676,7 @@ Once list length known, isolate element contents based on position number using 
 ```{r}
 typeof(df_bama[7]); length(df_bama[7])
 ```
-- subset one element of list with `[[]]` yields vector w length==# rows
+- subset one element of list with `[[]]` yields vector w length== # rows
 ```{r}
 df_bama[[7]]; typeof(df_bama[[7]]); length(df_bama[[7]])
 ```
@@ -684,9 +717,9 @@ seq(2,length(df_bama))
 \medskip
 What are loops?: __Loops__ execute some set of commands multiple times
 
-- we build loops using the `for()` function
-- each time the loop executes the set of commands is an __iteration__
-- the below loop iterates 4 times
+- We build loops using the `for()` function
+- Each time the loop executes the set of commands is an __iteration__
+- The below loop iterates 4 times
 
 __Example__
 
@@ -731,7 +764,7 @@ Components of a loop
 __When building a loop, I always include a line like `cat("z=",z, fill=TRUE)` to help me understand what loop is doing__
 
 \medskip
-Below two loops essentially the same; I prefer second approach. Why?:
+Below two loops are essentially the same; I prefer second approach. Why?:
 
 - Writing name of sequence var object (here `z`) and seeing value of sequence var object for each iteration helps me understand loop better
 ```{r}
@@ -853,7 +886,7 @@ str(df)
 
 - \medskip __sequence__ syntax: `for (i in object_name)`
     - Sequence iterates through each element of the object
-    - that is, __sequence iterates through _value_ of each element, rather than _name_ or _position_ of element__
+    - That is, __sequence iterates through _value_ of each element, rather than _name_ or _position_ of element__
 - in __body__.
     - value of `i` is equal to the contents of the `ith` element of the object
     
@@ -872,7 +905,7 @@ for (i in vec) {
 
 - \medskip __sequence__ syntax: `for (i in object_name)`
     - Sequence iterates through each element of the object
-    - that is, __sequence iterates through _value_ of each element__
+    - That is, __sequence iterates through _value_ of each element__
 - in __body__: value of `i` is equal to __contents__ of `ith` element of object
 
 ```{r}
@@ -896,10 +929,13 @@ __Example task__:
 ```{r}
 df # print list/data frame object
 
-for (i in df) { # sequence
+for (i in df) {
+  # sequence
   cat("value of object i=",i, fill=TRUE)
-  cat("mean value of object i=",mean(i),"\n", fill=TRUE)
-}
+  cat("mean value of object i=",mean(i, na.rm = TRUE), "\n", fill=TRUE)
+  
+} 
+
 ```
 ## Loop over element names
 
@@ -946,9 +982,9 @@ __sequence__ syntax: `for (i in names(object_name))`
 in __body__, value of `i` is equal to _name_ of `ith` element in object
 
 - Access element contents using `object_name[i]`
-    - same object type as `object_name`; retains attributes (e.g., _name_)
+    - Same object type as `object_name`; retains attributes (e.g., _name_)
 - Access element contents using `object_name[[i]]`
-    - removes level of hierarchy, thereby removing attributes
+    - Removes level of hierarchy, thereby removing attributes
     - Approach recommended by Wickham because isolates value of element
 
 \medskip
@@ -974,14 +1010,14 @@ __Example task__: calculate mean value of each element of list object `df`, usin
 str(df)
 
 for (i in names(df)) {
-  cat("mean of element named",i,"is",mean(df[[i]]),fill=TRUE)
+  cat("mean of element named",i,"is",mean(df[[i]], na.rm = TRUE), fill=TRUE)
 }
 ```
 
 What if we try to complete task using , `[]` to access element contents?
 ```{r, eval=FALSE}
 for (i in names(df)) {
-  cat("mean of element named",i,"is",mean(df[i]),fill=TRUE)
+  cat("mean of element named",i,"is",mean(df[i],na.rm = TRUE), fill=TRUE)
   #print(typeof(df[i]))
   #print(class(df[i]))  
 }
@@ -1072,12 +1108,12 @@ __sequence__ syntax: `for (i in 1:length(object_name))` __OR__ `for (i in seq_al
 
 - Sequence iterates through _position number_ of each element in the object
 
-in __body__, value of `i` equals the _position number_ of `ith` element in object
+In __body__, value of `i` equals the _position number_ of `ith` element in object
 
 - Access element contents using `object_name[i]`
-    - same object type as `object_name`; retains attributes (e.g., _name_)
+    - Same object type as `object_name`; retains attributes (e.g., _name_)
 - Access element contents using `object_name[[i]]` [RECOMMENDED]
-    - removes level of hierarchy, thereby removing attributes
+    - Removes level of hierarchy, thereby removing attributes
 
 __Example, object is atomic vector__
 ```{r}
@@ -1100,12 +1136,12 @@ __sequence__: `for (i in 1:length(object_name))` __OR__ `for (i in seq_along(obj
 
 - Sequence iterates through _position number_ of each element in the object
 
-in __body__, value of `i` equals the _position number_ of `ith` element in object
+In __body__, value of `i` equals the _position number_ of `ith` element in object
 
 - Access element contents using `object_name[i]`
-    - same object type as `object_name`; retains attributes (e.g., _name_)
+    - Same object type as `object_name`; retains attributes (e.g., _name_)
 - Access element contents using `object_name[[i]]` [RECOMMENDED]
-    - removes level of hierarchy, thereby removing attributes
+    - Removes level of hierarchy, thereby removing attributes
 
 __Example, object is a list__
 ```{r}
@@ -1124,18 +1160,18 @@ for (i in 1:length(df)) {
 
 __Example task__:
 
-- calculate mean value of each element of list object `df`, using `for (i in seq_along(df))` to create sequence and using `[[]]` to access element contents
+- Calculate mean value of each element of list object `df`, using `for (i in seq_along(df))` to create sequence and using `[[]]` to access element contents
 
 ```{r}
 for (i in seq_along(df)) {
-  cat("mean of element named",i,"is",mean(df[[i]]),fill=TRUE)
+  cat("mean of element named",i,"is",mean(df[[i]], na.rm = TRUE), fill=TRUE)
 }
 ```
 
 What happens if we try to complete task using , using `[]` to access element contents?
 ```{r, eval=FALSE}
 for (i in seq_along(df)) {
-  cat("mean of element named",i,"is",mean(df[i]),fill=TRUE)
+  cat("mean of element named",i,"is",mean(df[i],na.rm = TRUE), fill=TRUE)
   #print(typeof(df[i]))
   #print(class(df[i]))  
 }
@@ -1209,7 +1245,7 @@ for (i in seq_along(df)) {
 }
 ```
 
-# Modfifying vs. creating new object
+# Modifying vs. Creating new object
 
 ### Modify object or create new object
 
@@ -1261,7 +1297,7 @@ __Task__:
 In a previous example, we calculated mean for each variable
 ```{r}
 for (i in seq_along(df)) {
-  cat("mean of element named",i,"is",mean(df[[i]]),fill=TRUE)
+  cat("mean of element named",i,"is",mean(df[[i]], na.rm = TRUE),fill=TRUE)
 }
 ```
 Now we just have to create an object to store these results
@@ -1288,7 +1324,7 @@ Create loop; use position number to assign variable means to elements of vector 
 ```{r}
 for (i in seq_along(df)) {
   #cat("i=",i,fill=TRUE)
-  output[[i]] <- mean(df[[i]]) # mean of df[[1]] assigned to output[[1]], etc.
+  output[[i]] <- mean(df[[i]], na.rm = TRUE) # mean of df[[1]] assigned to output[[1]], etc.
 }
 output
 ```
@@ -1353,7 +1389,7 @@ What happens if we apply our loop to the data frame `df_bama`, which has both st
 \medskip
 Create data frame `df_bama`
 ```{r, results="hide"}
-load("../../data/recruiting/recruit_event_somevars.Rdata")
+load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData"))
 df_bama <- df_event %>% arrange(univ_id,event_date) %>% 
   select(instnm,univ_id,event_date,event_type,event_state,zip,med_inc) %>% 
   filter(row_number()<6)
@@ -1399,7 +1435,7 @@ set.seed(12345)
 df <- tibble(a = rnorm(10),b = rnorm(10),c = rnorm(10),d = rnorm(10))
 
 #recreate df_bama
-load("../../data/recruiting/recruit_event_somevars.Rdata")
+load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData"))
 df_bama <- df_event %>% arrange(univ_id,event_date) %>% 
   select(instnm,univ_id,event_date,event_type,event_state,zip,med_inc) %>% 
   filter(row_number()<6)
@@ -1436,29 +1472,29 @@ df_bama; df_bama_z
 
 __Broadly, rationale for writing loop same as rationale for writing function__:
 
-- do not duplicate code
-- can make changes to code in one place rather than many
+- Do not duplicate code
+- Can make changes to code in one place rather than many
 
 \medskip
 __When to write a loop__:
 
 - Grolemund and Wickham say __don't copy and paste more than twice__
-- if you find yourself doing this, consider writing a loop or function
+- If you find yourself doing this, consider writing a loop or function
 
 \medskip
 __Don't worry about knowing all the situations you should write a loop__
 
-- Rather, you'll be creating analysis dataset or analyzing data and you will notice there is some task that you are repeting over and over
-- then you'll think "oh, I should write a loop or function for this"
+- Rather, you'll be creating analysis dataset or analyzing data and you will notice there is some task that you are repeating over and over
+- Then you'll think "oh, I should write a loop or function for this"
 
 ### When to write a loop vs a functions
 
 \medskip
-Usually obvious when you are duplicating code, but unclear whether you should write a loop or a whether you should write a function.
+Usually obvious when you are duplicating code, but unclear whether you should write a loop or whether you should write a function.
 
 - Often, a repeated task can be completed with a loop or a function
 
-In my experience, loops are better for repeated tasks when the invidual tasks are __very__ similar to one another
+In my experience, loops are better for repeated tasks when the individual tasks are __very__ similar to one another
 
 - e.g., a loop that reads in data sets from individual years; each dataset you read in differs only by directory and name
 - e.g., a loop that converts negative values to `NA` for a set of variables
@@ -1498,7 +1534,7 @@ Load data frame with one observation per high school and variables for visits by
 - Note: this data frame has more vars than previous data frame we used
 ```{r, results="hide"}
 rm(list = ls()) # remove all objects
-load("../../data/recruiting/recruit_school_allvars.Rdata")
+load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_school_allvars.RData"))
 ```
 
 We are interested in creating measures of how good a job public universities are doing visiting in-state public high schools
@@ -1514,7 +1550,7 @@ rm(df_school_all)
 
 Create standalone objects (output and code omitted)
 
-1. character vector containing ID for each public university
+1. Character vector containing ID for each public university
 2. A named list containing university name
 ```{r, results="hide", echo=FALSE}
 ids<- c( '196097', '186380', '215293', '201885', '181464', '139959', '218663', '100751', '199193', '110635', '110653', '126614', '155317', '106397', '149222', '166629')
@@ -1565,7 +1601,7 @@ str(instnm)
 
 ### How well do public universities cover in-state public high schools
 
-\medskip __Task__: for each public research university, calcualte the number and percent of public high schools in the university's home state that received a visit
+\medskip __Task__: for each public research university, calculate the number and percent of public high schools in the university's home state that received a visit
 
 First, let's accomplish task outside of a loop for one university [Tidyverse]
 
@@ -1593,7 +1629,7 @@ df_pubhs %>% filter(state_code==inst_218663) %>% select(visits_by_218663) %>%
 ```
 ### How well do public universities cover in-state public high schools
 
-\medskip __Task__: for each public research university, calcualte the number and percent of public high schools in the university's home state that received a visit
+\medskip __Task__: for each public research university, calculate the number and percent of public high schools in the university's home state that received a visit
 
 First, let's accomplish task outside of a loop for one university [Base R]
 
@@ -1634,7 +1670,7 @@ typeof(pr_table); length(pr_table); str(pr_table) # named vector with 2 elements
 
 ### How well do public universities cover in-state public high schools
 
-\medskip __Task__: for each public research university, calcualte the number and percent of public high schools in the university's home state that received a visit
+\medskip __Task__: for each public research university, calculate the number and percent of public high schools in the university's home state that received a visit
 
 Build loop [Base R approach]
 
@@ -1654,7 +1690,7 @@ for (i in seq_along(instnm)) {
 
 ### How well do public universities cover in-state public high schools
 
-\medskip __Task__: for each public research university, calcualte the number and percent of public high schools in the university's home state that received a visit
+\medskip __Task__: for each public research university, calculate the number and percent of public high schools in the university's home state that received a visit
 
 Build loop
 
@@ -1685,7 +1721,7 @@ for (i in seq_along(instnm)) {
 
 ### How well do public universities cover in-state public high schools
 
-\medskip __Task__: for each public research university, calcualte the number and percent of public high schools in the university's home state that received a visit
+\medskip __Task__: for each public research university, calculate the number and percent of public high schools in the university's home state that received a visit
 
 Build loop
 
@@ -1712,7 +1748,7 @@ for (i in seq_along(instnm)) {
 
 ### How well do public universities cover in-state public high schools
 
-\medskip __Task__: for each public research university, calcualte the number and percent of public high schools in the university's home state that received a visit
+\medskip __Task__: for each public research university, calculate the number and percent of public high schools in the university's home state that received a visit
 
 Here is tidyverse approach to loop, which uses some programming concepts we haven't covered
 
