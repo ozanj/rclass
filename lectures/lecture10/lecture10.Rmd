@@ -51,7 +51,7 @@ __Reading:__
     - I wrote this lecture knowing we won't have time to get through all sections
     - Slides we don't cover are mainly for your future reference  
 
-__R resources__
+__Programming courses and resources__
 
 - Link [here](https://docs.google.com/spreadsheets/d/1zF1Rkqu_T3UdtrmItj79ASN5-_cvbqFoIr7wzhaTY0M/edit#gid=0)
 
