@@ -28,6 +28,30 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 
 # Introduction
 
+### Logistics
+
+__Course evaluations__  
+
+Please take a few minutes to complete instructor and T.A. evaluations
+
+- Complete online evaluation for Ozan  
+    - Should have received an email or log on to your MyUCLA account
+- Complete online evaluation for Patricia (TA)  
+    - Link [here](https://goo.gl/forms/tnBwfR2Ot29NXR023)
+
+__Problem set 10__
+
+- Due next Friday at noon; focuses on accessing vector elements and basics of looping
+- We give big hints; less emphasis on "figure it out on your own"
+
+__Reading:__
+
+- Grolemund and Wickham 20.4 - 20.5 (Chapter 20 is on "Vectors")
+- Grolemund and Wickham 21.1 - 21.3 (Chapter 21 is on "Iteration")
+- [OPTIONAL] Any slides from lecture we don't cover
+    - I wrote this lecture knowing we won't have time to get through all sections
+    - Slides we don't cover are mainly for your future reference
+
 ### What we will do today
 
 \medskip
@@ -41,7 +65,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 \tableofcontents[subsectionstyle=hide/hide/hide]
 ```
 
-### Libraries
+### Libraries and data
 
 ```{r}
 library(tidyverse)
@@ -52,30 +76,6 @@ Data frame
 #load dataset with one obs per recruiting event
 load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData"))
 ```
-
-### Logistics
-
-__Evaluations__  
-
-Please take a few minutes to complete instructor and T.A. evaluations
-
-- Complete online evaluation for Ozan  
-    - Should have received an email or log on to your MyUCLA account
-- Complete online evaluation for Patricia (TA)  
-    - Link [here](https://goo.gl/forms/tnBwfR2Ot29NXR023)
-
-__Problem set__
-
-- ADD TEXT
-    - Will give big hints; less emphasis on "figure it out on your own"
-
-__Reading:__
-
-- Grolemund and Wickham 20.4 - 20.5 (Chapter 20 is on "Vectors")
-- Grolemund and Wickham 21.1 - 21.3 (Chapter 21 is on "Iteration")
-- [OPTIONAL] Any slides from lecture we don't cover
-    - I wrote this lecture knowing we won't have time to get through all sections
-    - Slides we don't cover are mainly for your future reference
 
 
 # Accessing elements of vectors and lists
@@ -174,7 +174,7 @@ Comparing `is_*()` vs. `is.*()` functions
 - `is_*()` functions (e.g., `is_numeric()`) identifies vector __type__
     - They are the `TRUE/FALSE` versions of `typeof()` function
 - `is.*()` functions (e.g., `is.numeric()`) refer to both __type__ and __class__
-    - Review: class__ is an object __attribute__ that defines how object can be treated by object oriented programming language (e.g., which functions you can apply)
+    - Review: __class__ is an object __attribute__ that defines how object can be treated by object oriented programming language (e.g., which functions you can apply)
     - Recall that R functions care about __class__, not __type__
 
 \medskip
