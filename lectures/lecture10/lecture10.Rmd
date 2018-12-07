@@ -36,8 +36,7 @@ Please take a few minutes to complete instructor and T.A. evaluations
 
 - Complete online evaluation for Ozan  
     - Should have received an email or log on to your MyUCLA account
-- Complete online evaluation for Patricia (TA)  
-    - Link [here](https://goo.gl/forms/tnBwfR2Ot29NXR023)
+- Complete online evaluation for Patricia (TA), Link [here](https://goo.gl/forms/tnBwfR2Ot29NXR023)
 
 __Problem set 10__
 
@@ -50,7 +49,11 @@ __Reading:__
 - Grolemund and Wickham 21.1 - 21.3 (Chapter 21 is on "Iteration")
 - [OPTIONAL] Any slides from lecture we don't cover
     - I wrote this lecture knowing we won't have time to get through all sections
-    - Slides we don't cover are mainly for your future reference
+    - Slides we don't cover are mainly for your future reference  
+
+__R resources__
+
+- Link [here](https://docs.google.com/spreadsheets/d/1zF1Rkqu_T3UdtrmItj79ASN5-_cvbqFoIr7wzhaTY0M/edit#gid=0)
 
 ### What we will do today
 
