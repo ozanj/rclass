@@ -14,6 +14,7 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+**\textcolor{red}{\textbf{Grade: /20}}**  
 
 ```{r, echo=FALSE, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
@@ -35,7 +36,8 @@ If you have not yet installed MiKTeX/MacTeX, I recommend installing TinyTeX, whi
 
 - General Instructions for Problem Sets [Here](https://github.com/ozanj/rclass/raw/master/lectures/problemset_resources.pdf)
 
-# Make changes to YAML header
+# Make changes to YAML header  
+\textcolor{red}{\textbf{/0.25}} 
 
 Read XAG section 3.3 before answering these questions
 
@@ -44,7 +46,8 @@ Read XAG section 3.3 before answering these questions
 1. Add section numbering to headers
 1. Change "data frame printing" option to "tibble"
 
-# Load packages, load data, and rename variables
+# Load packages, load data, and rename variables  
+\textcolor{red}{\textbf{/0.25}} 
 
 1. Load the tidyverse package
 ```{r}
@@ -52,7 +55,8 @@ Read XAG section 3.3 before answering these questions
 library(tidyverse)
 ```
 
-2. Load the data frame data frame `df_school_all`
+2. Load the data frame data frame `df_school_all`  
+\textcolor{red}{\textbf{/0.25}} 
     - The URL for this data frame is: (https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_school_allvars.RData)
     - The data frame `df_school_all` has one observation for each high school (public and private). 
     - The variables that begin with `visits_by_...` identify how many off-campus recruiting visits the high school received from a particular public university. For example, UC Berkeley has the ID `110635` so the variable `visits_by_110635` identifies how many visits the high school received from UC Berkeley. 
@@ -62,7 +66,8 @@ library(tidyverse)
 load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_school_allvars.RData"))
 ```
 
-3. Run the following code which drops some variables, renames other variables, and assigns these changes to the existing object `df_school_all` and then print the names of all the variables using the `names()` function 
+3. Run the following code which drops some variables, renames other variables, and assigns these changes to the existing object `df_school_all` and then print the names of all the variables using the `names()` function  
+\textcolor{red}{\textbf{/0.25}} 
 ```{r}
 df_school_all <- df_school_all %>% 
   select(-contains("inst_")) %>% # remove vars that start with "inst_"
@@ -99,7 +104,8 @@ For the questions below, imagine that you have been asked by a major news outlet
     - just print the object and rely on the fact that the default option for printing tibbles is to print the first 10 observations 
     - OR you can wrap the command in the `head()` function and explicitly tell R to print 10 observations. 
 
-1. Without using pipes (`%>%`), sort (i.e., `arrange()` function) descending by `total_visits` and print the the following variables for the top 10 schools in terms of total number of visits:
+1. Without using pipes (`%>%`), sort (i.e., `arrange()` function) descending by `total_visits` and print the the following variables for the top 10 schools in terms of total number of visits:  
+\textcolor{red}{\textbf{/1}} 
     - variables to print: `name`, `state_code`, `city`, `school_type`,`total_visits`, `med_inc`, `pct_white`, `pct_black`, `pct_hispanic`, `pct_asian`, `pct_amerindian`
     - Note: You can do this in one step by wrapping the `select()` function around the `arrange()` (i.e., sort) function; or you can do this in two steps by creating a new data frame first.
 ```{r}
@@ -121,7 +127,8 @@ rm(df_temp)
 ```
 
 
-2. Answer the question above, but this time use pipes (`%>%`) to answer the question in one line of code
+2. Answer the question above, but this time use pipes (`%>%`) to answer the question in one line of code  
+\textcolor{red}{\textbf{/1}} 
 ```{r}
 df_school_all %>%
   select(name,state_code,city,school_type,total_visits,med_inc,pct_white,pct_black,
@@ -139,7 +146,8 @@ df_school_all %>%
 ```
 
 
-3. Without using pipes, print the following (same variables as above):
+3. Without using pipes, print the following (same variables as above):  
+\textcolor{red}{\textbf{/1.5}} 
     - (A) the top 10 public high schools in terms of total number of visits and then
     - (B) the top 10 private high schoools in terms of total number of visits
     
@@ -163,7 +171,8 @@ head(select(arrange(filter(df_school_all,school_type == "private"),desc(total_vi
 ```
 
 
-4. Answer the question above, but this time using pipes (`%>%`) to answer the question in one line of code for part (A) and one line of code for part (B)
+4. Answer the question above, but this time using pipes (`%>%`) to answer the question in one line of code for part (A) and one line of code for part (B)  
+\textcolor{red}{\textbf{/1.5}}
 ```{r}
 #part a
 df_school_all %>%
@@ -183,7 +192,8 @@ df_school_all %>%
 ```
 
 
-5. Using pipe operator (`%>%`), print the following (same variables as above; one line of code for each part (A), (B), (C), (D)): 
+5. Using pipe operator (`%>%`), print the following (same variables as above; one line of code for each part (A), (B), (C), (D)):  
+\textcolor{red}{\textbf{/2}}
     - (A) the top 10 public high schools in Massachusetts in terms of total number of visits and then 
     - (B) the top 10 private high schools in Massachusetts in terms of total number of visits
     - (C) the top 10 public high schools in California in terms of total number of visits and then 
@@ -232,7 +242,8 @@ Before presenting questions, here are some examples of code that may be useful i
 - the number of observations in the data frame `df_school_all` 
 - the number of observations that have missing values for the variable `state_code`
 - the number of observations that have missing values for the variable `school_type`
-- a frequency count of the variable `school_type`
+- a frequency count of the variable `school_type`  
+\textcolor{red}{\textbf{/0.25}} 
 ```{r}
 df_school_all %>% count()
 count(df_school_all) # same as above
@@ -242,9 +253,9 @@ df_school_all %>% count(school_type) # frequency count of school_type
 ```
 
 
-1. Using `mutate()` with `ifelse()` create a 0/1 indicator called `ca_school` that indicates whether the high school is in California and then use `count()` to create a frequency table for the values of `ca_school` (you don't need to assign/retain the new variable)
+1. Using `mutate()` with `ifelse()` create a 0/1 indicator called `ca_school` that indicates whether the high school is in California and then use `count()` to create a frequency table for the values of `ca_school` (you don't need to assign/retain the new variable)  
 
-
+\textcolor{red}{\textbf{/1}}
 ```{r}
 str(df_school_all$state_code)
 df_school_all %>% mutate(ca_school = ifelse(state_code=="CA",1,0)) %>%
@@ -252,7 +263,9 @@ df_school_all %>% mutate(ca_school = ifelse(state_code=="CA",1,0)) %>%
 ```
 
 
-2. Using `mutate()` with `ifelse()` create a 0/1 indicator called `ca_pub_school` that indicates whether the school is a public high school in California and then use `count()` to create a frequency table for the values of `ca_pub_school` (you don't need to assign/retain the new variable)
+2. Using `mutate()` with `ifelse()` create a 0/1 indicator called `ca_pub_school` that indicates whether the school is a public high school in California and then use `count()` to create a frequency table for the values of `ca_pub_school` (you don't need to assign/retain the new variable)  
+
+\textcolor{red}{\textbf{/1}} 
 
 ```{r}
 str(df_school_all$state_code)
@@ -263,7 +276,8 @@ df_school_all %>%
 ```
 
 
-3. By combining the `is.na()` function with the `filter()` function, identify the number of observations that have missing values for the following variables:
+3. By combining the `is.na()` function with the `filter()` function, identify the number of observations that have missing values for the following variables:  
+\textcolor{red}{\textbf{/0.75}}
     - `pct_black`, `pct_hispanic`, `pct_amerindian`
 ```{r}
 df_school_all %>% filter(is.na(pct_black)) %>% count() 
@@ -272,13 +286,15 @@ df_school_all %>% filter(is.na(pct_amerindian)) %>% count()
 ```
 
 
-4. Create a new variable pct_bl_hisp_nat that represents the percent of students at the school that identify as black, hispanic, or american indian. Retain this variable by assigning it to the object `df_school_all`
+4. Create a new variable pct_bl_hisp_nat that represents the percent of students at the school that identify as black, hispanic, or american indian. Retain this variable by assigning it to the object `df_school_all`  
+\textcolor{red}{\textbf{/1.5}} 
 ```{r}
 df_school_all <- df_school_all %>% mutate(pct_bl_hisp_nat = pct_black + pct_hispanic + pct_amerindian)
 ```
 
 
-5. Create a new 0/1 indicator  variable gt50pct_bl_hisp_nat identifies whether more than 50% of students identify as black, hispanic, or american indian and create a frequency count of this variable (no need to retain thie variable)
+5. Create a new 0/1 indicator  variable gt50pct_bl_hisp_nat identifies whether more than 50% of students identify as black, hispanic, or american indian and create a frequency count of this variable (no need to retain thie variable)  
+\textcolor{red}{\textbf{/1.5}} 
 
 ```{r}
 df_school_all %>% mutate(gt50pct_bl_hisp_nat = ifelse(pct_bl_hisp_nat>50,1,0)) %>%
@@ -286,7 +302,8 @@ df_school_all %>% mutate(gt50pct_bl_hisp_nat = ifelse(pct_bl_hisp_nat>50,1,0)) %
 ```
 
 
-6. Create the following 0/1 indicator variables, retain them (assign to object `df_school_all`), and then create frequency counts of these variables:
+6. Create the following 0/1 indicator variables, retain them (assign to object `df_school_all`), and then create frequency counts of these variables:  
+\textcolor{red}{\textbf{/3}} 
     - Variable `miss_took_math` for whether the school has missing values for the variable `num_took_math`
     - Variable `miss_prof_math` for whether the school has missing values for the variable `num_prof_math`
     - Variable `miss_took_or_prof_math` for whether the school has missing values for the variable `num_took_math` OR `num_prof_math`
@@ -304,7 +321,8 @@ df_school_all %>% count(miss_took_or_prof_math)
 ```
 
 
-7. create a variable of `pct_prof_math` that measures the percent of students who score proficient in the state math assessment(assign to object `df_school_all`). 
+7. create a variable of `pct_prof_math` that measures the percent of students who score proficient in the state math assessment(assign to object `df_school_all`).  
+\textcolor{red}{\textbf{/2}}
 ```{r}
 df_school_all <- df_school_all %>% 
   mutate(pct_prof_math=num_prof_math/num_took_math)
@@ -312,7 +330,8 @@ df_school_all <- df_school_all %>%
 ```
 
 
-8. create a frequency count of value of the variable `pct_prof_math` separately for the three following filters:
+8. create a frequency count of value of the variable `pct_prof_math` separately for the three following filters:  
+\textcolor{red}{\textbf{/1}} 
     - Observations where `miss_took_math==1`
     - Observations where `miss_prof_math==1`
     - Observations where `miss_took_or_prof_math==1`
@@ -323,6 +342,7 @@ df_school_all %>% filter(miss_prof_math==1) %>% count(pct_prof_math)
 df_school_all %>% filter(miss_took_or_prof_math==1) %>% count(pct_prof_math)
 ```
 
+# **THIS IS A BONUS QUESTION**
 
 # case_when() question
 
@@ -338,7 +358,8 @@ load(url("https://github.com/ozanj/rclass/raw/master/data/prospect_list/wwlist_m
 ```
 
 
-2. Apply the `str()` function to the variables `state` and `for_country`; and using the `count()` function to create frequency tables for the variables `state`
+2. Apply the `str()` function to the variables `state` and `for_country`; and using the `count()` function to create frequency tables for the variables `state`  
+\textcolor{red}{\textbf{/0.5}}
     - `state`
     - `for_country`
 ```{r}
@@ -350,7 +371,8 @@ wwlist %>% count(for_country)
 ```
 
 
-3. Using the `filter()` function and `is.na()` function do the following:
+3. Using the `filter()` function and `is.na()` function do the following:  
+\textcolor{red}{\textbf{/0.5}}
     - count how many missing observations (`NAs`) the variable `state` has
     - count how many missing observations the variable `for_country` has
 ```{r}
@@ -359,25 +381,29 @@ wwlist %>% filter(is.na(for_country)) %>% count()
 ```
     
     
-4. Create a frequency count for the variable `for_country` for the observations where `state` equals `NA` (hint: use the `is.na()`) function
+4. Create a frequency count for the variable `for_country` for the observations where `state` equals `NA` (hint: use the `is.na()`) function  
+\textcolor{red}{\textbf{/0.5}}
 ```{r}
 wwlist %>% filter(is.na(state)) %>% count(for_country)
 ```
 
 
-5. Create a frequency count for the variable `for_country` for the observations where `state` does not equal `NA` (hint: use  `!is.na()`) function
+5. Create a frequency count for the variable `for_country` for the observations where `state` does not equal `NA` (hint: use  `!is.na()`) function  
+\textcolor{red}{\textbf{/0.5}}
 ```{r}
 wwlist %>% filter(!is.na(state)) %>% count(for_country)
 ```
 
 
-6. Count the number of observations that have the value "No Response" for the variable `for_country`
+6. Count the number of observations that have the value "No Response" for the variable `for_country`  
+\textcolor{red}{\textbf{/0.5}}
 ```{r}
 wwlist %>% filter(for_country == "No Response") %>% count()
 ```
 
 
-7. Using the `case_when` function within `mutate()` create a character variable called `residency` that has the following values: "in_state"; "out_state_us"; "not_in_us"
+7. Using the `case_when` function within `mutate()` create a character variable called `residency` that has the following values: "in_state"; "out_state_us"; "not_in_us"  
+\textcolor{red}{\textbf{/1.5}}
 
 - This variable should have the value `NA` for observations where `for_country=="No Response"`
 - Retain this variable (assign to object `wwlist`) and create a frequency count of this variable
@@ -396,7 +422,7 @@ wwlist %>% count(residency)
 
 
 Once finished, knit to (pdf) and upload both .Rmd and HTML files to class website under the week 3 tab  
-*Remeber to use this naming convention "lastname_firstname_ps3"*
+*Remember to use this naming convention "lastname_firstname_ps3"*
 
 
 
