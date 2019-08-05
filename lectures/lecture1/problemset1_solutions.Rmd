@@ -11,6 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Problem set 1  
 
+\textcolor{red}{\textbf{Grade: /20}} 
+
 ### Step 1:
 
 - Go to your rclass folder and open your saved lecture1.2.Rmd file (hint: in lecture1 folder)  
@@ -23,6 +25,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ### Step 2:  
 
 **Question 1**: Load .Rdata directly with url  
+
+\textcolor{red}{\textbf{/4}} 
 
 - Make sure to view current/working directory first `getwd()` 
 - Url to data https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_ps1_small.Rdata  
@@ -38,6 +42,8 @@ load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_ps1
 
 **Question 2**: Set your working directory and use absolute filepath to load data  
 
+\textcolor{red}{\textbf{/4}}
+
 - Download .Rdata using link from above  
 - Save .Rdata file in the recruiting folder (rclass/data/recruiting)  
 - View your current/working directory `getwd()` 
@@ -48,7 +54,7 @@ load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_ps1
 
 ```{r}
 getwd() 
-setwd("/Users/patriciamartin/Desktop/rclass/data/recruiting") #absolute file path to data
+setwd("/Users/patriciamartin/Desktop/GitHub/rclass/data/recruiting") #absolute file path to data
 getwd()  #if you run lines 50-52 together you can see how the working directory changes
 list.files() #list.files displays the files in the folder
 load("recruit_ps1_small.Rdata")
@@ -56,6 +62,8 @@ names(df_recruiting)
 ```
 
 **Question 3**: Set your working directory and use relative filepath to load data  
+
+\textcolor{red}{\textbf{/5}} 
 
 - View your current/working directory `getwd()` 
 - Use `setwd()` function to set your working directory to where .Rdata file is saved (rclass/data/recruiting)  
@@ -76,7 +84,9 @@ names(df_recruiting)
 # Run the entire code chunck 
 ```
 
-**Question 4**: Load dataset using relative filepath without first changing working directory  
+**Question 4**: Load dataset using relative filepath without first changing working directory   
+
+\textcolor{red}{\textbf{/7}} 
 
 ```{r}
 getwd()
