@@ -17,6 +17,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, echo=FALSE, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 ```
+\textcolor{red}{\textbf{Grade: /20}} 
+
 # Required reading and instructions  
 
 ##  Required reading before next class
@@ -117,7 +119,9 @@ nls_crs_v2 %>% var_label() # view variable labels
 - Perform one-way investigations following input variables:
     - `transnum`, `termnum`, `crsecred`, `gradtype`, `crsgrada`, `crsgradb`  
     
-- First four variables done for you. __Run one-way investigations for `crsgrada` and `crsgradb`__ 
+- First four variables done for you. __Run one-way investigations for `crsgrada` and `crsgradb`__  
+
+\textcolor{red}{\textbf{/2}} 
 ```{r results='hide'}
 
 #Investigate variable transnum
@@ -194,8 +198,9 @@ nls_crs_v2%>% filter(crsgradb>100) %>% count(crsgradb)
     - `gradtype` and `crsgradb`
     - `crsecred` and `gradtype`  
     
-- First two are done for you. __Investigate relationship between `crsecred` and `gradtype`__
-    
+- First two are done for you. __Investigate relationship between `crsecred` and `gradtype`__  
+
+\textcolor{red}{\textbf{/2}} 
 ```{r results='hide'}
 options(tibble.print_min=50)
 #Investigate gradtype, crsgrada, crsgradb
@@ -269,6 +274,7 @@ __Some guidelines/hints for creating gpa variable__
 
 
 __Your Plan here:__  
+\textcolor{red}{\textbf{/3}}
   
     
       
@@ -290,7 +296,8 @@ __Your Plan here:__
 				
 				
 
-# Part III: Clean data
+# Part III: Clean data  
+\textcolor{red}{\textbf{/5}} 
 
 __Clean data: create new versions of variables that will be inputs to your GPA variable__  
 
@@ -418,7 +425,8 @@ nls_crs_v2 %>%
 
 
 
-# Part IV: Create institution-level GPA variable 
+# Part IV: Create institution-level GPA variable  
+\textcolor{red}{\textbf{/3}} 
 __Create institution-level GPA variable and save as a new object__
 ```{r results='hide'}
     nls_crs_trans <- nls_crs_v2%>% group_by(id,transnum) %>% 
@@ -433,7 +441,8 @@ __Create institution-level GPA variable and save as a new object__
 
 ```
 
-After you create the gpa variable, conduct some basic investigations/descriptive statistics to check whether it looks reasonable
+After you create the gpa variable, conduct some basic investigations/descriptive statistics to check whether it looks reasonable  
+\textcolor{red}{\textbf{/1}}
 ```{r results='hide'}
 nls_crs_trans %>%
   count(gpa_trans) #freq count of new variable 
@@ -457,7 +466,8 @@ nls_crs_trans %>%
 
 
 
-# Part V: Create term-level GPA variable
+# Part V: Create term-level GPA variable  
+\textcolor{red}{\textbf{/3}}
 
 __Create term-level GPA variable and save as a new object__
 ```{r results='hide'}
@@ -472,7 +482,8 @@ __Create term-level GPA variable and save as a new object__
     
 ```
 
-After you create the gpa variable, conduct some basic investigations/descriptive statistics to check whether it looks reasonable
+After you create the gpa variable, conduct some basic investigations/descriptive statistics to check whether it looks reasonable  
+\textcolor{red}{\textbf{/1}}
 ```{r results='hide'}
 nls_crs_term %>%
   count(gpa_term) #freq count of new variable 
@@ -496,7 +507,7 @@ nls_crs_term %>%
 
 
 Once finished, knit to (pdf) and upload both .Rmd and pdf files to class website under the week 5 tab  
-*Remeber to use this naming convention "lastname_firstname_ps5"*
+*Remember to use this naming convention "lastname_firstname_ps5"*
 
 
 
