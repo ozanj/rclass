@@ -17,6 +17,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, echo=FALSE, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 ```
+\textcolor{red}{\textbf{Grade: /20}}  
+
 # Required reading and instructions  
  
  
@@ -99,7 +101,8 @@ __In general, for all questions that ask you to drop certain observations or cre
 
 # Part I: Questions related to keeping/dropping specfic observations
 
-## Question 1 
+## Question 1  
+\textcolor{red}{\textbf{/1}} 
 
 - Do the following:  
     - Count the number of observations that have `NA` for the variable `state`
@@ -126,7 +129,8 @@ wwlist %>% count(in_state)
 wwlist %>% filter(is.na(in_state)) %>% count()
 ```
 
-## Question 2 
+## Question 2  
+\textcolor{red}{\textbf{/0.25}} 
 
 - Do the following:
     - Count the number of observations where the value of `pop_total_zip` equals `0`
@@ -148,6 +152,7 @@ wwlist <- wwlist %>%
 
  
 ## Question 3  
+\textcolor{red}{\textbf{/0.25}} 
 
 - Remove observations the have the following values for the variable `state`: "AP", "MP"
     - these values either refer to territories or are errors
@@ -165,7 +170,8 @@ wwlist %>% count(state)
 
 __This set of questions primarily relates to creating prospect-level measures of race/ethnicity (data from College Board) that are consistent with zip-code-level and state-level measures of race/ethnicity (data from US Census)__
 
-## Question 1   
+## Question 1  
+\textcolor{red}{\textbf{/0.25}} 
 
 - Investigate the prospect-level race/ethnicity variable `ethn_code` as follows:
     - what "type" of variable is it
@@ -180,6 +186,7 @@ wwlist %>% filter(is.na(ethn_code)) %>% count()
 ```
 
 ## Question 2  
+\textcolor{red}{\textbf{/0.25}}
 
 - The prospect-level variable `ethn_code` combines Asian, Native Hawaiian and Pacific Islander into one category. To be consistent with the prospect-level variable `ethn_code`, create a variable `pop_api_zip` equal to the sum of `pop_asian_zip` and `pop_nativehawaii_zip`. Follow these steps:
     - check how many missing values the "input variables" `pop_asian_zip` and `pop_nativehawaii_zip` have
@@ -211,6 +218,7 @@ wwlist <- wwlist %>% select(-pop_asian_zip,-pop_nativehawaii_zip)
 ```
 
 ## Question 3  
+\textcolor{red}{\textbf{/1}} 
 
 - Follow the same steps as above to create a variable `pop_api_state` from the input variables 
 
@@ -234,6 +242,7 @@ wwlist <- wwlist %>% select(-pop_asian_state,-pop_nativehawaii_state)
 ```
 
 ## Question 4  
+\textcolor{red}{\textbf{/0.25}} 
 
 - Next, we'll use the zip-code level measures of number of people by race/ethnicity to create zip-code level measures of __percent__ of people by race/ethnicity
     - Before creating the new variables, investigate presence of missing observations in input variables
@@ -282,6 +291,7 @@ wwlist %>% filter(is.na(pop_black_zip) | is.na(pop_total_zip)) %>%
 ```
 
 ## Question 5  
+\textcolor{red}{\textbf{/1}} 
 
 - Follow the same steps as above to create state-level measures of percent of people by race/ethnicity
     - after you create the variables, investigate the value of the new variables and their value against missing values of the input variables for two of the new race variables
@@ -319,7 +329,8 @@ wwlist %>% filter(is.na(pop_black_state) | is.na(pop_total_state)) %>%
 
 ```
 
-## Question 6   
+## Question 6  
+\textcolor{red}{\textbf{/2}} 
 
 - Next, we'll make a new version of the prospect level race/ethnicity variable that is consistent with the Census zip code level and state level race/ethnicity variables
     - First, investigate the input variable `ethn_code` including:  
@@ -374,7 +385,8 @@ wwlist %>% filter(is.na(ethn_race)) %>% count()
 wwlist %>% group_by(ethn_race) %>% count(ethn_code)
 ```
 
-## Question 7   
+## Question 7  
+\textcolor{red}{\textbf{/0.25}}
 
 - Based on the variable `ethn_race` you just created, create a set of 0/1 prospect-level race indicator indicators
 - `nativeam_stu`; `api_stu`; `black_stu`; `latinx_stu`; `multirace_stu`; `white_stu`, `notreported_stu`
@@ -429,7 +441,8 @@ wwlist %>% group_by(notreported_stu) %>% count(ethn_race)
 
 __Now that we have cleaned data and created variables in prospect-level dataset, we can use `group_by()` and `summarise()` to perform calculations across rows about the characteristics of prospects purchased and how they compare to the general population. Generally, for the below questions you don't need to retain/assign the object created by `group_by()` and `summarise()`__
 
-## Question 1   
+## Question 1  
+\textcolor{red}{\textbf{/1}} 
 
 - Grouping by the variable `in_state`, use `summarise()` to create the following measures:
     - `tot_prosp`: a count of the number of prospects purchased
@@ -439,7 +452,8 @@ names(wwlist)
 wwlist %>% group_by(in_state) %>% summarise(total_prosp=n())
 ```
 
-## Question 2   
+## Question 2  
+\textcolor{red}{\textbf{/1}} 
 
 - Grouping by the variable `in_state`, use `summarise()` to create the following measures:
     - `tot_prosp`: a count of the number of prospects purchased
@@ -454,7 +468,8 @@ wwlist %>% group_by(in_state) %>%
     )
 ```
 
-## Question 3   
+## Question 3  
+\textcolor{red}{\textbf{/1}} 
 
 - Grouping by the variable `in_state`, use `summarise()` to create the following measures:
     - `tot_prosp`: a count of the number of prospects purchased
@@ -471,7 +486,8 @@ wwlist %>% group_by(in_state) %>%
     )
 ```    
     
-## Question 4   
+## Question 4  
+\textcolor{red}{\textbf{/1.5}} 
 
 - Grouping by the variable `in_state`, use `summarise()` to create the following measures:
     - `tot_prosp`: a count of the number of prospects purchased
@@ -495,7 +511,8 @@ wwlist %>% group_by(in_state) %>%
 
 ```
 
-## Question 5   
+## Question 5  
+\textcolor{red}{\textbf{/1}}
 
 - Grouping by the variable `in_state`, use `summarise()` to create the following measures:
 - `tot_prosp`: a count of the number of prospects purchased
@@ -513,7 +530,8 @@ wwlist %>% group_by(in_state) %>%
 
 ```
 
-## Question 6 
+## Question 6  
+\textcolor{red}{\textbf{/1.5}} 
 
 - Grouping by the variable `in_state`, use `summarise()` to create the following measures:
 - `tot_prosp`: a count of the number of prospects purchased
@@ -536,7 +554,8 @@ wwlist %>% group_by(in_state) %>%
 
 ```
 
-## Question 7 
+## Question 7  
+\textcolor{red}{\textbf{/1}} 
 
 - Now we will group_by the variable __`state`__ (rather than `in_state`), use `summarise()` to create the following measures:
     - `tot_prosp`: a count of the number of prospects purchased
@@ -556,6 +575,7 @@ wwlist %>% group_by(state) %>%
 # Part IV: Comparing prospects purchased to regional income and racial demographics  
 
 ## Question 1  
+\textcolor{red}{\textbf{/1}}
 
 In this question, we will compare median zip code income of prospects purchased to the median income in the states they live in. The goal is to assess whether Western Washington is disproportionately purchasing more affluent prospects. The variable `med_inc_state` identifies the median income of all people in the state aged 25-64. This variable has the same value for all prospects in the same state. Therefore, when using `group_by()` and `summarise()`, we can just grab the first observation for each state (hint: `first(input_var)` or `nth(input_var,1)`).
 
@@ -590,7 +610,8 @@ wwlist %>% group_by(state) %>%
   )
 ```
 
-## Question 2   
+## Question 2  
+\textcolor{red}{\textbf{/1}}
 
 For each state, we want to compare the percent of prospects purchased who are white to the percent of people in the state who are white.  The variable `pct_white_state` identifies the percent of people in the state who are white. This variable has the same value for all prospects in the same state. Therefore, when using `group_by()` and `summarise()`, we can grab the first observation for each state (hint: `first(input_var)` or `nth(input_var,1)`).
 
@@ -611,7 +632,8 @@ wwlist %>% group_by(state) %>%
 
 ```
 
-## Question 3   
+## Question 3  
+\textcolor{red}{\textbf{/1.5}}
 
 - group_by  __`state`__ and use `summarise()` to create the following measures:
     - `tot_prosp`: a count of the number of prospects purchased
@@ -640,7 +662,8 @@ wwlist %>% group_by(state) %>%
 
 ```
 
-## Question 4   
+## Question 4  
+\textcolor{red}{\textbf{/2}} 
 
 - The goal of this question is to compare the race of prospects purchased from Washington to the racial composition of zip-codes in Washington. For this question, you will filter to __only include prospects who are from Washington AND do not have the value `NA` for the variable `pop_total_zip`__, then group by the variable `zip5` and use `summarise()` to create the following variables:
     - `tot_prosp`: a count of the number of prospects purchased
@@ -674,7 +697,7 @@ wwlist %>% filter(state == "WA",!is.na(pop_total_zip)) %>% group_by(zip5) %>%
 
 
 Once finished, knit to (pdf) and upload both .Rmd and pdf files to class website under the week 4 tab  
-*Remeber to use this naming convention "lastname_firstname_ps4"*
+*Remember to use this naming convention "lastname_firstname_ps4"*
 
 
 
