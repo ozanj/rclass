@@ -14,7 +14,10 @@ output:
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
   #comment = "#>" makes it so results from a code chunk start with "#>"; default is "##"
 ```
-# Make changes to YAML header
+<span style="color:red">Grade: /20</span>  
+
+# Make changes to YAML header  
+<span style="color:red">(/1)</span>
 
 Recommend reading R Markdown: The Definative Guide section 3.1 ([LINK HERE](https://bookdown.org/yihui/rmarkdown/html-document.html)) before answering these questions
 
@@ -25,7 +28,8 @@ Recommend reading R Markdown: The Definative Guide section 3.1 ([LINK HERE](http
 
 
 
-Load tidyverse package
+Load tidyverse package  
+<span style="color:red">(/0.5)</span>
 ```{r}
 #install.packages("tidyverse") #install if you do not have tidyverse installed
 library(tidyverse)
@@ -46,7 +50,8 @@ df_school_all %>% count(total_visits)
 
 # Investigating objects, Base R approach
 
-1. Answer the following questions about the object `df_school_all` by running the appropriate R command within text (as opposed to in an R code chunk) and writing any substantive response required by the question. The first question will be answered for you to show how it works
+1. Answer the following questions about the object `df_school_all` by running the appropriate R command within text (as opposed to in an R code chunk) and writing any substantive response required by the question. The first question will be answered for you to show how it works  
+<span style="color:red">(/2)</span>  
     + What "type" of object is `df_school_all`?
         + ANSWER [GIVEN]: the object `df_school_all` has type equals `r typeof(df_school_all)`
     + What is the "length" of the object `df_school_all`? What does this specific value of length refer to?
@@ -55,7 +60,8 @@ df_school_all %>% count(total_visits)
         + ANSWER: the object `df_school_all` has `r nrow(df_school_all)` rows. Each row represents a high school
 
 \newline
-2. In the below code chunk, use the `str()` function to describe the contents of `df_school_all` and then answer the following questions in text above the code chunk:
+2. In the below code chunk, use the `str()` function to describe the contents of `df_school_all` and then answer the following questions in text above the code chunk:  
+<span style="color:red">(/2)</span>
 
     + What does each element of the object `df_school_all` represent? 
         + ANSWER: a variable
@@ -69,13 +75,15 @@ str(df_school_all)
 
 \newline
 
-3. These questions refer to the variable `school_type` within the object `df_school_all`. For the first two questions, run the appropriate R command within text (as opposed to in an R code chunk) and write any substantive response required by the question
+3. These questions refer to the variable `school_type` within the object `df_school_all`. For the first two questions, run the appropriate R command within text (as opposed to in an R code chunk) and write any substantive response required by the question  
+<span style="color:red">(/1.5)</span>
     + What is the data "type" of `school_type`?
         + ANSWER: The variable `school_type` has data type equal to `r typeof(df_school_all$school_type)`
     + What is the "length" of `school_type`? What does this specific value of length refer to?
         + ANSWER: The length of `school_type` is `r length(df_school_all$school_type)`. This value refers to the number of rows (or observations)
         
-4. In these questions, you will apply the `table()` function to the variable `school_type` within the object `df_school_all`.      + In your own words, what does the `table()` function do? 
+4. In these questions, you will apply the `table()` function to the variable `school_type` within the object `df_school_all`.      + In your own words, what does the `table()` function do?  
+<span style="color:red">(/3)</span>
         + ANSWER: counts the number of observations for each value of a variable
     + What does the `useNA` argument of the `table()` function control?
         + ANSWER: determines whether to include `NA` values in the table of counts
@@ -108,14 +116,16 @@ For the questions below, imagine that you have been asked by a major news outlet
 - For questions that ask you to print the "top 10" observations, you can simply print the object and rely on the fact that the default option [for "tibble" data frames] is to print 10 observations OR you can wrap the command in the `head()` function and explicitly tell R to print 10 observations
 - Before conducting analyses, we'll rename the variable `avgmedian_inc_2564` to give it a shorter name.
 
-1. Rename the variable `avgmedian_inc_2564` to `med_inc` and assign new variable name to the existing object `df_school_all`
+1. Rename the variable `avgmedian_inc_2564` to `med_inc` and assign new variable name to the existing object `df_school_all`  
+<span style="color:red">(/2)</span>
 ```{r}
 df_school_all <- rename(df_school_all, med_inc = avgmedian_inc_2564)
 #names(df_school_all)
 ```
 
 
-2. The news outlet is interested in comparing the in-state and out-of-state high school visits for [The University of Alabama](https://nces.ed.gov/globallocator/col_info_popup.asp?ID=100751) (IPEDS ID = 100751) variable `visits_by_100751`. Count the number of in-state public high schools that received at least one visit from The University of Alabama.   
+2. The news outlet is interested in comparing the in-state and out-of-state high school visits for [The University of Alabama](https://nces.ed.gov/globallocator/col_info_popup.asp?ID=100751) (IPEDS ID = 100751) variable `visits_by_100751`. Count the number of in-state public high schools that received at least one visit from The University of Alabama.  
+<span style="color:red">(/2)</span>
     - Note: You will need to use `filter` and the `count` function  
     - Use commas to separate varibles for this questions (e.g. `filer(dataframe, variable == something, variable == something)`)
     - You can do this in one step by wrapping the `count` function around the `filter` function ; or you can do this in two steps by creating a new data frame first  
@@ -124,7 +134,8 @@ count(filter(df_school_all, visits_by_100751 >= 1, state_code == "AL", school_ty
 
 ```
 
-3. How many public in-state high schools visited by The University of Alabama enroll at least 50% Latinx **or** 50% Black students?
+3. How many public in-state high schools visited by The University of Alabama enroll at least 50% Latinx **or** 50% Black students?  
+<span style="color:red">(/2)</span>
 ```{r}
 count(filter(df_school_all, school_type == "public", pct_black >= 50 | pct_hispanic >= 50,
              state_code == "AL", visits_by_100751 >= 1))
@@ -132,16 +143,20 @@ count(filter(df_school_all, school_type == "public", pct_black >= 50 | pct_hispa
 
 
 4. Now count the out-of-state public high schools that received at least one visit by the University of Alabama without using commas.  
+<span style="color:red">(/2)</span>
     - hint: `&` or `%in%`
 ```{r}
 count(filter(df_school_all, visits_by_100751 >=1 & state_code != "AL" & school_type == "public"))
 
 ```
 
-5. How many public out-of-state high schools visited by The University of Alabama enroll at least 50% Latinx **or** 50% Black students?
+5. How many public out-of-state high schools visited by The University of Alabama enroll at least 50% Latinx **or** 50% Black students?  
+<span style="color:red">(/2)</span>
 ```{r}
 count(filter(df_school_all, visits_by_100751 >= 1, school_type == "public", state_code != "AL" , pct_black >= 50 | pct_hispanic >= 50))
 ```
 
 
+Once finished, knit to (HTML) and upload both .Rmd and HTML files to class website under the week 2 tab  
+*Remember to use this naming convention "lastname_firstname_ps2"*
 

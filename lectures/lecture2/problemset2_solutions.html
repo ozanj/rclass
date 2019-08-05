@@ -73,9 +73,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type="text/css">
 .main-container {
@@ -100,21 +98,82 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
 </style>
 
 
 
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
 });
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
 </script>
 
 <!-- code folding -->
-
 
 
 
@@ -203,6 +262,16 @@ div.tocify {
 
 </style>
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row-fluid">
 <div class="col-xs-12 col-sm-4 col-md-3">
@@ -220,14 +289,16 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Problem Set #2 Solutions</h1>
-<h4 class="author"><em>INSERT YOUR NAME HERE</em></h4>
-<h4 class="date"><em>9/28/2018</em></h4>
+<h4 class="author">INSERT YOUR NAME HERE</h4>
+<h4 class="date">9/28/2018</h4>
 
 </div>
 
 
+<p><span style="color:red">Grade: /20</span></p>
 <div id="make-changes-to-yaml-header" class="section level1">
 <h1><span class="header-section-number">1</span> Make changes to YAML header</h1>
+<p><span style="color:red">(/1)</span></p>
 <p>Recommend reading R Markdown: The Definative Guide section 3.1 (<a href="https://bookdown.org/yihui/rmarkdown/html-document.html">LINK HERE</a>) before answering these questions</p>
 <ol style="list-style-type: decimal">
 <li>Add a table of contents to YAML header</li>
@@ -235,21 +306,22 @@ div.tocify {
 <li>table of contents should “float”</li>
 <li>add section numbering to headers</li>
 </ol>
-<p>Load tidyverse package</p>
+<p>Load tidyverse package<br />
+<span style="color:red">(/0.5)</span></p>
 <pre class="r"><code>#install.packages(&quot;tidyverse&quot;) #install if you do not have tidyverse installed
 library(tidyverse)
-#&gt; ── Attaching packages ──────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
-#&gt; ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
-#&gt; ✔ tibble  1.4.2     ✔ dplyr   0.7.6
-#&gt; ✔ tidyr   0.8.1     ✔ stringr 1.3.1
-#&gt; ✔ readr   1.1.1     ✔ forcats 0.3.0
-#&gt; ── Conflicts ─────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+#&gt; ── Attaching packages ─────────────────────────────────────────────────── tidyverse 1.2.1 ──
+#&gt; ✔ ggplot2 3.1.0       ✔ purrr   0.2.5  
+#&gt; ✔ tibble  2.1.1       ✔ dplyr   0.8.0.1
+#&gt; ✔ tidyr   0.8.3       ✔ stringr 1.4.0  
+#&gt; ✔ readr   1.3.1       ✔ forcats 0.3.0
+#&gt; ── Conflicts ────────────────────────────────────────────────────── tidyverse_conflicts() ──
 #&gt; ✖ dplyr::filter() masks stats::filter()
 #&gt; ✖ dplyr::lag()    masks stats::lag()</code></pre>
 <p>Load data frame objects</p>
 <pre class="r"><code>rm(list = ls()) # remove all objects
 getwd()
-#&gt; [1] &quot;/Users/patriciamartin/Dropbox/r_class_problem_sets/lecture2&quot;
+#&gt; [1] &quot;/Users/patriciamartin/Desktop/GitHub/rclass/lectures/lecture2&quot;
 
 #glimpse(df_school)
 load(url(&quot;https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_school_allvars.RData&quot;))
@@ -269,12 +341,13 @@ df_school_all %&gt;% count(total_visits)
 #&gt;  8            7   107
 #&gt;  9            8    89
 #&gt; 10            9    57
-#&gt; # ... with 15 more rows</code></pre>
+#&gt; # … with 15 more rows</code></pre>
 </div>
 <div id="investigating-objects-base-r-approach" class="section level1">
 <h1><span class="header-section-number">2</span> Investigating objects, Base R approach</h1>
 <ol style="list-style-type: decimal">
-<li>Answer the following questions about the object <code>df_school_all</code> by running the appropriate R command within text (as opposed to in an R code chunk) and writing any substantive response required by the question. The first question will be answered for you to show how it works
+<li>Answer the following questions about the object <code>df_school_all</code> by running the appropriate R command within text (as opposed to in an R code chunk) and writing any substantive response required by the question. The first question will be answered for you to show how it works<br />
+<span style="color:red">(/2)</span>
 <ul>
 <li>What “type” of object is <code>df_school_all</code>?
 <ul>
@@ -287,7 +360,8 @@ df_school_all %&gt;% count(total_visits)
 <li>how many “rows” are in the object <code>df_school_all? what does each row represent? + ANSWER: the object</code>df_school_all` has 21301 rows. Each row represents a high school</li>
 </ul></li>
 </ol>
-<p>2. In the below code chunk, use the <code>str()</code> function to describe the contents of <code>df_school_all</code> and then answer the following questions in text above the code chunk:</p>
+<p>2. In the below code chunk, use the <code>str()</code> function to describe the contents of <code>df_school_all</code> and then answer the following questions in text above the code chunk:<br />
+<span style="color:red">(/2)</span></p>
 <pre><code>+ What does each element of the object `df_school_all` represent? 
     + ANSWER: a variable
 + Are the individual elements within `df_school_all` lists or vectors?
@@ -353,7 +427,8 @@ df_school_all %&gt;% count(total_visits)
 #&gt;  $ inst_166629       : chr  &quot;MA&quot; &quot;MA&quot; &quot;MA&quot; &quot;MA&quot; ...</code></pre>
 
 <ol start="3" style="list-style-type: decimal">
-<li>These questions refer to the variable <code>school_type</code> within the object <code>df_school_all</code>. For the first two questions, run the appropriate R command within text (as opposed to in an R code chunk) and write any substantive response required by the question
+<li>These questions refer to the variable <code>school_type</code> within the object <code>df_school_all</code>. For the first two questions, run the appropriate R command within text (as opposed to in an R code chunk) and write any substantive response required by the question<br />
+<span style="color:red">(/1.5)</span>
 <ul>
 <li>What is the data “type” of <code>school_type</code>?
 <ul>
@@ -364,7 +439,8 @@ df_school_all %&gt;% count(total_visits)
 <li>ANSWER: The length of <code>school_type</code> is 21301. This value refers to the number of rows (or observations)</li>
 </ul></li>
 </ul></li>
-<li>In these questions, you will apply the <code>table()</code> function to the variable <code>school_type</code> within the object <code>df_school_all</code>. + In your own words, what does the <code>table()</code> function do? + ANSWER: counts the number of observations for each value of a variable
+<li>In these questions, you will apply the <code>table()</code> function to the variable <code>school_type</code> within the object <code>df_school_all</code>. + In your own words, what does the <code>table()</code> function do?<br />
+<span style="color:red">(/3)</span> + ANSWER: counts the number of observations for each value of a variable
 <ul>
 <li>What does the <code>useNA</code> argument of the <code>table()</code> function control?
 <ul>
@@ -417,12 +493,14 @@ table(df_school_all$school_type, useNA = &quot;always&quot;)
 <li>Before conducting analyses, we’ll rename the variable <code>avgmedian_inc_2564</code> to give it a shorter name.</li>
 </ul>
 <ol style="list-style-type: decimal">
-<li>Rename the variable <code>avgmedian_inc_2564</code> to <code>med_inc</code> and assign new variable name to the existing object <code>df_school_all</code></li>
+<li>Rename the variable <code>avgmedian_inc_2564</code> to <code>med_inc</code> and assign new variable name to the existing object <code>df_school_all</code><br />
+<span style="color:red">(/2)</span></li>
 </ol>
 <pre class="r"><code>df_school_all &lt;- rename(df_school_all, med_inc = avgmedian_inc_2564)
 #names(df_school_all)</code></pre>
 <ol start="2" style="list-style-type: decimal">
-<li>The news outlet is interested in comparing the in-state and out-of-state high school visits for <a href="https://nces.ed.gov/globallocator/col_info_popup.asp?ID=100751">The University of Alabama</a> (IPEDS ID = 100751) variable <code>visits_by_100751</code>. Count the number of in-state public high schools that received at least one visit from The University of Alabama.
+<li>The news outlet is interested in comparing the in-state and out-of-state high school visits for <a href="https://nces.ed.gov/globallocator/col_info_popup.asp?ID=100751">The University of Alabama</a> (IPEDS ID = 100751) variable <code>visits_by_100751</code>. Count the number of in-state public high schools that received at least one visit from The University of Alabama.<br />
+<span style="color:red">(/2)</span>
 <ul>
 <li>Note: You will need to use <code>filter</code> and the <code>count</code> function<br />
 </li>
@@ -436,7 +514,8 @@ table(df_school_all$school_type, useNA = &quot;always&quot;)
 #&gt;   &lt;int&gt;
 #&gt; 1   108</code></pre>
 <ol start="3" style="list-style-type: decimal">
-<li>How many public in-state high schools visited by The University of Alabama enroll at least 50% Latinx <strong>or</strong> 50% Black students?</li>
+<li>How many public in-state high schools visited by The University of Alabama enroll at least 50% Latinx <strong>or</strong> 50% Black students?<br />
+<span style="color:red">(/2)</span></li>
 </ol>
 <pre class="r"><code>count(filter(df_school_all, school_type == &quot;public&quot;, pct_black &gt;= 50 | pct_hispanic &gt;= 50,
              state_code == &quot;AL&quot;, visits_by_100751 &gt;= 1))
@@ -445,7 +524,8 @@ table(df_school_all$school_type, useNA = &quot;always&quot;)
 #&gt;   &lt;int&gt;
 #&gt; 1    21</code></pre>
 <ol start="4" style="list-style-type: decimal">
-<li>Now count the out-of-state public high schools that received at least one visit by the University of Alabama without using commas.
+<li>Now count the out-of-state public high schools that received at least one visit by the University of Alabama without using commas.<br />
+<span style="color:red">(/2)</span>
 <ul>
 <li>hint: <code>&amp;</code> or <code>%in%</code></li>
 </ul></li>
@@ -456,13 +536,16 @@ table(df_school_all$school_type, useNA = &quot;always&quot;)
 #&gt;   &lt;int&gt;
 #&gt; 1  1644</code></pre>
 <ol start="5" style="list-style-type: decimal">
-<li>How many public out-of-state high schools visited by The University of Alabama enroll at least 50% Latinx <strong>or</strong> 50% Black students?</li>
+<li>How many public out-of-state high schools visited by The University of Alabama enroll at least 50% Latinx <strong>or</strong> 50% Black students?<br />
+<span style="color:red">(/2)</span></li>
 </ol>
 <pre class="r"><code>count(filter(df_school_all, visits_by_100751 &gt;= 1, school_type == &quot;public&quot;, state_code != &quot;AL&quot; , pct_black &gt;= 50 | pct_hispanic &gt;= 50))
 #&gt; # A tibble: 1 x 1
 #&gt;       n
 #&gt;   &lt;int&gt;
 #&gt; 1   181</code></pre>
+<p>Once finished, knit to (HTML) and upload both .Rmd and HTML files to class website under the week 2 tab<br />
+<em>Remember to use this naming convention “lastname_firstname_ps2”</em></p>
 </div>
 
 
