@@ -18,6 +18,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, echo=FALSE, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 ```
+\textcolor{red}{\textbf{Grade: /20}}  
+
 # Required reading and instructions  
 
 ##  Required reading before next class
@@ -65,7 +67,7 @@ library(haven)
 library(labelled)
 ```
 
-# Part 1: identify and "fix" missing values of variables
+# Part 1: identify and "fix" missing values of variables  
 
 The questions for __Part 1__ are about writing functions for survey data that do these sorts of things:
 
@@ -78,7 +80,7 @@ __Note__: These functions won't work for "character" variables; don't worry abou
 
 
 Run the code chunk below to load HSLS data, changes variable names from upper-case to lower-case, keeps selected variables, and does some cursory investigation of the data frame  
-\textcolor{red}{\textbf{0.5/0.5}}
+\textcolor{red}{\textbf{/0.5}}
 
 ```{r, results='hide'}
 rm(list = ls()) # remove all objects
@@ -109,7 +111,7 @@ hsls_stu %>% val_labels() # value labels
 __SOLUTION__
 
 Perform task outside of function for a few variables  
-\textcolor{red}{\textbf{1/1}}
+\textcolor{red}{\textbf{/1}}
 ```{r, results='hide'}
 hsls_stu %>% select(x2race,x2paredu,s3classes,s3clglvl) %>% var_label()
 hsls_stu %>% select(x2race,x2paredu,s3classes,s3clglvl) %>% val_labels()
@@ -128,7 +130,7 @@ sum(hsls_stu$s3clglvl<0) # count number of obs with negative values
 ```
 
 Write function and call function  
-\textcolor{red}{\textbf{2/2}}
+\textcolor{red}{\textbf{/2}}
 ```{r}
 num_negative <- function(x){
 
@@ -157,7 +159,7 @@ __Additional details__:
 
 SOLUTION
 Perform task outside of function for a few variables  
-\textcolor{red}{\textbf{1/1}}
+\textcolor{red}{\textbf{/1}}
 ```{r, results='hide'}
 hsls_stu %>% select(x2race,x2paredu,s3classes,s3clglvl) %>% val_labels()
 
@@ -172,7 +174,7 @@ sum(hsls_stu$s3clglvl %in% c(-9,-8,-7,-6,-4,-1))
 ```
 
 Write function and call function  
-\textcolor{red}{\textbf{2/2}}
+\textcolor{red}{\textbf{/2}}
 ```{r}
 num_missing <- function(x, miss_vals){
 
@@ -222,7 +224,7 @@ __Additional details and hints__:
 SOLUTION
 
 Create `v2` versions of three variables  
-\textcolor{red}{\textbf{1/1}}
+\textcolor{red}{\textbf{/1}}
 ```{r, results='hide'}
 hsls_stu <- hsls_stu %>% mutate(
   x2race_v2 = x2race,
@@ -236,7 +238,7 @@ hsls_stu %>% select(contains("v2")) %>% val_labels()
 ```
 
 Perform task outside of function for at least two variables  
-\textcolor{red}{\textbf{1/1}}
+\textcolor{red}{\textbf{/1}}
 ```{r}
 #s3classes_v2
 hsls_stu$s3classes_v2 <- ifelse(hsls_stu$s3classes_v2 %in% c(-9,-8,-7,-6,-4),NA,hsls_stu$s3classes_v2)
@@ -254,7 +256,7 @@ hsls_stu %>% group_by(s3clglvl) %>% count(s3clglvl_v2)
 ```
 
 Write and call function  
-\textcolor{red}{\textbf{2/2}}
+\textcolor{red}{\textbf{/2}}
 ```{r}
 #Create fresh `v2` versions of variables
 hsls_stu <- hsls_stu %>% mutate(
@@ -314,7 +316,7 @@ In Part 2, you will load a data frame called `zip_data` that contains characteri
     - after you create a percent race variable, run some simple descriptive statistics to make sure the new variable looks ok; for this problem set, just printing a few observations for the input variables and the output variable is sufficient
     
 Run below code to load zip-code level data from the Census American Community Survey (ACS) and keep selected variables  
-\textcolor{red}{\textbf{0.5/0.5}}
+\textcolor{red}{\textbf{/0.5}}
 ```{r}
 #options(tibble.print_min=90)
 #options(tibble.print_min=10) 
@@ -334,7 +336,7 @@ zip_data %>%
 ```
 
 ## Question 1: Create percent race variables outside of function  
-\textcolor{red}{\textbf{1/1}}
+\textcolor{red}{\textbf{/1}}
 ```{r}
 #white
 zip_data$pop_white_pct <- (zip_data$pop_white/zip_data$pop_total)*100
@@ -352,7 +354,7 @@ zip_data$pop_latinx_pct <- NULL # remove variable
 ```
 
 ## Question 2: Create percent race variables within function  
-\textcolor{red}{\textbf{2/2}}
+\textcolor{red}{\textbf{/2}}
 ```{r}
 
 pct_race <- function(pct_var,pop_var,total_var){
@@ -379,7 +381,7 @@ zip_data %>% select(zip_code,pop_tworaces,pop_total,pop_tworaces_pct) %>% head(n
 ```
 
 # Part 3: Think of a task you might want to write a function for  
-\textcolor{red}{\textbf{1/1}}
+\textcolor{red}{\textbf{/1}}
 
 __Questions__
 
@@ -411,19 +413,19 @@ Here is an example of writing separate code to read in each year of data (as opp
 - NOTE: Change your file path to where the data is saved on your desktop  
     - We recommend using the relative file path instead of the absolute file path.  
     
-\textcolor{red}{\textbf{0.5/0.5}}    
+\textcolor{red}{\textbf{/0.5}}    
 ```{r, warning=FALSE}
 #read in data
 getwd()
-admit_16_17 <- read_dta(file="~/Desktop/rclass/data/ipeds/ic/ic16_17_admit.dta") %>%
+admit_16_17 <- read_dta(file="~/Desktop/GitHub/rclass/data/ipeds/ic/ic16_17_admit.dta") %>%
   select(unitid,endyear,sector,contains("admcon"),
          contains("numapply"),contains("numadmit"))
 
-admit_15_16 <- read_dta(file="~/Desktop/rclass/data/ipeds/ic/ic15_16_admit.dta") %>%
+admit_15_16 <- read_dta(file="~/Desktop/GitHub/rclass/data/ipeds/ic/ic15_16_admit.dta") %>%
   select(unitid,endyear,sector,contains("admcon"),
          contains("numapply"),contains("numadmit"))
 
-admit_14_15 <- read_dta(file="~/Desktop/rclass/data/ipeds/ic/ic14_15_admit.dta") %>%
+admit_14_15 <- read_dta(file="~/Desktop/GitHub/rclass/data/ipeds/ic/ic14_15_admit.dta") %>%
   select(unitid,endyear,sector,contains("admcon"),
          contains("numapply"),contains("numadmit"))
 
@@ -442,10 +444,10 @@ We already performed the task outside of a function, so let's try writing a func
 - NOTE: Change your file path to where the data is saved on your desktop  
     - We recommend using the relative file path instead of the absolute file path.  
     
-\textcolor{red}{\textbf{1/1}}    
+\textcolor{red}{\textbf{/1}}    
 ```{r, eval=FALSE}
 read_admit <- function(ayear) {
-  admit_ayear <- read_dta(file="~/Desktop/rclass/data/ipeds/ic/ayear_admit.dta") %>% #Change to your file path
+  admit_ayear <- read_dta(file="~/Desktop/GitHub/rclass/data/ipeds/ic/ayear_admit.dta") %>% #Change to your file path
   select(unitid,endyear,sector,contains("admcon"),
          contains("numapply"),contains("numadmit"))
 }
@@ -462,7 +464,7 @@ Before attempting to revise the function, let's develop an approach for completi
 Perform task outside of a function
 
 - First, create an object for desired name for data frame (admit_16_17)  
-\textcolor{red}{\textbf{0.5/0.5}}
+\textcolor{red}{\textbf{/0.5}}
 ```{r}
 x <- "16_17" #create an object for academic year
 x #print the object
@@ -488,7 +490,7 @@ Perform task outside of a function
 - NOTE: Change your file path to where the data is saved on your desktop  
     - We recommend using the relative file path instead of the absolute file path.  
     
-\textcolor{red}{\textbf{1/1}}    
+\textcolor{red}{\textbf{/1}}    
 ```{r, warning=FALSE}
 #name of the dataset we are reading, eg ic16_17_admit.dta
 paste("ic",x,"_admit.dta",sep="")
@@ -497,7 +499,7 @@ dtaname
 
 #Create object for filepath, eg. "~/Desktop/rclass/data/ipeds/ic/ic15_16_admit.dta"
   #?file.path # this function creates a file path 
-dir <- file.path("~","Desktop","rclass","data","ipeds","ic") #Change to your file path
+dir <- file.path("~","Desktop", "GitHub", "rclass","data","ipeds","ic") #Change to your file path
 dir #print object
 setwd(dir) #Run line 476 and 477 together or run the entire code chunk
 list.files()
@@ -510,13 +512,13 @@ Perform task outside of a function.
 - NOTE: Change your file path to where the data is saved on your desktop  
     - We recommend using the relative file path instead of the absolute file path.  
 
-\textcolor{red}{\textbf{1/1}}    
+\textcolor{red}{\textbf{/1}}    
 ```{r, warning=FALSE}
 #rm(list = ls())
 x <- "16_17" # academic year
 dfname <- paste("admit_",x, sep="") # name we want to assign to data frame
 dtaname=paste("ic",x,"_admit.dta",sep="") # name of Stata dataset we are reading in
-dir <- file.path("~","Desktop","rclass","data","ipeds","ic") # name of filepath to Stata datasets; Change file path to your filepath
+dir <- file.path("~","Desktop", "GitHub", "rclass","data","ipeds","ic") # name of filepath to Stata datasets; Change file path to your filepath
 
 #read data
 getwd()
@@ -537,7 +539,7 @@ Now we can create function for task
 - NOTE: Change your file path to where the data is saved on your desktop  
     - We recommend using the relative file path instead of the absolute file path.  
     
-\textcolor{red}{\textbf{1/1}}    
+\textcolor{red}{\textbf{/1}}    
 ```{r, warning=FALSE, eval=FALSE}
 
 #rm(list = ls())
@@ -545,7 +547,7 @@ read_admit <- function(ayear) {
 
   dfname <- paste("admit_",ayear, sep="") # name we want to assign to data frame
   dtaname=paste("ic",ayear,"_admit.dta",sep="") # name of Stata dataset we are reading in
-  dir <- file.path("~","Desktop","rclass","data","ipeds","ic") # name of filepath to Stata datasets; Change the file path to your file path
+  dir <- file.path("~","Desktop","GitHub","rclass","data","ipeds","ic") # name of filepath to Stata datasets; Change the file path to your file path
   
   #read data
   getwd()
