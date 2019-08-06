@@ -17,6 +17,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, echo=FALSE, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 ```
+\textcolor{red}{\textbf{Grade: /20}}   
+
 # Required reading and instructions  
 
 ##  Required reading before next class
@@ -74,10 +76,12 @@ library(labelled)
 # Part I: Conceptual questions
 
 - According to Wickham, what is the difference between "data structure" and "data concepts" (he uses the term "data semantics")  
+\textcolor{red}{\textbf{/1}}
     - Data structure refers to the the physical layout of the data (e.g., what the rows and columns in a dataset actually represent)  
     - Data concepts – which were introduced by Wickham (2014) – refer to how the data should be structured
 
-- According to Wickham:
+- According to Wickham:  
+\textcolor{red}{\textbf{/1}} 
     - what is an "observation"?  
     ANSWER: An observation contains the values for all attributes measured on the same unit (like a person, or a day)…across attributes”
     - give an example of an observation?  
@@ -88,7 +92,8 @@ library(labelled)
     ANSWER: When data is tidy (satisfies all three conditions of tidy data)
 
 
-- According to Wickham:
+- According to Wickham:  
+\textcolor{red}{\textbf{/1}} 
     - what is a "variable?"  
     ANSWER: “A variable contains all values that measure the same underlying attribute (like height, temperature, duration) across units”
     - give an example of a variable  
@@ -98,7 +103,8 @@ library(labelled)
     - Under what condition is a variable the same thing as a column  
     ANSWER: When data is tidy
     
-- According to Wickham:
+- According to Wickham:  
+\textcolor{red}{\textbf{/1}} 
     - what is a "value"?  
     ANSWER: "A single element within some data structure (e.g., vector, list), usually a number or a character string."
     - give an example of a value  
@@ -109,9 +115,12 @@ library(labelled)
     When data is tidy
 
 - What is the difference between the terms "unit of analysis" [an "ozan" term; not necessarily used outside this class] and "observational level" [A Wickham term]  
+\textcolor{red}{\textbf{/0.5}}  
+
 Wickham defines "observational level" as what each observation should represent in a tidy dataset (i.e., it is a data concept), whereas Ozan defines "unit of analysis" as what each row in the data actually represents (i.e., refers to data structure). 
 
 - What are the three rules of tidy data?  
+\textcolor{red}{\textbf{/0.5}} 
 
     1. Each variable must have its own column.  
     1. Each observation must have its own row.  
@@ -191,7 +200,8 @@ levstudy1_obs <- all_obs %>%
 glimpse(levstudy1_obs)
 ```
 
-## Questions related to spreading the dataset agegroup1_obs
+## Questions related to spreading the dataset `agegroup1_obs`  
+\textcolor{red}{\textbf{/0.5}}
 
 - Run whatever investigations seem helpful to you to get to know the data (e.g., list variable names, list variable variable labels, list variable values, tabulations). You may decide to comment out some of these investigations before you knit and submit the problem set so that your pdf doesn't get too long.
 
@@ -238,7 +248,8 @@ agegroup1_obs %>% group_by(unitid,levstudy) %>% # group by vars
   count(n_per_group) # frequency of number of observations per group
 ```
 
-Using code from previous question as a guide, confirm that the object `agegroup1_obs` has more than one observation for each value of unitid
+Using code from previous question as a guide, confirm that the object `agegroup1_obs` has more than one observation for each value of unitid  
+\textcolor{red}{\textbf{/0.5}} 
 
 ```{r}
 agegroup1_obs %>% group_by(unitid) %>% # group by vars
@@ -249,7 +260,8 @@ agegroup1_obs %>% group_by(unitid) %>% # group by vars
 ```
 
 
-- Diagnose whether the data frame `agegroup1_obs` meets each of the three criteria for tidy data
+- Diagnose whether the data frame `agegroup1_obs` meets each of the three criteria for tidy data  
+\textcolor{red}{\textbf{/2}} 
     - YOUR ANSWER HERE: 
         - Each variable must have its own column: false; the values of the column levstudy should each be variables with their own column
         - Each observation must have its own row: false; there should be one row per college/university, but this data frame has one row per college-levstudy  
@@ -271,7 +283,8 @@ agegroup1_obs %>% group_by(unitid) %>% # group by vars
 - what should the value column be in the data frame `agegroup1_obs`?
     - YOUR ANSWER HERE: value column should be `efage09`
     
-Tidy the data frame `agegroup1_obs` and create a new object `agegroup1_obs_tidy`, then print a few observations
+Tidy the data frame `agegroup1_obs` and create a new object `agegroup1_obs_tidy`, then print a few observations  
+\textcolor{red}{\textbf{/1}} 
 
 ```{r}
 agegroup1_obs %>% head(n=5)
@@ -279,7 +292,8 @@ agegroup1_obs_tidy <- agegroup1_obs %>% spread(key = levstudy, value = efage09)
 agegroup1_obs_tidy %>% head(n=5)
 ```
 
-Confirm that the new object `agegroup1_obs_tidy` contains one observation for each value of unitid
+Confirm that the new object `agegroup1_obs_tidy` contains one observation for each value of unitid  
+\textcolor{red}{\textbf{/0.5}} 
 ```{r}
 agegroup1_obs_tidy %>% group_by(unitid) %>% # group by vars
   summarise(n_per_group=n()) %>% # create a measure of number of observations per group
@@ -289,7 +303,8 @@ agegroup1_obs_tidy %>% group_by(unitid) %>% # group by vars
 
 
 
-Create a new object `agegroup1_obs_tidy_v2` from the object `agegroup1_obs` by performing the following steps in one line of code with multiple pipes:
+Create a new object `agegroup1_obs_tidy_v2` from the object `agegroup1_obs` by performing the following steps in one line of code with multiple pipes:  
+\textcolor{red}{\textbf{/1.5}} 
 
 - Create a variable `level` that is a character version of the variable `levstudy'
 - Drop the original variable `levstudy`
@@ -306,7 +321,8 @@ agegroup1_obs_tidy_v2 <- agegroup1_obs %>%
 
 ```
 
-Print a few observations of `agegroup1_obs_tidy_v2`; why is this data frame preferable over `agegroup1_obs_tidy`?
+Print a few observations of `agegroup1_obs_tidy_v2`; why is this data frame preferable over `agegroup1_obs_tidy`?  
+\textcolor{red}{\textbf{/0.5}} 
 ```{r}
 head(agegroup1_obs_tidy_v2)
 ```
@@ -314,7 +330,8 @@ YOUR ANSWER HERE: more intuitive to have variable names that are not numbers
 
 
 
-## Questions related to spreading the dataset levstudy1_obs
+## Questions related to spreading the dataset levstudy1_obs  
+\textcolor{red}{\textbf{/0.5}}
 
 - Run whatever investigations seem helpful to you to get to know the data frame `levstudy1_obs` (e.g., list variable names, list variable variable labels, list variable values, tabulations). You may decide to comment out some of these investigations before you knit and submit the problem set so that your pdf doesn't get too long.
 
@@ -342,7 +359,8 @@ levstudy1_obs %>% count(agegroup) %>% as_factor
 ```
 
 
-- Confirm that there is one row per each combination of unitid-agegroup
+- Confirm that there is one row per each combination of unitid-agegroup  
+\textcolor{red}{\textbf{/0.5}} 
 
 ```{r}
 levstudy1_obs %>% group_by(unitid,agegroup) %>% # group by vars
@@ -351,7 +369,8 @@ levstudy1_obs %>% group_by(unitid,agegroup) %>% # group by vars
   count(n_per_group) # frequency of number of observations per group
 ```
 
-Using code from previous question as a guide, confirm that the object `levstudy1_obs` has more than observation for each value of unitid
+Using code from previous question as a guide, confirm that the object `levstudy1_obs` has more than observation for each value of unitid  
+\textcolor{red}{\textbf{/0.5}}
 
 ```{r}
 levstudy1_obs %>% group_by(unitid) %>% # group by vars
@@ -360,6 +379,7 @@ levstudy1_obs %>% group_by(unitid) %>% # group by vars
   count(n_per_group) # frequency of number of observations per group
 
 ```
+\textcolor{red}{\textbf{/0.5}}  
 
 - Why is the data frame `levstudy1_obs` not tidy?
     - YOUR ANSWER HERE: the data frame has one row per college-agegroup; these rows do not meet the requirements of being observations because an observation contains all values for some unit.
@@ -368,7 +388,8 @@ levstudy1_obs %>% group_by(unitid) %>% # group by vars
     - YOUR ANSWER HERE: convert the values of the variable agegroup into their own variables; each variable will contain enrollment for that age group
 
 
-Tidy the data frame `levstudy1_obs` and create a new object `levstudy1_obs_tidy` (it is up to you whether you want to create character version of the variable `agegroup` prior to tidying) then print a few observations
+Tidy the data frame `levstudy1_obs` and create a new object `levstudy1_obs_tidy` (it is up to you whether you want to create character version of the variable `agegroup` prior to tidying) then print a few observations  
+\textcolor{red}{\textbf{/1.5}}
 
 ```{r}
 levstudy1_obs %>% head(n=5)
@@ -396,7 +417,8 @@ levstudy1_obs_tidy <- levstudy1_obs %>%
 levstudy1_obs_tidy %>% head(n=5)
 ```
 
-Confirm that the new object `levstudy1_obs_tidy` contains one observation for each value of unitid
+Confirm that the new object `levstudy1_obs_tidy` contains one observation for each value of unitid  
+\textcolor{red}{\textbf{/0.5}}
 ```{r}
 levstudy1_obs_tidy %>% group_by(unitid) %>% # group by vars
   summarise(n_per_group=n()) %>% # create a measure of number of observations per group
@@ -407,7 +429,8 @@ levstudy1_obs_tidy %>% group_by(unitid) %>% # group by vars
 
 ## Questions related to spreading the dataset all_obs
 
-Investigate data frame `all_obs` if you want, but not required to show code
+Investigate data frame `all_obs` if you want, but not required to show code  
+\textcolor{red}{\textbf{/0.5}}
 
 - Confirm that there is one row per each combination of unitid-agegroup-levstudy
 
@@ -418,7 +441,8 @@ all_obs %>% group_by(unitid,agegroup,levstudy) %>% # group by vars
   count(n_per_group) # frequency of number of observations per group
 ```
 
-- Why is the data frame `all_obs` not tidy?
+- Why is the data frame `all_obs` not tidy?  
+\textcolor{red}{\textbf{/0.5}} 
     - YOUR ANSWER HERE: the data frame has one row per college-agegroup-levstudy; these rows do not meet the requirements of being observations because an observation contains all values for some unit (e.g., a college)
   
 - What changes need to be made to `all_obs` to make it tidy?
@@ -460,7 +484,8 @@ all_obs_temp %>% head(n=20)
 
 ```
 
-Tidy the data frame `all_obs_temp` and create a new object `all_obs_tidy`; then print a few observations
+Tidy the data frame `all_obs_temp` and create a new object `all_obs_tidy`; then print a few observations  
+\textcolor{red}{\textbf{/1}} 
 
 ```{r}
 all_obs_tidy <- all_obs_temp %>%
@@ -469,7 +494,8 @@ all_obs_tidy <- all_obs_temp %>%
 all_obs_tidy %>% head(n=20)
 ```
 
-- Confirm that the new object `all_obs_tidy` contains one observation for each value of unitid
+- Confirm that the new object `all_obs_tidy` contains one observation for each value of unitid  
+\textcolor{red}{\textbf{/0.5}} 
 ```{r}
 all_obs_tidy %>% group_by(unitid) %>% # group by vars
   summarise(n_per_group=n()) %>% # create a measure of number of observations per group
@@ -487,7 +513,7 @@ Here, we load a table from NCES digest of education statistics that contains dat
 load(url("https://github.com/ozanj/rclass/raw/master/data/nces_digest/nces_digest_table_208_30.RData"))
 table208_30
 ```
-
+\textcolor{red}{\textbf{/0.5}}  
 
 - Why is the data frame `table208_30` not tidy?  
     - YOUR ANSWER HERE:  Some of the column names (tot_fall_2000...) are not names of variables, but values of a variable, which results in a single variable (e.g., total fall enrollment) being spread across multiple columns
@@ -497,7 +523,8 @@ table208_30
     - YOUR ANSWER HERE: "Gather" year columns or reshape from wide to long
     
 
-Tidy the data frame `table208_30` and create a new object `table208_30_tidy`:
+Tidy the data frame `table208_30` and create a new object `table208_30_tidy`:  
+\textcolor{red}{\textbf{/1.5}} 
 
 - Recommended but optional: prior to gathering, rename the __names__ columns (i.e., the set of columns that represent values, not variables in your untidy data). specifically, rename these variables to remove characters prior to gathering (e.g., rename "tot_fall_2000" -> "2000"). See the end of section 4.2.1 for an example of how to do this.
 - after you tidy the data, print a few observations
@@ -520,7 +547,8 @@ head(table208_30_tidy, n=20)
 
 
 
-# Bonus Question:
+# Bonus Question:  
+\textcolor{red}{\textbf{/4}} 
 
 Run this code below to see create the data frame `allobs_v1` and examine its contents
 ```{r}
@@ -541,4 +569,4 @@ Your end result should be a "tidy" version of `allobs_tidy`.
 Hint: Google "How to spread mulitple value columns in R"
 
 Once finished, knit to (pdf) and upload both .Rmd and pdf files to class website under the week 6 tab  
-*Remeber to use this naming convention "lastname_firstname_ps6"*
+*Remember to use this naming convention "lastname_firstname_ps6"*
