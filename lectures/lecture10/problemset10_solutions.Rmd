@@ -20,6 +20,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, echo=FALSE, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 ```
+\textcolor{red}{\textbf{Grade: /20}}  
+
 # Required reading and instructions  
 
 ##  Required reading
@@ -54,7 +56,7 @@ library(tidyverse)
 ```
 
 Run code below to load zip-code level data from the Census American Community Survey (ACS) and keep selected variables  
-\textcolor{red}{\textbf{0.5/0.5}}
+\textcolor{red}{\textbf{/0.5}}
 ```{r}
 #options(tibble.print_min=90)
 #options(tibble.print_min=10) 
@@ -72,7 +74,7 @@ class(zip_data)
 ```
 
 Run code below [answer to question from previous problem set] which creates percent race/ethnicity variables outside of a function for two race/ethnicity categories  
-\textcolor{red}{\textbf{0.5/0.5}}
+\textcolor{red}{\textbf{/0.5}}
 ```{r}
 #white
 zip_data$pop_white_pct <- (zip_data$pop_white/zip_data$pop_total)*100
@@ -100,7 +102,7 @@ __Specific task__
     - `data_frame_name[["var_name_pct"]] <- (data_frame_name[["var_name"]]/zip_data[["pop_total"]])*100`  
 - Perform task outside of a function for at least two race/ethnicity categories (can be white and latinx)  
 
-\textcolor{red}{\textbf{1/1}}
+\textcolor{red}{\textbf{/1}}
 
 ```{r}
 names(zip_data)
@@ -130,7 +132,7 @@ Run code below [solution to previous problem set] which creates and calls the `p
 - Make sure to delete variable after checking that your function worked   
     - `zip_data$pop_latinx_pct <- NULL`  
     
-\textcolor{red}{\textbf{0.5/0.5}}    
+\textcolor{red}{\textbf{/0.5}}    
 
 ```{r}
 pct_race <- function(pop_var,total_var){
@@ -165,7 +167,7 @@ __Specific task/question: Modify the function call you use to create these perce
 - Make sure to delete variable after checking that your function worked   
     - `zip_data$pop_latinx_pct <- NULL`  
     
-\textcolor{red}{\textbf{1/1}}
+\textcolor{red}{\textbf{/1}}
 ```{r}
 pct_race <- function(pop_var,total_var){
 
@@ -209,7 +211,7 @@ __Specific requirements__
     - However, in program call for `df` will be `df name` [i.e., without quotes]
         - Hint: `df[["new variable"]] <- pct_race(df, "variable", "variable")`   
         
-\textcolor{red}{\textbf{2/2}}
+\textcolor{red}{\textbf{/2}}
 ```{r}
 
 pct_race <- function(df,pop_var,total_var){
@@ -254,7 +256,7 @@ This part of the problem set will give you some practice looping over elements o
 Run the code below to create data frame called `zip_tiny` that consists of the first 10 observations of data frame `zip_data`
 
 - Note: when we created `zip_data` above, we sorted by `zip_code` so no need to `arrange()` observations when creating `zip_tiny`  
-\textcolor{red}{\textbf{0.5/0.5}}
+\textcolor{red}{\textbf{/0.5}}
 ```{r}
 #names(zip_data)
 
@@ -275,7 +277,7 @@ For this question, you get full credit just by running the code below. But try t
 
 - Note that one line of the loop body calculates the mean value of the variable using the `mean()` function. The `mean()` function will not calculate mean values for variables that do not have numeric or logical classes (e.g., character vars, factor vars). But this won't stop code from running, so you can ignore these warnings.   
 
-\textcolor{red}{\textbf{0.5/0.5}}
+\textcolor{red}{\textbf{/0.5}}
 
 ```{r}
 for (i in zip_tiny) {
@@ -300,7 +302,7 @@ __Question__: Write a loop that loops across **names** of object elements of dat
     - `cat("\n","value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)`
     
 SOLUTION  
-\textcolor{red}{\textbf{1/1}}
+\textcolor{red}{\textbf{/1}}
 ```{r}
 for (i in names(zip_tiny)) {
   cat("\n","value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)
@@ -320,7 +322,7 @@ __Question__: Modify the previous loop to also print the element contents associ
 - You should have two lines of code in your loop body
 
 SOLUTION  
-\textcolor{red}{\textbf{1/1}}
+\textcolor{red}{\textbf{/1}}
 ```{r}
 for (i in names(zip_tiny)) {
   cat("\n","value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)
@@ -340,7 +342,7 @@ __Question__: Modify the previous loop to revise the way the loop prints the ele
 - You should have two lines of code in your loop body (same as above)
     
 SOLUTION  
-\textcolor{red}{\textbf{1/1}}
+\textcolor{red}{\textbf{/1}}
 ```{r}
 for (i in names(zip_tiny)) {
   cat("\n","value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)
@@ -354,7 +356,7 @@ for (i in names(zip_tiny)) {
 __Question__: When using the `for (i in names(data_frame_name))` approach to loop over elements in a data frame, what is the difference between objects created by the syntax `data_frame_name[i])` and objects created by the syntax `data_frame_name[[i]])`?
 
 YOUR ANSWER HERE:  
-\textcolor{red}{\textbf{1/1}}
+\textcolor{red}{\textbf{/1}}
 
 SOLUTION: Objects created by the syntax `data_frame_name[i])` have the same `type` and `class` as the data frame. By contrast objected created by the syntax `data_frame_name[[i]])` remove a level of hierarchy, so these objects are always vectors.
 
@@ -372,7 +374,7 @@ __Question__: Modify the previous loop to add a line that prints the mean value 
         - `cat("Mean of element named",i,"is",....`)
     - Note: the `mean()` function will not calculate mean values for variables that do not have numeric or logical classes (e.g., character vars, factor vars). But this won't stop code from running, so you can ignore these warnings.  
 
-\textcolor{red}{\textbf{2/2}}
+\textcolor{red}{\textbf{/2}}
 ```{r}
 for (i in names(zip_tiny)) {
   cat("\n","value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)
@@ -396,7 +398,7 @@ __Question__: Modify the previous loop (which calculates mean values in the last
         - Note that a more advanced approach to this is on page 80 of lecture 10
 
 SOLUTION  
-\textcolor{red}{\textbf{1.5/1.5}}
+\textcolor{red}{\textbf{/1.5}}
 ```{r}
 names(zip_tiny)
 
@@ -411,7 +413,7 @@ for (i in c("pop_total","pop_white","pop_black","pop_nativeamer","pop_asian","po
 ## Question 8: Loop over elements based on numeric element position
 
 First, run this code to become acquainted with the components involved for writing the `sequence` syntax for this approach to looping  
-\textcolor{red}{\textbf{0.5/0.5}}
+\textcolor{red}{\textbf{/0.5}}
 ```{r}
 zip_tiny
 length(zip_tiny) # length = number of elements = number of variables (when object is data frame)
@@ -424,7 +426,7 @@ __Question__: Use `for (i in 1:length(data_frame_name))` approach to loop over e
 - Your loop body should be: 
     - `cat("\n","value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)`
 
-\textcolor{red}{\textbf{1/1}}
+\textcolor{red}{\textbf{/1}}
 ```{r}
 for (i in 1:length(zip_tiny)) {
   cat("\n","value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)
@@ -442,7 +444,7 @@ __Question__: Modify the loop above to add a second line that prints out the nam
 - Second line of loop body should start with:  
     - `cat("Variable name associated with object i =", ...)`  
     
-\textcolor{red}{\textbf{1/1}}    
+\textcolor{red}{\textbf{/1}}    
 ```{r}
 for (i in 1:length(zip_tiny)) {
   cat("\n","Value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)
@@ -457,7 +459,7 @@ __Question__: Keeping all the code from the loop above, add a third line to the 
 
 - syntax hint: `print(str(data_frame_name[[i]]))`
 
-\textcolor{red}{\textbf{1.5/1.5}}
+\textcolor{red}{\textbf{/1.5}}
 ```{r}
 for (i in 1:length(zip_tiny)) {
   cat("\n","value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)
@@ -476,7 +478,7 @@ __Question__: Keeping all the code from the loop above, add a fourth line to the
 - Fourth line of code should start with:  
     - `cat("Mean of element named",names(df[[i]]),"is", ...`)  
     
-\textcolor{red}{\textbf{2/2}}
+\textcolor{red}{\textbf{/2}}
 ```{r}
 for (i in 1:length(zip_tiny)) {
   cat("\n","Value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)
