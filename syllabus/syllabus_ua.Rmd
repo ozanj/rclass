@@ -15,7 +15,7 @@ date: "Fall 2019"
 instructor: "Karina Salazar"
 pronouns: "she/her/hers"
 email: "ksalazar@email.arizona.edu"
-officehours: Tues 3-4PM; and by appt
+officehours: Tues 2-4PM; and by appt
 office: "EDU 313"
 
 web: "ozanj.github.io/rclass/"
@@ -229,10 +229,14 @@ In the below schedule, I lecture on a topic, and then you do the reading about t
 
 ## Lecture 1, 8/28/2019: Course introduction; objects in R
 
-- Reading (after class): Wickham and Grolemund (W&G) 1; W&G 2; W&G 4; W&G 20.1 - 20.3
-- RmD 
+- Reading (after class): 
+    - Wickham and Grolemund (W&G) 1; W&G 2; W&G 4; W&G 20.1 - 20.3
 
-## `r advdate(fri, 1)`: Investigating data patterns
+## Lecture 2, 9/4/2019: Introduction to using "base R" to investigate data patters
+
+- Reading (after class):
+
+## Lecture 3, 9/11/2019: Introduction to using tidyverse Investigating data patterns
 
 - Problem set due (before class): Yes
 - Reading (after class): 
