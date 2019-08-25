@@ -1,6 +1,6 @@
 ---
 title: Managing and Manipulating Data Using R # potentially push to header
-subtitle:  Lecture 1.1, Logistics
+subtitle:  Lecture 1.1
 author: Karina Salazar
 date: 
 classoption: dvipsnames  # for colors

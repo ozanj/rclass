@@ -138,6 +138,7 @@ Course readings will be assigned from:
 
 - Wickham, H., & Grolemund, G. (2018). _R for Data Science_. Retrieved from http://r4ds.had.co.nz/ [FREE!]
 - Xie, Y., Allaire, J. j., & Grolemund, G. (2018). _R Markdown: The Definitive Guide_.  Retrieved from https://bookdown.org/yihui/rmarkdown/ [FREE!]
+- Wickham, H. (2014). _Advanced R_.  Retrieved from https://adv-r.hadley.nz/ [FREE!]
 
 # Required Software and Hardware
 
@@ -232,17 +233,20 @@ In the below schedule, I lecture on a topic, and then you do the reading about t
 - Reading (after class): 
     - Wickham and Grolemund (W&G) 1; W&G 2; W&G 4; W&G 20.1 - 20.3
 
-## Lecture 2, 9/4/2019: Introduction to using "base R" to investigate data patters
-
-- Reading (after class):
-
-## Lecture 3, 9/11/2019: Introduction to using tidyverse Investigating data patterns
+## Lecture 2, 9/4/2019: Introduction to using tidyverse to investigate data patterns
 
 - Problem set due (before class): Yes
 - Reading (after class): 
     - GW 5.1 - 5.4
     - Xie, Allaire & Grolemund (XAG) 3.1 [LINK HERE](https://bookdown.org/yihui/rmarkdown/html-document.html)
     - Spend 15 minutes studying the "R Markdown Reference Guide" [LINK HERE](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf)
+
+## Lecture 3, 9/11/2019: Introduction to using "base R" to investigate data patterns
+
+- Problem set due (before class): Yes
+- Reading (after class): 
+    - GW 5.1 - 5.4
+    - Xie, Allaire & Grolemund (XAG) 3.1 [LINK HERE](https://bookdown.org/yihui/rmarkdown/html-document.html)
 
 ## `r advdate(fri, 2)`: Pipes and variable creation
 
@@ -306,56 +310,6 @@ In the below schedule, I lecture on a topic, and then you do the reading about t
 ## `r advdate(fri, 11)`: No class
 
 - Problem set due: Yes
-
-# Campus Resources  
-**Counseling and Psychological Services (CAPS)**  
-This is a multidisciplinary student mental health center for the UCLA campus. CAPS offers an array of free services including individual counseling. If you suspect you are experiencing mental health problems or just need someone to talk to, you can make an appointment at John Wooden Center West, facing Drake Stadium, second floor, 310-825-0768. http://www.counseling.ucla.edu
-
-**Report Discrimination**
-UCLA is committed to maintaining a campus community that provides the stronget possible support for the intellectual and personal growth of all its members- students, faculty, and staff. Acts intended to create a hostile climate are unacceptable. To file an online incident report, visit: https://equity.ucla.edu/report-an-incident/  
-
-**Sexual harassment**  
-Title IX prohibits gender discrimination, including sexual harassment, domestic and dating violence, sexual assault, and stalking. If you have experienced sexual harassment or sexual violence, you can receive confidential support and advocacy at the CARE Advocacy Office for Sexual and Gender-Based Violence. 1st Floor Wooden Center West, via email CARE.advocate@careprogram.ucla.edu or by phone (310) 206-2465. In addition, Counseling and Psychological Services (CAPS) provides confidential counseling to all students and can be reached 24/7 at (310) 825-0768. You can also report sexual violence or sexual harassment directly to the University's Title IX Coordinator, 2241 Murphy Hall, via email at mcato@equity.ucla.edu, or via phone at (310) 206-3417. Reports to law enforcement can be made to UCPD at (310) 825-1491. *Faculty and TAs are required under the UC Policy on Sexual Violence and Sexual Harassment to inform the Title IX Coordinator should they become aware that you or any other student has experienced sexual violence or sexual harassment.*  
-
-**LGTBQ Resource Center**
-This resource center provides a range of education and advocacy services supporting intersectional identity development. It fosters unity; wellness; and an open, safe, inclusive environment for lesbian, gay, bisexual, intersex, transgender, queer, asexual, questioning, and same-gender-loving students, their families, and the entire campus community. Find it in the Student Activities Center, or via email lgbt@lgbt.ucla.edu. Visit their website for more information: https://www.lgbt.ucla.edu/  
-
-**International Students**  
-The Dashew Center provides a range of programs to promote cross-cultural learning, language improvement, and cultural adjustment. Their programs include trips in the LA area, performances, and on-campus events and workshops. Visit their website for more information: https://www.internationalcenter.ucla.edu/  
-
-**Undocumented Student Program**  
-This program provides a safe space for undergraduate and graduate undocument students. USP supports the UndocuBruin community through personalized services and resources, programs, and workshops. Visit their website for more information: https://www.usp.ucla.edu/  
-
-**Student legal services**  
-UCLA student legal services provides a range of legal support to all registered and enrolled UCLA students. Some of their services include:  
-
-- Landlord/Tenant Relations  
-- Accident and Injury Problems  
-- Domestic Violence and Harassment  
-- Divorces and Other Family Law Matter  
-
-For more information visit their website: http://www.studentlegal.ucla.edu/index.php
-
-**Students with dependents**  
-UCLA Students with Dependents provides support to UCLA studens who are parents, guardians, and caregivers. Some of their services include:  
-
-- Information, referrals, and support to navigate UCLA (childcare, family housing, financial aid)  
-- Access to information about resources within the larger community  
-- On-site application and verification for CalFresh (food stamps) & MediCal and assistance with Cal
-Works/GAIN  
-- A quiet study space  
-- Family friendly graduation celebration in June  
-
-For more information visit their website: https://www.deanofstudents.ucla.edu/Portals/16/Documents/studentsdependents.pdf  
-
-**Lactation Rooms**  
-[Map to lactation rooms on campus](https://map.ucla.edu/?f=5)  
-
-**Gender Inclusive restrooms**  
-[Map to gender inclusive restrooms](http://maps.ucla.edu/campus/?a_layers=flyr_restrooms)  
-
-**Campus accessibility**  
-[Campus accessibility map](https://maps.ucla.edu/downloads/pdf/Access_08_21_15.pdf)
 
 
 
