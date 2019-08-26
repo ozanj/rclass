@@ -138,7 +138,6 @@ Course readings will be assigned from:
 
 - Wickham, H., & Grolemund, G. (2018). _R for Data Science_. Retrieved from http://r4ds.had.co.nz/ [FREE!]
 - Xie, Y., Allaire, J. j., & Grolemund, G. (2018). _R Markdown: The Definitive Guide_.  Retrieved from https://bookdown.org/yihui/rmarkdown/ [FREE!]
-- Wickham, H. (2014). _Advanced R_.  Retrieved from https://adv-r.hadley.nz/ [FREE!]
 
 # Required Software and Hardware
 
@@ -226,18 +225,19 @@ Students should review the UA Code of Academic Integrity which can be found at: 
 # Course Schedule and Required Reading
 In the below schedule, I lecture on a topic, and then you do the reading about that topic and are required to complete a problem set about that topic. However, if you would prefer to the reading about a topic __prior__ to me lecturing about that topic, feel free to do so.
 
+_Work and course requirements are subject to change at the discretion of the instructor with proper notice to the students._
 
 
 ## Lecture 1, 8/28/2019: Course introduction; objects in R
 
 - Reading (after class): 
-    - Wickham and Grolemund (W&G) 1; W&G 2; W&G 4; W&G 20.1 - 20.3
+    - Wickham and Grolemund 2018 (W&G) 1; W&G 2; W&G 4; W&G 20.1 - 20.3
 
 ## Lecture 2, 9/4/2019: Introduction to using tidyverse to investigate data patterns
 
 - Problem set due (before class): Yes
 - Reading (after class): 
-    - GW 5.1 - 5.4
+    - W&G 5.1 - 5.4
     - Xie, Allaire & Grolemund (XAG) 3.1 [LINK HERE](https://bookdown.org/yihui/rmarkdown/html-document.html)
     - Spend 15 minutes studying the "R Markdown Reference Guide" [LINK HERE](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf)
 
@@ -245,71 +245,87 @@ In the below schedule, I lecture on a topic, and then you do the reading about t
 
 - Problem set due (before class): Yes
 - Reading (after class): 
-    - GW 5.1 - 5.4
-    - Xie, Allaire & Grolemund (XAG) 3.1 [LINK HERE](https://bookdown.org/yihui/rmarkdown/html-document.html)
+    - Wickham, H. (2014). _Advanced R_.  Retrieved from https://adv-r.hadley.nz/: 4.1-4.3
+    - Nicholls, A., Pugh, R., & Gott, A. (2015). _Sams Teach Yourself R in 24 Hours_. (pg.236-237) [on D2L]
 
-## `r advdate(fri, 2)`: Pipes and variable creation
+## Lecture 4, 9/18/2019: Pipes and variable creation
 
 - Problem set due (before class): Yes
 - Reading (after class): 
-    - GW 5.5 (creating variables)
+    - W&G 5.5 (creating variables)
     - XAG 3.3 (R Markdown, creating PDF documents) [LINK HERE](https://bookdown.org/yihui/rmarkdown/pdf-document.html)
         - note: sections 3.3.5 through 3.3.8 will feel somewhat cryptic and are not required for this course; so just do the best you can with those
 
-## `r advdate(fri, 3)`: Processing across rows
+## Lecture 5, 9/25/2019:  Processing across rows
 
 - Problem set due (before class): Yes
 - Reading (after class): 
-    - GW 5.6 - 5.7 (grouped summaries and mutates)
+    - W&G 5.6 - 5.7 (grouped summaries and mutates)
     - XAG 4.1 (R Markdown, ioslides presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/ioslides-presentation.html) and 4.3 (R Markdown, Beamer presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/beamer-presentation.html)
 
-## `r advdate(fri, 4)`: Augmented vectors, Survey data, and exploratory data analysis
+## Lecture 6, 10/2/2019:  Augmented vectors, Survey data, and exploratory data analysis
 
 - Problem set due (before class): Yes
 - Reading (after class): 
-    - GW 15.1 - 15.2 (factors) [this is like 2-3 pages]
-    - [OPTIONAL] GW 15.3 - 15.5 (remainder of "factors" chapter)
-    - [OPTIONAL] GW 20.6 - 20.7 (attributes and augmented vectors)
-    - [OPTIONAL] GW 10 (tibbles)
+    - W&G 15.1 - 15.2 (factors) [this is like 2-3 pages]
+    - [OPTIONAL] W&G 15.3 - 15.5 (remainder of "factors" chapter)
+    - [OPTIONAL] W&G 20.6 - 20.7 (attributes and augmented vectors)
+    - [OPTIONAL] W&G 10 (tibbles)
 
-## `r advdate(fri, 5)`: Tidy data
+
+## Lecture 7, 10/9/2019:  Guidelines for investigating, cleaning, and creating variables
+- Problem set due (before class): Yes
+- Reading (after class): TBD
+
+## Lecture 8, 10/16/2019:  Tidy Data
 
 - Problem set due (before class): Yes
 - Reading (after class):
-    - Work through slides we from lecture 6 that we don't get to in class
-        - [REQUIRED] slides from section 4 "Tidying data"
-        - [OPTIONAL] slides from section 5 "Missing data"
-    - [OPTIONAL] GW chapter 12 (tidy data)
-        - Lecture 6 covers this material pretty closely, so read chapter if you can, but I get it if you don't have time
+    - W&G chapter 12 (tidy data)
     - [OPTIONAL] Wickham, H. (2014). Tidy Data. _Journal of Statistical Software_, 59(10), 1-23. doi:10.18637/jss.v059.i10
-        - This is the journal article that introduced the data concepts covered in GW chapter 12 and created the packages related to tidying data
+        - This is the journal article that introduced the data concepts covered in W&G chapter 12 and created the packages related to tidying data
         - Link to article here: [LINK](https://www.jstatsoft.org/article/view/v059i10)
 
-## `r advdate(fri, 6)`: Joining multiple datasets
+## Lecture 9, 10/23/2019:  Joining multiple datasets
 
 - Problem set due (before class): Yes
-- Reading (after class): GW 13
+- Reading (after class): W&G 13
 
-## `r advdate(fri, 7)`: Acquiring data
-
-- Problem set due (before class): Yes
-- Reading (after class): GW 11
-
-## `r advdate(fri, 8)`: No class
-
-## `r advdate(fri, 9)`: Writing functions
+## Lecture 10, 10/30/2019:  Acquiring data
 
 - Problem set due (before class): Yes
-- Reading (after class): GW 19
+- Reading (after class): W&G 11
 
-## `r advdate(fri, 10)`: Accessing object elements and looping
+## Lecture 11, 11/6/2019:  Working with Strings and Date/Time Variables
 
 - Problem set due (before class): Yes
-- Reading (after class): GW 20.4 - 20.5; 21.1 - 21.3
+- Reading (after class): W&G 19
 
-## `r advdate(fri, 11)`: No class
+
+## Lecture 12, 11/13/2019: : No class (ASHE)
 
 - Problem set due: Yes
 
+
+## Lecture 13, 11/20/2019: : Accessing object elements and looping 
+
+- Problem set due (before class): Yes
+- Reading (after class): W&G 20.4 - 20.5; 21.1 - 21.3
+
+
+## Lecture 14, 11/27/2019: : No class (Thanksgiving)
+
+- Problem set due (before class): Yes
+
+
+## Lecture 15, 12/4/2019: : Introduction to Git Hub 
+
+- "Reading" (after class):
+    - Code Academy Git Tutorial: https://www.codecademy.com/learn/learn-git 
+
+
+## Lecture 16, 12/11/2019: Catch-Up and/or Wrap-up 
+
+- Problem set due: Yes [Code Academy Certificate of Completion]
 
 
