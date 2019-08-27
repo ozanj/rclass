@@ -18,7 +18,7 @@ output:
     df_print: tibble # push to header?    
     latex_engine: pdflatex #  Available engines are pdflatex [default], xelatex, and lualatex; The main reasons you may want to use xelatex or lualatex are: (1) They support Unicode better; (2) It is easier to make use of system fonts.
     includes:
-      in_header: ../beamer_header_ks.tex
+      in_header: ../beamer_header.tex
       #after_body: table-of-contents.txt 
 ---
 
@@ -75,7 +75,7 @@ Got sick of the limitations of survey data and/or available data
 Examples:
 
 - [The off-campus recruiting project](https://emraresearch.org/)
-- [Dissertation Defense](file:///Users/Karina/defense/index.html#/title)
+- [Dissertation Defense](https://ksalazar3.github.io/defense/#/title)
     
 
 

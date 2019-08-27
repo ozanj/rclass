@@ -15,13 +15,13 @@ date: "Fall 2019"
 instructor: "Karina Salazar"
 pronouns: "she/her/hers"
 email: "ksalazar@email.arizona.edu"
-officehours: Tues 2-4PM; and by appt
-office: "EDU 313"
+officehours: Tues 12pm - 2pm; and by appt
+office: "COE 313"
 
 web: "ozanj.github.io/rclass/"
 discuss: "d2l.arizona.edu"
 classroom: "COE 331"
-classhours: "Wednesdays 4:15 - 6:45 pm"
+classhours: "Wednesdays 4:15pm - 6:45pm"
 
 ta: "Patricia Martín"
 tapronouns: "she/her/hers"
@@ -157,12 +157,12 @@ Please install the following software on your laptop
 
 # Course Website and Resources
 
-Course Website can be found [here](https://ozanj.github.io/rclass/). We wil use this website to download course materials such as lecture slides in pdf and .Rmd formats, data, weekly problem sets, and other class resources.  
+Course Website can be found [here](https://ozanj.github.io/rclass/). We will use this website to download course materials such as lecture slides in pdf and .Rmd formats, data, weekly problem sets, and other class resources.  
 
 
 #Discussion and Homework Questions
 
-We are using D2L as our class discussion forum where folks can ask homework questions/comments to share with the instructor and the entire class. If you're stuck on a homework question or are experiencing problems with R more generally odds are others are too. Posting questions and concerns on D2L is the easiest way for us to all benefit from each other's knowledge. When asking questions on D2L, please include as many details to replicate the "error." Always indicate the homework assignment and question number that's causing you issues, insert code, screenshots, and text to your posts. 
+We are using D2L as our class discussion forum where folks can ask homework questions/comments to share with the instructor and the entire class. If you're stuck on a homework question or are experiencing problems with R more generally odds are others are too. Posting questions and concerns on D2L is the easiest way for us to all benefit from each others knowledge. When asking questions on D2L, please include as many details to replicate the "error." Always indicate the homework assignment and question number that's causing you issues, insert code, screenshots, and text to your posts. 
 
 I strongly encourage all questions related to course content to be posted on the D2L discussion forum for each week. I will do my best to reply to all posts within 24 hours. I also encourage you all to share your thoughts/answers on posts by your classmates. Writing out explanations to student questions will improve your own knowledge and will benefit your classmates. Sharing different ways to get at the "right" answer will be beneficial for all. 
 
@@ -198,7 +198,7 @@ We all have a responsibility to ensure that every member of the class feels valu
 
 With respect to the course material, learning programming and the essential skills of data manipulation is hard! This stuff feels overwhelming to me all the time. So it is important that we all create an environment where students feel comfortable asking questions and talking about what they did not understand. 
 
-With respect to creating an inclusive environment, be mindful that what you say affects other people. So express your thoughts in a way that doesn’t make people feel excluded.
+With respect to creating an inclusive environment, be mindful that what you say affects other people. So express your thoughts in a way that does not’t make people feel excluded.
 
 
 ## Online Collaboration/Netiquette
