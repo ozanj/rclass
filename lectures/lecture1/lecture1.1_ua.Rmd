@@ -257,4 +257,57 @@ Why am I asking you to create R project and download a specific directory struct
     - e.g., in "rclass/lectures/lecture1" you might add an additional document of notes you took
 
 
+# Directories and filepaths 
+
+### Working directory
+
+__(Current) Working directory__
+
+- the folder/directory in which you are currently working
+- this is where R looks for files
+- Files located in your current working directory can be accessed without specifying a filepath because R automatically looks in this folder
+
+Function `getwd()` shows current working directory
+```{r}
+getwd()
+```
+Command `list.files()` lists all files located in working directory
+```{r}
+getwd()
+list.files()
+```
+
+### Working directory, "Code chunks" vs. "console" and "R scripts"
+
+When you run __code chunks__ in RMarkdown files (.Rmd), the working directory is set to the filepath where the .Rmd file is stored
+
+```{r}
+getwd()
+list.files()
+```
+
+When you run code from the __R Console__ or an __R Script__, the working directory is....
+
+
+Command `getwd()` shows current working directory
+```{r}
+getwd()
+```
+
+### Absolute vs. relative filepath  
+**Absolute file path**:  The absolute file path is the complete list of directories needed to locate a file or folder.  
+`setwd("Users/Karina/rclass/lectures/lecture2")`
+
+
+**Relative file path**:  The relative file path is the path relative to your current location/directory. Assuming your current working directory is in the "lecture2" folder and you want to change your directory to the data folder, your relative file path would look something like this:  
+`setwd("../../data")`  
+
+            File path shortcuts
+
+| **Key** | **Description** |
+| ------ | -------- |
+| ~    | tilde is a shortcut for user's home directory (mine is my name)   |
+| ../    | moves up a level   |
+| ../../    | moves up two level   |
+
 
