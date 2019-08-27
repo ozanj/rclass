@@ -1,7 +1,7 @@
 ---
 title: Managing and Manipulating Data Using R # potentially push to header
 subtitle:  Lecture 1.2
-author: Karina Salazar
+author: 
 date: 
 classoption: dvipsnames  # for colors
 fontsize: 8pt
