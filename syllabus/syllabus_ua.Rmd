@@ -246,7 +246,7 @@ _Work and course requirements are subject to change at the discretion of the ins
 - Problem set due (before class): Yes
 - Reading (after class): 
     - Wickham, H. (2014). _Advanced R_.  Retrieved from https://adv-r.hadley.nz/: 4.1-4.3
-    - Nicholls, A., Pugh, R., & Gott, A. (2015). _Sams Teach Yourself R in 24 Hours_. (pg.236-237) [on D2L]
+    - Nicholls, A., Pugh, R., & Gott, A. (2015). _Sams Teach Yourself R in 24 Hours_. (pg. 236-237) [on D2L]
 
 ## Lecture 4, 9/18/2019: Pipes and variable creation
 
@@ -302,7 +302,7 @@ _Work and course requirements are subject to change at the discretion of the ins
 - Reading (after class): W&G 19
 
 
-## Lecture 12, 11/13/2019: : No class (ASHE)
+## Lecture 12, 11/13/2019: No class (ASHE)
 
 - Problem set due: Yes
 

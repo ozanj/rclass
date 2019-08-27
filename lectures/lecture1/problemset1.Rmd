@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Problem set 1  
 
 ***  
-Note: Change author to your name
+Note: Change author to your name & date to current date
 
 ### Step 1:
 
@@ -74,5 +74,5 @@ Note: Change author to your name
 
 **Knit to pdf** select the "Knit" tab (icon with blue yarn ball) or scroll down and "Knit to PDF"  
 
-- Submit both .Rmd and pdf to rclass website https://ozanj.github.io/rclass/resources/ under week 1  
+- Submit both .Rmd and pdf   
 - Use this naming convention "lastname_firstname_ps#"
