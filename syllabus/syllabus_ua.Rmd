@@ -143,9 +143,9 @@ Course readings will be assigned from:
 
 ## Software [FREE!]
 
-Instructions on downloading software can be found [here](https://github.com/ozanj/rclass/raw/master/educ263_todo.pdf)
+Instructions on downloading software can be found [here](https://github.com/ozanj/rclass/raw/master/rclass_todo.pdf)
 
-Please install the following software on your laptop
+Please install the following software on your laptop 
 
 - R
 - RStudio
