@@ -302,29 +302,29 @@ _Work and course requirements are subject to change at the discretion of the ins
 - Reading (after class): W&G 19
 
 
-## Module 12, 11/13/2019: No class (ASHE)
+## 11/13/2019: No class (ASHE)
 
 - Problem set due: Yes
 
 
-## Module 13, 11/20/2019: : Accessing object elements and looping 
+## Module 12, 11/20/2019: Accessing object elements and looping 
 
 - Problem set due (before class): Yes
 - Reading (after class): W&G 20.4 - 20.5; 21.1 - 21.3
 
 
-## Module 14, 11/27/2019: : No class (Thanksgiving)
+## 11/27/2019: : No class (Thanksgiving)
 
 - Problem set due (before class): Yes
 
 
-## Module 15, 12/4/2019: : Introduction to Git Hub 
+## Module 13, 12/4/2019: : Introduction to Git Hub 
 
 - "Reading" (after class):
     - Code Academy Git Tutorial: https://www.codecademy.com/learn/learn-git 
 
 
-## Module 16, 12/11/2019: Catch-Up and/or Wrap-up 
+## Module 14, 12/11/2019: Catch-Up and/or Wrap-up 
 
 - Problem set due: Yes [Code Academy Certificate of Completion]
 
