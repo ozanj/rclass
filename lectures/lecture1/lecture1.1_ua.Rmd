@@ -35,7 +35,6 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 1. Academic program (and how far along) 
 1. GA, RA, TA, and/or job?
 1. Why are you interested in this course?
-1. Tell us about your name (e.g., what is the origin story?)
 
 
 # About your instructor
