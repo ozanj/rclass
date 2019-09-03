@@ -432,7 +432,7 @@ getwd()
 ```
 
 
-# Investigating objects, Base R approach
+# Investigating objects
 
 ### Load .Rdata data frames we will use today
 
@@ -765,20 +765,6 @@ Tip:
 str(df_event)
 ```
 
-# Find homework groups
-
-### What we'll do to choose homework groups
-
-- Meet new people (10-15 minutes of speed-dating!)
-    - find someone in class you don't know and talk to them for three minutes about whatever!
-        - e.g., where you from, what program, what are research interests, what you like doing outside of school, work
-- We'll spend 10-15 minutes where enrolled students choose homework groups
-    - must be groups of 3
-    - cannot have more than 2 people from same academic program (e.g., HEOC, HDP)
-- Auditors not part of "official" homework groups of 3, but they are welcome to join any homework group or form their own homework group
-
-Use Zoom for group meetings!
-- https://ucla.zoom.us/ 
 
 # Investigating data frames, tidyverse approach
 

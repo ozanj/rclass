@@ -79,3 +79,18 @@ if(!file.exists("fp2.JPG")) {
 1. Added required reading for next week on syllaus 
 1. If we don't get through all of lecture, finish on your own
     - whenever we don't cover difficult concepts in class; I'll cover those concepts next week and slow down the pace of class
+    
+# Find homework groups
+
+### What we'll do to choose homework groups
+
+- Meet new people (10-15 minutes of speed-dating!)
+    - find someone in class you don't know and talk to them for three minutes about whatever!
+        - e.g., where you from, what program, what are research interests, what you like doing outside of school, work
+- We'll spend 10-15 minutes where enrolled students choose homework groups
+    - must be groups of 3
+    - cannot have more than 2 people from same academic program (e.g., HEOC, HDP)
+- Auditors not part of "official" homework groups of 3, but they are welcome to join any homework group or form their own homework group
+
+Use Zoom for group meetings!
+- https://ucla.zoom.us/ 
