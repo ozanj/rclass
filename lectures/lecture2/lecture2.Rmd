@@ -102,7 +102,7 @@ How we will be using R Markdown files in this class:
 
 - homework you submit will be .Rmd files, with "output" style will be `html_document` or `pdf_document`
 - lectures we write are .Rmd files, where we the output style will usually be `beamer_presentation`
-    - this is essentially a pdf document, where each page is a slide
+    - this is essentially a PDF document, where each page is a slide
 
 ### Creating RMarkdown documents
 
