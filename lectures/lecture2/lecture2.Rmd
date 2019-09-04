@@ -725,9 +725,9 @@ svector <- c("e","f",NA,"NA")
 is.na(svector)
 ```
 
-### Missing values are "contageous"
+### Missing values are "contagious"
 
-What does "contageous" mean?
+What does "contagious" mean?
 
 - operations involving a missing value will yield a missing value
 
@@ -766,7 +766,7 @@ str(df_event)
 ```
 
 
-# Investigating data frames, tidyverse approach
+# Investigating data patterns with tidyverse
 
 ### Introduction to the `dplyr` library
 
