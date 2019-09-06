@@ -79,7 +79,7 @@ knitr::opts_chunk$set(echo = TRUE)
       + _Do not worry about the code right now. We will review how to install packages in the following weeks._ 
     3. Once the package is installed, paste the following code in the "console" and hit return(enter): __tinytex::install_tinytex()__  
     
-  * Instructions for installing MikTeX/MacTeX 
+  * [Instructions](https://github.com/ozanj/rclass/raw/master/miktex_mactex_instructions.pdf) for installing MikTeX/MacTeX 
   
     * We understand that installing MikTeX/MacTeX can be challenging and time-consuming and
 for that reason, we recommend installing tinytex if you do not already have MikTeX/MacTeX installed. We ask you to come to class with all the software installed. Please reach out to me if you are running into problems. I am happy to help. 
