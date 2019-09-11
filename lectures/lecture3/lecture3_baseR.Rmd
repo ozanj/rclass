@@ -485,4 +485,71 @@ df_event[order(df_event$event_date, df_event$total_12, decreasing = TRUE), ]
 
 #sorting by both ascending and descending variables
 df_event[order(df_event$event_date, -df_event$total_12), ]
-````
+```
+
+
+# Tidyverse vs base R examples
+
+### Extracting columns (variables)
+
+-Create a new dataframe by extracting the columns `instnm`, `event_date`, `event_type` from df_event. Use the `names()` function to show what columns/variables are in the newly created dataframe.
+
+__tidyverse__
+```{r}
+df_event_tv <- select(df_event, instnm, event_date, event_type)
+names(df_event_tv)
+```
+
+__base R__ using subsetting operators
+```{r}
+df_event_br1 <- df_event[, c("instnm", "event_date", "event_type")]
+names(df_event_br1)
+```
+
+__base R__ using `subset()` function
+```{r}
+df_event_br2 <- subset(df_event, select=c(instnm, event_date, event_type))
+names(df_event_br2)
+```
+
+
+### Extracting observations 
+
+-Create a new dataframe from df_schools that includes out-of-state public high schools with 50%+ Latinx student enrollment that received at least one visit by the University of California Berkeley.
+
+__tidyverse__
+```{r}
+df_school_tv <- filter(df_school, state_code != "CA" & school_type == "public" & pct_hispanic >= 50 & visits_by_110635 >=1 )
+nrow(df_school_tv)
+```
+
+__base R__ using subsetting operators
+```{r}
+df_school_br1 <- df_school[df_school$state_code != "CA" & df_school$school_type == "public" 
+                  & df_school$pct_hispanic >= 50 
+                  & df_school$visits_by_110635 >=1, ]
+nrow(df_school_br1)
+```
+
+__base R__ using `subset()` function
+```{r}
+df_school_br2 <- subset(df_school, state_code != "CA" & school_type == "public" & pct_hispanic >= 50 & visits_by_110635 >=1 )
+nrow(df_school_br2)
+```
+
+
+
+### Sorting observations 
+
+-Create a new dataframe from df_events that sorts by ascending by `event_date`, ascending `event_state`, and descending `pop_total` .
+
+__tidyverse__
+```{r results="hide"}
+df_event_tv <- arrange(df_event, event_date, event_state, desc(pop_total))
+```
+
+__base R__ using  `order()` function
+```{r results="hide"}
+df_event_br1 <- df_event[order(df_event$event_date, df_event$event_state, 
+                               -df_event$pop_total), ]
+```
