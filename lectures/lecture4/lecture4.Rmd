@@ -1,7 +1,7 @@
 ---
-title: "Lecture 3: Pipes and creating variables using `mutate()`"
-subtitle:  "EDUC 263: Managing and Manipulating Data Using R"
-author: Ozan Jaquette
+title: "Lecture 4: Creating variables via tidyverse (pipes & `mutate()`) and base R"
+subtitle:  "Managing and Manipulating Data Using R"
+author:
 date: 
 fontsize: 8pt
 classoption: dvipsnames  # for colors
@@ -69,29 +69,6 @@ Note: when we load package, name of package is not in quotes; but when we instal
 - `library(tidyverse)`
 
 
-## Finish lecture 2, filter and arrange (i.e., sort)
-
-### Load data for lecture 2
-
-Data on off-campus recruiting events by public universities
-
-```{r}
-rm(list = ls()) # remove all objects
-#load dataset with one obs per recruiting event
-load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData"))
-#load dataset with one obs per high school
-load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_school_somevars.RData"))
-```
-
-Object `df_event`
-
-- Off-campus recruiting project; one obs per university, recruiting event
-
-Object `df_school`
-
-- Off-campus recruiting project; one obs per high school (visited and non-visited)
-
-\medskip Work through lecture 2 slides on `filter()` and `arrange()`
 
 ## Data for lecture 3
 
