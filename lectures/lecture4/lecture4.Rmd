@@ -324,7 +324,7 @@ rm(wwlist_temp)
 ```
 
 
-# Creating variables using mutate
+# Creating variables using mutate (tidyverse approach)
 
 ### Our plan for learning how to create new variables
 
