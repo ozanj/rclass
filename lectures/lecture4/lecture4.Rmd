@@ -61,7 +61,7 @@ Note: when we load package, name of package is not in quotes; but when we instal
 
 
 
-## Data for lecture 3
+## Data for lecture
 
 ### Lecture 3 data: prospects purchased by Western Washington U.
 
