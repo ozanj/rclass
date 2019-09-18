@@ -1,5 +1,5 @@
 ---
-title: "Lecture 4: Creating variables via tidyverse (pipes & `mutate()`) and base R"
+title: "Lecture 4: Creating variables via pipes & `mutate()` (tidyverse) and subsetting operators (base R)"
 subtitle:  "Managing and Manipulating Data Using R"
 author:
 date: 
@@ -40,15 +40,6 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 #Use this if you don't want TOC to show level 2 headings
 \tableofcontents[subsectionstyle=hide/hide/hide]
 ```
-
-### Logistics
-
-Required reading for next week:
-
-- Grolemund and Wickham 5.5 (Add new variables with `mutate()`)
-- Xie, Allaire, and Grolemund (XAG) section 3.3 (R Markdown, PDF document) [LINK HERE](https://bookdown.org/yihui/rmarkdown/pdf-document.html)
-
-Syllabus (on class website has been revised to reflect this); these readings are also listed on the problem set due next week
 
 ### Libraries we will use today
 
@@ -467,33 +458,6 @@ rm(school_v2_temp)
 
 ```
 
-### Aside: Base R approach to creating new variables
-
-__Task__: Create measure of percent of students on free-reduced lunch
-
-__dplyr/tidyverse approach__
-```{r}
-school_v2_temp <- school_v2 %>% 
-  mutate(pct_fr_lunch = num_fr_lunch/total_students) 
-```
-
-
-__Base R approach__
-```{r, results="hide"}
-school_v2_temp <- school_v2 # create copy of dataset; not necessary
-
-school_v2_temp$pct_fr_lunch <- school_v2_temp$num_fr_lunch/school_v2_temp$total_students
-
-names(school_v2_temp)
-rm(school_v2_temp)
-```
-
-Good to know both Base R and tidyverse approaches; sometimes you need to use one or the other
-
-- But overwhelming to learn both approaches at once
-- We'll focus mostly on learning tidyverse approaches
-- But I'll try to work-in opportunities to learn Base R approach
-
 ### `mutate()` can create multiple variables at once
 
 `mutate()` can create multiple variables at once
@@ -770,7 +734,7 @@ wwlist %>% count(school_category)
 rm(wwlist_temp)
 ```
 
-### Using `recode()` within `mutate()` [do in pairs/groups]
+### Using `recode()` within `mutate()` 
 
 __Task__: Create `school_catv2` based on `school_category` with these categories:
 
@@ -792,7 +756,7 @@ wwlist_temp %>% count(school_catv2)
 wwlist %>% count(school_category)
 rm(wwlist_temp)
 ```
-### Using `recode()` within `mutate()` [do in pairs/groups]
+### Using `recode()` within `mutate()` 
 
 __Task__: Create `school_catv2` based on `school_category` with these categories:
 
@@ -972,8 +936,105 @@ school_v2_temp %>% count(state_type)
 
 
 
+# Base R appraoch to creating new variables 
+
+
+### Base R approach to creating new variables
+
+Subsetting operators `[]` and `$` are used to create new variables and set conditions of the input variables 
+
+\medskip
+
+If creating new variable based on calculation of input variables, basically the tidyverse equivalent of `mutate()` __without__ `ifelse()` or `recode()`
+
+- Sudo syntax: `df$newvar <- ...` 
+- where ... argument is expression(s)/calculation(s) used to create new variables 
+
+\medskip
+
+__Task__: Create measure of percent of students on free-reduced lunch
+
+__base R approach__
+```{r}
+school_v2_temp<- school_v2 #create copy of dataset; not necessary
+school_v2_temp$pct_fr_lunch <- 
+   school_v2_temp$num_fr_lunch/school_v2_temp$total_students 
+```
+
+__tidyverse approach (with pipes)__
+```{r}
+school_v2_temp <- school_v2 %>% 
+  mutate(pct_fr_lunch = num_fr_lunch/total_students) 
+```
+
+### Base R approach to creating new variables
+
+If creating new variable based on the condition/values of input variables, basically the tidyverse equivalent of `mutate()` __with__ `ifelse()` or `recode()`
+
+\medskip
+
+- Sudo syntax: `df$newvar[logical condition]<- new value` 
+- `logical condition`: a condition that evaluates to `TRUE` or `FALSE`
 
 
 
+###  Base R approach to creating new variables
 
+__Task__: Create 0/1 indicator if school has median income greater than $100k
+
+__tidyverse approach (using pipes)__
+```{r}
+school_v2_temp %>% select(med_inc) %>% 
+  mutate(inc_gt_100k= ifelse(med_inc>100000,1,0)) %>%
+  count(inc_gt_100k) # note how NA values of med_inc treated
+```
+
+__Base R approach__
+```{r}
+school_v2_temp$inc_gt_100k<-NA #initialize an empty column with NAs 
+                              # otherwise you'll get warning
+school_v2_temp$inc_gt_100k[school_v2_temp$med_inc>100000] <- 1
+school_v2_temp$inc_gt_100k[school_v2_temp$med_inc<=100000] <- 0
+count(school_v2_temp, inc_gt_100k)
+```
+
+### Base R approach to creating new variables 
+
+__Task__: Using data frame `wwlist` and input vars `state` and `firstgen`, create a 4-category var with following categories:
+
+- "instate_firstgen"; "instate_nonfirstgen"; "outstate_firstgen"; "outstate_nonfirstgen"
+
+__tidyverse approach (using pipes)__
+```{r}
+wwlist_temp <- wwlist %>% 
+  mutate(state_gen = case_when(
+    state == "WA" & firstgen =="Y" ~ "instate_firstgen",
+    state == "WA" & firstgen =="N" ~ "instate_nonfirstgen",
+    state != "WA" & firstgen =="Y" ~ "outstate_firstgen",
+    state != "WA" & firstgen =="N" ~ "outstate_nonfirstgen")
+  )
+str(wwlist_temp$state_gen)
+wwlist_temp %>% count(state_gen)
+```
+
+
+### Base R approach to creating new variables 
+
+__Task__: Using data frame `wwlist` and input vars `state` and `firstgen`, create a 4-category var with following categories:
+
+- "instate_firstgen"; "instate_nonfirstgen"; "outstate_firstgen"; "outstate_nonfirstgen"
+
+__base R approach__
+```{r}
+wwlist_temp <- wwlist 
+
+wwlist_temp$state_gen <- NA
+wwlist_temp$state_gen[wwlist_temp$state == "WA" & wwlist_temp$firstgen =="Y"] <- "instate_firstgen"
+wwlist_temp$state_gen[wwlist_temp$state == "WA" & wwlist_temp$firstgen =="N"] <- "instate_nonfirstgen"
+wwlist_temp$state_gen[wwlist_temp$state != "WA" & wwlist_temp$firstgen =="Y"] <- "outstate_firstgen"
+wwlist_temp$state_gen[wwlist_temp$state != "WA" & wwlist_temp$firstgen =="N"] <- "outstate_nonfirstgen"
+
+str(wwlist_temp$state_gen)
+count(wwlist_temp, state_gen)
+```
 
