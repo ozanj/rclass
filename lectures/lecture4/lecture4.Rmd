@@ -1,5 +1,5 @@
 ---
-title: "Lecture 4: Creating variables via pipes & `mutate()` (tidyverse) and subsetting operators (base R)"
+title: "Lecture 4: Pipes and variable creation"
 subtitle:  "Managing and Manipulating Data Using R"
 author:
 date: 
