@@ -1,7 +1,7 @@
 ---
-title: "Lecture 10: Accessing object elements and looping"
+title: "Lecture 8: Acquiring data"
 subtitle:  "EDUC 263: Managing and Manipulating Data Using R"
-author: Ozan Jaquette
+author: Patricia Martin
 date: 
 fontsize: 8pt
 classoption: dvipsnames  # for colors
@@ -22,42 +22,86 @@ output:
       #after_body: table-of-contents.txt 
 ---
 
-```{r, echo=FALSE}
+```{r echo=FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
+#knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
+  #comment = "#>" makes it so results from a code chunk start with "#>"; default is "##"
+```
+
+```{r, echo=FALSE, include=FALSE}
+#THIS CODE DOWNLOADS THE MOST RECENT VERSION OF THE FILE beamder_header.tex AND SAVES IT TO THE DIRECTORY ONE LEVEL UP FROM THIS .RMD LECTURE FILE
+download.file(url = 'https://raw.githubusercontent.com/ozanj/rclass/master/lectures/beamer_header.tex', 
+              destfile = '../beamer_header.tex',
+              mode = 'wb')
+```
+
+```{r, echo=FALSE, include=FALSE}
+#DO NOT WORRY ABOUT THIS
+if(!file.exists('tidyverse.png')){
+  download.file(url = 'https://github.com/ozanj/rclass/raw/master/lectures/lecture8/tidyverse.png', 
+                destfile = 'tidyverse.png',
+                mode = 'wb')
+}
+```
+
+```{r, echo=FALSE, include=FALSE}
+#DO NOT WORRY ABOUT THIS
+if(!file.exists('mrc_table1.png')){
+  download.file(url = 'https://github.com/ozanj/rclass/raw/master/lectures/lecture8/mrc_table1.png', 
+                destfile = 'mrc_table1.png',
+                mode = 'wb')
+}
+```
+
+```{r, echo=FALSE, include=FALSE}
+#DO NOT WORRY ABOUT THIS
+if(!file.exists('ic2017_ay.png')){
+  download.file(url = 'https://github.com/ozanj/rclass/raw/master/lectures/lecture8/ic2017_ay.png', 
+                destfile = 'ic2017_ay.png',
+                mode = 'wb')
+}
+```
+
+```{r, echo=FALSE, include=FALSE}
+#DO NOT WORRY ABOUT THIS
+if(!file.exists('rclass_folder.png')){
+  download.file(url = 'https://github.com/ozanj/rclass/raw/master/lectures/lecture8/rclass_folder.png', 
+                destfile = 'rclass_folder.png',
+                mode = 'wb')
+}
+```
+
+```{r, echo=FALSE, include=FALSE}
+#DO NOT WORRY ABOUT THIS
+if(!file.exists('rclass_folder_contents.png')){
+  download.file(url = 'https://github.com/ozanj/rclass/raw/master/lectures/lecture8/rclass_folder_contents.png', 
+                destfile = 'rclass_folder_contents.png',
+                mode = 'wb')
+}
 ```
 
 # Introduction
 
+
 ### Logistics
 
-__Course evaluations__  
+__Reading to do before next class:__
 
-Please take a few minutes to complete instructor and T.A. evaluations
+- [REQUIRED] GW chapter 11 (Data import)
 
-- Complete online evaluation for Ozan  
-    - Should have received an email or log on to your MyUCLA account
-- Complete online evaluation for Patricia (TA), Link [here](https://goo.gl/forms/tnBwfR2Ot29NXR023)
 
-__Problem set 10__
+__No class next Friday (11/23)__  
 
-- Due next Friday at noon; focuses on accessing vector elements and basics of looping
-- We give big hints; less emphasis on "figure it out on your own"
+- Problem set #8 is due on Friday (11/23)  
+- Problem set #9 will be assigned the following week, Friday (11/30) and will be due on Friday (12/7)  
 
-__Reading:__
 
-- Grolemund and Wickham 20.4 - 20.5 (Chapter 20 is on "Vectors")
-- Grolemund and Wickham 21.1 - 21.3 (Chapter 21 is on "Iteration")
-- [OPTIONAL] Any slides from lecture we don't cover
-    - I wrote this lecture knowing we won't have time to get through all sections
-    - Slides we don't cover are mainly for your future reference  
+__Questions on Problem set #7?__ 
 
-__Programming courses and resources__
 
-- Link [here](https://docs.google.com/spreadsheets/d/1zF1Rkqu_T3UdtrmItj79ASN5-_cvbqFoIr7wzhaTY0M/edit#gid=0)
+
 
 ### What we will do today
-
-\medskip
 
 \tableofcontents
 
@@ -68,1708 +112,1031 @@ __Programming courses and resources__
 \tableofcontents[subsectionstyle=hide/hide/hide]
 ```
 
-### Libraries and data
+
+### Load the packages we will use today (output omitted) 
+
+- __you must run this code chunk after installing these packages__
+```{r warning=FALSE, message=FALSE}
+library(dplyr)
+library(readr)
+library(haven)
+library(readxl)
+library(labelled)
+```
+__If package not yet installed__, then must install before you load. Install in "console" rather than .Rmd file
+
+- Generic syntax: `install.packages("package_name")`
+- Install "tidyverse": `install.packages("tidyverse")`
+
+Note: when we load package, name of package is not in quotes; but when we install package, name of package is in quotes:
+
+- `install.packages("tidyverse")`
+- `library(tidyverse)`
+
+
+# Relative file paths  
+
+### Rclass folder structure  
+
+
+In lecture 1 we downloaded the rclass folder structure.  
+
+- You should have an rclass folder like this with a lectures and a data subfolder.    
+
+![](rclass_folder.png) 
+
+### Rclass folder structure  
+
+- Inside the data subfolder, you should have the following subfolders:  
+![](rclass_folder_contents.png) 
+
+
+### Save data for lecture  
+
+We will not be providing links to data in this lecture. Please save data to the corresponding folders.  
+
+- First make sure to save __lecture8.Rmd__ in your lectures folder  
+    - If you do not have class folder structure, you can download it [here](https://github.com/ozanj/rclass/raw/master/rclass_directory.zip)
+- Download and unzip data folder we are using for this lecture [here](https://github.com/ozanj/rclass/raw/master/lectures/lecture8/lecture8_data.zip) 
+- Save data files in the corresponding data folder  
+    - `ipeds_hd_2017_small.csv` should go in the __ic__ folder inside the ipeds folder  
+    - `peps300.xlsx` should go in the __fsa__ folder  
+    - `hsls_sch_small.dta` should go in the __hsls__ folder
+
+### Working directory  
+- Your working directory will change depending on if you are using an R script or R markdown.
+- **R script**  
+    - The default working directory is your computer's home directory 
+    - You only need to set your working directory `setwd()` in an r script once.  
+- **R markdown**  
+    - The default working directory is where the current r markdown file you are using is saved.  
+    - If you set your working directory in a code chunk, it will be reset to the default directory after the code chunk is finished running.  
+    - To avoid setting your working directory every time you read in data, you can read in data using a link to the data file or use the relative file path to save time.  
+- **R project**  
+    - The default working directory is in the R project location  
+    - If you are working with an R script in an R project, the working directory is the R project main folder (ex. rclass)  
+    - If you are working with an R markdown file in an R project, the working directory will be wherever the R markdown file is saved inside the R project.  
+        - For example, you have an R markdown file saved inside the lectures folder in an R project "rclass", your working directory may look like this ("/Users/pm/Desktop/rclass/lectures")
 
 ```{r}
-library(tidyverse)
+
 ```
 
-Data frame
-```{r}
-#load dataset with one obs per recruiting event
-load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData"))
-```
+### Absolute vs. relative filepath  
+**Absolute file path**:  The absolute file path is the complete list of directories needed to locate a file or folder.  
+`setwd("/Users/pm/Desktop/rclass/lectures/lecture8")`
 
 
-# Accessing elements of vectors and lists
+**Relative file path**:  The relative file path is the path relative to your current location/directory. Assuming your current working directory is in the "lecture8" folder and you want to change your directory to the data folder, your relative file path would look something like this:  
+`setwd("../../data")`  
 
-## Review: Types of vectors
-
-### Review: Types of vectors
-
-Recall that there are two broad types of vectors, __atomic vectors__ and __lists__
-
-1. __Atomic vectors__. There are six types:
-    - logical, integer, double, character, complex, and raw
-
-2. __lists__. "sometimes called recursive vectors lists can contain other lists"
-
-\medskip
-
-Main difference between atomic vectors and lists:
-
-- atomic vectors are "homogenous," meaning each element in vector must have same type (e.g., integer, logical, character)
-- lists are "heterogeneous," meaning that data type can differ across elements within a list
-
-Link to figure of data structures overview [HERE](http://r4ds.had.co.nz/diagrams/data-structures-overview.png)
-
-
-### Review: Types of atomic vectors
-
-\medskip 1. logical. each element can be three potential values: `TRUE`, `FALSE`, `NA`
-```{r}
-typeof(c(TRUE,FALSE,NA))
-typeof(c(1==1,1==2))
-```
-2. Numeric (integer or double)
-```{r}
-typeof(c(1.5,2,1))
-typeof(c(1,2,1))
-```
-- Numbers are doubles by default. To make integer, place `L` after number:
-```{r}
-typeof(c(1L,2L,1L))
-```
-
-3. character
-```{r}
-typeof(c("element of character vector","another element"))
-length(c("element of character vector","another element"))
-```
-### `TRUE/FALSE` functions that identify __type__ of vector
-
-\medskip
-Identifying vector __type__, Grolemund and Wickham:
-
-- "Sometimes you want to do different things based on the type of vector. One option is to use `typeof()`. Another is to use a test function which returns a `TRUE` or `FALSE`"
-
-`is_*()` functions are provided by `purrr` package within `Tidyverse`:
-
-Function | logical | int | dbl | chr | list
----------|---------|-----|-----|-----|-----
-`is_logical()` | X | | | |
-`is_integer()` |  |X | | |
-`is_double()` |  | |X | |
-`is_numeric()` |  |X |X | |
-`is_character()` |  | | |X |
-`is_atomic()` |X  |X |X |X |
-`is_list()` |  | | | | X
-`is_vector()` |X  |X |X |X |X
+  **File path shortcuts**  
+            
+| **Key** | **Description** |
+| ------ | -------- |
+| ~    | tilde is a shortcut for mac user's home directory (mine is my name pm)   |
+| ../    | moves up a level   |
+| ../../    | moves up two level   |
 
 ```{r}
-is_numeric(c(5,6,7))
+
 ```
 
 
-### `TRUE/FALSE` functions that identify __type__ of vector
+### Practice using relative file paths  
 
-Recall that elements of a vector must have the same type
+1. Using the code chunk below, get your working directory `getwd()`   
+```{r}
 
-- If vector contains elements of different type, type will be most "complex"
-- From simplest to most complex: logical, integer, double, character
+```
+2. Using your relative file path, set your working directory to fsa folder inside the data folder. `setwd("filepath")` 
+```{r}
 
+```
+3. Using your relative file path, set your working directory to the ef folder inside the ipeds folder inside the data folder. `setwd("filepath")`  
+```{r}
+
+```
+
+
+# Common data formats  
+### Common data formats  
+
+| **Format** | **Package** | **Function** |
+| ------ | -------- | ------- | ------- |
+| Comma-separated values (.csv) | readr | read_csv |
+| Text-formated data (.txt) | readr | read_table |
+| Tab-separated values (.tsv) | readr | read_tsv | 
+| Stata (.dta) | haven | read_dta |
+| SPSS (.sav) | haven | read_sav |
+| SAS (.sas) | haven | read_sas |
+| Excel (.xls or .xlsx) | readxl | read_excel |
+| R (.Rdata or .rds) | base R | load() |  
+
+- Source: Professor Darin Christensen
+
+
+
+# readr package
+
+### readr 
+
+The readr package is part of [tidyverse](https://readr.tidyverse.org/index.html), which is designed to read in flat data files in R and transform them into data frames.  
+\
+- We could load **library(tidyverse)** if we wanted to load all packages in tidyverse (e.g. ggplot2, dplyr, tidyr, stringr, readr, etc...)  
+
+![Caption for the picture.](tidyverse.png)
+\
+- For the purpose of this lecture, we will just need to load **library(readr)**  
+
+
+## readr functions
+
+### readr functions
+`readr` (tidyverse) functions  
+
+Refer to the `readr` package [pdf](https://cran.r-project.org/web/packages/readr/readr.pdf) for more detailed information on each function.   
+- Note: All of these functions follow similar syntax/rules in `readr`
+
+| **Format** | **Function** |
+| ------ | -------- |
+| Comma-separated values (csv)   | `read_csv`   |
+| Semicolon separated files    | `read_csv2`   |
+| Tab-separated values (tsv)    | `read_tsv`   |
+| Any delimiter    | `read_delim`   |
+| Fixed width files    | `read_fwf`   |
+| Text-formated data (txt)    | `read_table` |
+| Web log files    | `read_log` |
+
+
+## readr arguments  
+
+
+### readr arguments   
+`read_csv(file, col_names = TRUE, col_types = NULL, na = c("", "NA"), comment = "", skip = 0, n_max = Inf,)`
+`write_csv(x, path, na = "NA", append = FALSE, col_names = !append)`  
+
+__Arguments__
+
+- `col_types`: One of NULL, a cols() specification, or a string:  
+    - If NULL, all column types will be imputed from the first 1000 rows on the input. This is convenient (and fast), but not robust. If the imputation fails, you’ll need to supply the correct types yourself.  
+    - If a column specification created by cols(), it must contain one column specification for each column. If you only want to read a subset of the columns, use cols_only(). 
+- `skip`: Number of lines to skip before reading data. 
+- `comment`: A string used to identify comments. 
+- `col_names`: Either TRUE, FALSE or a character vector of column names.  
+    - If TRUE, the first row of the input will be used as the column names, and will not be included in the data frame.   
+    - If FALSE, column names will be generated automatically: X1, X2, X3 etc.  
+    - If col_names is a character vector, the values will be used as the names of the columns, and the first row of the input will be read into the first row of the output data frame.
+- `na`: Character vector of strings to use for missing values
+
+## readr column specification
+
+### read_csv column specification, part 1
+`readr` is pretty good at guessing each column's data type by looking at the first 1,000 rows (e.g. character, double, etc.), however it is good practice to manually specify the data type for each column.
+
+```{r}
+mtcars <- read_csv(readr_example("mtcars.csv"))
+```
+
+
+### read_csv column specification, part 1
+The output of the previous example shows us the column specification readr gave us. However, we could manually change column specification if we do not like readr's guess.
+```{r}
+mtcars <- read_csv(readr_example("mtcars.csv"), col_types = 
+  cols(
+    mpg = col_double(),
+    cyl = col_integer(),
+    disp = col_double(),
+    hp = col_integer(),
+    drat = col_double(),
+    vs = col_integer(),
+    wt = col_double(),
+    qsec = col_double(),
+    am = col_character(),
+    gear = col_integer(),
+    carb = col_character()
+  )
+)
+```
+
+
+### readr column specification, part 2  
+
+| **Data type** | **Arguments** |
+| ------ | -------- |
+| Logical (TRUE & FALSE)  | `col_logical()`   |
+| Integers   | `col_integer()`   |
+| Doubles    | `col_double()`   |
+| Dates    | `col_date(format = "")`   |
+| Characters   | `col_character()`   |
+| Numbers   | `col_numeric()` |
+| Factors   | `col_factors(levels, ordered)` |
+
+```{r}
+read_csv("a, b, c
+         1,2,F
+         4,5,T", col_types =
+           cols(
+             a = col_factor(c("1", "2", "3", "4")),
+             b = col_character(),
+             c = col_logical()
+           ))
+```
+
+
+
+### read_csv demonstration csv
+
+`readr` automatically treats the first line of data as column names. 
+```{r}
+read_csv("column 1, column 2, column 3
+         1,-2,3
+         4,5,6", na = c(-2, "NA")
+         )
+```
+
+
+There are instances where you may want to tell R from what line to begin reading in data.
+
+
+### read_csv skip argument
+
+Notice the example below. The first two lines are comments about the data. We would need to use **skip = n** to skip n lines. 
+
+```{r}
+read_csv("This file contains data on student charges for the acdemic year.
+         File name: IC2016_AY
+         a, b, c
+         1,2,3
+         4,5,6", skip = 2
+         )
+```
+
+
+### read_csv comment argument
+
+We could also tell R to drop lines we specify as comments. With **comment = n**
+```{r}
+read_csv("# This file contains data on student charges for the acdemic year.
+         a, b, c
+         1,2,3
+         4,5,6", comment = "#"
+         )
+```
+
+```{r}
+read_csv("* This file contains data on student charges for the acdemic year.
+         a, b, c
+         1,2,3
+         4,5,6", comment = "*"
+         )
+```
+
+### read_csv column names argument
+
+We could tell R there are no column names with **col_names = FALSE** or we could manually give R column names with **col_names = c("", "", "")**
+
+```{r}
+read_csv("1,2,3
+         4,5,6", col_names = FALSE
+         )
+```
+
+```{r}
+read_csv("1,2,3
+         4,5,6", col_names = c("column 1", "column 2", "column 3")
+         )
+```
+
+```{r}
+read_csv("a,b,c
+          1,2,3
+         4,5,6", col_names = c("column 1", "column 2", "column 3"), skip = 1
+         )
+```
+
+
+### read_csv Student exercise
+
+1. Create a 3x3 tibble like the examples above  (e.g. read_csv("a,b,c....")), treating the first line as column names  
+```{r}
+
+```
+
+1. Now on the first line add a sentence and use the `skip` argument to skip this line
+```{r}
+
+```
+
+1. This time add a special character ( *, #, ! ) at the beginning of the sentence and indicate it is a comment  
+```{r}
+
+```
+
+1. Delete the sentence and column names (should have a 2x2 tibble) and manually tell R column names
+```{r}
+
+```
+
+
+### read_csv Student exercise solutions
+
+1. Create a 3x3 tibble like the examples above  (e.g. read_csv("a,b,c....")), treating the first line as column names  
+```{r}
+read_csv("a, b, c
+         1,2,3
+         4,5,6"
+         )
+```
+
+2. Now on the first line add a sentence and use the `skip` argument to skip this line  
+```{r}
+read_csv("Do not read this sentence
+         a, b, c
+         1,2,3
+         4,5,6", skip = 1
+         )
+
+```
+
+### read_csv Student exercise solutions continued 
+3. This time add a special character ( *, #, ! ) at the beginning of the sentence and indicate it is a comment  
+```{r}
+read_csv("#This is a comment
+         a, b, c
+         1,2,3
+         4,5,6",comment = "#"
+         )
+```
+4. Delete the sentence and column names (should have a 2x3 tibble) and manually tell R column names
+```{r}
+read_csv("1,2,3
+         4,5,6",col_names = c("a", "b", "c")
+         )
+```
+
+
+
+### 1. readr Running into errors
+1. Make sure you have downloaded and saved the flat file  
+1. Make sure to know the file path of where data is downloaded or saved ("../../data")  
+    - You can use the `list.files()` function to view what files you have in a particular folder
+1. Make sure you set your working **`setwd()`** directory in R. To check your current working directory type **`getwd()`** in console. 
+
+```{r echo=FALSE, eval=FALSE}
+getwd()
+list.files()
+```
+
+
+### read_csv demonstration using IPEDS data
+
+Integrated Postsecondary Education Data System (IPEDS)
+
+- Postsecondary education data from NCES  
+- There are [12 survey components](https://nces.ed.gov/ipeds/resource/download/IPEDS_DataReleaseProcedures.pdf) and 3 collection periods  
+
+We will be working with [Institutional Characteristics data of 2017](https://nces.ed.gov/ipeds/datacenter/DataFiles.aspx)  
+
+### read_csv demonstration using IPEDS data
+**Tying it all together**
+
+Use `read_csv()` function from `readr` to import csv dataset into R without column specification. Follow along on your computers.
 ```{r, results="hide"}
-is_logical(c(TRUE,TRUE,NA))
-is_logical(c(TRUE,TRUE,NA,1))
-
-typeof(c(TRUE,1L))
-is_integer(c(TRUE,1L))
-
-typeof(c(TRUE,1L,1.5,"b"))
-is_character(c(TRUE,1L,1.5,"b"))
-```
-
-### `TRUE/FALSE` functions that identify __type__ vs. __class__ of vector
-
-\medskip
-Comparing `is_*()` vs. `is.*()` functions
-
-- `is_*()` functions (e.g., `is_numeric()`) identifies vector __type__
-    - They are the `TRUE/FALSE` versions of `typeof()` function
-- `is.*()` functions (e.g., `is.numeric()`) refer to both __type__ and __class__
-    - Review: __class__ is an object __attribute__ that defines how object can be treated by object oriented programming language (e.g., which functions you can apply)
-    - Recall that R functions care about __class__, not __type__
-
-\medskip
-```{r, results="hide", warning= FALSE}
-df_event %>% select(instnm,univ_id,event_date,med_inc,titlei_status_pub) %>% str()
-```
-
-Variable = `univ_id`
-```{r, results="hide", warning= FALSE}
-typeof(df_event$univ_id)
-class(df_event$univ_id)
-is_numeric(df_event$univ_id)
-is.numeric(df_event$univ_id)
-```
-Variable = `event_date`
-```{r, results="hide", warning= FALSE}
-typeof(df_event$event_date)
-class(df_event$event_date)
-is_numeric(df_event$event_date)
-is.numeric(df_event$event_date)
-```
-
-### `TRUE/FALSE` functions that identify __type__ vs. __class__ of vector
-
-Comparing `is_*()` vs. `is.*()` functions
-
-- `is_*()` functions (e.g., `is_numeric()`) identifies vector __type__
-- `is.*()` functions (e.g., `is.numeric()`) refer to both __type__ and __class__
-
-\medskip
-Variable = `med_inc`
-```{r, results="hide", warning= FALSE}
-typeof(df_event$med_inc)
-class(df_event$med_inc)
-is_numeric(df_event$med_inc)
-is.numeric(df_event$med_inc)
-```
-
-Variable = `titlei_status_pub`
-```{r, results="hide", warning= FALSE}
-typeof(df_event$titlei_status_pub)
-class(df_event$titlei_status_pub)
-is_numeric(df_event$titlei_status_pub)
-is.numeric(df_event$titlei_status_pub)
+ipeds <- read_csv(file="../../data/ipeds/ic/ipeds_hd_2017_small.csv")
+# glimpse(ipeds)
 ```
 
 
+### read_csv demonstration using IPEDS data
 
-## Accessing elements of (atomic) vectors
+Use `read_csv()` function from `readr` to import csv dataset into R with column specification
 
-### Subsetting elements of vector
+```{r, results='hide'}
 
-"Subsetting" a vector, refers to isolating particular elements of a vector
+ipeds <- read_csv(file="../../data/ipeds/ic/ipeds_hd_2017_small.csv",
+                  col_types =
+                    cols(
+                      unitid = col_character(), 
+                      instnm = col_character(),
+                      stabbr = col_character(),
+                      sector = col_integer(),
+                      iclevel = col_integer(),
+                      control = col_integer()
+  )
+)
+```
+We changed unitid to character type, but could be left as is or changed to double type for example.  
 
-- I sometimes refer to this as "accessing elements of a vector"
-- subsestting elements of a vector is similar to "filtering" rows of a data-frame
+### readr variable and value labels
 
-`[]` is the subsetting function for vectors
-
-- contents inside `[]` can refer to element number (also called "position"). 
-    - e.g., `[3]` refers to contents of 3rd element (or position 3)
-- contents inside `[]` can also refer to name of element
-    - e.g., `["a"]` refers to contents inside an element named "a"
-
-### Subsetting elements of vector, based on position number    
-
-`[]` is the subsetting function for vectors
-
-- contents inside `[]` can refer to element number (also called "position"). 
-    - e.g., `[3]` refers to contents of 3rd element (or position 3)
-
-__Examples of referring to elements based on element position number__
+Let's view variable and value labels
 ```{r}
-x <- c("a","b","c","d","e")
-x # all elements
-
-x[1] # 1st element
-x[5] # 5th element
-
-c(x[1],x[2],x[2]) # 1st, 2nd, and 2nd element
-
-x[c(1,2,2)] # 1st, 2nd, and 2nd element
+ipeds %>% select(sector) %>% var_label()
+ipeds %>% select(sector) %>% val_labels()
 ```
 
-### Subsetting elements of vector, based on position number
+- There are no variable and value labels for this data. IPEDS has a separate do file with variable and value labels.  
 
-__Examples of referring to elements based on position number, continued__
+- Let's practice manually adding variable and value labels using the `labelled` package.  
+
+# Set variable and value labels  
+
+### Set variable and value labels
+
+Let's create a tibble first  
+```{r}
+df <- tribble(
+  ~id, ~edu, ~sch,
+  #--|--|----
+  1, 2, 2,
+  2, 1, 1,
+  3, 3, 2,
+  4, 4, 2,
+  5, 1, 2
+)
+df
+```
+
+
+### Set variable labels
+  
+- Use `set_variable_labels` function to manually set variable labels  
+    - `df %>% set_variable_labels(variable = "Variable label")`   
+    - `ipeds %>% set_variable_labels(unitid = "Unit identification number")`
+    
+```{r}
+class(df$sch)
+df <- df %>%
+  set_variable_labels(
+    id = "Unique identification number",
+    edu = "Education level",
+    sch = "Type of school attending"
+  )
+class(df$sch)
+```
+
+### Set value labels 
+- Use `set_value_labels` function to manually set value labels  
+    - `df %>% set_value_labels(variable = c("Value label" = 1, "Value label" = 2))`  
+    - `ipeds %>% set_value_labels(sector = "Administrative Unit" = 0)`  
 
 ```{r}
-y <- c(4,5,10,29,15,12)
-length(y)
-
-y[c(1,3,6)]
-y[c(3,6,1)]
-```
-While subsetting with positive numbers keeps elements in those positions, subsetting with negative numbers drops elements at those positions
-```{r}
-y
-
-y[c(-3,-4,-5,-6)] # show elements except 3rd, 4th, 5th and 6th elements
-```
-
-### Subsetting elements of named vector, by element name
-
-__Review: naming vectors__
-
-- All vectors can be "named" (i.e., you name individual elements within the vector)
-
-Unnamed vector
-```{r}
-x <- c(1,2,3,"hi!")
-x
-str(x)
-```
-Named vector
-```{r}
-y <- c(a=1,b=2,3,c="hi!")
-y
-str(y)
+class(df$sch)
+df <- df %>%
+  set_value_labels(
+    edu = c("High School" = 1,
+            "AA degree" = 2,
+            "BA degree" = 3,
+            "MA or higher" = 4),
+    sch = c("Private" = 1,
+            "Public" = 2))
+class(df$sch)
 ```
 
-### Subsetting elements of named vector, by element name
-
-If you have a __named vector__, you can subset it with a character vector:
-
-- i.e., access __element values__ based on __element names__
+ 
+### readr labelled data
+- Open the data dictionary file for [hd2017](https://nces.ed.gov/ipeds/datacenter/data/HD2017_Dict.zip) data and select "Frequencies" sheet 
+- We are only working with these 6 variables (unitid, instnm, stabbr, sector, iclevel, control)  
 
 ```{r}
-x <- c(abc = 1, def = 2, xyz = 5)
-x
-
-x["xyz"] # show value of element named "xyz"
-
-x[c("xyz", "def")] # show value of element named "xyz" and element named "def"
+# Lets view values for sector
+ipeds %>%
+  count(sector) 
 ```
 
-### Subsetting elements of vector, with a logical vector
 
-Subsetting elements with a logical vector
+### readr variable and value labels student exercise  
+1. Using the codebook for hd2017 data, add variable labels for all 6 variables (unitid, instnm, stabbr, sector, iclevel, control)  
 
-- i.e., access elements that satisfy some `TRUE/FALSE` condition
-
-
-```{r, warning=FALSE}
-(x <- c(10, 3, NA, 5, 8, 1, NA,"Hi!"))
-
-typeof(x)
-
-x[is_character(x)] # since vector type is character, all elements are character
-x[is_numeric(x)] # since vector type is character, no elements are numeric
-
-(y <- c(10, 3, NA, 5, 8, 1, NA))
-
-typeof(y)
-y[is_numeric(y)]
-```
-
-## Accessing elements of lists
-
-### Review: Lists
-
-\medskip
-
-Like atomic vectors, lists are objects that contain elements. However:
-
-- "type" of elements can vary within a list
-- elements of a list can contain another list
-
-Examples:
-```{r}
-x1 <- list(c(1, 2), c(3, 4))
-x2 <- list(list(1, 2), list(3, 4))
-x3 <- list(1, list(2, list(3)))
-```
-
-`str()` function is helpful for understanding structure and contents of a list
-```{r}
-str(x1)
-str(x2)
-```
-
-### Review: Data frames are lists
-
-\medskip
-Recall the relationship between "lists" and "data frames"
-
-- data frames have "type==list"
-- data frames are lists with these additional structure requirements
-    - each element of data frame must be a vector (not a list)
-    - each element (i.e., vector) in data frame must have the same length
-- data frames have additional attributes (e.g., each vector is named)
+1. Add value labels for sector, iclevel, and control  
 
 ```{r}
-(df <- tibble(x = 1:3, y = 3:1))
-typeof(df)
-str(df)
 
-typeof(df_event)
 ```
 
-### Subsetting/accessing elements of a list
 
-__Accessing elements of a list is important for writing loops, writing functions, and many other applications in R__
 
-\medskip
+### readr variable and value labels student exercise solution
+```{r}
+# Need to manually assign variable and value labels using labelled package 
+ipeds_labelled <- ipeds %>%
+  set_variable_labels(unitid = "Unit identification number", 
+                      instnm = "Institution name", 
+                      stabbr = "State abbreviation",
+                      sector = "Sector of institution",
+                      iclevel = "Level of institution",
+                      control = "Control of institution") %>%
+  set_value_labels(sector = c("Administrative Unit" = 0, 
+                              "Public, 4-year or above" = 1, 
+                              "Private not-for-profit, 4-year or above" = 2,
+                              "Private for-profit, 4-year or above" = 3, 
+                              "Public, 2-year" = 4, 
+                              "Private not-for-profit, 2-year" = 5, 
+                              "Private for-profit, 2-year" = 6,
+                              "Public, less-than 2-year" = 7, 
+                              "Private not-for-profit, less-than 2-year" = 8,
+                              "Private for-profit, less-than 2-year" = 9, 
+                              "Sector unknown (not active)" = 99), 
+                   iclevel = c("Four or more years" = 1, 
+                               "At least 2 but less than 4 years" = 2, 
+                               "Less than 2 years (below associate)" = 3,
+                               "{Not available}" = -3),
+                   control = c("Public" = 1, "Private not-for-profit" = 2, 
+                               "Private for-profit" = 3, 
+                               "{Not available}" = -3))
 
-I will demonstrate accessing elements of a list using two lists:
+```
 
-1. \medskip A list that has more complicated structure than a data frame (from Grolemund and Wickham example)
+### readr Let's view new labelled data
+```{r}
+typeof(ipeds_labelled$iclevel)
+class(ipeds_labelled$iclevel)
+attributes(ipeds_labelled$iclevel)
+```
+
+
+### `as_factor()` function
+
+
+__Usage (i.e., syntax)__: `as_factor(x, ..., only_labelled = TRUE)`
+
+__Arguments__  
+
+- `x`: object to coerce to a factor  
+- `...`: other arguments passed down to method  
+- `only_labelled`: only apply to labelled columns  
+- `levels`: How to create the levels of the generated factor:  
+    - "default": uses labels where available, otherwise the values. Labels are
+sorted by value.  
+    -  "both": like "default", but pastes together the level and value  
+    - "label": use only the labels; unlabelled values become NA
+labelled 3  
+    -  "values: use only the values  
+- `ordered`: If TRUE create an ordered (ordinal) factor, if FALSE (the default) create a regular (nominal) factor
+
+__Example__: Change labelled columns to factor
 ```{r, results="hide"}
-list_a <- list(a = 1:3, b = "a string", c = pi, d = list(-1, -5))
-typeof(list_a)
-str(list_a)
+as_factor(df, only_labelled = TRUE) 
 ```
 
-2. \medskip List that is 7 variables and first 5 obs of `df_event`, corresponding to University of Alabama
-```{r, results="hide"}
-df_bama <- df_event %>% arrange(univ_id,event_date) %>% 
-  select(instnm,univ_id,event_date,event_type,event_state,zip,med_inc) %>% 
-  filter(row_number()<6)
+### readr labelled data to factor
 
-typeof(df_bama)
-str(df_bama)
-```
-### Subsetting/accessing elements of a list
-
-__Accessing elements of a list is important for writing loops, writing functions, and many other applications in R__
-
-\medskip
-
-GW [20.5.2](https://r4ds.had.co.nz/vectors.html#subsetting-1) ("Subsetting"): 3 ways to "subset" (i.e., access elements of) list
-
-1. `[]` "extracts a sub-list. The result will always be a list"
-    - like subsetting vectors, you can subset with a logical, integer, or character vector
-2. `[[]]` "extracts a single component from a list. It removes a level of hierarchy from the list"
-3. `$` "shorthand for extracting named elements of a list. It works similarly to `[[]]` except that you don’t need to use quotes."
-
-### Subset a list using `[]`
-
-`[]` "extracts a sub-list"
-
-- contents of `[]` can be position number, name of element in list, logical vector, etc.
-
-```{r, results="hide"}
-str(list_a)
-length(list_a)
-
-list_a[1] # extract first element of list
-str(list_a[1]) # extract first element of list
-str(list_a["a"]) # extract element named "a"
-
-str(list_a[1:2]) # extract first two elements of list
-str(list_a[c(1,2)]) # extract first two elements of list
-
-str(list_a[c("a","c")]) # extract element named "a" and element named "c"
-```
-
-Key takeaway about subsetting a list using `[]`: __The result will always be a list__
-
-- that is, `[]` does not remove a level of hierarchy
-- structure and attributes of object you isolate using `[]` will be the same as its structure and attributes in the list it is taken from
-
-### Subset a list using `[]`: Student task
-
-Applying `[]` to the object `df_bama`:
-
-- Isolate the 1st element of `df_bama`
-- Isolate the 3rd through 5th element of `df_bama`
-- Isolate the 3rd, 7th, and 1st element of `df_bama`
-- Isolate the element named `"event_type"`
-- Isolate the elements named `"event_type"` and `"med_inc`
-
-### Subset a list using `[]`: Student task [SOLUTIONS]
-
-Applying `[]` to the object `df_bama`:
-
-```{r, results="hide"}
-#- Isolate the 1st element of `df_bama`
-df_bama[1]
-str(df_bama[1])
-#- Isolate the 3rd through 5th element of `df_bama`
-df_bama[3:5]
-str(df_bama[3:5])
-#- Isolate the 3rd, 7th, and 1st element of `df_bama`
-df_bama[c(3,7,1)]
-#- Isolate the element named `"event_type"`
-df_bama["event_type"]
-str(df_bama["event_type"])
-#- Isolate the elements named `"event_type"` and `"med_inc`
-df_bama[c("event_type","med_inc")]
-```
-### Subset a list using `[[]]`
-
-GW: "`[[]]` extracts a single component from a list." More specifically, `[[]]`:
-
-1. Extracts a __single__ element of the list __AND__
-1. Removes a "level of hierarchy"" from the list
-
-```{r, results="hide"}
-str(list_a)
-
-str(list_a[1]) # []; result is a one-element list [length=1]; this list contains a numeric vector with 3 elements
-str(list_a[[1]]) # [[]]; result is a numeric vector with 3 elements
-
-str(list_a["a"]) # []; result is a one-element list [length=1]; this list contains a numeric vector with 3 elements
-str(list_a[["a"]]) # [[]]; result is a numeric vector with 3 elements
-
-str(list_a[4]) # []; result is a one-element list, which contains a two-element list
-str(list_a[[4]]) # [[]]; result is a two-element list
-```
-### Subset a list using `[[]]`, data frames
-
-\medskip
-Comparing `[]` to `[[]]` when working with lists that are data frames
-
-- Data frame object always has type=list and each element is a vector
-- If you subset using `[]` the result will always have type==list
-- If you subset using `[[]]` the result will always have type==vector
-
-`[]` vs. `[[]]`: Subsetting data frame using __element position number__
-```{r, results="hide"}
-df_bama[1]
-df_bama[[1]]
-
-str(df_bama[1])
-str(df_bama[[1]])
-
-typeof(df_bama[1])
-typeof(df_bama[[1]])
-
-class(df_bama[1])
-class(df_bama[[1]])
-
-attributes(df_bama[3])
-attributes(df_bama[[3]])
-```
-
-### Subset a list using `[[]]`, data frames
-
-\medskip
-Comparing `[]` to `[[]]` when working with lists that are data frames
-
-- If you subset using `[]` the result will always have type==list
-- If you subset using `[[]]` the result will always have type==vector
-
-\medskip
-`[]` vs. `[[]]`: Subsetting data frame using __element name__ (i.e., variable name)
-
-- note: whether using `[]` or `[[]]`, element name must be in quotes
-```{r, results="hide"}
-str(df_bama["event_type"]) # a "tibble" data frame with one variable
-str(df_bama[["event_type"]]) # a character vector with 5 elements
-
-attributes(df_bama["event_type"]) # contains attributes (e.g., variiable name)
-attributes(df_bama[["event_type"]]) # no attributes; just the data
-
-str(df_bama["event_date"]) # a "tibble" data frame with one variable
-str(df_bama[["event_date"]]) # a numeric "date" vector with 5 elements
-
-attributes(df_bama["event_date"]) # attributes of the data frame
-attributes(df_bama[["event_date"]]) # class=date
-```
-
-
-### Subset a list using `$`
-
-`$` is a shorthand for extracting __named__ elements of a list. 
-
-- works similarly to `[[]]` except that you don’t need to use quotes.
-- Like `[[]]`, subsetting using `$` removes a level of hierarchy
-
-
-Note: we have been using this method of subsetting variables in a data frame all quarter!
-```{r, results="hide"}
-str(list_a)
-
-list_a["a"] # list of one element, which contains integer vector of 3 elements
-list_a[["a"]] # integer vector of 3 elements
-list_a$a # integer vector of 3 elements
-```
-These two approaches yield the same result:
+Let's change class to factor
 ```{r}
-df_bama[["med_inc"]]
-df_bama$med_inc
+ipeds_factor <- as_factor(ipeds_labelled, only_labelled = TRUE)
+typeof(ipeds_factor$sector)
+class(ipeds_factor$sector)
+attributes(ipeds_factor$sector)
 ```
-### Extracting multiple elements of a list using `[[]]` and `$`
 
-Each instance of `[[]]` or `$` can only extract a __single__ element from the list
 
-\medskip
-Using `[[]]` to extract multiple elements of list
+
+# Reading in data from the web
+
+### Reading in data from the web
+
+- Save time  
+    - Reduce the steps of downloading, saving, and reading in data  
+    - Read in data directly from the internet  
+    - **note** not all packages will work with downloading data from the web (read_excel)
+ 
+For example, rather than downloading Raj Chetty data and saving it in a folder, we could download the data directly from the web.  
+
+### Reading in data from web example using Raj Chetty data  
+
+Equality of Opportunity Project  
+
+- [Equality of Opportunity Project](http://www.equality-of-opportunity.org/papers/coll_mrc_paper.pdf) uses two data sources-- federal tax recoards and Department of Education records (1999-2013)-- to investigate intergenerational income mobility at colleges in the US.  
+
+We will use [Mobility Report Cards: The Role of Colleges in Intergenerational Mobility data](http://www.equality-of-opportunity.org/documents/)
+
+
+### Reading in data from web example using Raj Chetty data  
+
+1. Follow this [link](http://www.equality-of-opportunity.org/data/) and under the "Mobility Report Cards..." tab select "click to view data".  
+2. Choose "Online Data Table 1" 
+3. Right click and copy link address for "Excel" (Note: it is actually a csv file)
+
+![mobility report cards](mrc_table1.png)\  
+
+### Reading in data from the web  
+
+Approach #1
+```{r, message=FALSE}
+#Paste url to excel "csv" file
+data_url <- "http://www.equality-of-opportunity.org/data/college/mrc_table1.csv"
+
+#Download data and read in using read_csv (readr)
+mrc <- read_csv(data_url)
+
+#View first 4 rows and 4 columns 
+mrc[1:4, 1:4]
+```
+
+
+### Reading in data from the web 
+
+Approach #2
 ```{r}
-c(df_bama[["med_inc"]],df_bama[["event_type"]])
+#Download data and read in link directly using read_csv (readr)
+mrc <- read_csv("http://www.equality-of-opportunity.org/data/college/mrc_table1.csv")
+
 ```
 
-Using `$` to extract multiple elements of list
+### Reading in data from the web 
 ```{r}
-c(df_bama$med_inc,df_bama$event_type)
-```
-\medskip
-By contrast, `[]` can extract multiple elements within each instance of `[]`
-```{r, results="hide"}
-str(df_bama[c("instnm","med_inc")]) # "tibble" data frame with two variables
-
-#df_bama[[c("instnm","med_inc")]] # this code will yield an error
+#View first 4 rows and 4 columns 
+mrc[1:4, 1:4]
 ```
 
+### Problems downloading data (zip files) using IPEDS
 
-### Subset a vector using `[[]]`: Student task
+1. Follow this [link](https://nces.ed.gov/ipeds/use-the-data) and under the "Survey Data" tab select "Complete data files".  
+2. Choose "All years" and "All surveys" and click continue  
+3. Right click and copy link address for "IC2017_AY" 
 
-Applying `[[]]` to the object `df_bama`:
+![ipeds data center](ic2017_ay.png) 
 
-- Isolate the 5th element of `df_bama`
-- Isolate the element `"event_type"` of `df_bama`
-- Isolate the element `"zip"` of `df_bama` using `$`
-- Isolate the elements named `"event_date"` and `"event_type"`
+### Downloading data (zip files) using IPEDS
 
-
-### Subset a vector using `[]`: Student task [SOLUTIONS]
-
-Applying `[[]]` to the object `df_bama`:
-
-```{r, results="hide"}
-#- Isolate the 5th element of `df_bama`
-df_bama[[5]]
-str(df_bama[[5]])
-#- Isolate the element `"event_type"` of `df_bama`
-df_bama[["event_type"]]
-str(df_bama[["event_type"]])
-#- Isolate the element `"zip"` of `df_bama` using `$`
-df_bama$zip
-#- Isolate the elements named `"event_date"` and `"event_type"`
-c(df_bama[["event_date"]],df_bama[["event_type"]])
-str(c(df_bama[["event_date"]],df_bama[["event_type"]]))
-
-```
-
-
-## Review key concepts for loops
-
-### Sequences
-
-(Loose) definition
-
-- a sequence is a list of numbers in ascending or descending order
-
-Creating sequences using colon operator
+- Paste url and read in using `read_csv`  
+    - `ipeds <- read_csv("link")`
+What happens when you try reading in this file?  
 ```{r}
--5:5
-5:-5
-```
-Creating sequences using `seq()` function
 
-- basic syntax: 
-```{r, eval=FALSE}
-seq(from = 1, to = 1, by = ((to - from)/(length.out - 1)),
-    length.out = NULL, along.with = NULL, ...)
 ```
-- examples:
+Need to download **and** unzip
+
+## download.file function  
+
+### download.file function  
+
+`download.file` is a function use to download a file from the internet.  
+
+__Usage (i.e., syntax)__: `download.file(url, destfile, method, quiet = FALSE, mode = "w")`
+
+__Arguments__  
+
+- `url`: A character string naming the URL of a resource to be downloaded  
+- `destfile`: A character string with the name where the downloaded file is saved.  
+- `method`: Method to be used for downloading files. Current download methods are "internal", "wininet" (Windows only) "libcurl", "wget" and "curl", and there is a value "auto"  
+- `quiet`: If TRUE, suppress status messages (if any), and the progress bar.  
+- `mode`: character. The mode with which to write the file. Useful values are "w", "wb" (binary), "a" (append) and "ab". Not used for methods "wget" and "curl"  
+- `cacheOK`: logical. Is a server-side cached value acceptable?  
+- `extra`: character vector of additional command-line arguments for the "wget" and "curl" methods.  
+- `...`: allow additional arguments to be passed, unused
+
+### download.file function
+
+__Details__: The function download.file can be used to download a single file as described by url from the internet and store it in destfile. The url must start with a scheme such as http://, https://, ftp:// or file://.  
+
+__Example__: Download data from the web
+```{r, results="hide", eval=FALSE}
+#Data from the Equality of Opportunity Project
+download.file(url = "http://www.equality-of-opportunity.org/data/race/table_1.csv",
+              destfile = "../../../../table_1.csv", mode = "wb") 
+```
+
+### unzip files
+`unzip` is used to extract files from or list a zip archive.  
+
+__Usage (i.e., syntax)__: `unzip(zipfile, files = NULL, list = FALSE, overwrite = TRUE, unzip = "internal", exdir = ".")`
+
+__Arguments__  
+
+- `zipfile`: The pathname of the zip file 
+- `files`: A character vector of recorded filepaths to be extracted: the default is to extract all files.  
+- `list`: If TRUE, list the files and extract none. 
+- `overwrite`: If TRUE, overwrite existing files, otherwise ignore such files.  
+- `junkpaths`: If TRUE, use only the basename of the stored filepath when extracting.   
+- `exdir`: The directory to extract files to
+- `unzip`: The method to be used.  
+
+
+### Downloading data (zip files) using IPEDS
 ```{r}
-seq(10,15)
-seq(from=10,to=15,by=1)
-seq(from=100,to=150,by=10)
-```
-### Length of atomic vectors
+#Set path to where data will be saved
+#download file 
+#getwd()
+setwd("../../data/ipeds/ic")
+download.file("https://nces.ed.gov/ipeds/datacenter/data/IC2017_AY.zip",
+              destfile = "ic2017_ay", mode = "wb")
+#unzip zip file 
+unzip(zipfile = "ic2017_ay" , unzip = "unzip")
 
-\medskip 
-Definition: __length__ of an object is its number of elements
+ic2017_ay <- read_csv("ic2017_ay.csv") %>%
+  select(-starts_with("X"))
 
-\medskip 
-Length of vectors, using `length()` function
-```{r}
-x <- c(1,2,3,4,"ha ha"); length(x)
-y <- seq(1,10); length(y)
-z <- c(seq(1,10),"ho ho"); length(z)
-```
-Once vector length known, isolate element contents based on position number using `[]`
-```{r}
-x[5]
-z[1]
-```
-For atomic vectors, applying `[[]]` to vector gives same result as  `[]`
-```{r}
-x[[5]]
-z[[1]]
-```
-### Length of lists
+names(ic2017_ay) <- tolower(names(ic2017_ay)) #lowercase column names
 
-\medskip 
-Definition: __length__ of an object is its number of elements
-
-```{r}
-typeof(df_bama); length(df_bama)
-```
-
-Once list length known, isolate element contents based on position number using `[]` or `[[]]`
-
-- subset one element of list with `[]` yields list w/ length==1
-```{r}
-typeof(df_bama[7]); length(df_bama[7])
-```
-- subset one element of list with `[[]]` yields vector w length== # rows
-```{r}
-df_bama[[7]]; typeof(df_bama[[7]]); length(df_bama[[7]])
-```
-
-subset one element of list with `$` is same as `[[]]`
-```{r}
-df_bama$med_inc; typeof(df_bama$med_inc); length(df_bama$med_inc)
-```
-
-### Combine sequences and length
-
-\medskip
-
-When writing loops, very common to create a sequence from 1 to the length (i.e., number of elements) of an object
-
-\medskip Here, we do this with a vector object
-```{r}
-(x <- c("a","b","c","d","e"))
-length(x)
-
-1:length(x)
-seq(from=1,to=length(x),by=1)
-```
-Can do same thing with list object
-```{r}
-length(df_bama)
-
-1:length(df_bama)
-seq(2,length(df_bama))
-```
-
-
-
-# Loop basics
-
-### Simple loop example
-
-\medskip
-What are loops?: __Loops__ execute some set of commands multiple times
-
-- We build loops using the `for()` function
-- Each time the loop executes the set of commands is an __iteration__
-- The below loop iterates 4 times
-
-__Example__
-
-- Create loop that prints each value of vector `c(1,2,3,4)`, one at a time
-```{r}
-c(1,2,3,4)
-
-for(i in c(1,2,3,4)) { # Loop sequence
-  print(i) # Loop body
-}
-```
-I use loops to perform practical tasks more efficienlty (e.g., read in data)
-
-- But we'll introduce loop concepts by doing things that aren't very useful
-
-### Components of a loop
-
-```{r}
-for(i in c(1,2,3,4)) { # Loop sequence
-  print(i) # Loop body
-}
-```
-
-
-Components of a loop
-
-1. __Sequence__. Determines what to "loop over" (e.g., from 1 to 4 by 1)
-    - sequence in above loop is `for(i in c(1,2,3,4))`
-    - this creates a temporary/local object named `i`; could name it anything
-        - `i` will no longer exist after the loop is finished running
-    - each iteration of loop will assign a different value to `i`
-    - c(1,2,3,4) is the set of values that will be assigned to `i` 
-          - in first iteration, value of `i` is `1`
-          - in second iteration, value of `i` is `2`, etc.
-2. __Body__. What commands to execute for each iteration through the loop
-    - Body in above loop is `print(i)`
-    - Each time (i.e., iteration) through the loop, body prints the value of object `i`
-
-### Using `cat()` to print value of sequence var for each iteration
-
-\medskip
-__When building a loop, I always include a line like `cat("z=",z, fill=TRUE)` to help me understand what loop is doing__
-
-\medskip
-Below two loops are essentially the same; I prefer second approach. Why?:
-
-- Writing name of sequence var object (here `z`) and seeing value of sequence var object for each iteration helps me understand loop better
-```{r}
-for(z in c(1,2,3)) { # Loop sequence
-  print(z) # Loop body
-}
-for(z in c(1,2,3)) { # Loop sequence
-  cat("object z=",z, fill=TRUE) # "fill=TRUE" forces line break after each iteration
-}
-```
-
-Without `fill=TRUE` [not recommended]
-```{r}
-for(z in c(1,2,3)) { # Loop sequence
-  cat("object z=",z) # "Loop body
-}
-```
-
-### Components of a loop
-
-\medskip
-
-Note that these three loops all do the same thing
-
-- __Loop body__ is the same in each loop
-- __Loop sequence__ written slightly differently in each loop
-
-```{r}
-for(z in c(1,2,3)) { # Loop sequence
-  cat("object z=",z, fill=TRUE) # Loop body
-}
-
-for(z in 1:3) { # Loop sequence
-  cat("object z=",z, fill=TRUE) # Loop body
-}
-
-num_sequence <- 1:3
-for(z in num_sequence) { # Loop sequence
-  cat("object z=",z, fill=TRUE) # Loop body
-}
+#names(ic2017_ay)
 ```
 
 
 ### Student exercise
 
-Try on your own or just follow along.
+**Tying it all together** 
 
-\medskip
-
-__Task__
-
-1. Create a numeric vector that has year of birth of members of your family
-    - you decide who to include
-    - e.g., for my mom, dad, wife, son: `birth_years <- c(1944,1950,1981,2016)`
-2. Write a loop that calculates current year minus birth year and prints this number for each member of your family
-    - Within this loop, you will create a new variable that calculates current year minus birth year
-
-\medskip
-
-Note: multiple correct ways to complete this task
-
-### Student exercise [SOLUTION]
-
-1. Create a numeric vector that has year of birth of members of your family (you decide who to include)
-2. Write a loop that calculates current year minus birth year and prints this number for each member of your family 
+- Using everything we learned today, read in a csv data file from the web  
+- Go back to the ipeds data center [here](https://nces.ed.gov/ipeds/datacenter/DataFiles.aspx)  
+- Right click and copy the link address to a different data file ("HD2017", "EFFY2017")  
+- Make sure to download the link first (download.file) before reading in the data  
+- Change column names to lowercase `names(df) <- tolower(names(df))`
+- Report dimensions of data `dim(df)`
+- Create a subset of your data (filter, select, etc.)
 
 ```{r}
-birth_years <- c(1944,1950,1981,2016)
-birth_years
 
-for(y in birth_years) { # Loop sequence
-  cat("object y=",y, fill=TRUE) # Loop body
-  z <- 2018-y
-  cat("value of",y,"minus",2018,"is",z, fill=TRUE)
-}
 ```
-# Three ways to loop over a vector (atomic vector or a list)
 
-### Plan for learning more about loops
 
-Rest of lecture on loops will proceed as follows:
 
-1. Describe the three different ways to "loop over" a vector
-2. Describe the two broad sorts of tasks to accomplish within body of a loop
-    1. Modify an existing object (e.g., vector or list/data frame)
-    2. Create a new object
+# readxl package
+
+### readxl 
+The `readxl`package is part of [tidyverse](https://readxl.tidyverse.org/), which is designed to read data from Excel and into R.  
+
+- We could install tidyverse **install.package("tidyverse")** to access `readxl`, but have to explicitly load `readxl` because it is not a core tidyverse package  
+    - `library(readxl)`  
+- Or install `readxl`**install.packages("readxl")** and load it  
+    - `library(readxl)`  
+- For the purpose of this lecture, we just need to load **library(readxl)**.
+
+### readxl
+
+`readxl` supports both .xls and .xlsx formats and is designed to work with tabular data. It does not require dependencies-- making installing and operating fairly simple.  
+
+`readxl` has several example files where we could use as practice. The files include: 
+```{r}
+readxl_example()
+```
+
+For now, lets use "datasets.xlsx"
+```{r, warning=FALSE}
+excel_example <- readxl_example("datasets.xlsx")
+```
+
+
+## readxl arguments
+
+### readxl arguments  
+
+Refer to the `readxl` package [pdf](https://cran.r-project.org/web/packages/readxl/readxl.pdf) for more detailed information on each function. 
+
+__Arguments__  
+
+- `sheet`: Sheet to read. Either a string (the name of a sheet), or an integer (the position of the sheet).  
+- `n_max`: Maximum number of data rows to read  
+- `range`: A cell range to read from  
+- `cell_rows`: Cell rows to read from  
+- `cell_cols`: Cell columns to read from  
+- `na`: Character vector of strings to interpret as missing values
+
+
+### readxl sheet  
+
+Select the excel sheet you want to work with.
+```{r, warning=FALSE}
+#To view sheets in excel file
+excel_sheets(excel_example)
+```
+```{r}
+xl_example <- read_excel(excel_example, sheet = "quakes")
+head(xl_example)
+```
+
+### readxl n_max  
+
+Maximum number of rows to read
+```{r}
+read_excel(excel_example, sheet = "quakes", n_max = 3)
+```
+
+### readxl range  
+
+A cell range to read from
+```{r}
+read_excel(excel_example, sheet = "quakes", range = "C1:E4")
+
+read_excel(excel_example, sheet = "quakes", range = cell_rows(1:3))
+
+head(read_excel(excel_example, sheet = "quakes", range = cell_cols("A:C")))
+# using head() to only view first 6 rows 
+```
+
+### readxl na  
+
+Character vector of strings to interpret as missing values
+```{r}
+read_excel(excel_example, sheet = "quakes", na = "-20.42")
+```
+
+
+### read_excel using FSA data
+
+Federal Student Aid  
+
+- Federal Student Aid Data Center provides information for federal assistance programs and is divided into four categories: 
+      - Student Aid Data  
+      - School Data  
+      - Federal Family Education Loan (FFEL) Program  
+      - Business Information Resources  
+      
+We will be working with [School Data](https://studentaid.ed.gov/sa/node/105)  
+
+
+### read_excel student exercise using FSA data
+Read in Federal Student Aid data using `readxl` function  
+    - Excel file "peps300.xlsx" is saved in the fsa folder inside the data folder  
     
-Throughout, I'll try to give you lots of examples and practice    
-
-### Three ways to loop over an object
-
-\medskip
-
-There are 3 ways to loop over elements of an object
-
-1. __Loop over the elements__ [approach we have used so far]
-2. __Loop over names of the elements__
-3. __Loop over numeric indices associated with element position__ [approach recommended by Grolemnund and Wickham]
-
-Will demonstrate 3 approaches on a named atomic vector and list/data frame
-
-- Create named vector
+1. Use relative file path to read in data  
+    - `read_excel("filepath/excelfile")`
 ```{r}
-vec=c("a"=5,"b"=-10,"c"=30)
-vec
+
 ```
-- Create data frame with fictitious data, 3 columns (vars) and 4 rows (obs)
-```{r}
-set.seed(12345) # so we all get the same variable values
-df <- tibble(a = rnorm(4),b = rnorm(4),c = rnorm(4))
-str(df)
-```
-
-## Loop over elements
-
-### Approach 1: loop over elements of object [object=atomic vector]
-
-\medskip
-
-- \medskip __sequence__ syntax: `for (i in object_name)`
-    - Sequence iterates through each element of the object
-    - That is, __sequence iterates through _value_ of each element, rather than _name_ or _position_ of element__
-- in __body__.
-    - value of `i` is equal to the contents of the `ith` element of the object
     
+1. Read in first four rows (n_max)
 ```{r}
-vec # print atomic vector object
 
-for (i in vec) {
-  cat("value of object i=",i, fill=TRUE) 
-  cat("object i has: type=",typeof(i),"; length=",length(i),"; class=",class(i),
-      "; attributes=",attributes(i),"\n",sep="",fill=TRUE) # "\n" adds line break
-}
 ```
-### Approach 1: loop over elements of object [object=list]
 
-\medskip
-
-- \medskip __sequence__ syntax: `for (i in object_name)`
-    - Sequence iterates through each element of the object
-    - That is, __sequence iterates through _value_ of each element__
-- in __body__: value of `i` is equal to __contents__ of `ith` element of object
-
+1. Read in columns from range Names to State **hint** `cell_cols`
 ```{r}
-df # print list/data frame object
-#class(df) 
-#attributes(df)
-for (i in df) {
-  cat("value of object i=",i, fill=TRUE)
-  cat("object type=",typeof(i),"; length=",length(i),"; class=",class(i),
-      "; attributes=",attributes(i),"\n",sep="",fill=TRUE)
-}
+
 ```
-### Approach 1: loop over elements of object
 
-\medskip
-
-__Example task__:
-
-- calculate mean value of each element of list object `df`
-
+1. Set value "P" to missing (na) **note** : you need to investigate in detail before setting anything to missing
 ```{r}
-df # print list/data frame object
-
-for (i in df) {
-  # sequence
-  cat("value of object i=",i, fill=TRUE)
-  cat("mean value of object i=",mean(i, na.rm = TRUE), "\n", fill=TRUE)
-  
-} 
 
 ```
-## Loop over element names
 
-### Approach 2: loop over names of object elements
 
-\medskip
 
-To use this approach, elements in object must have name attributes
-
-__sequence__ syntax: `for (i in names(object_name))`
-
-- Sequence iterates through the _name_ of each element in object
-
-in __body__, value of `i` is equal to _name_ of `ith` element in object
-
-- Access element contents using `object_name[i]`
-    - same object type as `object_name`; retains attributes (e.g., _name_)
-- Access element contents using `object_name[[i]]`
-    - removes level of hierarchy, thereby removing attributes
-    - Approach recommended by Wickham because isolates value of element
-
-Example: Object= atomic vector
+### read_excel Student exercise solutions  
+1. Use relative file path to read in data 
 ```{r}
-vec  # print atomic vector object
-names(vec)
+#Read in data using readxl function
+#getwd()
+fsa <- read_excel("../../data/fsa/peps300.xlsx")
 ```
-
-```{r, results="hide"}
-for (i in names(vec)) {
-  cat("\n","value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)
-  print(str(vec[i])) # "Access element contents using []"
-  print(str(vec[[i]])) # "Access element contents using [[]]"
-}
-```
-
-### Approach 2: loop over names of object elements [object = list]
-
-\medskip
-
-__sequence__ syntax: `for (i in names(object_name))`
-
-- Sequence iterates through the _name_ of each element in object
-
-in __body__, value of `i` is equal to _name_ of `ith` element in object
-
-- Access element contents using `object_name[i]`
-    - Same object type as `object_name`; retains attributes (e.g., _name_)
-- Access element contents using `object_name[[i]]`
-    - Removes level of hierarchy, thereby removing attributes
-    - Approach recommended by Wickham because isolates value of element
-
-\medskip
-
-Example, object is a list
+2. Read in first four rows (n_max)
 ```{r}
-names(df)
+#Read in first four rows (n_max)
+#setwd()
+read_excel("../../data/fsa/peps300.xlsx", n_max = 4)
 ```
-```{r, results="hide"}
-for (i in names(df)) {
-  cat("\n","value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)
-  print(str(df[i])) # "Access element contents using []"
-  print(str(df[[i]])) # "Access element contents using [[]]"
-}
-```
-### Approach 2: loop over names of elements in object
 
-\medskip
-
-__Example task__: calculate mean value of each element of list object `df`, using `[[]]` to access element contents
-
+### read_excel Student exercise solutions continued
+3. Read in columns from range Names to State **hint** `cell_cols`
 ```{r}
-str(df)
+#Read in column Names to column State
+#setwd()
+head(read_excel("../../data/fsa/peps300.xlsx", range = cell_cols("B:E")))
 
-for (i in names(df)) {
-  cat("mean of element named",i,"is",mean(df[[i]], na.rm = TRUE), fill=TRUE)
-}
 ```
 
-What if we try to complete task using , `[]` to access element contents?
-```{r, eval=FALSE}
-for (i in names(df)) {
-  cat("mean of element named",i,"is",mean(df[i],na.rm = TRUE), fill=TRUE)
-  #print(typeof(df[i]))
-  #print(class(df[i]))  
-}
-#?mean # mean function only works for particular *classes* of objects
-```
-## Loop over element position number
-
-### Approach 3: Loop over numeric indices of element position
-
-\medskip
-
-First explain sequence syntax, using atomic vector `vec` as object
-
-- __sequence__ syntax: `for (i in 1:length(object_name))`
-
+### read_excel Student exercise solutions continued
+4. Set value "P" to missing (na) **note** : you need to investigate in detail before setting anything to missing
 ```{r}
-vec # print named atomic vector vec
-length(vec)
-1:length(vec)
-
-for (i in 1:length(vec)) { # loop sequence
-  cat("value of object i=",i,fill=TRUE) # loop body
-}
-```
-Note: These two approaches yield same result as above
-```{r, results="hide"}
-for (i in c(1,2,3)) {
-  cat("value of object i=",i,fill=TRUE)
-}
-for (i in 1:3) {
-  cat("value of object i=",i,fill=TRUE)
-}
+#setwd()
+read_excel("../../data/fsa/peps300.xlsx", n_max = 4,  na = "P")
 ```
 
+### readxl Running into problems
+1. Make sure you have downloaded and saved excel file  
+2. Make sure to know the file path of where data is downloaded or saved ("../../data")  
+    - `list.files()`
+3. Make sure you set your working **`setwd()`** directory in R. To check your current working directory type **`getwd()`** in console.  
+4. Make sure to choose the correct sheet (if applicable)  
+5. Pay attention to column names when setting range
 
-### Approach 3: Loop over numeric indices of element position
 
-\medskip
 
-Loop over element position number: Simple sequence syntax
-```{r}
-for (i in 1:length(vec)) {
-  cat("value of object i=",i,fill=TRUE)
-}
-```
+# haven package
 
-__Wickham's preferred sequence syntax__: `for (i in seq_along(object_name))`
+### haven
 
-- `seq_along(x)` function returns a sequence from 1 value of `length(x)`
-```{r}
-length(vec)
-seq_along(vec)
-
-for (i in seq_along(vec)) {
-  cat("value of object i=",i,fill=TRUE)
-}
-```
-### Approach 3: Loop over numeric indices [SKIP]
-
-\medskip
-
-Why Wickham prefers `seq_along(object_name)` over `1:length(object_name)`
-
-- `seq_along` handles zero-length vectors correctly, and is therefore the "safe" version of `1:length(object_name)`
-
-```{r}
-# create vector of length=0
-y <- vector("double", 0) 
-length(y)
-
-1:length(y)
-for (i in 1:length(y)) {
-  cat("value of object i=",i,fill=TRUE)
-}
-
-seq_along(y)
-for (i in seq_along(y)) {
-  cat("value of object i=",i,fill=TRUE)
-}
-```
-Personally, I find `1:length(object_name)` much more intuitive
-
-### Approach 3: Loop over numeric indices of element position
-
-\medskip
-
-__sequence__ syntax: `for (i in 1:length(object_name))` __OR__ `for (i in seq_along(object_name))`
-
-- Sequence iterates through _position number_ of each element in the object
-
-In __body__, value of `i` equals the _position number_ of `ith` element in object
-
-- Access element contents using `object_name[i]`
-    - Same object type as `object_name`; retains attributes (e.g., _name_)
-- Access element contents using `object_name[[i]]` [RECOMMENDED]
-    - Removes level of hierarchy, thereby removing attributes
-
-__Example, object is atomic vector__
-```{r}
-vec
-```
-
-```{r, results="hide"}
-for (i in 1:length(vec)) {
-  cat("\n","value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)
-  print(str(vec[i])) # "Access element contents using []"
-  print(str(vec[[i]])) # "Access element contents using [[]]"
-}
-```
-
-### Approach 3: Loop over numeric indices of element position
-
-\medskip
-
-__sequence__: `for (i in 1:length(object_name))` __OR__ `for (i in seq_along(object_name))`
-
-- Sequence iterates through _position number_ of each element in the object
-
-In __body__, value of `i` equals the _position number_ of `ith` element in object
-
-- Access element contents using `object_name[i]`
-    - Same object type as `object_name`; retains attributes (e.g., _name_)
-- Access element contents using `object_name[[i]]` [RECOMMENDED]
-    - Removes level of hierarchy, thereby removing attributes
-
-__Example, object is a list__
-```{r}
-df %>% head(n=3)
-```
-
-```{r, results="hide"}
-for (i in 1:length(df)) {
-  cat("\n","value of object i=",i,"; type=",typeof(i),sep="",fill=TRUE)
-  print(str(df[i])) # "Access element contents using []"
-  print(str(df[[i]])) # "Access element contents using [[]]"
-}
-```
-
-### Approach 3: Loop over numeric indices of element position
-
-__Example task__:
-
-- Calculate mean value of each element of list object `df`, using `for (i in seq_along(df))` to create sequence and using `[[]]` to access element contents
-
-```{r}
-for (i in seq_along(df)) {
-  cat("mean of element named",i,"is",mean(df[[i]], na.rm = TRUE), fill=TRUE)
-}
-```
-
-What happens if we try to complete task using , using `[]` to access element contents?
-```{r, eval=FALSE}
-for (i in seq_along(df)) {
-  cat("mean of element named",i,"is",mean(df[i],na.rm = TRUE), fill=TRUE)
-  #print(typeof(df[i]))
-  #print(class(df[i]))  
-}
-#?mean # mean(object) requires object to be numeric or logical
-```
-### Approach 3: Loop over numeric indices of element position
-
-\medskip 
-
-__When looping over numeric indices, you can extract element names based on element position__
-
-- First, let's experiment w/ `attributes()` and `names()` functions
-
-`attributes()` function [output omitted]
-```{r, results="hide"}
-attributes(df)
-attributes(df[1]) # not null
-attributes(df[[1]]) # null: removing level of hierarchy removes attributes
-```
-
-`names()` functions
-```{r}
-names(df)
-names(df[1]) # not null
-names(df[[1]]) # null: object df[[1]] has no attributes; just values
-
-names(df)[[1]] # not null: we extract names of df, then select first element
-```
-
-### Approach 3: Loop over numeric indices of element position
-
-\medskip 
-
-__When looping over numeric indices, you can extract element names based on element position__
-
-- First, experiment w/ `names()` function
-```{r}
-names(df)
-names(df)[[1]] # not null: we extract names of df, then select first element
-```
-
-- Second, apply what we learned to loop
-```{r}
-for (i in seq_along(df)) {
-  #print(names(df)[[i]])
-  cat("i=",i,"; names=",names(df)[[i]],sep="",fill=TRUE)
-}
-```
-
-
-### Summary: Three ways to loop over object
-
-1. Loop over elements
-1. Loop over element names
-1. Loop over numeric indices of element position
-
-Why Wickham prefers "loop over numeric indices of element" approach [3]:
-
-- given element position number, can extract element name[2] and value[1]
-
-
-```{r}
-for (i in seq_along(df)) {
-  cat("i=",i,sep="",fill=TRUE)
-  
-  name <- names(df)[[i]] # value of object "name" is what we loop over in approach 2
-  cat("name=",name,sep="",fill=TRUE)
-  
-  value <- df[[i]] # value of object "value" is what we loop over in approach 1
-  cat("value=",value,"\n",sep="",fill=TRUE)
-}
-```
-
-# Modifying vs. Creating new object
-
-### Modify object or create new object
-
-Grolemund and Wickham differentiate between two types of tasks loops accomplish: (1) modify existing object; and (2) create new object
-
-1. __Modify an existing object__
-    - example: looping through a set of variables in a data frame to:
-        - Modifying these variables OR
-        - Creating new variables (within the existing data frame object)
-    - When writing loops in Stata/SAS/SPSS, we are usually modifying an existing object because these programs typically only have one object - a dataset - open at a time)    
-2. __Create a new object__
-    - Example: Create an object that has summary statistics for each variable; this object will be the basis for a table or graph
-    - Often the new object will be a vector of results based on looping through elements of a data frame
-    - In R (as opposed to Stata/SAS/SPSS) creating a new object is very common because R can hold many objects at the same time
-
-## Loops that create new object
-
-### Creating a new object
-
-So far our loops have two components: 
-
-1. sequence
-1. body
-
-When we create a new object to store the results of a loop, our loops have three components
-
-1. sequence
-1. body
-1. output
-    - this is the new object that will store results created from your loop
-
-Grolemund and Wickham recommend creating this new object __prior__ to writing the loop (rather than creating the new object within the loop)
-
-> "Before you start loop...allocate sufficient space for the output. This is very important for efficiency: if you grow the for loop at each iteration using c() (for example), your for loop will be very slow."
-
-### Creating a new object
-
-Create sample data frame named `df`
-```{r}
-set.seed(54321)
-df <- tibble(a = rnorm(10),b = rnorm(10),c = rnorm(10),d = rnorm(10))
-```
-
-__Task__: 
-
-- Using the data frame `df`, which contains data on four numeric variables, create a new object that contains the mean value of each variable
-
-
-In a previous example, we calculated mean for each variable
-```{r}
-for (i in seq_along(df)) {
-  cat("mean of element named",i,"is",mean(df[[i]], na.rm = TRUE),fill=TRUE)
-}
-```
-Now we just have to create an object to store these results
-
-### Creating a new object
-
-__Task__: Create a new object that contains mean value of each variable in `df`
-
-\medskip
-Wickham recommends creating new object __prior__ to creating loop
-
-- You must specify type and length of new object
-- New object will contain mean for each variable; should be numeric vector with number of elements (length) equal to number of variables in `df`
-
-\medskip
-Create object to hold output; we'll name this object `output`
-```{r}
-output <- vector("double", ncol(df)) # create object
-typeof(output)
-length(output)
-length(df)
-```
-Create loop; use position number to assign variable means to elements of vector `output`
-```{r}
-for (i in seq_along(df)) {
-  #cat("i=",i,fill=TRUE)
-  output[[i]] <- mean(df[[i]], na.rm = TRUE) # mean of df[[1]] assigned to output[[1]], etc.
-}
-output
-```
-## Loops that modify existing object
-
-### Example of modifying an object: z-score loop
-
-__Task__ (from Christenson lecture):
-
-- Write a loop that calculates z-score for a set of variables in a data frame and then  replaces the original variables with the z-score variables 
-
-The z-score for observation _i_ is number of standard deviations from mean:
-
-$z_i = \frac{x_i - \bar{x}}{sd(x)}$
-
-We wrote a z-score function in the functions lecture; this can be basis of our z-score loop
-```{r}
-z_score <- function(x) {
-  (x - mean(x, na.rm=TRUE))/sd(x, na.rm=TRUE)
-}
-z_score(df$a)
-z_score(df[["a"]]) # same
-z_score(df[[1]]) # same
-```
-
-### Example of modifying an object: z-score loop
-
-__Task__: write loop that replaces variables with z-scores of those variables
-
-\medskip
-
-When modifying existing object, we only need to write __sequence__ and __body__
-
-- __sequence__. 
-    - data frame `df` has 4 variables and all are quantitative
-    - so write a sequence that loops across each element of `df`
-        - `for (i in seq_along(df))`
-- __body__.
-    - body of z-score function:
-        - `(x - mean(x, na.rm=TRUE))/sd(x, na.rm=TRUE)`
-    - Substitute `df[[i]]` for  `x`: 
-        - `(df[[i]] - mean(df[[i]], na.rm=TRUE))/sd(df[[i]], na.rm=TRUE)`
-    - Assign (replace) each observation the value of its z-score: 
-        - `df[[i]] <- (df[[i]] - mean(df[[i]], na.rm=TRUE))/sd(df[[i]], na.rm=TRUE)`
-
-```{r, results="hide"}
-set.seed(54321)
-(df <- tibble(a = rnorm(10),b = rnorm(10),c = rnorm(10),d = rnorm(10)))
-
-for (i in seq_along(df)) {
-  cat("i=",i,"; mean=",mean(df[[i]], na.rm=TRUE),"; sd=",sd(df[[i]], na.rm=TRUE),sep="",fill=TRUE)
-  #print((df[[i]] - mean(df[[i]], na.rm=TRUE))/sd(df[[i]], na.rm=TRUE)) # show z-score for each obs
-  df[[i]] <- (df[[i]] - mean(df[[i]], na.rm=TRUE))/sd(df[[i]], na.rm=TRUE) # modify values
-}
-str(df)
-```
-
-### Modify z-score loop to work with non-numeric variables
-
-What happens if we apply our loop to the data frame `df_bama`, which has both string and numeric variables?
-
-\medskip
-Create data frame `df_bama`
-```{r, results="hide"}
-load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData"))
-df_bama <- df_event %>% arrange(univ_id,event_date) %>% 
-  select(instnm,univ_id,event_date,event_type,event_state,zip,med_inc) %>% 
-  filter(row_number()<6)
-str(df_bama)
-```
-
-Attempt to run loop; what went wrong?
-```{r, eval=FALSE}
-for (i in seq_along(df_bama)) {
-  cat("i=",i,"; mean=",mean(df_bama[[i]], na.rm=TRUE),"; sd=",sd(df_bama[[i]], na.rm=TRUE),sep="",fill=TRUE)
-  #print((df_bama[[i]] - mean(df_bama[[i]], na.rm=TRUE))/sd(df_bama[[i]], na.rm=TRUE))
-  df_bama[[i]] <- (df_bama[[i]] - mean(df_bama[[i]], na.rm=TRUE))/sd(df_bama[[i]], na.rm=TRUE)
-}
-df_bama
-```
-### Modify z-score loop to work with non-numeric variables
-
-What happens if we apply our loop to the data frame `df_bama`, which has both string and numeric variables?
-
-\medskip
-
-Let's modify our loop so that it only calculates z-score if for non-integer, numeric variables
-```{r, results="hide"}
-str(df_bama)
-for (i in seq_along(df_bama)) {
-  cat("i=",i,"; var name=",names(df_bama)[[i]],"; type=",typeof(df_bama[[i]]),
-      "; class=",class(df_bama[[i]]),sep="",fill=TRUE)
-  
-  if(is.numeric(df_bama[[i]]) & (!is_integer(df_bama[[i]]))) {
-    df_bama[[i]] <- (df_bama[[i]] - mean(df_bama[[i]], na.rm=TRUE))/sd(df_bama[[i]], na.rm=TRUE)
-  } else {
-    # do nothing
-  }
-}
-str(df_bama)
-```
-### Modify object:  embed z-score loop in function [SKIP]
-
-Recreate `df` and `df_bama` [ouput and code omitted]
-```{r, results="hide", echo=FALSE}
-#recreate df
-set.seed(12345)
-df <- tibble(a = rnorm(10),b = rnorm(10),c = rnorm(10),d = rnorm(10))
-
-#recreate df_bama
-load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData"))
-df_bama <- df_event %>% arrange(univ_id,event_date) %>% 
-  select(instnm,univ_id,event_date,event_type,event_state,zip,med_inc) %>% 
-  filter(row_number()<6)
-```
-\medskip
-
-Can we embed this loop in a function that takes the data frame as an argument so we don't have to modify loop for each data frame?
-
-```{r, results="hide"}
-z_score <- function(x) {
-
-  for (i in seq_along(x)) {
-    cat("i=",i,"; var name=",names(x)[[i]],"; type=",typeof(x[[i]]),
-        "; class=",class(x[[i]]),sep="",fill=TRUE)
+Recap from lecture 5   
     
-    if(is.numeric(x[[i]]) & (!is_integer(x[[i]]))) {
-      x[[i]] <- (x[[i]] - mean(x[[i]], na.rm=TRUE))/sd(x[[i]], na.rm=TRUE)
-    } else {
-       #do nothing
-    }
-  }
-}
-#apply to data frame df
-df_z <- z_score(df)
-df; df_z
-#apply to data frame df_bama
-df_bama_z <- z_score(df_bama)
-df_bama; df_bama_z
+
+haven is part of [tidyverse](https://haven.tidyverse.org/), which enables users to import and export data from the following statistical packages:  
+
+- SAS
+- SPSS
+- Stata  
+\
+
+Similar to `readr`, we could load the entire **library(tidyverse)** package to get `haven`. 
+For the purpose of this lecture, we will just need to load **library(haven)**.  
+
+### haven functions  
+
+Refer to the `haven` package [pdf](https://cran.r-project.org/web/packages/haven/haven.pdf) for more detailed information on each function. 
+
+**haven's** (tidyverse) functions
+
+| **Format** | **Function** |
+| ------ | -------- |
+| SPSS    | `read_sav`   |
+| SAS    | `read_sas`   |
+| Stata    | `read_dta`   |
+
+
+### haven read and write Stata arguments
+
+`read_dta(file, encoding = NULL)`  
+`write_dta(data, path, version = 14)`  
+
+__Arguments__  
+
+- `file`: file path to data  
+- `encoding`: the character encoding used for the file  
+- `data`: data frame to save (write)  
+- `path`: file path to where data will be saved  
+- `version`: file version to use. Supports versions 8-15.  
+
+[Link](https://haven.tidyverse.org/reference/read_dta.html)
+
+
+### haven using HSLS data
+
+High school longitudinal surveys from National Center for Education Statistics (NCES)
+
+- Follow U.S. students from high school through college, labor market
+
+We will be working with [High School Longitudinal Study of 2009 (HSLS:09)](https://nces.ed.gov/surveys/hsls09/index.asp)
+
+- Follows 9th graders from 2009
+- Data collection waves
+      - Base Year (2009)
+      - First Follow-up (2012)
+      - 2013 Update (2013)
+      - High School Transcripts (2013-2014)
+      - Second Follow-up (2016) 
+      
+### haven Student exercise using HSLS data     
+
+1. Use `read_dta()` function from `haven` to import Stata dataset into R  
+```{r}
+
 ```
 
-# When to write a loop (vs. a function); recipe for writing loops
+1. Use `write_dta()` function from `haven` to save Stata dataset  
+```{r}
 
-### When to write a loop
+```
 
-__Broadly, rationale for writing loop same as rationale for writing function__:
+1. If you have time, explore data (View, glimpse, head, etc.)  
+    - View variable and value labels  
+    - Change class == labelled to class == factor
+```{r}
 
-- Do not duplicate code
-- Can make changes to code in one place rather than many
+```
+    
+    
+### haven Student exercise solutions
 
-\medskip
-__When to write a loop__:
-
-- Grolemund and Wickham say __don't copy and paste more than twice__
-- If you find yourself doing this, consider writing a loop or function
-
-\medskip
-__Don't worry about knowing all the situations you should write a loop__
-
-- Rather, you'll be creating analysis dataset or analyzing data and you will notice there is some task that you are repeating over and over
-- Then you'll think "oh, I should write a loop or function for this"
-
-### When to write a loop vs a functions
-
-\medskip
-Usually obvious when you are duplicating code, but unclear whether you should write a loop or whether you should write a function.
-
-- Often, a repeated task can be completed with a loop or a function
-
-In my experience, loops are better for repeated tasks when the individual tasks are __very__ similar to one another
-
-- e.g., a loop that reads in data sets from individual years; each dataset you read in differs only by directory and name
-- e.g., a loop that converts negative values to `NA` for a set of variables
-
-Because functions can have many arguments, functions are better when the individual tasks differ substantially from one another 
-
-- Example: function that runs regression and creates formatted results table
-    - function allows you to specify (as function arguments): dependent variable; independent variables; what model to run, etc.
-
-__Note__
-
-- Can embed loops within functions; can call functions within loops
-- But for now, just try to understand basics of functions and loops
-
-
-
-### Recipe for how to write loop
-
-The general recipe for how to write a loop is very similar to the recipe for writing a function:
-
-1. Complete the task for one instance outside a loop (this is akin to writing the __body__ of the loop)
-
-2. Write the __sequence__ 
-
-3. Which parts of the body need to change with each iteration
-
-4. _if_ you are creating a new object store output of the loop, create this outside of the loop
-
-5. Construct the loop
-
-# Practice: How well do public universities cover in-state public high schools?
-
-### Load recruiting data
-
-Load data frame with one observation per high school and variables for visits by each public research university in sample
-
-- Note: this data frame has more vars than previous data frame we used
+Use `read_dta` function from `haven` to import State data
 ```{r, results="hide"}
-rm(list = ls()) # remove all objects
-load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_school_allvars.RData"))
+hsls <- read_dta("../../data/hsls/hsls_sch_small.dta", encoding=NULL)
+
+# View data
+head(hsls)
+glimpse(hsls)
 ```
 
-We are interested in creating measures of how good a job public universities are doing visiting in-state public high schools
+Use `write_dta` function from `haven` to write State data
 
-- Create data frame with one observation for each public high school
-```{r, results="hide"}
-#names(df_school_all)
-df_school_all %>% str()
-df_pubhs <- df_school_all %>% # Create data-frame that keeps public high schools
-  filter(school_type=="public") %>% select(-school_type)
-rm(df_school_all)
+`write_dta(dataframe, path = ""`
+```{r eval=FALSE}
+write_dta(hsls, path = "../../data/hsls/hsls_sch_small.dta")
 ```
 
-Create standalone objects (output and code omitted)
+### haven Student exercise Solution continued...
+Variable and Value labels
+```{r}
+# View variable labels
+hsls %>% var_label()
 
-1. Character vector containing ID for each public university
-2. A named list containing university name
-```{r, results="hide", echo=FALSE}
-ids<- c( '196097', '186380', '215293', '201885', '181464', '139959', '218663', '100751', '199193', '110635', '110653', '126614', '155317', '106397', '149222', '166629')
-str(ids)
+```
 
-#create named list
-  #value of each element is university name
-  #name assigned to each element is the university ID
-  instnm<- list(
-    "196097"="Stony Brook",
-    "186380"="Rutgers",
-    "215293"="Pitt",
-    "201885"="Cinci",
-    "181464"="U Nebraska Lincoln",
-    "139959"="U Georgia",
-    "218663" ="U South Carolina",
-    "100751"="U Alabama",
-    "199193"="NC State",
-    "110635"="UC Berkeley",
-   "110653"="UC Irvine",
-   "126614"="CU Boulder" ,
-   "155317"="U Kansas",
-   "106397"="U Arkansas",
-   "149222"="U S Illinois",
-   "166629"="UMass Amherst")
-  
-  instnm<- list(
-    "Stony Brook"="196097",
-    "Rutgers"="186380",
-    "Pitt"="215293",
-    "Cinci"="201885",
-    "U Nebraska Lincoln"="181464",
-    "U Georgia"="139959",
-    "U South Carolina"="218663",
-    "U Alabama"="100751",
-    "NC State"="199193",
-    "UC Berkeley"="110635",
-   "UC Irvine"="110653",
-   "CU Boulder"="126614",
-   "U Kansas"="155317",
-   "U Arkansas"="106397",
-   "U S Illinois"="149222",
-   "UMass Amherst"="166629")  
-str(instnm)  
+### haven Student exercise Solution cont...
+```{r}
+#View value label for x1locale
+hsls %>% select(x1locale) %>% val_labels()
+```
+
+### haven Student exercise Solution cont...
+```{r}
+# Change class == labelled to class == factor
+hsls <- as_factor(hsls, only_labelled = TRUE)
+
+typeof(hsls$x1region)
+class(hsls$x1region)
+attributes(hsls$x1region)
 ```
 
 
 
-### How well do public universities cover in-state public high schools
-
-\medskip __Task__: for each public research university, calculate the number and percent of public high schools in the university's home state that received a visit
-
-First, let's accomplish task outside of a loop for one university [Tidyverse]
-
-- let's choose `"U of South Carolina"`, `ID==218663`
-```{r, results="hide"}
-#"state_code" is the 2-letter high school state code
-df_pubhs %>% select(state_code) %>% str()
-
-#variables starting with "inst_" identify state the university is located in
-df_pubhs %>% select(inst_218663) %>% str()
-df_pubhs %>% select(inst_218663) %>% count(inst_218663) # these vars don't vary
-
-#variables starting with "visits_by_" indicate number of visits HS got in 2017
-df_pubhs %>% select(visits_by_218663) %>% str()
-df_pubhs %>% select(visits_by_218663) %>% count(visits_by_218663) 
-
-#filter only obs where HS state code equals home state of university
-df_pubhs %>% filter(state_code==inst_218663) %>% count() # count pub HS in SC
-
-#Create measures: number pub HS in SC; number w/ visit; pct w/ visit
-df_pubhs %>% filter(state_code==inst_218663) %>% select(visits_by_218663) %>% 
-  mutate(got_visit=ifelse(visits_by_218663>0,1,0)) %>%
-  summarise(n_hs=n(),n_visit=sum(got_visit),pct_visit=sum(got_visit)/n())
-
-```
-### How well do public universities cover in-state public high schools
-
-\medskip __Task__: for each public research university, calculate the number and percent of public high schools in the university's home state that received a visit
-
-First, let's accomplish task outside of a loop for one university [Base R]
-
-- let's choose `"U of South Carolina"`, `ID==218663`
-```{r, results="hide"}
-#"state_code" is the 2-letter high school state code
-str(df_pubhs$state_code)
-
-#variables starting with "inst_" identify state the university is located in
-str(df_pubhs$inst_218663)
-table(df_pubhs$inst_218663, useNA='ifany') # these vars don't vary 
-
-#variables starting with "visits_by_" indicate number of visits HS got in 2017
-str(df_pubhs$visits_by_218663)
-table(df_pubhs$visits_by_218663, useNA='ifany')
-
-#filter only obs where HS state code equals home state of university
-tempdf <- subset(df_pubhs,df_pubhs[["state_code"]]==df_pubhs[["inst_218663"]])
-  #tempdf <- subset(df_pubhs,df_pubhs$state_code==df_pubhs$inst_218663) # same as above
-  #tempdf <- subset(df_pubhs,state_code==inst_218663) # same as above
-
-#Create 0/1 indicator of whether got visit
-tempdf$got_visit <- ifelse(tempdf$visits_by_218663>0,1,0)
-
-#frequency count of schools that got visits vs. not
-table(tempdf$got_visit, useNA='ifany')
-
-#create objects for count table and proportion table
-ct_table <- table(tempdf$got_visit, useNA='ifany')
-ct_table
-typeof(ct_table); length(ct_table); str(ct_table) # named vector with 2 elements
-
-prop.table(ct_table)
-pr_table <-prop.table(ct_table)
-pr_table
-typeof(pr_table); length(pr_table); str(pr_table) # named vector with 2 elements
-```
-
-### How well do public universities cover in-state public high schools
-
-\medskip __Task__: for each public research university, calculate the number and percent of public high schools in the university's home state that received a visit
-
-Build loop [Base R approach]
-
-- first, loop through each value of list `instnm`
-```{r, results="hide"}
-instnm
-for (i in seq_along(instnm)) {
-  cat("\n","i=",i,sep="",fill=TRUE)
-  
-  name <- names(instnm)[[i]] # name of element
-  cat("name=",name,sep="",fill=TRUE)
-  
-  value <- instnm[[i]] # value of element
-  cat("value=",value,sep="",fill=TRUE)
-}
-```
-
-### How well do public universities cover in-state public high schools
-
-\medskip __Task__: for each public research university, calculate the number and percent of public high schools in the university's home state that received a visit
-
-Build loop
-
-- next, create "inst_..." and "visits_by_..." vars for each id
-- keep obs in same state as university
-- create 0/1 variable of whether high school got a visit
-```{r, results="hide"}
-for (i in seq_along(instnm)) {
-  cat("\n","i=",i,"; ",names(instnm)[[i]],sep="",fill=TRUE)
-  
-  #create object called inst_var; value is "inst_id" (e.g., "inst_166629")
-  cat("inst_",instnm[[i]],sep="",fill=TRUE)
-  inst_var <- paste("inst_",instnm[[i]],sep="")
-  print(inst_var)
-  
-  #create object called visits_by_var; value is "visits_by_id" (e.g., "visits_by_166629")
-  visits_by_var <- paste("visits_by_",instnm[[i]],sep="")
-  print(visits_by_var)
-  
-  #create subset of data with high schools in same state as the university
-  tempdf <- subset(df_pubhs,df_pubhs[["state_code"]]==df_pubhs[[inst_var]])
-      # code df_pubhs[[inst_var]]) evaluates to df_pubhs[["inst_166629"]]) or whatever current value of inst_var is
-      # this is same as instnm[[i]] evaluating to instnm[[16]] or whatever current value of i is
-  #Create 0/1 indicator of whether got visit
-  tempdf$got_visit <- ifelse(tempdf[[visits_by_var]]>0,1,0)  
-}
-```
-
-### How well do public universities cover in-state public high schools
-
-\medskip __Task__: for each public research university, calculate the number and percent of public high schools in the university's home state that received a visit
-
-Build loop
-
-- next, create count of number of visted and non-visited in-state schools
-```{r, results="hide"}
-for (i in seq_along(instnm)) {
-  cat("\n","i=",i,"; ",names(instnm)[[i]],sep="",fill=TRUE)
-  
-  inst_var <- paste("inst_",instnm[[i]],sep="")
-  visits_by_var <- paste("visits_by_",instnm[[i]],sep="")
-
-  tempdf <- subset(df_pubhs,df_pubhs[["state_code"]]==df_pubhs[[inst_var]]) # keep obs in same state as university
-  tempdf$got_visit <- ifelse(tempdf[[visits_by_var]]>0,1,0) # create 0/1 indicator
-  
-  #create frequency table of number of schools with and without visits
-  print(table(tempdf$got_visit, useNA='ifany'))
-  ct_table <- table(tempdf$got_visit, useNA='ifany') # named vector with 2 elements str(ct_table)
-
-  #create proportion table
-  print(prop.table(ct_table))
-  pr_table <- prop.table(ct_table) # named vector with 2 elements str(pr_table)
-}
-```
-
-### How well do public universities cover in-state public high schools
-
-\medskip __Task__: for each public research university, calculate the number and percent of public high schools in the university's home state that received a visit
-
-Here is tidyverse approach to loop, which uses some programming concepts we haven't covered
-
-```{r, results="hide",eval=FALSE}
-for (i in seq_along(instnm)) {
-  cat("\n","i=",i,"; ",names(instnm)[[i]],sep="",fill=TRUE)
-  
-  #create object called inst_var; value is "inst_id" (e.g., "inst_166629")
-  inst_var <- paste("inst_",instnm[[i]],sep="")
-
-  #create object called visits_by_var; value is "visits_by_id" (e.g., "visits_by_166629")
-  visits_by_var <- paste("visits_by_",instnm[[i]],sep="")
-
-  #Create measures: number pub HS in SC; number w/ visit; pct w/ visit
-  df_pubhs %>% filter_(glue::glue("state_code=={inst_var}")) %>% 
-      select_(visits_by_var) %>% 
-      mutate_(got_visit=glue::glue("ifelse({visits_by_var}>0,1,0)")) %>%
-      summarise(n_hs=n(),n_visit=sum(got_visit),pct_visit=sum(got_visit)/n())
-}
-```
 

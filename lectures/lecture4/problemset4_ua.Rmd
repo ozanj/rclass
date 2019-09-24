@@ -1,7 +1,7 @@
 ---
-title: "Lecture 3 problem set"
+title: "Lecture 4 problem set"
 author: "INSERT YOUR NAME HERE"
-date: "October 11, 2018"
+date: "INSERT DATE"
 urlcolor: blue
 output: 
   pdf_document
@@ -17,23 +17,14 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 
 # Required reading and instructions
 
-## Required reading
+__Required reading__
 
 - Grolemund and Wickham 5.5 (Add new variables with `mutate()`)
 - Xie, Allaire, and Grolemund (XAG) section 3.3 (R Markdown, PDF document) [LINK HERE](https://bookdown.org/yihui/rmarkdown/pdf-document.html)
 
-## General instructions
+__General instructions__: In this homework, you will specify `pdf_document` as the output format. 
 
-In this homework, you will specify `pdf_document` as the output format. You must have LaTeX installed in order to create pdf documents. 
-
-If you have not yet installed MiKTeX/MacTeX, I recommend installing TinyTeX, which is much simpler to install!
-
-- Instructions for installation of TinTeX can be found [HERE](https://bookdown.org/yihui/rmarkdown/installation.html#installation)
-
-- General Instructions for Problem Sets [Here](https://github.com/ozanj/rclass/raw/master/lectures/problemset_resources.pdf)
-
-
-# Make changes to YAML header
+# Step 1: Make changes to YAML header
 
 Read XAG section 3.3 before answering these questions
 
@@ -42,7 +33,7 @@ Read XAG section 3.3 before answering these questions
 1. Add section numbering to headers
 1. Change "data frame printing" option to "tibble"
 
-# Load packages, load data, and rename variables
+# Step 2: Load packages, load data, and rename variables
 
 
 1. Load the tidyverse package
@@ -92,57 +83,9 @@ df_school_all <- df_school_all %>%
 names(df_school_all)
 ```
 
-# Filter and arrange questions
+# Step 3: creating variables using mutate() and `if_else()`
 
-For the questions below, imagine that you have been asked by a major news outlet to identify which high schools receive the most off-campus recruiting visits from the 16 public universities in the sample. Therefore, you will focus on the variable `total_visits`, which counts the total number of visits to the high school across all public 16 public research universities in the sample
-
-- For questions that ask you to print the "top 10" observations, you can either:
-    - just print the object and rely on the fact that the default option for printing tibbles is to print the first 10 observations 
-    - OR you can wrap the command in the `head()` function and explicitly tell R to print 10 observations. 
-
-
-1. Without using pipes (`%>%`), sort (i.e., `arrange()` function) descending by `total_visits` and print the the following variables for the top 10 schools in terms of total number of visits:
-    - variables to print: `name`, `state_code`, `city`, `school_type`,`total_visits`, `med_inc`, `pct_white`, `pct_black`, `pct_hispanic`, `pct_asian`, `pct_amerindian`
-    - Note: You can do this in one step by wrapping the `select()` function around the `arrange()` (i.e., sort) function; or you can do this in two steps by creating a new data frame first.
-```{r}
-
-```
-
-
-2. Answer the question above, but this time use pipes (`%>%`) to answer the question in one line of code
-```{r}
-
-```
-
-
-3. Without using pipes, print the following (same variables as above):
-    - (A) the top 10 public high schools in terms of total number of visits and then
-    - (B) the top 10 private high schoools in terms of total number of visits
-    
-```{r}
-
-```
-
-
-4. Answer the question above, but this time using pipes (`%>%`) to answer the question in one line of code for part (A) and one line of code for part (B)
-```{r}
-
-```
-
-
-5. Using pipe operator (`%>%`), print the following (same variables as above; one line of code for each part (A), (B), (C), (D)): 
-    - (A) the top 10 public high schools in Massachusetts in terms of total number of visits and then 
-    - (B) the top 10 private high schools in Massachusetts in terms of total number of visits
-    - (C) the top 10 public high schools in California in terms of total number of visits and then 
-    - (D) the top 10 private high schools in California in terms of total number of visits    
-```{r}
-
-```
-
-
-# Creating variables using mutate()
-
-The focus of this set of questions will be practicing creating some variables from the data frame `df_school_all`. You will be using the `mutate()` function, often combined with the `if_else()` function. Additionally, questions will ask you to investigate the values of "input" variables before creating new "analysis" variables using `mutate()`
+The focus of this set of questions will be practicing creating some variables from the data frame `df_school_all`. You will be using the `mutate()` function, __sometimes__ combined with the `if_else()` function. Additionally, be sure to investigate the values of "input" variables before creating new "analysis" variables. 
 
 Before presenting questions, here are some examples of code that may be useful in checking variable values. The below lines of code count:
 
@@ -180,20 +123,20 @@ df_school_all %>% count(school_type) # frequency count of school_type
 ```
 
 
-4. Create a new variable pct_bl_hisp_nat that represents the percent of students at the school that identify as black, hispanic, or american indian. Retain this variable by assigning it to the object `df_school_all`
+4. Create a new variable `pct_bl_hisp_ai` that represents the percent of students at the school that identify as black, hispanic, or american indian (hint: just sum all the pct vars for each race/ethnicity). Retain this variable by assigning it to the object `df_school_all`
 ```{r}
 
 ```
 
 
-5. Create a new 0/1 indicator variable gt50pct_bl_hisp_nat that identifies whether more than 50% of students identify as black, hispanic, or american indian and create a frequency count of this variable (no need to retain this variable)
+5. Using `mutate()` with `ifelse()`, create a new 0/1 indicator variable `gt50pct_bl_hisp_ai` that identifies whether more than 50% of students identify as black, hispanic, or american indian and create a frequency count of this variable (no need to retain this variable)
 
 ```{r}
 
 ```
 
 
-6. Create the following 0/1 indicator variables, retain them (assign to object `df_school_all`), and then create frequency counts of these variables:
+6. Using `mutate()` with `ifelse()`, create the following 0/1 indicator variables, retain them (assign to object `df_school_all`), and then create frequency counts of these variables:
     - Variable `miss_took_math` for whether the school has missing values for the variable `num_took_math`
     - Variable `miss_prof_math` for whether the school has missing values for the variable `num_prof_math`
     - Variable `miss_took_or_prof_math` for whether the school has missing values for the variable `num_took_math` OR `num_prof_math`
@@ -202,24 +145,8 @@ df_school_all %>% count(school_type) # frequency count of school_type
 ```
 
 
-7. create a variable of `pct_prof_math` that measures the percent of students who score proficient in the state math assessment(assign to object `df_school_all`). 
-```{r}
 
-```
-
-
-8. create a frequency count of value of the variable `pct_prof_math` separately for the three following filters:
-    - Observations where `miss_took_math==1`
-    - Observations where `miss_prof_math==1`
-    - Observations where `miss_took_or_prof_math==1`
-    
-```{r}
-
-```
-
-# **THIS IS A BONUS QUESTION**
-
-# case_when() question
+# Step 4: creating variables using `mutate()` + `case_when()`
 
 For this set of questions, you will work with the data frame `wwlist` which has one observation for each prospective student purchased by Western Washington University from the College Board. 
 
@@ -274,6 +201,10 @@ load(url("https://github.com/ozanj/rclass/raw/master/data/prospect_list/wwlist_m
 ```{r}
 
 ```
+
+# **THIS IS A BONUS QUESTION**
+
+BONUS QUESTION: Complete questions 4 and 5 in Step 3 using base R syntax (without the tidyverse `mutate()` function). To create frequency counts, you can still use the `count()` function __after__ you've created the new variables via base R (see slides 62 & 64 on Lecture 4 presentation)
 
 
 Once finished, knit to (pdf) and upload both .Rmd and PDF files to class website under the week 3 tab  

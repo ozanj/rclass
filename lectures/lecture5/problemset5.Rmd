@@ -1,7 +1,7 @@
 ---
-title: "Lecture 5 problem set"
+title: "Lecture 4 problem set"
 author: "INSERT YOUR NAME HERE"
-date: "November 2, 2018"
+date: "October 26, 2018"
 urlcolor: blue
 output: 
   pdf_document:
@@ -18,303 +18,450 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 ```
 # Required reading and instructions  
+ 
+ 
 
 ##  Required reading before next class
 
-- Work through slides from lecture 5 that we don't get to in class
-- GW 15.1 - 15.2 (factors) [this is like 2-3 pages]
-- [OPTIONAL] GW 15.3 - 15.5 (remainder of "factors" chapter)
-- [OPTIONAL] GW 20.6 - 20.7 (attributes and augmented vectors)
-- [OPTIONAL] GW 10 (tibbles)
+- Grolemund and Wickham 5.6 - 5.7 (grouped summaries and mutates)
+- Xie, Allaire, and Grolemund 4.1 (R Markdown, ioslides presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/ioslides-presentation.html) and 4.3 (R Markdown, Beamer presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/beamer-presentation.html)  
 
-## General Problem Set instructions  
+
+
+## General instructions  
 
 In this homework, you will specify `pdf_document` as the output format. You must have LaTeX installed in order to create pdf documents. 
 
 If you have not yet installed MiKTeX/MacTeX, I recommend installing TinyTeX, which is much simpler to install!
 
-- Instructions for installation of TinyTeX can be found [HERE](https://bookdown.org/yihui/rmarkdown/installation.html#installation)
+- Instructions for installation of TinTeX can be found [HERE](https://bookdown.org/yihui/rmarkdown/installation.html#installation)
 
 - General Instructions for Problem Sets [Here](https://github.com/ozanj/rclass/raw/master/lectures/problemset_resources.pdf)  
 
 ****** 
 
-## Overview
-Using the NLS72 course-level dataset, your assigmnent is to create the following GPA variables:
-
-- institution-level (i.e., transcript-level) GPA variable
-- term-level GPA variable
 
 
-__General Instructions__  
+## Purpose
 
-- Don't make changes to "input" variables; instead, create a new variable  
-- You are responsible for deciding what data investigations to conduct (e.g., conditional statements, frequency counts, etc.)  
+**Data you will be working with** 
 
-    - Keep the data investigations you want Patricia to see; though you might want to comment out very long lists of observations  
-    - Whenever you create a new variable, run checks to make sure variable created correctly (e.g., counts, cross-tabulations, assertions)  
-    - As you work towards creating the gpa variable(s) you will create several new "input" variables; drop these variables when you no longer need them  
-    - Below, you will find additional instructions/hints about making GPA variable
+In this problem set, we are working with data from the the list of prospective students that Western Washington University purchased from College Board. We have also merged in Census data on socioeconomic/racial characteristics and NCES data on school characteristics to the prospect-level data from College Board. Hence, the dataset you will be working with has one observation per prospect (i.e., student). Some variables are prospet-level variables (e.g., `ethn_code` is a measure of race/ethnicity that varies by prospect). Other variables measured at the zip-code level or state-level. These are measures of the racial composition for the zip code the prospect lives in and measures of the racial composition for the state in which the prospect lives; they do not vary across prospects within the same zip-code or state.
 
+**Task**
+
+For this problem set, you are a researcher and your goal is to identify systematic racial and socioeconomic bias in student list purchases by Western Washington University. That is, do the prospects purchased by Western Washington tend to have different racial and socioeconomic characteristics than other people in their state or zip-code?
+
+Note that there is a lot of data cleaning required before conducting `group_by` and `summarise()` analyses. Much of this data cleaning involves creating prospect-level and zipcode/state-level measures of race/ethnicity that are consistent to one another. Therefore, we have answered some of the data cleaning questions for you to avoid making the problem set too long. We intentionally left our data cleaning code for you all to get a sense of the process of investigating and cleaning your data.  
+
+**Caveat**
+
+Merging data from other sources (e.g. College Board & Census) gives us breadth in investigating racial and socioeconomic bias beyond the prospect (student) level, yet at the same time, we are limited in the choices we make for disaggregating by race and ethnicity (in addition to other variables).  Further, there are some fundamental differences between how College Board and Census define race/ethnicity that cannot be overcome with data cleaning. Therefore, comparisons between race/ethncity variables from College Board and race/ethnicity variables from Census are problematic. 
+
+## Definitions for race and ethnicity used by Census and College Board
+
+Here is some background information on how U.S. Census and College Board define race and etncity:
+
+- U.S. Census
+    - Census efinitions of race and ethnicity [LINK HERE](https://www.census.gov/mso/www/training/pdf/race-ethnicity-onepager.pdf)
+    - Census categories of race and ethnicity [LINK HERE](https://www.socialexplorer.com/data/ACS2016_5yr/metadata/?ds=ACS16_5yr&table=B03002)
+- College Board
+    - College Board Categories of race and ethnicity [LINK HERE](https://research.collegeboard.org/about-us/changes-to-race-ethnicity-reporting)
+    - College Board race and ethnicity questions from SAT Questionnaire [LINK HERE](https://collegereadiness.collegeboard.org/pdf/sat-registration-booklet-students.pdf#page=29)
+
+__Idiosyncracies about the way race/ethnicity is defined by College Board vs. U.S. Census in the dataset you will be working with__
+
+- The College Board survey asks a question about "ethnicity" and then a separate question about "race"; However, the data sent to us by Western Washington combined race and ethnicity into one variable called `ethn_code`
+- The College Board survey questions for ethnicity and race uses the following rules:
+    - "Students may select all options that apply. In prior years, they were asked to select one option."
+- By contrast, US Census data asks respondents to select one option; there is a separate option for "Two or More Races"
+- As a result of these differences, the College Board race/ethnicity variable has a much higher percentage of people who identify as "2 or more races" than data from U.S. Census
 
 # Load library and data
 
-```{r results="hide"}
-#install.packages("tidyverse") #uncomment if you haven't installed these packaged
-#install.packages("haven")
-#install.packages("labelled")
+```{r}
 library(tidyverse)
-library(haven)
-library(labelled)
 ```
 
-Open data
 
-Run the code chunk below
 ```{r}
 rm(list = ls()) # remove all objects
+
+load(url("https://github.com/ozanj/rclass/raw/master/data/prospect_list/wwlist_merged.RData"))
 #getwd()
-#list.files("../../../documents/rclass/data/nls72") # list files in directory w/ NLS data
+#load("../../../documents/rclass/data/prospect_list/wwlist_merged.RData")
 
-#Read Stata data into R using read_data() function from haven package
-nls_crs <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/nls72/nls72petscrs_v2.dta", encoding=NULL)
+```
+
+# Cleaning the data before creating summary measures using group_by() and summarise()
+
+__In general, for all questions that ask you to drop certain observations or create new variables, __assign__ these changes to the existing object `wwlist`__
+
+# Part I: Questions related to keeping/dropping specfic observations
+
+## Question 1 
+
+- Do the following:  
+    - Count the number of observations that have `NA` for the variable `state`
+    - Using `filter()` drop all observations that have `NA` for the variable `state` 
+    - Using `mutate()` and `if_else()`, create a [and retain] 0/1  variable `in_state` that equals 1 if `state` equals Washington and equals `0` otherwise
+    - Investigate the values of the new variable `in_state`, including confirming that this variable has no missing values
+    
+```{r}
+
 ```
 
 
-## Sort, select, and order
+## Question 2 
 
-Here we sort the observations, remove a variable, and arrange order of variables. We also create a new object `nls_crs_v2`, which is the data frame object you will work with for the rest of the problem set. All you have to do is run this code chunk.
+- Do the following:
+    - Count the number of observations where the value of `pop_total_zip` equals `0`
+    - Count the number of observations where the value of `pop_total_zip` equals `NA`
+    - Drop observations where the value of `pop_total_zip` is equal to `0`
+        - NOTE: we won't drop observations where value of `pop_total_zip` equals `NA`
+
+NOTE: IN THIS QUESTION, WE GIVE YOU THE ANSWERS; ALL YOU HAVE TO DO IS RUN THE BELOW CODE CHUNK
+```{r}
+wwlist %>% filter(pop_total_zip ==0) %>% count() # number of obs that equal 0
+wwlist %>% filter(is.na(pop_total_zip)) %>% count() # number of obs that equal NA
+
+wwlist %>% filter(pop_total_zip != 0 | is.na(pop_total_zip)) %>% 
+  count() # number of obs where pop_total zip is either not equal to 0 or is equal to NA
+
+wwlist <- wwlist %>% 
+  filter(pop_total_zip != 0 | is.na(pop_total_zip)) # keep obs where pop_total_zip is not equal to 0 or is equal to NA
+```
+
+ 
+## Question 3  
+
+- Remove observations the have the following values for the variable `state`: "AP", "MP"
+    - these values either refer to territories or are errors
+    
+NOTE: IN THIS QUESTION, WE GIVE YOU THE ANSWERS; ALL YOU HAVE TO DO IS RUN THE BELOW CODE CHUNK    
+```{r}
+wwlist %>% filter(state %in% c("AP","MP")) %>% count() # equal to AP or MP
+wwlist %>% filter(!state %in% c("AP","MP")) %>% count() # not equal to AP or MP
+
+wwlist <- wwlist %>% filter(!state %in% c("AP","MP")) # not equal to AP or MP
+wwlist %>% count(state)
+```
+
+
+# Part II: Questions related to creating new variables prior to creating summary measures using group_by() and summarise()
+
+__This set of questions primarily relates to creating prospect-level measures of race/ethnicity (data from College Board) that are consistent with zip-code-level and state-level measures of race/ethnicity (data from US Census)__
+
+## Question 1   
+
+- Investigate the prospect-level race/ethnicity variable `ethn_code` as follows:
+    - what "type" of variable is it
+    - create a frequency table
+    - count the number of `NA` values
+    
+NOTE: IN THIS QUESTION, WE GIVE YOU THE ANSWERS; ALL YOU HAVE TO DO IS RUN THE BELOW CODE CHUNK
+```{r}
+str(wwlist$ethn_code)
+wwlist %>% count(ethn_code)
+wwlist %>% filter(is.na(ethn_code)) %>% count()
+```
+
+
+## Question 2  
+
+- The prospect-level variable `ethn_code` combines Asian, Native Hawaiian and Pacific Islander into one category. To be consistent with the prospect-level variable `ethn_code`, create a variable `pop_api_zip` equal to the sum of `pop_asian_zip` and `pop_nativehawaii_zip`. Follow these steps:
+    - check how many missing values the "input variables" `pop_asian_zip` and `pop_nativehawaii_zip` have
+    - create the new variable
+    - check the value of the new variable for observations that had missing values in the input variables
+    - delete the input variables
+
+NOTE: IN THIS QUESTION, WE GIVE YOU THE ANSWERS; ALL YOU HAVE TO DO IS RUN THE BELOW CODE CHUNK
+```{r}
+
+#investigate input variables [zip-code level race/ethnicity vars]
+wwlist %>% filter(is.na(pop_asian_zip)) %>% count()
+wwlist %>% filter(is.na(pop_nativehawaii_zip)) %>% count()
+
+#create variable
+wwlist <- wwlist %>% mutate(
+    pop_api_zip = pop_asian_zip + pop_nativehawaii_zip
+  )
+
+#check value of new variable; and check the value of the new variable against value of input variables
+wwlist %>% filter(is.na(pop_api_zip)) %>% count()
+wwlist %>% filter(is.na(pop_asian_zip)) %>% count(pop_api_zip)
+wwlist %>% filter(is.na(pop_nativehawaii_zip)) %>% count(pop_api_zip)
+
+#remove input variables
+wwlist <- wwlist %>% select(-pop_asian_zip,-pop_nativehawaii_zip)
+
+#names(wwlist)
+```
+
+
+## Question 3  
+
+- Follow the same steps as above to create a variable `pop_api_state` from the input variables 
 
 ```{r}
-names(nls_crs)
 
-# sort observations and assign to new object nls_crs_v2, which we'll use for rest of problem set
-nls_crs_v2 <- nls_crs %>% arrange(id, transnum, termnum, crsename) 
-
-# select order variables; and drop var cname, which we don't use
-nls_crs_v2 <- nls_crs_v2 %>% select(id, transnum, termnum, crsecred, gradtype, 
-  crsgrada, crsgradb, crsecip, crsename,-cname) 
-
-#rm(nls_crs)
-names(nls_crs_v2)
-```
-
-# Part I: Investigate data
-
-First stage of creating an analysis dataset is conducting a thorough investigation of the "input" dataset(s) and an investigation of key variables. This often takes a long time. Since you have never seen this dataset before, we conduct __most__ of the investigation for you. All you have to do is run the code in code chunks that is provided for you and complete the rest. We encourage you to spend some time thinking about how the code works and why these investigations.
-
-- Preliminary investigation of data frame
-
-```{r results='hide'}
-names(nls_crs_v2)
-glimpse(nls_crs_v2)
-str(nls_crs_v2)
-head(nls_crs_v2)
-nls_crs_v2 %>% var_label() # view variable labels
 ```
 
 
-- Perform one-way investigations following input variables:
-    - `transnum`, `termnum`, `crsecred`, `gradtype`, `crsgrada`, `crsgradb`  
+## Question 4  
+
+- Next, we'll use the zip-code level measures of number of people by race/ethnicity to create zip-code level measures of __percent__ of people by race/ethnicity
+    - Before creating the new variables, investigate presence of missing observations in input variables
+    - after you create the variables, investigate the value of the new variables and their value against missing values of the input variables. Do this for two of the new race variables you created
+
+NOTE: IN THIS QUESTION, WE GIVE YOU THE ANSWERS; ALL YOU HAVE TO DO IS RUN THE BELOW CODE CHUNK
+```{r}
+#show names of zip code level race vars
+wwlist %>% select(ends_with("_zip"),-med_inc_zip) %>% names()
+
+#Investigate presence of missing values in input variables
+wwlist %>% filter(is.na(pop_total_zip)) %>% count()
+wwlist %>% filter(is.na(pop_white_zip)) %>% count()
+wwlist %>% filter(is.na(pop_black_zip)) %>% count()
+wwlist %>% filter(is.na(pop_latinx_zip)) %>% count()
+wwlist %>% filter(is.na(pop_nativeam_zip)) %>% count()
+wwlist %>% filter(is.na(pop_multirace_zip)) %>% count()
+wwlist %>% filter(is.na(pop_otherrace_zip)) %>% count()
+wwlist %>% filter(is.na(pop_api_zip)) %>% count()
+
+#create new variables
+  #note: we multiply by 100 so that we have percentages rather than proportions, which are easier to read for race/ethnicity groups with small numbers of people
+wwlist <- wwlist %>% 
+  mutate(
+    pct_white_zip= pop_white_zip/pop_total_zip*100,
+    pct_black_zip= pop_black_zip/pop_total_zip*100,
+    pct_latinx_zip= pop_latinx_zip/pop_total_zip*100,
+    pct_nativeam_zip= pop_nativeam_zip/pop_total_zip*100,
+    pct_multirace_zip= pop_multirace_zip/pop_total_zip*100,
+    pct_otherrace_zip= pop_otherrace_zip/pop_total_zip*100,
+    pct_api_zip= pop_api_zip/pop_total_zip*100,
+  )
+
+#Investigate values of new variables against values of input vars for two of the race categories
+
+wwlist %>% summarise(pct_white_zip= mean(pct_white_zip, na.rm = TRUE)) # average percent white across all zip codes in US. doe sthis look reasonable?
+
+wwlist %>% filter(is.na(pct_white_zip)) %>% count() # number missing
+wwlist %>% filter(is.na(pop_white_zip) | is.na(pop_total_zip)) %>%
+  count(pct_white_zip) # count values of pct_white_zip if either of the input vars is missing
+
+wwlist %>% filter(is.na(pct_black_zip)) %>% count()
+wwlist %>% filter(is.na(pop_black_zip) | is.na(pop_total_zip)) %>%
+  count(pct_white_zip)
+
+```
+
+
+## Question 5  
+
+- Follow the same steps as above to create state-level measures of percent of people by race/ethnicity
+    - after you create the variables, investigate the value of the new variables and their value against missing values of the input variables for two of the new race variables
+```{r}
+
+```
+
+
+## Question 6   
+
+- Next, we'll make a new version of the prospect level race/ethnicity variable that is consistent with the Census zip code level and state level race/ethnicity variables
+    - First, investigate the input variable `ethn_code` including:  
+        - identifying variable "type"
+        - creating a frequency table 
+        - counting the number of missing values
+    - Second, Using the `recode()` function within `mutate()`, create a variable called `ethn_race` that recodes the input variable `ethn_code` as follows:
+        - "american indian or alaska native" = "nativeam",
+        - "asian or native hawaiian or other pacific islander" = "api",
+        - "black or african american" = "black",
+        - "cuban" = "latinx",
+        - "mexican/mexican american" = "latinx",
+        - "not reported" = "not_reported",
+        - "other-2 or more" = "multirace",
+        - "other spanish/hispanic" = "latinx",
+        - "puerto rican" = "latinx",
+        - "white" = "white",    
+    - Third, investigate the values of the new variable `ethn_race` including:
+        - variable type
+        - creating a frequency table 
+        - counting the number of missing values
+        - Then run this code to check the values of the new variable against the values of the input variable:
+        - `wwlist %>% group_by(ethn_race) %>% count(ethn_code)`
+
+```{r}
+
+```
+
+
+## Question 7   
+
+- Based on the variable `ethn_race` you just created, create a set of 0/1 prospect-level race indicator indicators
+- `nativeam_stu`; `api_stu`; `black_stu`; `latinx_stu`; `multirace_stu`; `white_stu`, `notreported_stu`
+- after creating the 0/1 indicators check their values against the value of the input variable
     
-- First four variables done for you. __Run one-way investigations for `crsgrada` and `crsgradb`__ 
-```{r results='hide'}
+NOTE: IN THE BELOW CODE CHUNK, I'LL CREATE THE INDICATOR FOR `nativeam_stu`; YOU CREATE THE REMAINING  
+Uncomment this code chunk after creating the `ethn_code` variable from the code chunk above
+```{r}
+#wwlist %>% count(ethn_race)
+#wwlist %>% count(ethn_code)
 
-#Investigate variable transnum
-class(nls_crs_v2$transnum)
-nls_crs_v2%>% select(transnum) %>% var_label() # view variable labels
-nls_crs_v2%>% count(transnum)
+#Create var
+#wwlist <- wwlist %>% 
+#  mutate(nativeam_stu = ifelse(ethn_race == "nativeam",1,0))
 
-
-#Check that sum of transnum equals number of rows in dataset
-nls_crs_v2 %>%
-  group_by(transnum) %>% #grouping by transum
-  summarise(count_transum = n()) %>% #count for each value of transum
-  ungroup() %>% #ungroup
-  mutate(total_obs = sum(count_transum)) #Get the sum of count to check that it equals the number of observations in the dataset
-
-
-#Investigate variable termnum
-class(nls_crs_v2$termnum)
-nls_crs_v2%>% select(termnum) %>% var_label() # view variable labels
-nls_crs_v2%>% count(termnum)
-
-
-#Investigate course credits
-#glimpse(nls_crs_v2)
-class(nls_crs_v2$crsecred)
-nls_crs_v2%>% select(crsecred) %>% var_label() # view variable labels
-options(tibble.print_min=50)
-nls_crs_v2%>% count(crsecred)
-nls_crs_v2 %>% #run some descriptive stats 
-  summarise_at(
-    .vars = vars(crsecred),
-    .funs = funs(min, max, .args=list(na.rm=TRUE))
-)
-#investigate high values of crsecred
-nls_crs_v2%>% filter(crsecred>=100) %>% count(crsecred) # frequency table of crsecred
-nls_crs_v2%>% filter(crsecred==999) # printing some observations for specific values of crsecred
-nls_crs_v2%>% filter(crsecred>=999) %>% count(crsecred) # 
-
-
-#Investigate gradtype
-class(nls_crs_v2$gradtype) # labelled
-#glimpse(nls_crs_v2)
-nls_crs_v2%>% select(gradtype) %>% var_label() # view variable labels
-nls_crs_v2%>% select(gradtype) %>% val_labels() # view value labels on variable
-nls_crs_v2 %>% count(gradtype) #freq count of values
-nls_crs_v2 %>% count(gradtype) %>% as_factor() #freq count with value labels
-
-
-
-#Run one-way investigation for crsgrada
-
-
-
-#Run one-way investigation for crsgradb
-
-
+#Investigate var
+#wwlist %>% count(nativeam_stu)
+#wwlist %>% group_by(nativeam_stu) %>% count(ethn_race)
 
 ```
 
 
-- Investigate the relationship between the following pairs of variables:
-    - `gradtype` and `crsgrada`
-    - `gradtype` and `crsgradb`
-    - `crsecred` and `gradtype`  
-    
-- First two are done for you. __Investigate relationship between `crsecred` and `gradtype`__
-    
-```{r results='hide'}
-options(tibble.print_min=50)
-#Investigate gradtype, crsgrada, crsgradb
+# Part III: group_by() and summarise() questions
 
-#some tabulations for different values of gradtype and crsgrada
-nls_crs_v2 %>% group_by(gradtype) %>% count(crsgrada) # cross tab of vars gradtype & crsgrada
-nls_crs_v2 %>% group_by(gradtype) %>% count(crsgrada) %>% as_factor() #cross tab this time show value labels
+__Now that we have cleaned data and created variables in prospect-level dataset, we can use `group_by()` and `summarise()` to perform calculations across rows about the characteristics of prospects purchased and how they compare to the general population. Generally, for the below questions you don't need to retain/assign the object created by `group_by()` and `summarise()`__
 
-nls_crs_v2%>% filter(gradtype==1) %>% count(crsgrada) # letter grade
-nls_crs_v2%>% filter(gradtype==2) %>% count(crsgrada) # numeric grade
-nls_crs_v2%>% filter(gradtype==9) %>% count(crsgrada) # missing
+## Question 1   
 
+- Grouping by the variable `in_state`, use `summarise()` to create the following measures:
+    - `tot_prosp`: a count of the number of prospects purchased
 
-#some tabulations for different values of gradtype and crsgradb
-nls_crs_v2 %>% group_by(gradtype) %>% count(crsgradb) # cross tab of vars gradtype & crsgradb
-nls_crs_v2 %>% group_by(gradtype) %>% count(crsgradb) %>% as_factor() #cross tab this time show value labels
-nls_crs_v2 %>% group_by(gradtype) %>%
-  summarise_at(.vars = vars(crsgradb),
-               .funs = funs(min, max, .args = list(na.rm = TRUE))) %>%
-  as_factor()
-
-nls_crs_v2%>% filter(gradtype==1) %>% count(crsgradb) # letter grade
-nls_crs_v2%>% filter(gradtype==2) %>% count(crsgradb) # numeric grade
-nls_crs_v2%>% filter(gradtype==9) %>% count(crsgradb) # missing
-
-
-
-#Run tabulations for different values of gradtype and crsecred
-
-
+```{r}
 
 ```
 
 
+## Question 2   
 
-# Part II:  Write out plan
-
-__Write a plan for how you will create institution-level (i.e., transcript-level GPA variable)__
-
-This plan should include your general conceptual definition for how to calculate GPA.  
-
-- The general definition of GPA is quality points (course credit multiplied by numerical grade value) divided by total credits.  
-- The plan should describe how you will apply this general definition to actual variables in the NLS course-level data  
-- The plan should also describe how you plan to deal with idiosyncracies in the value of "input" variables (e.g., missing values, strange values) and your rationale for treating the variable values this way.  
-- Note: you will almost certainly update this plan as you make progress.  
-
-__Some guidelines/hints for creating gpa variable__  
-
-- You will have to create a new version of course credit called `crsecredv2` that is missing (`NA`) for strange values of `crsecred`  
-- You will have to create a new course grade variable, call it `numgrade` that has numeric grade for each course  
-      - the primary input variables for `numgrade` will be `crsgrada`,`crsgradb`, `gradtype`, and your new course credit variable `crsecredv2`  
-      - Use this key to assign numeric values to letter grades from `crsgrada`
-				- A+=4; A=4; A-=3.7; B+=3.3; B=3; B-=2.7; C+=2.3; C=2; C-=1.7; D+=1.3; D=1; D-=.7; F=0; E=0; WF=0  
-				- Note: WF refers to "Withdrawal with a failing grade"  
-				- Note: other letter grades will have missing values for numeric grade
-		- your variable `numgrade` should be missing for observations where `crsecredv2` equals `NA`
-		- your variable `numgrade` should be missing if `gradtype` indicates that the grade is numeric (rather than letter) but the value of the numeric grade (`crsegradb`) is greater than `4`
-- After you create the variable `numgrade` you should create a new course credit variable `crsecredv3` that is missing (`NA`) for observations where `numgrade` is missing  
-- Calculate institutional level quality points and total credit variables by summing across observations within id and transnum.  
-- Finally, divide the institutional level quality points by insitutional total credits to generate the institutional level GPA.
-
-
-__Your Plan here:__  
+- Grouping by the variable `in_state`, use `summarise()` to create the following measures:
+    - `tot_prosp`: a count of the number of prospects purchased
+    - `white`: a count of number of white prospects purchased, based on the input var `white_stu`  
+        - **hint:** `newvar = sum(input_var, na.rm=TRUE)`
   
+```{r}
+
+```
+
+
+## Question 3   
+
+- Grouping by the variable `in_state`, use `summarise()` to create the following measures:
+    - `tot_prosp`: a count of the number of prospects purchased
+    - `report_race`: the total number of prospects purchased that reported race (**hint:** `sum(ethn_race !="not_reported", na.rm=TRUE)`)
+    - `white`: a count of number of white prospects purchased, based on the input var `white_stu`
+```{r}
+
+```    
     
-      
-      
+    
+## Question 4   
+
+- Grouping by the variable `in_state`, use `summarise()` to create the following measures:
+    - `tot_prosp`: a count of the number of prospects purchased
+    - `report_race: the total number of prospects purchased that reported race    
+    - a count of number of prospects purchased by race based on each of the following input variables (that is, you will create 7 variables)  
+        - **nativeam_stu , api_stu , black_stu , latinx_stu ,  multirace_stu ,  white_stu ,  notreported_stu**
+        
+```{r}
+
+```
 
 
+## Question 5   
 
-
-
-
-
-
-
-
-
-
-
-		
-				
-				
-
-# Part III: Clean data
-
-__Clean data: create new versions of variables that will be inputs to your GPA variable__  
-
-Some requirements  
-
-- Prior to creating any new variable, conduct investigations of the input variable(s)  
-- After creating any new variable, conduct investigations of the value of the new variable and check the value of the new variable against values of the input variable(s)  
-- The investigations that we gave you above may be useful
+- Grouping by the variable `in_state`, use `summarise()` to create the following measures:
+- `tot_prosp`: a count of the number of prospects purchased
+- `white`: a count of number of white prospects purchased, based on the input var `white_stu`    
+- `p_white`: the proportion of prospects purchased that were white for each by group, based on the 0/1 input var `white_stu`  
+- **hint:** `newvar = mean(input_var, na.rm=TRUE)`
 
 ```{r}
 
 ```
 
 
+## Question 6 
 
-# Part IV: Create institution-level GPA variable 
-__Create institution-level GPA variable and save as a new object__
-```{r}
+- Grouping by the variable `in_state`, use `summarise()` to create the following measures:
+- `tot_prosp`: a count of the number of prospects purchased
+- the __percent__ of prospects purchased from each race group based on the following 0/1 indicator variables (that is, you will create 7 variables)  
+    - **nativeam_stu ,  api_stu ,  black_stu ,  latinx_stu ,  multirace_stu ,  white_stu ,  notreported_stu**
+    - **hint:** since you are creating __percent__ measures rather than __proportion__: `newvar = mean(input_var)*100`
 
-```
-
-After you create the gpa variable, conduct some basic investigations/descriptive statistics to check whether it looks reasonable
-```{r}
-
-```
-
-
-
-# Part V: Create term-level GPA variable
-
-__Create term-level GPA variable and save as a new object__
-```{r}
-
-```
-
-After you create the gpa variable, conduct some basic investigations/descriptive statistics to check whether it looks reasonable
 ```{r}
 
 ```
 
 
+## Question 7 
+
+- Now we will group_by the variable __`state`__ (rather than `in_state`), use `summarise()` to create the following measures:
+    - `tot_prosp`: a count of the number of prospects purchased
+    - `white`: a count of number of white prospects purchased, based on the input var `white_stu`    
+    - `p_white`: the __percent__ of prospects purchased that were white for each by group, based on the 0/1 input var `white_stu`
+    
+```{r}
+
+```
 
 
-Once finished, knit to (pdf) and upload both .Rmd and pdf files to class website under the week 5 tab  
-*Remeber to use this naming convention "lastname_firstname_ps5"*
+# Part IV: Comparing prospects purchased to regional income and racial demographics  
 
+## Question 1  
+
+In this question, we will compare median zip code income of prospects purchased to the median income in the states they live in. The goal is to assess whether Western Washington is disproportionately purchasing more affluent prospects. The variable `med_inc_state` identifies the median income of all people in the state aged 25-64. This variable has the same value for all prospects in the same state. Therefore, when using `group_by()` and `summarise()`, we can just grab the first observation for each state (hint: `first(input_var)` or `nth(input_var,1)`).
+
+To answer this question, group_by  __`state`__ and use `summarise()` to create the following measures:  
+
+- `tot_prosp`: a count of the number of prospects purchased  
+- `med_inc_zip_stu`: the mean value of the variable `med_inc_zip` for each by group  
+- `med_inc_state`: the first value of the variable `med_inc_state` for each by group
+
+```{r}
+
+```
+
+
+## Question 2   
+
+For each state, we want to compare the percent of prospects purchased who are white to the percent of people in the state who are white.  The variable `pct_white_state` identifies the percent of people in the state who are white. This variable has the same value for all prospects in the same state. Therefore, when using `group_by()` and `summarise()`, we can grab the first observation for each state (hint: `first(input_var)` or `nth(input_var,1)`).
+
+- group_by  __`state`__ and use `summarise()` to create the following measures:
+    - `tot_prosp`: a count of the number of prospects purchased
+    - `white`: a count of number of white prospects purchased, based on the input var `white_stu`    
+    - `p_white`: the __percent__ of prospects purchased that were white for each by group, based on the 0/1 input var `white_stu`
+    - `p_white_st`: the percent of people in the state who are White, based on the input variable `pct_white_state`
+    
+```{r}
+
+```
+
+
+## Question 3   
+
+- group_by  __`state`__ and use `summarise()` to create the following measures:
+    - `tot_prosp`: a count of the number of prospects purchased
+    -  Create (A) a measure of the percent of prospects who identify as a particular race/ethnicity group and (B) the percent of people in the state who identify as that particular race/ethnicity group for the following race/ethnicity groups: **multirace, white, api, black, latinx**
+
+```{r}
+
+```
+
+
+## Question 4   
+
+- The goal of this question is to compare the race of prospects purchased from Washington to the racial composition of zip-codes in Washington. For this question, you will filter to __only include prospects who are from Washington AND do not have the value `NA` for the variable `pop_total_zip`__, then group by the variable `zip5` and use `summarise()` to create the following variables:
+    - `tot_prosp`: a count of the number of prospects purchased
+    -  Create (A) a measure of the percent of prospects in the zip-code who identify as a particular race/ethnicity group and (B) the percent of people in the zip-code who identify as that particular race/ethnicity group for the following race/ethnicity groups: **multirace, white, api, black, latinx**
+            
+```{r}
+
+```
+
+
+Once finished, knit to (pdf) and upload both .Rmd and pdf files to class website under the week 4 tab  
+*Remeber to use this naming convention "lastname_firstname_ps4"*
 
 

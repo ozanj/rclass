@@ -1,5 +1,5 @@
 ---
-title: "Lecture 7: Guidelines for Investigating, cleaning, and creating variables" # potentially push to header
+title: "Lecture 11: Working with Strings and Date/Time Variables" # potentially push to header
 subtitle:  "Managing and Manipulating Data Using R"
 author: 
 date: 

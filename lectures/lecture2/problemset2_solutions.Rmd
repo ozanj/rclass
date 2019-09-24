@@ -53,22 +53,35 @@ df_school_all %>% count(total_visits)
 1. Answer the following questions about the object `df_school_all` by running the appropriate R command within text (as opposed to in an R code chunk) and writing any substantive response required by the question. The first question will be answered for you to show how it works  
 <span style="color:red">(/2)</span>  
     + What "type" of object is `df_school_all`?
-        + ANSWER [GIVEN]: the object `df_school_all` has type equals `r typeof(df_school_all)`
+        + __ANSWER [GIVEN]: the object `df_school_all` has type equals `r typeof(df_school_all)`__
     + What is the "length" of the object `df_school_all`? What does this specific value of length refer to?
-        + ANSWER: the length of object `df_school_all` is `r length(df_school_all)`. This value refers to the number of variables
-    + how many "rows" are in the object `df_school_all? what does each row represent?
-        + ANSWER: the object `df_school_all` has `r nrow(df_school_all)` rows. Each row represents a high school
+        + __ANSWER: the length of object `df_school_all` is `r length(df_school_all)`. This value refers to the number of variables__
+    + how many "rows" are in the object `df_school_all`? what does each row represent?
+        + __ANSWER: the object `df_school_all` has `r nrow(df_school_all)` rows. Each row represents a high school__
+
+```{r}
+#type of df_school_all 
+typeof(df_school_all)
+
+#length of df_school_all 
+length(df_school_all)
+
+#num of rows in df_school_all
+nrow(df_school_all)
+```
+
+
 
 \newline
 2. In the below code chunk, use the `str()` function to describe the contents of `df_school_all` and then answer the following questions in text above the code chunk:  
 <span style="color:red">(/2)</span>
-
-    + What does each element of the object `df_school_all` represent? 
-        + ANSWER: a variable
+    + What does each element of the object `df_school_all` represent? (hint Lecture 1.2, Slide 34)
+        + __ANSWER: a variable__
     + Are the individual elements within `df_school_all` lists or vectors?
-        + ANSWER: vectors    
+        + __ANSWER: vectors__    
     + Are the individual elements within `df_school_all` named or un-named? what do these element names refer to?
-        + ANSWER: the individual elements are named; the name of each element refers to a variable name    
+        + __ANSWER: the individual elements are named; the name of each element refers to a variable name__    
+        
 ```{r}
 str(df_school_all)
 ```
@@ -78,21 +91,29 @@ str(df_school_all)
 3. These questions refer to the variable `school_type` within the object `df_school_all`. For the first two questions, run the appropriate R command within text (as opposed to in an R code chunk) and write any substantive response required by the question  
 <span style="color:red">(/1.5)</span>
     + What is the data "type" of `school_type`?
-        + ANSWER: The variable `school_type` has data type equal to `r typeof(df_school_all$school_type)`
+        + __ANSWER: The variable `school_type` has data type equal to `r typeof(df_school_all$school_type)`__
     + What is the "length" of `school_type`? What does this specific value of length refer to?
-        + ANSWER: The length of `school_type` is `r length(df_school_all$school_type)`. This value refers to the number of rows (or observations)
+        + __ANSWER: The length of `school_type` is `r length(df_school_all$school_type)`. This value refers to the number of rows (or observations)__
         
-4. In these questions, you will apply the `table()` function to the variable `school_type` within the object `df_school_all`.      + In your own words, what does the `table()` function do?  
+```{r}
+typeof(df_school_all$school_type)
+
+length(df_school_all$school_type)
+```
+        
+        
+4. In these questions, you will apply the `table()` function to the variable `school_type` within the object `df_school_all`.  
 <span style="color:red">(/3)</span>
-        + ANSWER: counts the number of observations for each value of a variable
+    + In your own words, what does the `table()` function do?  
+        + __ANSWER: counts the number of observations for each value of a variable__
     + What does the `useNA` argument of the `table()` function control?
-        + ANSWER: determines whether to include `NA` values in the table of counts
+        + __ANSWER: determines whether to include `NA` values in the table of counts__
     + What is the default value of the `useNA` argument and what does this default value mean?
-        + ANSWER: the default value for `useNA` argument is "no", which means that `NA` values are excluded from the count
+        + __ANSWER: the default value for `useNA` argument is "no", which means that `NA` values are excluded from the count__
     + What happens when you assign the value `"ifany"` to the `useNA` argument?
-        + ANSWER: if there are observations with `NA` values, the table of counts shows the number of observations with `NAs`. If no observations with `NA` values, the table does not have a category for `NAs`
+        + __ANSWER: if there are observations with `NA` values, the table of counts shows the number of observations with `NAs`. If no observations with `NA` values, the table does not have a category for `NAs`__
     + What happens when you assign the value `"always"` to the `useNA` argument?
-        + ANSWER: The table of counts shows the number of `NA` observations even if there are zero `NA` observations
+        + __ANSWER: The table of counts shows the number of `NA` observations even if there are zero `NA` observations__
     + In the below R code chunk, use the `table()` function to count the number of observations for each value `school_type` three different ways: 
         + First, without specifying any value for `useNA`
         + Second, by assigning the value `"ifany"` to the `useNA` argument

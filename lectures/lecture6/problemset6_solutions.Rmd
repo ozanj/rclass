@@ -1,7 +1,7 @@
 ---
-title: "Lecture 6 problem set"
+title: "Lecture 5 problem set"
 author: "INSERT YOUR NAME HERE"
-date: "November 9, 2018"
+date: "November 2, 2018"
 urlcolor: blue
 output: 
   pdf_document:
@@ -17,20 +17,17 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, echo=FALSE, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 ```
-\textcolor{red}{\textbf{Grade: /20}}   
+\textcolor{red}{\textbf{Grade: /20}} 
 
 # Required reading and instructions  
 
 ##  Required reading before next class
 
-- Work through slides from lecture 6 that we don't get to in class
-    - [REQUIRED] slides from section 4 "Tidying data", particularly 4.2 "gathering"
-    - [OPTIONAL] slides from section 5 "Missing data"
-- [OPTIONAL] GW chapter 12 (tidy data)
-    - Lecture 6 covers this material pretty closely, so read chapter if you can, but I get it if you don't have time
-- [OPTIONAL] Wickham, H. (2014). Tidy Data. _Journal of Statistical Software_, 59(10), 1-23. doi:10.18637/jss.v059.i10
-    - This is the journal article that introduced the data concepts covered in GW chapter 12 and created the packages related to tidying data  
-
+- Work through slides from lecture 5 that we don't get to in class
+- GW 15.1 - 15.2 (factors) [this is like 2-3 pages]
+- [OPTIONAL] GW 15.3 - 15.5 (remainder of "factors" chapter)
+- [OPTIONAL] GW 20.6 - 20.7 (attributes and augmented vectors)
+- [OPTIONAL] GW 10 (tibbles)
 
 ## General Problem Set instructions  
 
@@ -38,27 +35,28 @@ In this homework, you will specify `pdf_document` as the output format. You must
 
 If you have not yet installed MiKTeX/MacTeX, I recommend installing TinyTeX, which is much simpler to install!
 
-- Instructions for installation of TinyTeX can be found [Here](https://bookdown.org/yihui/rmarkdown/installation.html#installation)
+- Instructions for installation of TinyTeX can be found [HERE](https://bookdown.org/yihui/rmarkdown/installation.html#installation)
 
 - General Instructions for Problem Sets [Here](https://github.com/ozanj/rclass/raw/master/lectures/problemset_resources.pdf)  
-
-## Mid-quarter evaluation
-- Please take 10 minutes to complete the anonymous mid-quarter evaluation
-[Here](https://goo.gl/forms/a471SnGfL3euYsww2)  
 
 ****** 
 
 ## Overview
+Using the NLS72 course-level dataset, your assigmnent is to create the following GPA variables:
 
-This problem set has three parts. 
+- institution-level (i.e., transcript-level) GPA variable
+- term-level GPA variable
 
-1. I'll ask you some definitional/conceptual questions about the concepts introduced in lecture
-1. Tidying untidy data: "spreading" (i.e., going from long to wide)
-    - this will be the longest part of the problem set because it is very common that data we find "in the wild" needs to be "spread" before it is tidy
-        - e.g., dataset has one row for each combination of university ID and enrollment age group, but you want a dataset with one row per university ID and one enrollment variable for each age group
-    - for these questions we'll use fall enrollment data from the Integrated Postsecondary Data System (IPEDS), specifically the fall enrollment sub-survey that focuses on enrollment by age group
-1. Tidying untidy data: "gathering" (i.e., going from wide to long)
-    - This section will be short because it is less common that datasets need to be "gathered" before they are tidy
+
+__General Instructions__  
+
+- Don't make changes to "input" variables; instead, create a new variable  
+- You are responsible for deciding what data investigations to conduct (e.g., conditional statements, frequency counts, etc.)  
+
+    - Keep the data investigations you want Patricia to see; though you might want to comment out very long lists of observations  
+    - Whenever you create a new variable, run checks to make sure variable created correctly (e.g., counts, cross-tabulations, assertions)  
+    - As you work towards creating the gpa variable(s) you will create several new "input" variables; drop these variables when you no longer need them  
+    - Below, you will find additional instructions/hints about making GPA variable
 
 
 # Load library and data
@@ -72,501 +70,445 @@ library(haven)
 library(labelled)
 ```
 
-    
-# Part I: Conceptual questions
+Open data
 
-- According to Wickham, what is the difference between "data structure" and "data concepts" (he uses the term "data semantics")  
-\textcolor{red}{\textbf{/1}}
-    - Data structure refers to the the physical layout of the data (e.g., what the rows and columns in a dataset actually represent)  
-    - Data concepts – which were introduced by Wickham (2014) – refer to how the data should be structured
-
-- According to Wickham:  
-\textcolor{red}{\textbf{/1}} 
-    - what is an "observation"?  
-    ANSWER: An observation contains the values for all attributes measured on the same unit (like a person, or a day)…across attributes”
-    - give an example of an observation?  
-    ANSWER: Imagine a dataset consisting of demographic/socioeconomic data about 6th graders (e.g., age, address, parental education). An observation would contain the value of all attributes for one 6th grader
-    - What is the difference between an "observation" and a "row"?  
-    ANSWER: A row refers to the physical layout of a dataset (e.g., one row consisting of cells in that row) but there are no rules about the kind of information contained in the row; by contrast an observation contains the values of all attributes for a particular observational unit (e.g., person, organization-year)
-    - Under what condition is an observation the same thing as a row?  
-    ANSWER: When data is tidy (satisfies all three conditions of tidy data)
-
-
-- According to Wickham:  
-\textcolor{red}{\textbf{/1}} 
-    - what is a "variable?"  
-    ANSWER: “A variable contains all values that measure the same underlying attribute (like height, temperature, duration) across units”
-    - give an example of a variable  
-    ANSWER: Height, weight, or age for all students in a dataset that contains demographic data on 6th graders; note that a variable could be represented by two columns, but in a tidy dataset, each variable must be contained within one column
-    - what is the difference between a "variable" and a "column"  
-    ANSWER: A variable contains the values of an attribute for all observational units in a dataset; by contrast a column just refers to physical structure of the data and there are no rules about what kind of information belongs in a column
-    - Under what condition is a variable the same thing as a column  
-    ANSWER: When data is tidy
-    
-- According to Wickham:  
-\textcolor{red}{\textbf{/1}} 
-    - what is a "value"?  
-    ANSWER: "A single element within some data structure (e.g., vector, list), usually a number or a character string."
-    - give an example of a value  
-    ANSWER: The value of the variable height for one person in a dataset where each observation represents a person
-    - what is the difference between a "cell" and a value?  
-    ANSWER: A cell is just the contents of the intersection of one row and one column; by contrast, a value represents the value of one attribute for one observational unit
-    - Under what condition is a value the same thing as a cell?  
-    When data is tidy
-
-- What is the difference between the terms "unit of analysis" [an "ozan" term; not necessarily used outside this class] and "observational level" [A Wickham term]  
-\textcolor{red}{\textbf{/0.5}}  
-
-Wickham defines "observational level" as what each observation should represent in a tidy dataset (i.e., it is a data concept), whereas Ozan defines "unit of analysis" as what each row in the data actually represents (i.e., refers to data structure). 
-
-- What are the three rules of tidy data?  
-\textcolor{red}{\textbf{/0.5}} 
-
-    1. Each variable must have its own column.  
-    1. Each observation must have its own row.  
-    1. Each value must have its own cell.
-
-
-# Part II: Questions about spreading
-
-## Description of the data
-
-For these questions, we'll be using data from the Fall Enrollment survey component of the Integrated Postsecondary Education Data System (IPEDS)
-
-- specifically, we'll be using data from the survey sub-component that focuses on enrollment by age-group.
-- The dataset we'll be using contains data from Fall 2016 (i.e., Fall of the 2016-17 academic year)
-- Here is a link to a data dictionary (an excel file) for the enrollment by age dataset: [LINK](https://nces.ed.gov/ipeds/datacenter/data/EF2016B_Dict.zip)
-- In the dataset you load below:
-    - I've dropped a few of the variables from the raw enrollment by age data
-    - I've added a few variables from the "institutional characteristics" survey (e.g., institution name, state, sector) that should be pretty self explanatory if you examine the variable labels and/or value labels
-- the variable `unitid` is the ID variable for each college/university
-- the dataset has one observation for each combination of the variables unitid-efbage-lstudy
-
-## Overview of the spreading tasks
-
-- Load the data frame and assign it the name `age_f16_allvars_allobs`
-- Create three different data frame objects based on the data frame `age_f16_allvars_allobs`
-    - A dataframe `all_obs` that has fewer variables than `age_f16_allvars_allobs` but the same number of observations 
-        - this data frame has the most complex structure; we'll spread this one last
-    - A dataframe `agegroup1_obs` that has fewer variables than `age_f16_allvars_allobs` and keeps observations where age-group equals `1` (1. All age categories total)
-        - this data frame has the simplist structure; we'll spread this one first
-    - A dataframe `levstudy1_obs` that has fewer variables than `age_f16_allvars_allobs` and keeps observations where "level of study" equals `1` (1. All Students total)
-        - this data frame has the second simplist structure; we'll spread this one second
-- Questions related to spreading `agegroup1_obs`
-- Questions related to spreading `levstudy1_obs`
-- Questions related to spreading `all_obs`
-
-## Load data and create three new data frames
-
-- Load IPEDS data that contains fall enrollment by age
-
-NOTE: IN THIS QUESTION, WE GIVE YOU THE ANSWERS; ALL YOU HAVE TO DO IS RUN THE BELOW CODE CHUNK
+Run the code chunk below
 ```{r}
 rm(list = ls()) # remove all objects
 #getwd()
-#list.files("../../../documents/rclass/data/ipeds/ef/age") # list files in directory w/ NLS data
+#list.files("../../../documents/rclass/data/nls72") # list files in directory w/ NLS data
 
 #Read Stata data into R using read_data() function from haven package
-age_f16_allvars_allobs <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/ipeds/ef/age/ef_age_ic_fall_2016.dta", encoding=NULL)
-
-#rename a couple variables
-age_f16_allvars_allobs <- age_f16_allvars_allobs %>% rename(agegroup=efbage, levstudy=lstudy)
-
-#list variables and variable labels
-names(age_f16_allvars_allobs)
-age_f16_allvars_allobs %>% var_label()
+nls_crs <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/nls72/nls72petscrs_v2.dta", encoding=NULL)
 ```
 
-- Create three new data frames based on `age_f16_allvars_allobs`
 
-NOTE: IN THIS QUESTION, WE GIVE YOU THE ANSWERS; ALL YOU HAVE TO DO IS RUN THE BELOW CODE CHUNK
-```{r}
-#Create dataframe that has fewer variables than `age_f16_allvars_allobs` but the same number of observations 
-all_obs <- age_f16_allvars_allobs %>%   
-  select(fullname,unitid,agegroup,levstudy,efage09,stabbr,sector,locale)
+## Sort, select, and order
 
-glimpse(all_obs)
-
-#Create dataframe that keeps observations where age-group equals `1` (1. All age categories total)
-agegroup1_obs <- all_obs %>% 
-  filter(agegroup==1) %>% select(-agegroup)
-
-glimpse(agegroup1_obs)
-
-#Create dataframe keeps observations where "level of study" equals `1` (1. All Students total)
-levstudy1_obs <- all_obs %>% 
-  filter(levstudy==1) %>% select(-levstudy)
-
-glimpse(levstudy1_obs)
-```
-
-## Questions related to spreading the dataset `agegroup1_obs`  
-\textcolor{red}{\textbf{/0.5}}
-
-- Run whatever investigations seem helpful to you to get to know the data (e.g., list variable names, list variable variable labels, list variable values, tabulations). You may decide to comment out some of these investigations before you knit and submit the problem set so that your pdf doesn't get too long.
+Here we sort the observations, remove a variable, and arrange order of variables. We also create a new object `nls_crs_v2`, which is the data frame object you will work with for the rest of the problem set. All you have to do is run this code chunk.
 
 ```{r}
-#basic investigations of dataset
-names(agegroup1_obs)
-str(agegroup1_obs)
-agegroup1_obs %>% var_label()
+names(nls_crs)
+
+# sort observations and assign to new object nls_crs_v2, which we'll use for rest of problem set
+nls_crs_v2 <- nls_crs %>% arrange(id, transnum, termnum, crsename) 
+
+# select order variables; and drop var cname, which we don't use
+nls_crs_v2 <- nls_crs_v2 %>% select(id, transnum, termnum, crsecred, gradtype, 
+  crsgrada, crsgradb, crsecip, crsename,-cname) 
+
+#rm(nls_crs)
+names(nls_crs_v2)
 ```
 
-Sort and print a few obs
-```{r}
-#sort
-agegroup1_obs <- agegroup1_obs %>% arrange(unitid,levstudy)
+# Part I: Investigate data
 
-#print a few obs
-agegroup1_obs %>% head(n=10) %>% as_factor
-```
+First stage of creating an analysis dataset is conducting a thorough investigation of the "input" dataset(s) and an investigation of key variables. This often takes a long time. Since you have never seen this dataset before, we conduct the investigation for you. all you have to do is run the code in code chunks, but spend some time thinking about how the code works and why these investigations.
 
-Frequencies
-```{r}
-#frequency of level of study variable
-agegroup1_obs %>% select(levstudy) %>% val_labels()
-agegroup1_obs %>% count(levstudy) %>% as_factor
+- Preliminary investigation of data frame
 
-#frequency of sector variable
-agegroup1_obs %>% select(sector) %>% val_labels()
-agegroup1_obs %>% count(sector) %>% as_factor
-
-#frequency of locale variable
-agegroup1_obs %>% select(locale) %>% val_labels()
-agegroup1_obs %>% count(locale) %>% as_factor
+```{r results='hide'}
+names(nls_crs_v2)
+glimpse(nls_crs_v2)
+str(nls_crs_v2)
+head(nls_crs_v2)
+nls_crs_v2 %>% var_label() # view variable labels
 ```
 
 
+- Perform one-way investigations following input variables:
+    - `transnum`, `termnum`, `crsecred`, `gradtype`, `crsgrada`, `crsgradb`  
+    
+- First four variables done for you. __Run one-way investigations for `crsgrada` and `crsgradb`__  
 
-- Run the following code, which confirms that there is one row per each combination of unitid-levstudy
-
-NOTE: IN THIS QUESTION, WE GIVE YOU THE ANSWERS; BUT TRY TO UNDERSTAND WHAT EACH PART OF THE CODE IS DOING
-```{r}
-agegroup1_obs %>% group_by(unitid,levstudy) %>% # group by vars
-  summarise(n_per_group=n()) %>% # create a measure of number of observations per group
-  ungroup %>% # ungroup (otherwise frequency table [next step] created) separately for each group
-  count(n_per_group) # frequency of number of observations per group
-```
-
-Using code from previous question as a guide, confirm that the object `agegroup1_obs` has more than one observation for each value of unitid  
-\textcolor{red}{\textbf{/0.5}} 
-
-```{r}
-agegroup1_obs %>% group_by(unitid) %>% # group by vars
-  summarise(n_per_group=n()) %>% # create a measure of number of observations per group
-  ungroup %>% # ungroup (otherwise frequency table [next step] created) separately for each group
-  count(n_per_group) # frequency of number of observations per group
-
-```
-
-
-- Diagnose whether the data frame `agegroup1_obs` meets each of the three criteria for tidy data  
 \textcolor{red}{\textbf{/2}} 
-    - YOUR ANSWER HERE: 
-        - Each variable must have its own column: false; the values of the column levstudy should each be variables with their own column
-        - Each observation must have its own row: false; there should be one row per college/university, but this data frame has one row per college-levstudy  
-        - Each value must have its own cell: true
+```{r results='hide'}
 
-- what changes need to be made to `age_all` to make it tidy?
-    - YOUR ANSWER HERE: convert the values of the variable levstudy into their own variables; each variable will contain enrollment for that level of study
+#Investigate variable transnum
+class(nls_crs_v2$transnum)
+nls_crs_v2%>% select(transnum) %>% var_label() # view variable labels
+nls_crs_v2%>% count(transnum)
 
 
-- With respect to "spreading" to tidy a dataset, define the concept "key column"
-    - YOUR ANSWER HERE: Column name in the untidy data whose values will become variable names in the tidy data
+#Check that sum of transnum equals number of rows in dataset
+nls_crs_v2 %>%
+  group_by(transnum) %>% #grouping by transum
+  summarise(count_transum = n()) %>% #count for each value of transum
+  ungroup() %>% #ungroup
+  mutate(total_obs = sum(count_transum)) #Get the sum of count to check that it equals the number of observations in the dataset
 
-- What should the key column be in the data frame `agegroup1_obs`?
-    - YOUR ANSWER HERE: key column should be `levstudy`
+
+#Investigate variable termnum
+class(nls_crs_v2$termnum)
+nls_crs_v2%>% select(termnum) %>% var_label() # view variable labels
+nls_crs_v2%>% count(termnum)
+
+
+#Investigate course credits
+#glimpse(nls_crs_v2)
+class(nls_crs_v2$crsecred)
+nls_crs_v2%>% select(crsecred) %>% var_label() # view variable labels
+options(tibble.print_min=50)
+nls_crs_v2%>% count(crsecred)
+nls_crs_v2 %>% #run some descriptive stats 
+  summarise_at(
+    .vars = vars(crsecred),
+    .funs = funs(min, max, .args=list(na.rm=TRUE))
+)
+#investigate high values of crsecred
+nls_crs_v2%>% filter(crsecred>=100) %>% count(crsecred) # frequency table of crsecred
+nls_crs_v2%>% filter(crsecred==999) # printing some observations for specific values of crsecred
+nls_crs_v2%>% filter(crsecred>=999) %>% count(crsecred) # 
+
+
+#Investigate gradtype
+class(nls_crs_v2$gradtype) # labelled
+#glimpse(nls_crs_v2)
+nls_crs_v2%>% select(gradtype) %>% var_label() # view variable labels
+nls_crs_v2%>% select(gradtype) %>% val_labels() # view value labels on variable
+nls_crs_v2 %>% count(gradtype) #freq count of values
+nls_crs_v2 %>% count(gradtype) %>% as_factor() #freq count with value labels
+
+
+#Run one-way investigation for crsgrada
+#crsgrada
+#glimpse(nls_crs_v2)
+class(nls_crs_v2$crsgrada) #character
+nls_crs_v2%>% select(crsgrada) %>% var_label() # view variable labels
+nls_crs_v2%>% count(crsgrada)
+nls_crs_v2%>% filter(crsgrada %in% c("99", "AU", "CR", "I", "NO", "P", "S", "U", "W", "WP")) #printing some observations for specific values of crsgrada
+
+#Run one-way investigation for crsgradb
+#crsgradb
+class(nls_crs_v2$crsgradb) #numeric
+nls_crs_v2%>% select(crsgradb) %>% var_label()
+nls_crs_v2%>% count(crsgradb)
+nls_crs_v2 %>% #run some descriptive stats 
+  summarise_at(
+    .vars = vars(crsgradb),
+    .funs = funs(min, max, .args=list(na.rm=TRUE))
+)
+nls_crs_v2%>% filter(crsgradb>100) %>% count(crsgradb)
+
+```
+
+
+- Investigate the relationship between the following pairs of variables:
+    - `gradtype` and `crsgrada`
+    - `gradtype` and `crsgradb`
+    - `crsecred` and `gradtype`  
     
-- With respect to "spreading" to tidy a dataset, define the concept "value column"
-    - YOUR ANSWER HERE: Column name in untidy data that contains values for the new variables that will be created in the tidy data
-    
-- what should the value column be in the data frame `agegroup1_obs`?
-    - YOUR ANSWER HERE: value column should be `efage09`
-    
-Tidy the data frame `agegroup1_obs` and create a new object `agegroup1_obs_tidy`, then print a few observations  
-\textcolor{red}{\textbf{/1}} 
+- First two are done for you. __Investigate relationship between `crsecred` and `gradtype`__  
 
-```{r}
-agegroup1_obs %>% head(n=5)
-agegroup1_obs_tidy <- agegroup1_obs %>% spread(key = levstudy, value = efage09)
-agegroup1_obs_tidy %>% head(n=5)
-```
+\textcolor{red}{\textbf{/2}} 
+```{r results='hide'}
+options(tibble.print_min=50)
+#Investigate gradtype, crsgrada, crsgradb
 
-Confirm that the new object `agegroup1_obs_tidy` contains one observation for each value of unitid  
-\textcolor{red}{\textbf{/0.5}} 
-```{r}
-agegroup1_obs_tidy %>% group_by(unitid) %>% # group by vars
-  summarise(n_per_group=n()) %>% # create a measure of number of observations per group
-  ungroup %>% # ungroup (otherwise frequency table [next step] created) separately for each group
-  count(n_per_group) # frequency of number of observations per group
-```
+#some tabulations for different values of gradtype and crsgrada
+nls_crs_v2 %>% group_by(gradtype) %>% count(crsgrada) # cross tab of vars gradtype & crsgrada
+nls_crs_v2 %>% group_by(gradtype) %>% count(crsgrada) %>% as_factor() #cross tab this time show value labels
+
+nls_crs_v2%>% filter(gradtype==1) %>% count(crsgrada) # letter grade
+nls_crs_v2%>% filter(gradtype==2) %>% count(crsgrada) # numeric grade
+nls_crs_v2%>% filter(gradtype==9) %>% count(crsgrada) # missing
 
 
+#some tabulations for different values of gradtype and crsgradb
+nls_crs_v2 %>% group_by(gradtype) %>% count(crsgradb) # cross tab of vars gradtype & crsgradb
+nls_crs_v2 %>% group_by(gradtype) %>% count(crsgradb) %>% as_factor() #cross tab this time show value labels
+nls_crs_v2 %>% group_by(gradtype) %>%
+  summarise_at(.vars = vars(crsgradb),
+               .funs = funs(min, max, .args = list(na.rm = TRUE))) %>%
+  as_factor()
 
-Create a new object `agegroup1_obs_tidy_v2` from the object `agegroup1_obs` by performing the following steps in one line of code with multiple pipes:  
-\textcolor{red}{\textbf{/1.5}} 
-
-- Create a variable `level` that is a character version of the variable `levstudy'
-- Drop the original variable `levstudy`
-- Tidy the dataset
-
-```{r}
-agegroup1_obs_tidy_v2 <- agegroup1_obs %>% 
-  mutate(level=recode(as.integer(levstudy),
-    `1` = "all",
-    `2` = "ug",
-    `5` = "grad")
-  ) %>% select(-levstudy) %>% # drop variable lstudy
-  spread(key = level, value = efage09)
-
-```
-
-Print a few observations of `agegroup1_obs_tidy_v2`; why is this data frame preferable over `agegroup1_obs_tidy`?  
-\textcolor{red}{\textbf{/0.5}} 
-```{r}
-head(agegroup1_obs_tidy_v2)
-```
-YOUR ANSWER HERE: more intuitive to have variable names that are not numbers
+nls_crs_v2%>% filter(gradtype==1) %>% count(crsgradb) # letter grade
+nls_crs_v2%>% filter(gradtype==2) %>% count(crsgradb) # numeric grade
+nls_crs_v2%>% filter(gradtype==9) %>% count(crsgradb) # missing
 
 
+#Run tabulations for different values of gradtype and crsecred
 
-## Questions related to spreading the dataset levstudy1_obs  
-\textcolor{red}{\textbf{/0.5}}
+#some tabulations for different values of gradtype and crsecred
+nls_crs_v2 %>% group_by(gradtype) %>% count(crsecred) # cross tab of vars gradtype & crsecred
+nls_crs_v2 %>% group_by(gradtype) %>% count(crsecred) %>% as_factor() #cross tab this time show value labels
+nls_crs_v2 %>% group_by(gradtype) %>%
+  summarise_at(.vars = vars(crsecred),
+               .funs = funs(min, max, .args = list(na.rm = TRUE))) %>%
+  as_factor()
 
-- Run whatever investigations seem helpful to you to get to know the data frame `levstudy1_obs` (e.g., list variable names, list variable variable labels, list variable values, tabulations). You may decide to comment out some of these investigations before you knit and submit the problem set so that your pdf doesn't get too long.
+nls_crs_v2%>% filter(gradtype==1) %>% count(crsecred) # letter grade
+nls_crs_v2%>% filter(gradtype==2) %>% count(crsecred) # numeric grade
+nls_crs_v2%>% filter(gradtype==9) %>% count(crsecred) # missing
 
-```{r}
-#basic investigations of dataset
-names(levstudy1_obs)
-str(levstudy1_obs)
-levstudy1_obs %>% var_label()
-```
-
-Sort and print a few obs
-```{r}
-#sort
-levstudy1_obs <- levstudy1_obs %>% arrange(unitid,agegroup)
-
-#print a few obs
-levstudy1_obs %>% head(n=10) %>% as_factor
-```
-
-Frequencies
-```{r}
-#frequency of level of study variable
-levstudy1_obs %>% select(agegroup) %>% val_labels()
-levstudy1_obs %>% count(agegroup) %>% as_factor
+nls_crs_v2 %>% group_by(gradtype) %>% count(crsecred)
 ```
 
 
-- Confirm that there is one row per each combination of unitid-agegroup  
-\textcolor{red}{\textbf{/0.5}} 
 
-```{r}
-levstudy1_obs %>% group_by(unitid,agegroup) %>% # group by vars
-  summarise(n_per_group=n()) %>% # create a measure of number of observations per group
-  ungroup %>% # ungroup (otherwise frequency table [next step] created) separately for each group
-  count(n_per_group) # frequency of number of observations per group
-```
+# Part II:  Write out plan
 
-Using code from previous question as a guide, confirm that the object `levstudy1_obs` has more than observation for each value of unitid  
-\textcolor{red}{\textbf{/0.5}}
+__Write a plan for how you will create institution-level (i.e., transcript-level GPA variable)__
 
-```{r}
-levstudy1_obs %>% group_by(unitid) %>% # group by vars
-  summarise(n_per_group=n()) %>% # create a measure of number of observations per group
-  ungroup %>% # ungroup (otherwise frequency table [next step] created) separately for each group
-  count(n_per_group) # frequency of number of observations per group
+This plan should include your general conceptual definition for how to calculate GPA.  
 
-```
-\textcolor{red}{\textbf{/0.5}}  
+- The general definition of GPA is quality points (course credit multiplied by numerical grade value) divided by total credits.  
+- The plan should describe how you will apply this general definition to actual variables in the NLS course-level data  
+- The plan should also describe how you plan to deal with idiosyncracies in the value of "input" variables (e.g., missing values, strange values) and your rationale for treating the variable values this way.  
+- Note: you will almost certainly update this plan as you make progress.  
 
-- Why is the data frame `levstudy1_obs` not tidy?
-    - YOUR ANSWER HERE: the data frame has one row per college-agegroup; these rows do not meet the requirements of being observations because an observation contains all values for some unit.
+__Some guidelines/hints for creating gpa variable__  
+
+- You will have to create a new version of course credit called `crsecredv2` that is missing (`NA`) for values of `crsecred` that you think refer to missing
+- You will have to create a new course grade variable, call it `numgrade` that has numeric grade for each course  
+      - the primary input variables for `numgrade` will be `crsgrada`,`crsgradb`, `gradtype`, and your new course credit variable `crsecredv2`  
+      - Use this key to assign numeric values to letter grades from `crsgrada`
+				- A+=4; A=4; A-=3.7; B+=3.3; B=3; B-=2.7; C+=2.3; C=2; C-=1.7; D+=1.3; D=1; D-=.7; F=0; E=0; WF=0  
+				- Note: WF refers to "Withdrawal with a failing grade"  
+				- Note: other letter grades will have missing values for numeric grade
+		- your variable `numgrade` should be missing for observations where `crsecredv2` equals `NA`
+		- your variable `numgrade` should be missing if `gradtype` indicates that the grade is numeric (rather than letter) but the value of the numeric grade (`crsegradb`) is greater than `4`
+- After you create the variable `numgrade` you should create a new course credit variable `crsecredv3` that is missing (`NA`) for observations where `numgrade` is missing  
+- Calculate institutional level quality points and total credit variables by summing across observations within id and transnum.  
+- Finally, divide the institutional level quality points by insitutional total credits to generate the institutional level GPA.
+
+
+__Your Plan here:__  
+\textcolor{red}{\textbf{/3}}
   
-- What changes need to be made to `levstudy1_obs` to make it tidy?
-    - YOUR ANSWER HERE: convert the values of the variable agegroup into their own variables; each variable will contain enrollment for that age group
+    
+      
+      
 
 
-Tidy the data frame `levstudy1_obs` and create a new object `levstudy1_obs_tidy` (it is up to you whether you want to create character version of the variable `agegroup` prior to tidying) then print a few observations  
-\textcolor{red}{\textbf{/1.5}}
-
-```{r}
-levstudy1_obs %>% head(n=5)
-levstudy1_obs %>% count(agegroup) %>% as_factor()
-
-levstudy1_obs_tidy <- levstudy1_obs %>% 
-  mutate(age = recode(as.integer(agegroup),
-    `1`="age_all",
-    `2`="age_lt25",
-    `3`="age_lt18",
-    `4`="age_18_19",
-    `5`="age_20_21",
-    `6`="age_22_24",
-    `7`="age_25_plus",
-    `8`="age_25_29",
-    `9`="age_30-34",
-    `10`="age_35-39",
-    `11`="age_40_49",
-    `12`="age_50_64",
-    `13`="age_65_plus",
-    `14`="age_unknown")
-  ) %>% select(-agegroup) %>%
-  spread(key = age, value = efage09)
-
-levstudy1_obs_tidy %>% head(n=5)
-```
-
-Confirm that the new object `levstudy1_obs_tidy` contains one observation for each value of unitid  
-\textcolor{red}{\textbf{/0.5}}
-```{r}
-levstudy1_obs_tidy %>% group_by(unitid) %>% # group by vars
-  summarise(n_per_group=n()) %>% # create a measure of number of observations per group
-  ungroup %>% # ungroup (otherwise frequency table [next step] created) separately for each group
-  count(n_per_group) # frequency of number of observations per group
-```
 
 
-## Questions related to spreading the dataset all_obs
 
-Investigate data frame `all_obs` if you want, but not required to show code  
-\textcolor{red}{\textbf{/0.5}}
 
-- Confirm that there is one row per each combination of unitid-agegroup-levstudy
 
-```{r}
-all_obs %>% group_by(unitid,agegroup,levstudy) %>% # group by vars
-  summarise(n_per_group=n()) %>% # create a measure of number of observations per group
-  ungroup %>% # ungroup (otherwise frequency table [next step] created) separately for each group
-  count(n_per_group) # frequency of number of observations per group
-```
 
-- Why is the data frame `all_obs` not tidy?  
-\textcolor{red}{\textbf{/0.5}} 
-    - YOUR ANSWER HERE: the data frame has one row per college-agegroup-levstudy; these rows do not meet the requirements of being observations because an observation contains all values for some unit (e.g., a college)
+
+
+
+
+
+		
+				
+				
+
+# Part III: Clean data  
+\textcolor{red}{\textbf{/5}} 
+
+__Clean data: create new versions of variables that will be inputs to your GPA variable__  
+
+Some requirements  
+
+- Prior to creating any new variable, conduct investigations of the input variable(s)  
+- After creating any new variable, conduct investigations of the value of the new variable and check the value of the new variable against values of the input variable(s)  
+- The investigations that we gave you above may be useful
+
+```{r results='hide'}
+#Create measure of course credits attempted that replaces 999 and 999.999 with missing
+
+nls_crs_v2%>% count(crsecred)
+
+nls_crs_v2%>% filter(crsecred==999) # printing some observations for specific values of crsecred
+nls_crs_v2%>% filter(crsecred==1000) # printing some observations for specific values of crsecred
+nls_crs_v2%>% filter(crsecred>=999) %>% count(crsecred) # printing some observations for specific values of crsecred
+
+nls_crs_v2<- nls_crs_v2%>% 
+  mutate(crsecredv2= ifelse(crsecred>=900, NA, crsecred))
+
+#check that variables have been created correctly
+
+  nls_crs_v2%>% filter(crsecred==999) %>% select(crsecred,crsecredv2)
+  nls_crs_v2%>% filter(crsecred>999) %>% select(crsecred,crsecredv2)
   
-- What changes need to be made to `all_obs` to make it tidy?
-    - YOUR ANSWER HERE: each combination of the variables agegroup and levstudy should be converted from a row into a variable of its own
+  nls_crs_v2%>% filter(crsecred>900) %>% count(crsecredv2) # one-way frequency table
+  nls_crs_v2%>% filter(crsecred>900) %>% group_by(crsecred) %>% count(crsecredv2) # two-way frequency table
 
 
+#investigate values of the numeric grade when gradtype==2 and course credit not missing
+  
+  typeof(nls_crs_v2$crsgradb)
+  class(nls_crs_v2$crsgradb)
+  
+  options(tibble.print_min=300)
+  nls_crs_v2%>% filter(gradtype==2, (!is.na(crsecredv2))) %>% count(crsgradb)
 
+  nls_crs_v2<- nls_crs_v2%>% mutate(crsgradbv2= ifelse(crsgradb<=4 & gradtype==2 & (!is.na(crsecredv2)), crsgradb, NA)) 
+  #%>%   filter(gradtype==2)
+  
+  #check variables  
+    nls_crs_v2%>% filter(is.na(crsecredv2)) %>% count(crsgradbv2) # course credit is missing
+    nls_crs_v2%>% filter(gradtype %in% c(1,9)) %>% count(crsgradbv2) # course credit is missing
+    nls_crs_v2%>% filter(crsgradb>4) %>% count(crsgradbv2) # course credit is missing
+    
+    nls_crs_v2%>% filter(crsgradb<=4, gradtype==2, (!is.na(crsecredv2))) %>% count(crsgradbv2) # tabulation of analysis variable
+    nls_crs_v2%>% filter(crsgradb<=4, gradtype==2, (!is.na(crsecredv2))) %>% group_by(crsgradb) %>% count(crsgradbv2) # tabulation of analysis variable
+    nls_crs_v2%>% filter(crsgradb<=4, gradtype==2, (!is.na(crsecredv2))) %>% mutate(assert=crsgradb==crsgradbv2) %>% count(assert)
+  
+#Create "numgrade" variable that has numeric grade associated with each class
+  #check inputs
+  nls_crs_v2%>% count(gradtype)
+  nls_crs_v2%>% count(gradtype) %>% haven::as_factor()
+  
+  nls_crs_v2%>% filter(gradtype==1) %>% count(crsgrada)
 
-- The `spread()` function can only have a single key variable. we have two key variables: `agegroup` and `level`. Run the below code, which creates character versions of these two variables and then uses the `unit()` function to combine these two variables into a single variable. this code will create a new object all_obs_temp
+  #options(tibble.print_min=200)
 
+  
+  nls_crs_v2<- nls_crs_v2%>% 
+    mutate(
+      numgrade=case_when(
+        crsgrada %in% c("A+","A") & gradtype==1 & (!is.na(crsecredv2)) ~ 4,
+        crsgrada=="A-" & gradtype==1 & (!is.na(crsecredv2)) ~ 3.7,
+        crsgrada=="B+" & gradtype==1 & (!is.na(crsecredv2)) ~ 3.3,
+        crsgrada=="B" & gradtype==1 & (!is.na(crsecredv2)) ~ 3,
+        crsgrada=="B-" & gradtype==1 & (!is.na(crsecredv2)) ~ 2.7,
+        crsgrada=="C+" & gradtype==1 & (!is.na(crsecredv2)) ~ 2.3,
+        crsgrada=="C" & gradtype==1 & (!is.na(crsecredv2)) ~ 2,
+        crsgrada=="C-" & gradtype==1 & (!is.na(crsecredv2)) ~ 1.7,
+        crsgrada=="D+" & gradtype==1 & (!is.na(crsecredv2)) ~ 1.3,
+        crsgrada=="D" & gradtype==1 & (!is.na(crsecredv2)) ~ 1,
+        crsgrada=="D-" & gradtype==1 & (!is.na(crsecredv2)) ~ 0.7,
+        crsgrada %in% c("F","E","WF") & gradtype==1 & (!is.na(crsecredv2)) ~ 0,
+        crsgradb<=4 & gradtype==2 & (!is.na(crsecredv2)) ~ crsgradb # use values of numeric var crsgradb
+      )
+    )
+    
 
-NOTE: IN THIS QUESTION, WE GIVE YOU THE ANSWERS; BUT TRY TO UNDERSTAND WHAT EACH PART OF THE CODE IS DOING
-```{r}
-all_obs_temp <- all_obs %>% 
+#check variable created correctly
+  nls_crs_v2%>% count(numgrade)
+  nls_crs_v2%>% filter(is.na(crsecredv2)) %>% count(numgrade) # missing when crsecredv2==NA
+  nls_crs_v2%>% filter(gradtype==9) %>% count(numgrade) # missing when grade-type is not "letter"
+  
+  nls_crs_v2%>% filter(gradtype==1, (!is.na(crsecredv2))) %>% count(numgrade) # when grade-type=letter and course credit is not missing
+
+  
+  nls_crs_v2%>% filter(gradtype==1, (!is.na(crsecredv2))) %>% group_by(crsgrada) %>% count(numgrade)  #when grade-type=letter and course credit is not missing
+  
+#check against values of crsgradb
+  nls_crs_v2%>% filter(crsgradb>4, gradtype==2, !is.na(crsecredv2)) %>% group_by(crsgradb) %>% count(numgrade) # course credit is missing
+  
+#Create "quality points" variable, which equals credits attempted multiplied by numgrade
+  
+  nls_crs_v2<- nls_crs_v2%>% mutate(qualpts=numgrade*crsecredv2) 
+  
+#checks
+  nls_crs_v2 %>%
+    count(qualpts)
+  
+  nls_crs_v2 %>%
+    select(id, transnum, numgrade, crsecredv2, qualpts)
+  
+  nls_crs_v2%>% filter(is.na(numgrade)) %>% count(qualpts) # missing when numgrade==NA
+  
+  nls_crs_v2%>% group_by(numgrade, crsecredv2) %>% count(qualpts) #group by input variables and get a count of new var
+  
+  nls_crs_v2%>% filter(numgrade==0 & qualpts!=0) %>% select(numgrade,crsecredv2,qualpts) #If variable was calculated correctly, any numgrade with the value 0 multipled by crsecredv2 will result in qualpts being 0, otherwise there is a problem with the calculation
+  
+  nls_crs_v2%>% filter(crsecredv2==0 & qualpts!=0) %>% select(numgrade,crsecredv2,qualpts) #same logic
+  
+
+  
+#Create measure of credits attempted that is missing if numgrade is missing
+nls_crs_v2<- nls_crs_v2%>%
   mutate(
-    age = recode(as.integer(agegroup),
-    `1`="age_all",
-    `2`="age_lt25",
-    `3`="age_lt18",
-    `4`="age_18_19",
-    `5`="age_20_21",
-    `6`="age_22_24",
-    `7`="age_25_plus",
-    `8`="age_25_29",
-    `9`="age_30-34",
-    `10`="age_35-39",
-    `11`="age_40_49",
-    `12`="age_50_64",
-    `13`="age_65_plus",
-    `14`="age_unknown"),
-  level=recode(as.integer(levstudy),
-    `1` = "lev_all",
-    `2` = "lev_ug",
-    `5` = "lev_grad")
-  ) %>% unite("age_lev", age, level) %>% 
-  select(-levstudy,-agegroup) 
+    crsecredv3=ifelse(is.na(numgrade),NA,crsecredv2)) 
 
-all_obs_temp %>% head(n=20)
+#check
+nls_crs_v2 %>%
+  count(crsecredv3)
 
 ```
 
-Tidy the data frame `all_obs_temp` and create a new object `all_obs_tidy`; then print a few observations  
-\textcolor{red}{\textbf{/1}} 
-
-```{r}
-all_obs_tidy <- all_obs_temp %>%
-  spread(key=age_lev, value=efage09)
-
-all_obs_tidy %>% head(n=20)
-```
-
-- Confirm that the new object `all_obs_tidy` contains one observation for each value of unitid  
-\textcolor{red}{\textbf{/0.5}} 
-```{r}
-all_obs_tidy %>% group_by(unitid) %>% # group by vars
-  summarise(n_per_group=n()) %>% # create a measure of number of observations per group
-  ungroup %>% # ungroup (otherwise frequency table [next step] created) separately for each group
-  count(n_per_group) # frequency of number of observations per group
-```
 
 
-
-# Part III: Questions about gathering
-
-Here, we load a table from NCES digest of education statistics that contains data about the total number of teachers in each state for particular years.
-
-```{r}
-load(url("https://github.com/ozanj/rclass/raw/master/data/nces_digest/nces_digest_table_208_30.RData"))
-table208_30
-```
-\textcolor{red}{\textbf{/0.5}}  
-
-- Why is the data frame `table208_30` not tidy?  
-    - YOUR ANSWER HERE:  Some of the column names (tot_fall_2000...) are not names of variables, but values of a variable, which results in a single variable (e.g., total fall enrollment) being spread across multiple columns
-  
-
-- What changes need to be made to `table208_30` to make it tidy?
-    - YOUR ANSWER HERE: "Gather" year columns or reshape from wide to long
+# Part IV: Create institution-level GPA variable  
+\textcolor{red}{\textbf{/3}} 
+__Create institution-level GPA variable and save as a new object__
+```{r results='hide'}
+    nls_crs_trans <- nls_crs_v2%>% group_by(id,transnum) %>% 
+      summarise(
+        cred_trans=sum(crsecredv3, na.rm=TRUE), # sum total credits attempted where grade is known
+        qualpts_trans=sum(qualpts, na.rm=TRUE) # sum of quality points where grade is known
+      ) %>% 
+      mutate(gpa_trans=qualpts_trans/cred_trans) 
     
+    nls_crs_trans
+    #options(tibble.print_min=400)
 
-Tidy the data frame `table208_30` and create a new object `table208_30_tidy`:  
-\textcolor{red}{\textbf{/1.5}} 
+```
 
-- Recommended but optional: prior to gathering, rename the __names__ columns (i.e., the set of columns that represent values, not variables in your untidy data). specifically, rename these variables to remove characters prior to gathering (e.g., rename "tot_fall_2000" -> "2000"). See the end of section 4.2.1 for an example of how to do this.
-- after you tidy the data, print a few observations
+After you create the gpa variable, conduct some basic investigations/descriptive statistics to check whether it looks reasonable  
+\textcolor{red}{\textbf{/1}}
+```{r results='hide'}
+nls_crs_trans %>%
+  count(gpa_trans) #freq count of new variable 
 
-```{r}
-names(table208_30)
-names(table208_30)<- c("state","2000","2005","2009","2010", "2011")
-names(table208_30)
+nls_crs_trans %>%
+  filter(is.na(gpa_trans)) #view NA for new variable
 
-table208_30_tidy <- table208_30 %>% 
-  gather(`2000`,`2005`,`2009`,`2010`, `2011`,  key = year, value = total_teachers)
+nls_crs_trans %>%
+  filter(cred_trans==0 & qualpts_trans!=0) #checking to see if cred_trans equals 0 and qualpts_trans equals something else, returns 0
 
-#sort data (optional)
-table208_30_tidy<- table208_30_tidy%>%
-  arrange(state,year)
+nls_crs_trans %>%
+  filter(cred_trans==0 & !is.na(gpa_trans)) #checking to see if cred_trans equals 0 and gpa_trans does not equal NA, returns 0
 
-#examine data
-head(table208_30_tidy, n=20)
+nls_crs_trans %>%
+  filter((qualpts_trans/cred_trans) != gpa_trans) 
+
+nls_crs_trans %>%
+  count(gpa_trans) %>%
+  filter(n > 1)
 ```
 
 
 
-# Bonus Question:  
-\textcolor{red}{\textbf{/4}} 
+# Part V: Create term-level GPA variable  
+\textcolor{red}{\textbf{/3}}
 
-Run this code below to see create the data frame `allobs_v1` and examine its contents
-```{r}
-names(age_f16_allvars_allobs)
-#age_f16_allvars_allobs %>% var_label()
-
-allobs_v1 <- age_f16_allvars_allobs %>%
-  select(1:9, 13:19)
-names(allobs_v1)
-allobs_v1
+__Create term-level GPA variable and save as a new object__
+```{r results='hide'}
+    nls_crs_term <- nls_crs_v2%>% group_by(id,transnum,termnum) %>% 
+      summarise(
+        cred_term=sum(crsecredv3, na.rm=TRUE), # sum total credits attempted where grade is known
+        qualpts_term=sum(qualpts, na.rm=TRUE) # sum total credits attempted where grade is known
+      ) %>% 
+      mutate(gpa_term=qualpts_term/cred_term) 
+    
+    nls_crs_term
+    
 ```
 
-Your task in this bonus question is to make the untidy data frame `allobs_v1` tidy. note that `allobs_v1` contains multiple enrollment variables (in addition to the variables `efbage` and `lstudy` which were in the previous data frames we tidied. 
+After you create the gpa variable, conduct some basic investigations/descriptive statistics to check whether it looks reasonable  
+\textcolor{red}{\textbf{/1}}
+```{r results='hide'}
+nls_crs_term %>%
+  count(gpa_term) #freq count of new variable 
 
-The end of Section 4.3 "Tidying data: spreading" of Lecture 6 states that the `spread()` function is not designed to create tidy datasets when there are multiple __value__ variables. Therefore, in order to spread to create a tidy dataset from an untidy dataset that has multiple __value__ variables, we would need to incorporate additional/alternative programming skills **not taught** in class.  and that is why this is a bonus question.
+nls_crs_term %>%
+  filter(is.na(gpa_term)) #view NA for new variable
 
-Your end result should be a "tidy" version of `allobs_tidy`.  
-Hint: Google "How to spread mulitple value columns in R"
+nls_crs_term %>%
+  filter(cred_term==0 & qualpts_term!=0) #checking to see if cred_trans equals 0 and qualpts_trans equals something else, returns 0
 
-Once finished, knit to (pdf) and upload both .Rmd and pdf files to class website under the week 6 tab  
-*Remember to use this naming convention "lastname_firstname_ps6"*
+nls_crs_term %>%
+  filter(cred_term==0 & !is.na(gpa_term)) #checking to see if cred_trans equals 0 and gpa_trans does not equal NA, returns 0
+
+nls_crs_term %>%
+  filter((qualpts_term/cred_term) != gpa_term) 
+
+nls_crs_term %>%
+  count(gpa_term) %>%
+  filter(n > 1)
+```
+
+
+Once finished, knit to (pdf) and upload both .Rmd and pdf files to class website under the week 5 tab  
+*Remember to use this naming convention "lastname_firstname_ps5"*
+
+
+
+

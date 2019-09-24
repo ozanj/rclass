@@ -1,23 +1,25 @@
 ---
-title: "Lecture 6: Tidy data"
+title: "Lecture 5: Augmented vectors and exploratory data analysis"
 subtitle:  "EDUC 263: Managing and Manipulating Data Using R"
 author: Ozan Jaquette
 date: 
+fontsize: 8pt
+classoption: dvipsnames  # for colors
 urlcolor: blue
-output: 
-  html_document:
-    toc: true
-    toc_depth: 2
-    toc_float: # toc_float option to float the table of contents to the left of the main document content. floating table of contents will always be visible even when the document is scrolled
-      collapsed: false # collapsed (defaults to TRUE) controls whether the TOC appears with only the top-level (e.g., H2) headers. If collapsed initially, the TOC is automatically expanded inline when necessary
-      smooth_scroll: true # smooth_scroll (defaults to TRUE) controls whether page scrolls are animated when TOC items are navigated to via mouse clicks
-    number_sections: true
-    fig_caption: true # ? this option doesn't seem to be working for figure inserted below outside of r code chunk    
-    highlight: default # Supported styles include "default", "tango", "pygments", "kate", "monochrome", "espresso", "zenburn", and "haddock" (specify null to prevent syntax    
-    theme: default # theme specifies the Bootstrap theme to use for the page. Valid themes include default, cerulean, journal, flatly, readable, spacelab, united, cosmo, lumen, paper, sandstone, simplex, and yeti.
-    df_print: tibble #options: default, tibble, paged
-    keep_md: true # may be helpful for storing on github
-    
+output:
+  beamer_presentation:
+    keep_tex: true
+    toc: false
+    slide_level: 3
+    theme: default # AnnArbor # push to header?
+    #colortheme: "dolphin" # push to header?
+    #fonttheme: "structurebold"
+    highlight: default # Supported styles include "default", "tango", "pygments", "kate", "monochrome", "espresso", "zenburn", and "haddock" (specify null to prevent syntax highlighting); push to header
+    df_print: default #default # tibble # push to header?    
+    latex_engine: xelatex #  Available engines are pdflatex [default], xelatex, and lualatex; The main reasons you may want to use xelatex or lualatex are: (1) They support Unicode better; (2) It is easier to make use of system fonts.
+    includes:
+      in_header: ../beamer_header.tex
+      #after_body: table-of-contents.txt 
 ---
 
 ```{r, echo=FALSE, include=FALSE}
@@ -25,1233 +27,1576 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
   #comment = "#>" makes it so results from a code chunk start with "#>"; default is "##"
 ```
 
+```{r, echo=FALSE, include=FALSE}
+#THIS CODE DOWNLOADS THE MOST RECENT VERSION OF THE FILE beamder_header.tex AND SAVES IT TO THE DIRECTORY ONE LEVEL UP FROM THIS .RMD LECTURE FILE
+download.file(url = 'https://raw.githubusercontent.com/ozanj/rclass/master/lectures/beamer_header.tex', 
+              destfile = '../beamer_header.tex',
+              mode = 'wb')
+```
+
+```{r, echo=FALSE, include=FALSE}
+#DO NOT WORRY ABOUT THIS
+if(!file.exists('data-structures-overview.png')){
+  download.file(url = 'https://raw.githubusercontent.com/ozanj/rclass/master/lectures/lecture5/data-structures-overview.png', 
+                destfile = 'data-structures-overview.png',
+                mode = 'wb')
+}
+```
+
 # Introduction
 
-## Logistics
 
-<br>
+### Logistics
 
-### Using `html_document` rather than `beamer_presentation` output for the next two lectures (lecture 6 and 7)
+__Reading to do before next class:__
 
-- What this means is that the lecture won't have "slides"; rather, I'll just scroll down
-- Should be easier for you to "knit" entire lecture [Try it!] because doesn't rely on latex
-- To see formatted version of lecture, open `lecture6.html` or knit and follow along in that version
-- you will be able to run code chunks within .Rmd file as usual
-- This is an experiment to see which you prefer; will inform revisions to next time I teach the class
-- For Lectures 8, 9, and 10 we will go back to `beamer_presentation` with 
+- Work through slides from lecture 5 that we don't get to in class
+- GW 15.1 - 15.2 (factors) [this is like 2-3 pages]
+- [OPTIONAL] GW 15.3 - 15.5 (remainder of "factors" chapter)
+- [OPTIONAL] GW 20.6 - 20.7 (attributes and augmented vectors)
+- [OPTIONAL] GW 10 (tibbles)
 
-### Mid-term course survey
+__Explanation about `beamer_header.tex` in YAML header:__
 
-- A link to mid-term course survey will be posted at beginning of lecture 6 problem set. It is short. please complete it!
-- focus is on how class is working for you; what is going well; how can class be improved
+- We are calling the beamer_header.tex file in the background to customize our slides. Without this LaTeX file, our slides would compile according to the default beamer presentation (PDF).  
+    - Why would we want to do this?  
+    - We can customize our slides with the beamer_header.tex LaTeX file to include page numbers, change heading options, or change slide colors (in addition to other things). 
+- `includes` option in the YAML header customizes the beamer presentation slides  
+    - Here is a [link](https://bookdown.org/yihui/rmarkdown/pdf-document.html#latex-options) to a short description of the includes option in the YAML header.  
 
-### Reading to do before next class
 
-- Work through slides we from lecture 6 that we don't get to in class
-    - [REQUIRED] slides from section 4 "Tidying data"
-    - [OPTIONAL] slides from section 5 "Missing data"
-- [OPTIONAL] GW chapter 12 (tidy data)
-    - Lecture 6 covers this material pretty closely, so read chapter if you can, but I get it if you don't have time
-- [OPTIONAL] Wickham, H. (2014). Tidy Data. _Journal of Statistical Software_, 59(10), 1-23. doi:10.18637/jss.v059.i10
-    - This is the journal article that introduced the data concepts covered in GW chapter 12 and created the packages related to tidying data
-    - Link to article here: [LINK](https://www.jstatsoft.org/article/view/v059i10)
 
-### Libraries we will use today 
+### What we will do today
 
-You must run this R code chunk (install packages first if you don't have them)
-```{r}
+\tableofcontents
+
+```{r, eval=FALSE, echo=FALSE}
+#Use this if you want TOC to show level 2 headings
+\tableofcontents
+#Use this if you don't want TOC to show level 2 headings
+\tableofcontents[subsectionstyle=hide/hide/hide]
+```
+
+### Libraries we will use today
+
+"Load" the package we will use today (output omitted)
+
+- __you must run this code chunk after installing these packages__
+```{r, message=FALSE}
 library(tidyverse)
 library(haven)
 library(labelled)
 ```
+__If package not yet installed__, then must install before you load. Install in "console" rather than .Rmd file
+
+- Generic syntax: `install.packages("package_name")`
+- Install "tidyverse": `install.packages("tidyverse")`
+
+Note: when we load package, name of package is not in quotes; but when we install package, name of package is in quotes:
+
+- `install.packages("tidyverse")`
+- `library(tidyverse)`
+
+# Augmented vectors
+
+### Data we will use to introduce augmented vectors
+
+```{r}
+rm(list = ls()) # remove all objects
+
+#load("../../data/prospect_list/western_washington_college_board_list.RData")
+load(url("https://github.com/ozanj/rclass/raw/master/data/prospect_list/wwlist_merged.RData"))
+
+```
+
+## Review data types and structures
+
+### __Vectors__ are the primary data structures in R
+
+\medskip
+
+Two types of vectors:
+
+1. __atomic vectors__
+1. __lists__
+
+\medskip
+
+![Overview of data structures (Grolemund and Wickham, 2018)](data-structures-overview.png){width=60%}
+
+### Review data structures: atomic vectors
 
 
+\medskip An __atomic vector__ is a collection of values
 
-## Lecture overview
+- each value in an atomic vector is an __element__
+- all elements within vector must have same __data type__
 
-Creating analysis datasets often require __changing the organizational structure__ of data
+```{r}
+(a <- c(1,2,3)) # parentheses () assign and print object in one step
+length(a)
+typeof(a)
+str(a)
+```
 
-Examples:
+Can assign __names__ to vector elements, creating a __named atomic vector__
 
-- You want analysis dataset to have one obs per student, but your data has one obs per student-course
-- You want analysis dataset to have one obs per institution, but enrollment data has one obs per institution-enrollment level
+```{r}
+(b <- c(v1=1,v2=2,v3=3))
+length(b)
+typeof(b)
+str(b)
+```
 
-Two common ways to change organizational structure of data
+### Review data structures: lists
 
-1. Use `group_by` to perform calculations separately within groups and then use `summarise` to create an object with one observation per group. Examples:
-    - Creating objects containing summary statistics that are basis for tables and graphs (focus of lecture 4)
-    - Creating student-transcript level GPA variable from student-transcript-course level data (focus of lecture 5 problem set)
-1. __Reshape__ your data -- called __tidying__ in the R tidyverse world -- by transforming columns (variables) into rows (observations) and vice-versa
-    - Our topic for today
+\medskip
 
-This lecture is about changing the organizational structure of your data by transforming __untidy__ data into __tidy__ data.  
+- Like atomic vectors, __lists__ are objects that contain __elements__
+- However, __data type__ can differ across elements within a list
+    - an element of a list can be another list
 
-- Working with tidy data has many benefits, one of them is that all the packages in the tidyverse are designed to work with tidy data.
-- We will perform data __tidying__ using functions from the __tidyr__ package, which is a package within tidyverse. 
 
-Show index and example datasets in __tidyr__ package
+```{r}
+list_a <- list(1,2,"apple")
+typeof(list_a)
+length(list_a)
+str(list_a)
+
+list_b <- list(1, c("apple", "orange"), list(1, 2))
+length(list_b)
+str(list_b)
+```
+
+### Review data structures: lists
+
+Like atomic vectors, elements within a list can be named, thereby creating a __named list__
+
+```{r}
+# not named
+str(list_b) 
+
+# named
+list_c <- list(v1=1, v2=c("apple", "orange"), v3=list(1, 2, 3))
+str(list_c) 
+```
+
+### Review data structures: a data frame is a list
+
+A __data frame__ is a list with the following characteristics:
+
+- All the elements must be __vectors__ with the same __length__
+- Data frames are __augmented lists__ because they have additional __attributes__ [described later]
+
+```{r}
+#a regular list
+list_d <- list(col_a = c(1,2,3), col_b = c(4,5,6), col_c = c(7,8,9))
+typeof(list_d)
+str(list_d)
+
+#a data frame
+df_a <- data.frame(col_a = c(1,2,3), col_b = c(4,5,6), col_c = c(7,8,9))
+typeof(df_a)
+str(df_a)
+```
+## Attributes and augmented vectors
+
+### Atomic vectors versus augmented vectors
+
+__Atomic vectors__ [our focus so far]
+
+- I think of atomic vectors as "just the data"
+- Atomic vectors are the building blocks for augmented vectors
+
+__Augmented vectors__
+
+- __Augmented vectors__ are atomic vectors with additional __attributes__ attached
+
+__Attributes__
+
+- __Attributes__ are additional "metadata" that can be attached to any object (e.g., vector or list)
+- Examples of some important attributes in R:
+    - __Names__: name the elements of a vector (e.g., variable names)
+    - __value labels__: character labels (e.g., "Charter School") attached to numeric values
+    - __Object class__: How object should be treated by object oriented programming language [discussed below]
+
+__Main takaway__:
+
+- Augmented vectors are atomic vectors (just the data) with additional attributes attached
+
+### Attributes in vectors
+
+Identify attributes in any object using the `attributes()` function
+
+```{r}
+#vector with no attributes
+vector1 <- c(1,2,3,4)
+vector1
+attributes(vector1)
+
+#vector with name attributes
+vector2 <- c(a = 1, b= 2, c= 3, d = 4)
+vector2
+attributes(vector2)
+```
+
+
+### Attributes in lists
+
+```{r}
+#no attributes
+list1 <- list(c(1,2,3), c(4,5,6))
+attributes(list1)
+
+#list with attributes
+list2 <- list(col_a = c(1,2,3), col_b = c(4,5,6))
+str(list2)
+attributes(list2)
+
+#data frame with attributes
+list3 <- data.frame(col_a = c(1,2,3), col_b = c(4,5,6))
+str(list3)
+attributes(list3)
+```
+## Object class
+
+### Object class
+
+\medskip 
+Every object in R has a __class__
+
+- Object class defines rules for how object can be treated by object oriented programming language (e.g., which functions you can apply to object)
+- class is an __attribute__ of an object
+
+Identify the class of an object using the `class()` function
+```{r}
+(vector2 <- c(a = 1, b= 2, c= 3, d = 4))
+class(vector2)
+```
+
+When I encounter a new object I often investigate object by applying `typeof()`, `class()`, and `attributes()` functions to that object
+```{r}
+vector2
+typeof(vector2)
+class(vector2)
+attributes(vector2)
+```
+
+### Object class
+
+Why is __class__ important?
+
+- Specific functions usually work with only particular __classes__ of objects
+    - e.g., "date"" functions usually only work on objects with a date class
+    - "string" functions usually only work with on objects with a character class
+    - Functions that do mathematical computation usually work on objects with a numeric class
+- Note: functions care about object __class__, not object __type__
+
+object with `numeric` class (output omitted)
 ```{r, eval=FALSE}
-help(package="tidyr")
+str(wwlist)
 
-# note that example datasets table1, table2, etc. are listed in the index alongside functions
-table1
-tidyr::table1 # same same
+typeof(wwlist$med_inc_zip)
+class(wwlist$med_inc_zip)
+sum(wwlist$med_inc_zip[1:10], na.rm = TRUE) # numeric function
 
-df1 <- table1 # create an object from the "function" table1
-str(df1)
-
-table2
-table3
+# load library with date functions
+library(lubridate)
+#Sys.setenv(TZ="America/Los_Angeles") #setting time zone to Los Angeles time
+year(wwlist$med_inc_zip[1:10]) # date function
 ```
+### Object class
 
-# Data "structure" vs data "concepts"
+Why is __class__ important?
 
-Before we define "tidy data", we will spend significant time defining and discussing the some core terms/concepts about datasets. 
+- Specific functions usually work with only particular __classes__ of objects
+- Note: functions care about object __class__, not object __type__
 
-This discussion draws from the 2014 article [Tidy Data](https://www.jstatsoft.org/article/view/v059i10) by Hadley Wickham.
-
-- Wickham (2014) distinguishes between "__data structure__" and "__data concepts__"
-    - (Wickham actually uses the term "data semantics", but I don't know what the word "semantics" means, so I'll use the term "data concepts")
-
-
-## Dataset structure
-
-__Dataset structure__ refers to the "physical layout" of a dataset
-
-- Typically, datasets are "rectangular __tables__ made up of __rows__ and __columns__" (emphasis added).
-- a __cell__ is the intersection of one column and one row (think cells in Microsoft Excel)
-
-There are many alternative data structures to present the same underlying data
-
-- Below are two representations of the same underlying data that have different data structures (rows and columns transposed)
-
-```{r}
-#create structure a: treatment as columns, names as rows
-structure_a <- tibble(
-  name   = c("John Smith","Jane Doe","Mary Johnson"),
-  treatmenta    = c(NA, 16, 3),
-  treatmentb = c(2, 11, 1)
-)
-
-#create structure b: treatment as rows, names as columns
-structure_b <- tibble(
-  treatment   = c("treatmenta","treatmentb"),
-  John_Smith    = c(NA, 2),
-  Jane_Doe = c(16,11),
-  Mary_Johnson = c(3,1)
-)
-
-structure_a
-structure_b
-```
-### Unit of analysis
-
-__unit of analysis__ [my term, not Wickham's]: 
-
-- What each row represents in a dataset (referring to physical layout of dataset). 
-
-Examples of different units of analysis:
-
-- if each row represents a student, you have student level data
-- if each row represents a student-course, you have student-course level data
-- if each row represents an organization-year, you have organization-year level data
- 
-__Questions__: 
-
-- What does each row represent in the data frame object `structure_a`?
-```{r}
-structure_a
-```
-
-- What does each row represent in the data frame object `structure_b`?
-```{r}
-structure_b
-```
-
-- What does each row represent in the data frame object `ipeds_hc_temp`?
-    - Below we load data on 12-month enrollment headcount for 2015-16 academic year from the Integrated Postsecondary Education Data System (IPEDS)
-```{r}
-ipeds_hc_temp <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/ipeds/effy/ey15-16_hc.dta", encoding=NULL) %>% 
-  select(unitid,lstudy,efytotlt) %>% arrange(unitid,lstudy)
-
-ipeds_hc_temp
-#show variable labels and value labels
-ipeds_hc_temp %>% var_label()
-ipeds_hc_temp %>% val_labels()
-
-#print a few obs
-ipeds_hc_temp %>% head(n=10)
-
-#print a few obs, with value labels rather than variable values
-ipeds_hc_temp %>% head(n=10) %>% as_factor()
-```
-### Which variable(s) uniquely identify rows in a data frame
-
-Identifying which combination of variables uniquely identifies rows in a data frame helps you understand the "structure" of your dataset
-
-- Said differently: for each value of this variable (or combination of variables), there is only one row
-- Very important for reshaping/tidying data (this week) and very important for joining/merging data frames (next week)
-- Sometimes a codebook will explicitly tell you which vars uniquely identify rows
-- sometimes you have to figure this out through investigation
-    - focus on ID variables and categorical variables that identify what each row represents; not continuous numeric variables like `total_enrollment` or `family_income`
-
-__Task__: Let's try to identify the variable(s) that uniquely identify rows in `ipeds_hc_temp`
-
-- Multiple ways of doing this
-- I'll give you some code for one approach; just try to follow along and understand
-```{r}
-names(ipeds_hc_temp)
-ipeds_hc_temp %>% head(n=10)
-```
-
-<br>
-First, Let's investigate whether the ID variable `unitid` uniquely identifies rows in data frame `ipeds_hc_temp`
-
-- I'll annotate code for each step
-```{r}
-ipeds_hc_temp %>% # start with data frame object ipeds_hc_temp
-  group_by(unitid) %>% # group by unitid
-  summarise(n_per_group=n()) %>% # create measure of number of obs per group
-  ungroup %>% # ungroup (otherwise frequency table [next step] created) separately for each group (i.e., separate frequency table for each value of unitid)
-  count(n_per_group) # frequency of number of observations per group
-```
-
-What does above output tell us?
-
-- There are 5,127 values of `unitid` that have 2 rows for that value of `unitid`
-- There are 1,824 values of `unitid` that have 3 rows for that value of `unitid`
-- Note: `2*5127+3*1824==` `r format(round(2*5127+3*1824),nsmall=0, big.mark=",")` which is the number of observations in `ipeds_hc_temp`
-- __Conclusion__: the variable `unitid` does not uniquely identify rows in the data frame `ipeds_hc_temp`
-
-<br>
-Second, Let's investigate whether the comination of `unitid` and `lstudy` uniquely identifies rows in data frame `ipeds_hc_temp`
-
-```{r}
-ipeds_hc_temp %>% # start with data frame object ipeds_hc_temp
-  group_by(unitid,lstudy) %>% # group by unitid and lstudy
-  summarise(n_per_group=n()) %>% # create measure of number of obs per group
-  ungroup %>% # ungroup (otherwise frequency table [next step] created) separately for each group (i.e., separate frequency table for each value of unitid)
-  count(n_per_group) # frequency of number of observations per group
-```
-
-What does above output tell us?
-
-- There is `1` row each unique combination of `unitid` and `lstudy` 
-- __Conclusion__: the variables `unitid` and `lstudy` uniquely identify rows in the data frame `ipeds_hc_temp`
-
-What happens if we didn't ungroup?
-```{r}
-ipeds_hc_temp %>% # start with data frame object ipeds_hc_temp
-  group_by(unitid,lstudy) %>% # group by unitid and lstudy
-  summarise(n_per_group=n()) %>% # create measure of number of obs per group
-  count(n_per_group) # frequency of number of observations per group
-```
-
-## Dataset (semantics) concepts
-
-Think of these dataset _concepts_ as being distinct from dataset _structure_ (rows and columns)
-
-<br>
-The difference between data __structure__ and data __concepts__:
-
-- Data __structure__ refers to the the physical layout of the data (e.g., what the rows and columns in a dataset actually represent)
-- data __concepts__ -- which were introduced by Wickham (2014) -- refer to how the data __should__ be structured 
-
-### Values, variables, and observations
-
-Wickham (2014, p. 3): "A dataset is a collection of _values_, usually either numbers (if quantitative) or strings (if qualitative). Values are organized in two ways. Every value belongs to a _variable_ and an _observation_."
-
-Wickham (2014) definitions of dataset concepts: _values_, _variables_, and _observations_ [I Recommend writing these definitions down on a separate sheet of paper]:
-
-- __value__: A single element within some data structure (e.g., vector, list), usually a number or a character string.
-    - e.g. the value of the variable `enrollment` for one organization in a dataset where each observation represents a postsecondary education institution
-- __variables__: "A variable contains all values that measure the same underlying attribute (like height, temperature, duration) across units"
-    - e.g., the variable `enrollment` is a vector that contains total enrollment for each organization in the dataset
-- __observations__: "An observation contains all values measured on the same unit (like a person, or a day)...across attributes"
-    - e.g., the values of each variable for one organization in a dataset where each observation represents a postsecondary education institution
-
-Example of a dataset that satisfies Wickham definitions
-```{r, echo=FALSE}
-#Ignore this code; we'll explain it later in lecture
-ipeds_hc_temp %>% 
-  mutate(level = recode(as.integer(lstudy),
-    `1` = "ug_enroll",
-    `3` = "grad_enroll",
-    `999` = "all_enroll")
-  ) %>% select(-lstudy) %>% # drop variable lstudy
-  spread(key = level, value = efytotlt) %>%
-  select(unitid,ug_enroll,grad_enroll,all_enroll) %>%
-  head(n=10)
-```
-<br>
-Remove object
-```{r}
-rm(ipeds_hc_temp)
-```
-
-### Tables and observational unit
-
-A particular project or data collection (e.g., longitudinal survey tracking student achievement from high school through college), may require several data sources:
-
-- data on student characteristics (e.g., name, date of birth) with one observation per student
-- data on the high school the student attends with one observation per school
-- transcript data with one observation per student-course, etc.
-
-Each of these data sources may use a different "level of observation" and each requiring a different "table" (i.e., dataframe):
-
-- "Table" is the term database people use for what we would refer to as a "dataset" or a "data frame"
-- We talk more about "tables" next week, which is about joining/merging data frames
-
-<br>
-__Observational unit/observational level__ [Wickham's term, not mine]
-
-> "In a given analysis, there may be multiple __levels of observations__. For example, in a trial of new allergy medication we might have three observational types: demographic data collected from each person (age, sex, race), medical data collected from each person on each day (number of sneezes, redness of eyes), and meteorological data collected on each day (temperature,pollen count) (Wickham 2014, p. 4)"
-
-<br>
-So Wickham defines __observational unit/observational level__ as what each row __should__ represent in an appropriately structured data frame
-
-### Summary/parting thoughts
-
-These data concepts (e.g., value, variable, observation) seem easy on first glance, but can feel slippery on closer inspection. 
-
-In particular, when you confronted with a particular dataset, sometimes it can feel confusing what the variables/observations/unit of analysis __are__ (data structure) and what they __should be__ (data concepts).
-
-# Defining tidy vs. untidy data
-
-## Rules of tidy data (defining tidy data)
-
-Wickham chapter 12: "There are three interrelated rules which make a dataset tidy:
-
-1. Each __variable__ must have its own __column__
-1. Each __observation__ must have its own __row__
-1. Each __value__ must have its own __cell__"
-1. [Additional rule from Wickham (2014)] Each type of __observational unit__ forms a __table__
-
-I Recommend writing these rules down on a separate sheet of paper
-
-"These three rules are interrelated because it’s impossible to only satisfy two of the three" (Wickham chapter 12)
-
-<br>
-__Visual representation of the three rules of tidy data__:
-
-![](http://r4ds.had.co.nz/images/tidy-1.png)
-Here is an example of tidy data:
-```{r}
-#help(package="tidyr")
-table1
-```
-
-Question: 
-
-- What is does each observation (data concept) represent in the above dataset?
-- What is does each row (data structure) represent in the above dataset?
-
-## Untidy data
-
-> “Tidy datasets are all alike, but every messy dataset is messy in its own way.” –– Hadley Wickham
-
-While __all__ tidy datasets are organized the same way, untidy datasets can have several different organizational structures
-
-<br>
-Here is an example of an untidy version of the same data shown in `table1`
-```{r}
-#Untidy data, table 2
-#help(package="tidyr")
-table2
-```
-
-Other examples of untidy data (output omitted):
+Object with `character` class
 ```{r, eval=FALSE}
-table3
+str(wwlist$hs_city)
+typeof(wwlist$hs_city)
+class(wwlist$hs_city)
 
-#tables 4a and 4b put the information from table1 in two separate data frames
-table4a
-table4b
-
-table5
+tolower(wwlist$hs_city[1:10]) # string function
+sum(wwlist$hs_city, na.rm = TRUE) # numeric function
 ```
 
-## Diagnosing untidy data
 
-The first step in transforming untidy data to tidy data is diagnosing which principles of tidy data have been violated.
+Object with a date class
+```{r, eval=FALSE}
+typeof(wwlist$receive_date)
+class(wwlist$receive_date)
 
-Recall the three principles of tidy data:
+year(wwlist$receive_date[1:10]) # date function
+sum(wwlist$receive_date) # numeric function
 
-1. Each variable must have its own column.
-1. Each observation must have its own row.
-1. Each value must have its own cell.
+```
 
-Let's diagnose the problems with `table2` by answering these questions
+### Class and object oriented programming
 
-1. Does each variable have its own column?
-    - if not, how does the dataset violate this principle?
-    - what _should_ the variables be?
-1. Does each observation have its own row?
-    - if not, how does the dataset violate this principle?
-    - what does each row represent _actually_ represent?
-    - what _should_ each row represent?
-1. Does each value  have its own cell."
-    - if not, how does the dataset violate this principle?
+Definition of object oriented programming from this [LINK](https://www.webopedia.com/TERM/O/object_oriented_programming_OOP.html)
+
+> "Object-oriented programming (OOP) refers to a type of computer programming in which programmers define not only the data type of a data structure, but also the types of operations (functions) that can be applied to the data structure."
+
+Object __class__ is fundamental to object oriented programming because:
+
+- object class determines which functions can be applied to the object
+- object class also determines what those functions do to the object
+
+Many different object classes exist in R
+
+- we can also create our own classes
+- but in this course we will work with classes that have been created by others
+
+## Class == factor
+
+### Factors
+
+__Factors__ are an object _class_ used to display categorical data (e.g., marital status)
+
+- A factor is an __augmented vector__ built by attaching a "levels" attribute to an (atomic) integer vectors
+
+Usually, we would prefer a categorical variable (e.g., race, school type) to be a factor variable rather than a character variable
+
+- So far in the course I have made all categorical variables character variables because we had not introduced factors yet
+
+Below, I'll create a factor version of the character variable `ethn_code` 
+
+- (don't worry about understanding this code; I'll explain it later)
+```{r}
+str(wwlist$ethn_code)
+class(wwlist$ethn_code)
+# create factor var; tidyverse approach
+wwlist <- wwlist %>% mutate(ethn_code_fac = factor(ethn_code)) 
+#wwlist$ethn_code_fac <- factor(wwlist$ethn_code) # base r approach
+
+str(wwlist$ethn_code_fac)
+```
+### Factors
+
+A factor is an __augmented vector__ built by attaching a "levels" attribute to an (atomic) integer vector
+
+Compare (character) `ethn_code` to (factor) `ethn_code_fac` (output omitted)
+```{r, results="hide"}
+#character var
+typeof(wwlist$ethn_code)
+class(wwlist$ethn_code)
+str(wwlist$ethn_code)
+attributes(wwlist$ethn_code)
+
+#factor var
+typeof(wwlist$ethn_code_fac)
+class(wwlist$ethn_code_fac)
+str(wwlist$ethn_code_fac)
+attributes(wwlist$ethn_code_fac)
+```
+
+__Main takeaway__
+
+- `ethn_code_fac` has `type=integer` and `class=factor` because the variable has a "levels" attribute
+- Underlying data are integers but levels attribute is used to display the data.
+```{r}
+wwlist$ethn_code_fac[1:4] # print first few obs of ethn_code_fac
+```
+
+
+
+### Working with factor variables
+
+```{r, results='hide'}
+attributes(wwlist$ethn_code_fac)
+```
+Refer to categories of a factor by the values of the __level attribute__ rather than the underlying values of the variable
+
+__Task__
+
+- count the number of prospects in object `wwlist` who identify as "white"
+```{r}
+# referring to variable value; this doesn't work
+wwlist %>% filter(ethn_code_fac==10) %>% count 
+
+#referring to value of level attribute; this works
+wwlist %>% filter(ethn_code_fac=="white") %>% count 
+
+```
+
+### Working with factor variables
+
+__Task__
+
+- count the number of prospects in object `wwlist` who identify as "white"
+
+If you want to refer to underlying values, then apply `as.integer()` function to the factor variable
+```{r}
+attributes(wwlist$ethn_code_fac)
+wwlist %>% filter(as.integer(ethn_code_fac)==10) %>% count 
+```
+### How to identify the variable values associated with factor levels
+
+Let's create a factor version of the character variable `psat_range`
+```{r}
+wwlist <- wwlist %>% mutate(psat_range_fac = factor(psat_range)) # create factor var;
+```
+
+Run below code in console rather than code chunk to see values associated with each factor
+```{r, results="hide"}
+wwlist %>% count(psat_range_fac)
+attributes(wwlist$psat_range_fac)
+```
+
+Once you know values associated with factor, you can filter based on values
+```{r}
+wwlist %>% filter(as.integer(psat_range_fac)==4) %>% count()
+```
+
+Or you can just filter based on value of __factor levels__
+```{r}
+wwlist %>% filter(psat_range=="1270-1520") %>% count()
+```
+
+### Creating factor variables from character variables or from integer variables
+
+See Appendix
+
+### Factor student exercise   
+
+1. After running the code below, use `typeof`, `class`, `str`, and `attributes` functions to check the new variable `receive_year`  
+2. Create a factor variable from the input variable `receive_year` and name it `receive_year_fac`  
+3. Run the same functions (`typeof`, `class`, etc.) from the first question using the new variable you created  
+4. Get a count of `receive_year_fac`. __hint:__ you could also run this in the console to see values associated with each factor
+
+Run this code to create a year variable from the input variable "receive_date"
+```{r, results="hide", message=FALSE}
+#wwlist %>% glimpse()
+
+library(lubridate) #load library if you haven't already
+wwlist <- wwlist %>%
+  mutate(receive_year = year(receive_date)) #creating year variable with the lubricate package
+
+#Check variable
+wwlist %>% 
+  count(receive_year)
+
+wwlist %>%
+  group_by(receive_year) %>% 
+  count(receive_date)
+
+```
+
+
+### Factor student exercise solutions   
+1. Use `typeof`, `class`, `str`, and `attributes` functions to check the new variable `receive_year`  
+```{r}
+typeof(wwlist$receive_year)
+class(wwlist$receive_year)
+str(wwlist$receive_year)
+attributes(wwlist$receive_year) 
+```
+
+### Factor student exercise solutions  
+2. Now create a factor variable from the input variable `receive_year` and name it `receive_year_fac` 
+```{r}
+# create factor var; tidyverse approach
+wwlist <- wwlist %>%
+  mutate(receive_year_fac = factor(receive_year))  
+
+```
+
+### Factor student exercise solutions 
+3. Run the same functions (`typeof`, `class`, etc.) from the first question using the new variable you created  
+```{r}
+typeof(wwlist$receive_year_fac)
+class(wwlist$receive_year_fac)
+str(wwlist$receive_year_fac)
+attributes(wwlist$receive_year_fac)   
+```
+
+### Factor student exercise solutions 
+4. Get a count of `receive_year_fac`. __hint:__ you could also run this in the console to see values associated with each factor
+```{r}
+wwlist %>%
+  count(receive_year_fac)
+```
+
+
+## Class == labelled
+
+### Data we will use to introduce `labelled` class
+
+High school longitudinal surveys from National Center for Education Statistics (NCES)
+
+- Follow U.S. students from high school through college, labor market
+
+We will be working with [High School Longitudinal Study of 2009 (HSLS:09)](https://nces.ed.gov/surveys/hsls09/index.asp)
+
+- Follows 9th graders from 2009
+- Data collection waves
+      - Base Year (2009)
+      - First Follow-up (2012)
+      - 2013 Update (2013)
+      - High School Transcripts (2013-2014)
+      - Second Follow-up (2016)    
+
+### `haven` package
+
+[`haven`](https://haven.tidyverse.org/), which is part of __tidyverse__, "enables R to read and write various data formats" from the following statistical packages: 
+
+- SAS
+- SPSS
+- Stata
+
+When using `haven` to read data, resulting R objects have these characteristics:
+
+- Are __tibbles__, a particular type of data frame we discuss future weeks
+- Transform variables with "value labels" into the `labelled()` class [our focus today]
+    - `labelled` is an object __class__ created by folks who created `haven` package
+    - `labelled` is an object class, just like `factor` is an object class
+    - `labelled` and `factor` classes are both viable alternatives for categorical variables
+    - Helpful description of `labelled` class  [HERE](https://haven.tidyverse.org/articles/semantics.html)
+- Dates and times converted to R date/time classes
+- Character vectors not converted to factors
+
+### `haven` package
+
+Use `read_dta()` function from `haven` to import Stata dataset into R
+```{r, results="hide"}
+hsls <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/hsls/hsls_stu_small.dta")
+```
+
+Let's examine the data [you __must__ run this code chunk]
+```{r, results="hide"}
+names(hsls)
+names(hsls) <- tolower(names(hsls)) # convert names to lowercase
+names(hsls)
+
+str(hsls) # ugh
+
+str(hsls$s3classes)
+attributes(hsls$s3classes)
+typeof(hsls$s3classes)
+class(hsls$s3classes)
+```
+
+### `labelled` package
+
+Purpose of the `labelled` package is to work with data imported from SPSS/Stata/SAS using the `haven` package. 
+
+- In particular, `labelled` package creates functions to work with objects that have `labelled` class
+- From package documentation: "purpose of the `labelled` package is to provide functions to manipulate _metadata_ as variable labels, value labels and defined missing values using the `labelled` class and the `label` attribute introduced in `haven` package.
+- More info on the `labelled` package: [LINK](https://cran.r-project.org/web/packages/labelled/vignettes/intro_labelled.html)
+
+Functions in `labelled` package
+
+- [Full list](https://www.rdocumentation.org/packages/labelled/versions/1.1.0)
+- A couple relevant functions
+    - `val_labels`: get or set variable _value labels_
+    - `var_label`: get or set a _variable label_
+
+```{r, results="hide"}
+attributes(hsls$s3classes)
+
+hsls %>% select(s3classes) %>% var_label()
+hsls %>% select(s3classes) %>% val_labels()
+```
+### Core concepts for understanding `labelled` class [SKIP]
+
+__atomic vectors (and lists)__ the underlying data
+
+- data structures: vector or list
+- data type: numeric (integer or double); character; logical
+```{r}
+typeof(hsls$s3classes)
+```
+
+__augmented vectors__ are atomic vectors with __attributes__ attached
+
+__attributes__ are "metadata" attached to an object. Examples
+
+- __names__: names of elements of a vector or list (e.g., variable names)
+- __levels__: display output associated with values of a factor variable
+- __class__: e.g., factor, labelled
+
+```{r, results="hide"}
+attributes(hsls$s3classes)
+```
+__class__ is an object oriented programming concept. The `class` of an object determines which functions can be applied to the object and what those functions do
+
+- e.g., can't apply `sum()` to an object where `class=character`
+
+### What is `labelled` class?
+
+\medskip
+
+- `labelled` is an object class created by the `haven` package for importing variables from SAS/SPSS/Stata that have __value labels__
+- __value labels__ [in Stata] are labels attached to specific values of a variable:
+    - e.g., variable value `1` attached to value label "married", `2`="single", `3`="divorced"
+- Variables in an R data frame with `class==labelled`:
+    - data `type` can be numeric(double) or character
+    - To see `value labels` associated with each value:
+        - `attr(data_frame_name$variable_name,"labels")`
+        - e.g., `attr(hsls$s3classes,"labels")`
+
+Let's investigate the attributes of `hsls$s3classes`
+```{r, results="hide"}
+typeof(hsls$s3classes)
+class(hsls$s3classes)
+str(hsls$s3classes)
+attributes(hsls$s3classes)
+```
+use `attr(object_name,"attribute_name")` to refer to each attribute
+```{r, results="hide"}
+attr(hsls$s3classes,"label")
+attr(hsls$s3classes,"labels")
+attr(hsls$s3classes,"class")
+attr(hsls$s3classes,"format.stata")
+```
+
+### Working with `labelled` class data
+
+\medskip
+
+Show variable labels (`var_label`); and show value labels (`val_labels`)
+```{r, results="hide"}
+hsls %>% select(s3classes,s3clglvl) %>% var_label #show variable label
+hsls %>% select(s3classes,s3clglvl) %>% val_labels #show value labels
+```
+
+Create frequency tables with `labelled` class variables using `count()`
+
+- Default setting is to show variable __values__ not __value labels__
+```{r, results="hide"}
+hsls %>% count(s3classes)
+#investigate the object created
+hsls_freq_temp <- hsls %>% count(s3classes)
+hsls_freq_temp
+rm(hsls_freq_temp)
+```
+
+To make frequency table show __value labels__ add `%>% as_factor()` to pipe
+
+- `as_factor()` is function from `haven` that converts an object to a factor
+```{r, results="hide"}
+hsls %>% count(s3classes) %>% as_factor()
+#investigate the object created
+hsls_freq_temp <- hsls %>% count(s3classes)  %>% as_factor()
+hsls_freq_temp
+rm(hsls_freq_temp)
+```
+### Working with `labelled` class data
+
+To isolate values of `labelled` class variables in `filter()` function:
+
+- refer to variable __value__, not the __value label__
+
+__Task__ 
+
+- how many observations in var `s3classes` associated with "Unit non-response"
+- how many observations in var `s3classes` associated with "Yes"
+
+General steps to follow: 
+
+1. investigate object
+1. use filter to isolate desired observations
+
+Investigate object
+```{r, results="hide"}
+class(hsls$s3classes)
+hsls %>% select(s3classes,s3clglvl) %>% var_label #show variable label
+hsls %>% count(s3classes) # freq table, values
+hsls %>% count(s3classes) %>% as_factor() # freq table, value labels
+```
+
+filter specific values
+```{r, results="hide"}
+hsls %>% filter(s3classes==-8) %>% count() # -8 = unit non-response
+hsls %>% filter(s3classes==1) %>% count() # 1 = yes
+```
+
+### Labelled student exercise
+
+1. Get variable and value labels of `s3hs`  
+2. Get a count of the variable showing the values and the value labels. __hint__ use factor()  
+3. Filter if value is associated with "Missing"  
+4. Filter if value is associated with "Missing" or "Unit non-response"
+
+### Labelled student exercise solutions
+1. Get variable and value labels of `s3hs` 
+```{r}
+hsls %>% 
+  select(s3hs) %>% 
+  var_label() 
+
+hsls %>% 
+  select(s3hs) %>% 
+  val_labels()
+```
+
+### Labelled student exercise solutions
+2. Get a count of the variable `s3hs` showing the value labels. __hint__ use factor()
+
+```{r}
+hsls %>% 
+  count(s3hs) 
+
+hsls %>% 
+  count(s3hs) %>% 
+  as_factor() 
+
+```
+
+### Labelled student exercise solutions
+3. Filter if value is associated with "Missing"
+```{r}
+hsls %>%
+  filter(s3hs== -9) %>% 
+  count()
+```
+
+### Labelled student exercise solutions  
+4. Filter if value is associated with "Missing" or "Unit non-response"
+```{r}
+hsls %>%
+  filter(s3hs== -9 | s3hs== -8) %>% 
+  count()
+```
+
+
+## Comparing labelled class to factor class
+
+### Comparing `class==labelled` to `class==factor`
+
+|  | `class==labelled` | `class==factor`
+|---|----------|-------------|
+| data type  |    numeric or character   | integer |
+| name of value label attribute | labels | levels |
+| refer to data using | variable values | levels attribute |
+
     
-Printout of `table2`
-```{r}
-table2
+### Converting `class==labelled` to `class==factor`
+
+The `as_factor()` function from `haven` package converts variables with `class==labelled` to `class==factor`
+
+- Can be used for descriptive statistics
+```{r, results="hide"}
+hsls %>% select(s3classes) %>% count(s3classes) %>% as_factor()
 ```
 
-Answers to these questions:
-
-1. Does each variable have its own column? __No__
-    - if not, how does the dataset violate this principle? __"cases" and "population" should be two different variables because they are different attributes, but in `table2` these two attributes are recorded in the column "type" and the associated value for each type is recorded in the column "count"__
-    - what _should_ the variables be? __country, year, cases, population__
-1. Does each observation have its own row? __No__
-    - if not, how does the dataset violate this principle? __there is one observation for each country-year-type. But the values of type (population, cases) represent attributes of a unit, which should be represented by distint variables rather than rows. So `table2` has two rows per observation but it should have one row per observation__
-    - what does each row represent _actually_ represent? __country-year-type__
-    - what _should_ each row represent? __country-year__
-1. Does each value  have its own cell." Yes.
-    - if not, how does the dataset violate this principle?
-
-## Student exercise:
-
-For each of the following datasets -- `table1`, `table3`, `table4a`, and `table5` -- answer the following questions:
-
-1. Does each variable have its own column?
-    - if not, how does the dataset violate this principle?
-    - what _should_ the variables be?
-1. Does each observation have its own row?
-    - if not, how does the dataset violate this principle?
-    - what does each row represent _actually_ represent?
-    - what _should_ each row represent?
-1. Does each value  have its own cell."
-    - if not, how does the dataset violate this principle?
-
-We'll give you ~15 minutes for this
-
-<br>
-__ANSWERS TO STUDENT EXERCISE BELOW__:
-
-### `table1`
+- Can create object with some or all `labelled` vars converted to `factor`
 ```{r}
-table1
-```
-1. Does each variable have its own column? YES
-1. Does each observation have its own row? YES
-    - what does each row represent _actually_ represent? COUNTRY-YEAR
-    - what _should_ each row represent? COUNTERY-YEAR
-1. Does each value  have its own cell." YES
-
-### `table3`
-```{r}
-table3
+hsls_f <- as_factor(hsls,only_labelled = TRUE)
 ```
 
-1. Does each variable have its own column? __No__
-    - if not, how does the dataset violate this principle? __The column `rate` contains two variables, `cases` and `population`__
-    - what _should_ the variables be? __country, year, cases, population__
-1. Does each observation have its own row? __Yes__
-    - what does each row represent _actually_ represent? __country-year__
-    - what _should_ each row represent? __country-year__
-1. Does each value  have its own cell." __No__
-    - if not, how does the dataset violate this principle? __In the `rate` column, each cell contains two values, a value for `cases` and a value for `population`__
-    
-### `table4a`
-```{r}
-table4a
-```
-1. Does each variable have its own column? __No__
-    - if not, how does the dataset violate this principle? __The variable `cases` is spread over two columns and the variable `year` is also spread over two columns__
-    - what _should_ the variables be? __country, year, cases__
-1. Does each observation have its own row? __No__
-    - if not, how does the dataset violate this principle? __There are two country-year observations on each row__
-    - what does each row represent _actually_ represent? __country__
-    - what _should_ each row represent? __country-year__
-1. Does each value  have its own cell." __Yes__
+Let's examine this object
+```{r, results="hide"}
+glimpse(hsls_f)
+hsls_f %>% select(s3classes,s3clglvl) %>% str()
+typeof(hsls_f$s3classes)
+class(hsls_f$s3classes)
+attributes(hsls_f$s3classes)
 
-### `table4b` [not required to answer]
-```{r}
-table4b
-```
-Answers pretty much the same as `table4a`, except `table4b` shows data for `population` rather than `cases'
-
-### `table5`
-```{r}
-table5
-```
-1. Does each variable have its own column? __No__
-    - if not, how does the dataset violate this principle? __Two problems. First, the single variable `year' is spread across two columns `century` and `year`. Second, the `rate` column contains the two variables `cases` and `population`__
-    - what _should_ the variables be? __country, year, cases, population__
-1. Does each observation have its own row? __Yes__
-    - what does each row represent _actually_ represent? __country, year__
-    - what _should_ each row represent?  __country, year__
-1. Does each value  have its own cell?" __No__
-    - if not, how does the dataset violate this principle? __Two problems. First, the each value of `year' is spread across two cells. Second, the each cell of the `rate` column contains two values, one for `cases` and one for `population`__
-
-## Revisiting definitions of variables and observations
-
-Worthwhile to revisit Wickham's (2014) defintions of _variables_, and _observations_ in light of what we now know about tidy vs. untidy data.
-
-Whenever I work with datasets I tend to think of observations as being synonomous with rows and variables as being synonomous with columns. But if we use Wickham's definitions of observations and variables, this is not true.
-
-- Wickham definition of __variables__: "A variable contains all values that measure the same underlying attribute (like height, temperature, duration) across units"
-    - In a tidy dataset, variables and columns are the same thing. 
-    - In an untidy dataset, variables and columns are not the same thing; a single variable (i.e., attribute) may be represented by two columns 
-        - For example, in `table2` the attribute `population` was represented by two columns, `type` and `count`
-- Wickham definition of __observations__: "An observation contains all values measured on the same unit (like a person, or a day)...across attributes"
-    - In a tidy dataset, an observations is the same thing as a row
-    - In an untidy dataset, the values for a particular unit may be spread across multiple rows. 
-        - For example, in `table1` and `table2` Wickham would think of `country-year` as the proper __observational unit__. `table1` has one row per `country-year` (tidy) but `table2` has two rows per `country-year` (untidy). 
-        
-<br>
-__"Observational unit" (data concept) vs. "unit of analysis" (my term; data structure)__
-
-- __observational unit__. Wickham tends to think of observational unit as what each observation should represent (e.g., a person, a person-year) in a tidy dataset
-- __unit of analysis__. By contrast (right or wrong), I tend to think of "unit of analysis" as what each row of data _actually_ represents (e.g., country-year-type)
-
-<br>
-__Takeways from this discussion of formal data concepts and tidy vs. untidy data__
-
-- In everyday usage, the terms _variable_ and _observation_ refer to data structure, with :
-    - variables=columns
-    - observations=rows
-- In Wickham's definition, the terms _variables_ and _observation_ refer to data contents, with:
-    - A variable containing all values of one attribute for all _units_
-    - An observation contains the value of all attributes for one _unit_ 
-- Can think of Wickham's definitions of variables and observations as belonging only to tidy datasets.
-    - Based on Wickham's definition, variables=columns and observations=rows __only__ if the dataset is tidy
-    - Can think of Wickham's definitions of variables and observations as what _should be_. 
-    
-<br>
-In real world, we encounter many untidy datasets. We can still equate variables with columns and rows with observations. 
-
-- Just be mindful that you are using the "everyday" definitions of variables and observations rather than the Wickham definitions.
-
-
-
-
-
-
-## Why tidy data 
-
-Why should you create tidy datasets before conducting analyses?
-
-1. If you have a consistent organizational structure for analysis datasets, easier to learn tools for analyzing data
-
-2. tidy datasets are optimal for R
-- Base R functions and tidyverse functions are designed to work with vectors of values
-- In a tidy dataset, each column is the vector of values for a given variable, as shown below
-
-```{r}
-str(table1)
-str(table1$country)
-str(table1$cases)
-```
-<br>
-__Example__:
-
-- how would you calculate `rate` variable (`=cases/population*10000`) for `table1` (tidy) and `table2` (untidy)
-
-```{r}
-table1
-table1 %>% 
-  mutate(rate = cases / population * 10000)
-
-#Just looking at table2, obvious that calculating rate is much harder
-table2
+hsls_f %>% select(s3classes) %>% var_label()
+hsls_f %>% select(s3classes) %>% val_labels()
 ```
 
-### Caveat: But tidy data not always best
+### Working with `class==factor` data
 
-Datasets are often stored in an untidy structure rather than a tidy structure when the untidy structure has a smaller file size than the tidy structure
-
-- smaller file-size leads to faster processing time, which is very important for web applications (e.g., facebook) and data visualizations (e.g., interactive maps)
-
-## Legacy concepts: "Long" vs. "wide" data
-
-Prior to Wickham (2014) and the creation of the "tidyverse," the concepts of "tidy"/"untidy" (adjective) data and "tidying" (verb) did not exist.  
-
-Instead, researchers would "reshape" (verb) data from "long" (adjective) to "wide" (adjective) and vice-versa
-
-Think "wide" and "long" as alternative presentations of the exact same 
-
-__"wide" data__ represented with fewer rows and more columns  
-__"long" data__ represented with more rows and fewer columns
-
-Example, Table 204.10 of the Digest for Education Statistics shows changer over time in the number and percentage of K-12 students on free/reduced lunch [LINK](http://nces.ed.gov/programs/digest/d14/tables/dt14_204.10.asp)
-
-- Wide form display of data:
+Showing values associated with factor levels
 ```{r}
-#load("data/nces_digest/nces_digest_table_204_10.RData")
-load(url("https://github.com/ozanj/rclass/raw/master/data/nces_digest/nces_digest_table_204_10.RData"))
-table204_10
-```
-- Long form display of data: 
-```{r}
-total <- table204_10 %>%
-  select(state,tot_2000,tot_2010,tot_2011,tot_2012) #subset and assign to new object
-names(total)<-c("state","2000","2010","2011","2012") #change names for year "tot_2010" -> "2010"
-
-total_long <- total %>% 
-  gather(`2000`,`2010`,`2011`,`2012`,key=year,value=total_students) %>% #will discuss this function shortly
-  arrange(state, year) #arrange by state and year
-
-head(total_long, n=10) #view 10 obs
+hsls_f %>% count(s3classes)
 ```
 
-Note that the concepts "wide" vs. "long" are relative rather than absolute
-
-- For example, comparing `table4a` and `table1`: `table4a` is wide and `table1` is long
+In code, refer `level` attribute not variable value
 ```{r}
-table4a
-table1
-```
-- But comparing `table1` and `table2`: `table1` is wide and `table2` is long
-```{r}
-table1
-table2
+hsls_f %>% filter(s3classes=="Yes") %>% count(s3classes)
 ```
 
 
-# Tidying data:
 
-Steps in tidying untidy data:
+# Exploratory data analysis (EDA)
 
-1. Diagnose the problem
-    - e.g., Which principles of tidy data are violated and how are they violated? What _should_ the unit of analysis be? What _should_ the variables and observations be?
-2. Sketch out what the tidy data should look like [on piece of scrap paper is best!]
-3. Transform untidy to tidy
+### What is exploratory data analysis (EDA)?
 
-## Common causes of untidy data
+The [Towards Data Science](https://towardsdatascience.com/exploratory-data-analysis-8fc1cb20fd15) website has a nice definition of EDA:
 
-Tidy data can only have one organizational structure. 
+> "Exploratory Data Analysis refers to the critical process of performing initial investigations on data so as to discover patterns,to spot anomalies,to test hypothesis and to check assumptions with the help of summary statistics" 
 
-However, untidy data can have several different organizational structures. In turn, several _causes_ of untidy data exist. Important to identify the most common causes of untidy data, so that we can develop solutions for each common cause.
+__This course focuses on "data management":__
 
-__The two most common and most important causes of untidy data__
+- investigating and cleaning data for the purpose of creating analysis variables
+- Basically, everything that happens __before__ you conduct analyses
 
-1. Some column names are not names of variables, but values of a variable" (e.g, `table4a`, `table4b`), which results in:
-    - a single variable spread (e.g., `population`) over multiple columns (e.g., `1999`, `2000`)
-    - a single row contains multiple observations
+__I think about "exploratory data analysis for data quality"__
+
+- Investigating values and patterns of variables from "input data"
+- Identifying and cleaning errors or values that need to be changed
+- Creating analysis variables
+- Checking values of analysis variables agains values of input variables
+
+### How we will teach exploratory data analysis
+
+Will teach exploratory data analysis (EDA) in two sub-sections:
+
+1. Introduce "Tools of EDA": 
+    - Demonstrate code to investigate variables and relatioship between variables
+    - I'll focus on the __tidyverse__ approach rather than __base R__    
+    - Most of these tools are just the application of programming skills you have already learned
+1. Provide "Guidelines for EDA"
+    - Less about coding, more about practices you should follow and mentality necessary to ensure high data quality
+
+## Tools for EDA
+
+
+### Tools of EDA
+
+__To do EDA for data quality, must master the following tools:__
+
+- \medskip __Select, sort, filter, and print__ in order to see data patterns, anomolies
+    - Select and sort particular values of particular variables
+    - Print particular values of particular variables
+- __One-way descriptive analyses__ (i.e,. focus on one variable)
+    - Descriptive analyses for continuous variables
+    - Descriptive analyses for discreet/categorical variables
+- __Two-way descriptive analyses__ (relationship between two variables)
+    - Categorical by categorical
+    - Categorical by continuous
+    - Continuous by continuous
+
+Whenever using any of these tools, __pay close attention to missing values and how they are coded__
+
+- Often, the "input" variables don't code missing values as `NA` 
+- Especially when working with survey data, missing values coded as a negative number (e.g., `-9`,`-8`,`-4`) with different negative values representing different reasons for data being missing
+- sometimes missing values coded as very high positive numbers
+- Therefore, important to investigate input vars prior to creating analysis vars
+
+### Tools of EDA
+
+First, Let's create a smaller version of the HSLS:09 dataset
 ```{r}
-table4b
-```
-    
-2. An observation is scattered across multiple rows (e.g., `table2`), such that:
-    - One column identifies variable type (e.g., `type`) and another column contains the values for each variable (e.g., `count`)
-```{r}
-table2
-```
-__Other common causes of untidy data (less important and/or less common)__
-
-3. Individual cells in a column contain data from two variables (e.g., the `rate` column in `table3`)
-```{r}
-table3
-```
-4. Values from a single variable separated into two columns (e.g., in `table5`, values of the 4-digit `year`variable are separated into the two columns, `century` and 2-digit `year` )
-```{r}
-table5
-```
-
-
-## Tidying data: gathering
-
-As discussed above, the first common reason for untidy data is that some of the column names are not names of variables, but values of a variable (e.g., `table4a`, `table4b`)
-```{r}
-table4a
-```
-
-The solution to this problem is to transform the untidy columns (which represent variable values) into rows
-
-- In the tidyverse, this process is called "gathering"
-- Outside the tidyverse, this process is called "reshaping" from "wide" to "long"
-
-In the above example, we want to transform `table4a` into something that looks like this:
-```{r}
-table1 %>% select(country, year, cases)
-```
-
-We gather using the `gather()` function from the`tidyr` package. 
-```{r}
-#?gather
-```
-
-Gathering requires knowing three parameters:
-
-1. names of the set of columns that represent values, not variables in your untidy data 
-    - These are existing columns of the untidy data
-    - in table 4a these are the columns `1999` and `2000`
-2. __key variable__ : variable name you will assign to columns you are gathering from the untidy data
-    - This var doesn't yet exist in untidy data, but will be a variable name in the tidy data
-    - For the `table4a` example, we'll call this variable `year` because the values of this variable will be years
-    - Said different: the "key" is the variable you will create whose values will be the column names from the untidy data. 
-3. __value variable__: The name of the variable that will contain values in the tidy dataset you create and whose values are spread across multiple columns in the untidy dataset
-    - This var doesn't yet exist in untidy data, but will be a variable name in the tidy data
-    - in the `table4a` example, we'll call the "value variable" `cases` because the values refer to number of cases
-    
-```{r}
-table4a %>% gather(`1999`, `2000`, key = "year", value = "cases")
-#Note that we write `1999` rather than 1999 because the column name starts with a number
-
-#This would not work
-#table4a %>% gather(1999, 2000, key = "year", value = "cases")
-
-#But giving different names to the key variable and the value variable is fine
-table4a %>% gather(`1999`, `2000`, key = "yr", value = "num_cases")
-```
-### Student exercise: Real-world example of gathering
-
-[In the task I present below, fine to just work through solution I have created or try doing on your own before you look at solution]
-
-The following dataset is drawn from Table 204.10 of the NCES Digest for Education Statistics. 
-
-- The table shows  change over time in the number and percentage of K-12 students on free/reduced lunch for selected years.
-- [LINK to website with data](http://nces.ed.gov/programs/digest/d14/tables/dt14_204.10.asp)
-```{r}
-#Let's take a look at the data (we read in the data in the wide vs long section)
-glimpse(table204_10)
-
-#Create smaller version of data frame for purpose of student exercise
-total<- table204_10 %>% 
-  select(state,tot_2000,tot_2010,tot_2011,tot_2012)
-head(total)
+#hsls %>% var_label()
+hsls_small <- hsls %>%
+  select(stu_id,x3univ1,x3sqstat,x4univ1,x4sqstat,s3classes,
+         s3work,s3focus,s3clgft,s3workft,s3clgid,s3clgcntrl,
+         s3clglvl,s3clgsel,s3clgstate,s3proglevel,x4evrappclg,
+         x4evratndclg,x4atndclg16fb,x4ps1sector,x4ps1level,
+         x4ps1ctrl,x4ps1select,x4refsector,x4reflevel,x4refctrl,
+         x4refselect, x2sex,x2race,x2paredu,x2txmtscor,x4x2ses,x4x2sesq5)
 ```
 
-__Task (using the data frame `total`)__: 
-
-1. Diagnose the problem with the data frame `total`
-2. Sketch out what the tidy data should look like    
-3. Transform untidy to tidy
-
-__Solution to student exercise__
-
-1. Diagnose the problem with the data frame `total`
-    - Column names `tot_2000`, `tot_2010`, etc. are not variables; rather they refer to values of the variable `year`
-    - Currently each observation represents a state with separate enrollment variables for each year. 
-    - Each observation _should_ be a state-year, with only one variable for enrollment
-2. Sketch out what the tidy data should look like    
-3. Transform untidy to tidy
-    - __names__ of the set of columns that represent values, not variables in your untidy data 
-        - `tot_2000,tot_2010,tot_2011,tot_2012`
-    - __key variable__ : variable name you will assign to columns you are gathering from the untidy data
-        - This var doesn't yet exist in untidy data, but will be a variable name in the tidy data
-        - In this example, __key__ var is year 
-    - __value variable__: The name of the variable that will contain values in the tidy dataset you create and whose values are spread across multiple columns in the untidy dataset
-        - This var doesn't yet exist in untidy data, but will be a variable name in the tidy data
-        - in this example, __value__ var is total_students
-    
-```{r}
-total_tidy <- total %>% 
-  gather(tot_2000,tot_2010,tot_2011,tot_2012, key = year, value = total_students)
-
-#sort data (optional)
-total_tidy<- total_tidy %>%
-  arrange(state,year)
-
-#examine data
-head(total_tidy, n=10)
-```
-__Alternative solution to student exercise__
-
-- __Note__: often helpful to rename columns of untidy data -- removing characters -- prior to gathering
-```{r}
-#create smaller version of data frame; same as before
-
-totalv2 <- table204_10 %>% 
-  select(state,tot_2000,tot_2010,tot_2011,tot_2012)
-
-#rename columns that represent values so that the column names are numbers
-  #(e.g., rename tot_2000 to 2000)
-names(totalv2)<- c("state","2000","2010","2011","2012")
-head(totalv2)
-
-#create tidy dataset by gathering, same as before
-total_tidyv2 <- totalv2 %>% 
-  gather(`2000`,`2010`,`2011`,`2012`, key = year, value = total_students)
-
-#sort data (optional)
-total_tidyv2<- total_tidyv2 %>%
-  arrange(state,year)
-
-head(total_tidyv2, n=10)
+```{r, results="hide"}
+names(hsls_small)
+hsls_small %>% var_label()
 ```
 
-### Gathering with multiple value variables
 
-Working with data from same data frame `table204_10`, but this time we have variables for total enrollment __and__ variables for total number of students on free/reduced lunch
-```{r}
-totfrl <- table204_10 %>% 
-  select(state,tot_2000,tot_2010,tot_2011,tot_2012,frl_2000,frl_2010,frl_2011,frl_2012)
+### Tools of EDA: select, sort, filter, and print
 
-#names(totalv2)<-c("state","2000","2010","2011","2012")
-head(totfrl)
+We've already know `select()`, `arrange()`, `filter()` 
 
+\medskip Select, sort, and print specific vars
+```{r, results="hide"}
+#sort and print
+hsls_small %>% arrange(desc(stu_id)) %>% 
+  select(stu_id,x3univ1,x3sqstat,s3classes,s3clglvl)
+
+#investigate variable attributes
+hsls_small %>% arrange(desc(stu_id)) %>% 
+  select(stu_id,x3univ1,x3sqstat,s3classes,s3clglvl) %>% str()
+
+#print observations with value labels rather than variable values
+hsls_small %>% arrange(desc(stu_id)) %>% 
+  select(stu_id,x3univ1,x3sqstat,s3classes,s3clglvl) %>% as_factor()
+```
+Sometimes helpful to increase the number of observations printed
+```{r, results="hide"}
+class(hsls_small) #it's a tibble, which is the "tidyverse" version of a data frame
+options(tibble.print_min=50) 
+# execute this in console
+hsls_small %>% arrange(desc(stu_id)) %>%
+  select(stu_id,x3univ1,x3sqstat,s3classes,s3clglvl)
+options(tibble.print_min=10) # set default printing back to 10 lines
 ```
 
-__Task__: Tidy the dataset `totfrl` by converting columns to rows. Basically, we want to create "long" dataset with a `year` variable, a `total_students` variable, and a `frlunch_students` variable
+### One-way descriptive stats for continuous vars, Base R approach [SKIP]
+
+```{r, results="hide"}
+mean(hsls_small$x2txmtscor)
+sd(hsls_small$x2txmtscor)
+
+#Careful: summary stats include value of -8!
+min(hsls_small$x2txmtscor)
+max(hsls_small$x2txmtscor)
+```
+Be careful with `NA` values
+```{r, results="hide"}
+#Create variable replacing -8 with NA
+hsls_small_temp <- hsls_small %>% 
+  mutate(x2txmtscorv2=ifelse(x2txmtscor==-8,NA,x2txmtscor))
+hsls_small_temp %>% filter(is.na(x2txmtscorv2)) %>% count(x2txmtscorv2)
+
+mean(hsls_small_temp$x2txmtscorv2)
+mean(hsls_small_temp$x2txmtscorv2, na.rm=TRUE)
+rm(hsls_small_temp)
+```
+### One-way descriptive stats for continuous vars, Tidyverse approach
+
+Use `summarise_at()`, a variation of `summarise()`, to make descriptive stats
+
+- explain `.args=list(na.rm=TRUE)` on following slides
+
+__Task__:
+
+- calculate descriptive stats for `x2txmtscor`, math test score
+```{r, results}
+#?summarise_at
+hsls_small %>% select(x2txmtscor) %>% var_label()
+hsls_small %>% 
+  summarise_at(
+    .vars = vars(x2txmtscor),
+    .funs = funs(mean, sd, min, max, .args=list(na.rm=TRUE))
+  )
+```
+
+### One-way descriptive stats for continuous vars, Tidyverse approach
+
+Can calculate descriptive stats for more than one variable at a time
+
+__Task__:
+
+- calculate descriptive stats for `x2txmtscor`, math test score, and `x4x2ses`, socioeconomic index score
 
 
-- __names__ of the set of columns that represent values, not variables in your untidy data 
-    - `tot_2000,tot_2010,tot_2011,tot_2012,frl_2000,frl_2010,frl_2011,frl_2012`
-- __key variable__ : variable name you will assign to columns you are gathering from the untidy data
-    - This var doesn't yet exist in untidy data, but will be a variable name in the tidy data
-    - In this example, __key__ var is year 
-- __value variable__: The name of the variable that will contain values in the tidy dataset you create and whose values are spread across multiple columns in the untidy dataset
-    - in this example, there would be two __value__ variables is `total_students` and `frlunch_students`
+```{r}
+hsls_small %>% select(x2txmtscor,x4x2ses) %>% var_label()
 
-Unfortunately, `gather()` function not set up to work with multiple __value__ variables, so we cannot do this task with our existing tools. 
+hsls_small %>% 
+  summarise_at(
+    .vars = vars(x2txmtscor,x4x2ses),
+    .funs = funs(mean, sd, min, max, .args=list(na.rm=TRUE))
+  )
+```
 
-- but you could find several approaches through Googling
+### One-way descriptive stats for continuous vars, Tidyverse approach
+
+"Input vars" in survey data often have negative values for missing/skips
+```{r, results="hide"}
+hsls_small %>% filter(x2txmtscor<0) %>% count(x2txmtscor)
+```
+
+R includes those negative values when calculating stats; you don't want this
+
+- Solution: create version of variable that replaces negative values with `NA`
+```{r}
+hsls_small %>% mutate(x2txmtscor_na=ifelse(x2txmtscor<0,NA,x2txmtscor)) %>%
+  summarise_at(
+    .vars = vars(x2txmtscor_na),
+    .funs = funs(mean, sd, min, max, .args=list(na.rm=TRUE))
+  )
+```
+What if you didn't include `.args=list(na.rm=TRUE)`?
+```{r}
+hsls_small %>% mutate(x2txmtscor_na=ifelse(x2txmtscor<0,NA,x2txmtscor)) %>%
+  summarise_at(
+    .vars = vars(x2txmtscor_na),
+    .funs = funs(mean, sd, min, max))
+```
+
+
+### One-way descriptive stats for continuous vars, Tidyverse approach
+
+How to identify these missing/skip values if you don't have a codebook?
+
+- `count()` combined with `filter()` helpful for finding extreme values of continuous vars, which are often associated with missing or skip
+
+```{r}
+#variable x2txmtscor
+hsls_small %>% filter(x2txmtscor<0) %>% 
+  count(x2txmtscor)
+
+#variable s3clglvl
+hsls_small %>% select(s3clglvl) %>% var_label()
+
+hsls_small %>% filter(s3clglvl<0) %>%
+  count(s3clglvl)
+```
+
+### One-way descriptive stats student exercise
+
+1. Using the object `hsls`, identify variable type, variable class, and check the variable vakyes and value labels of `x4ps1start`
+    - variable `x4ps1start` identifies month and year student first started postsecondary education
+    - **Note**: This variable is a bit counterintuitive.
+        - e.g., the value `201105` refers to May 2011
+2. Get a frequency count of the variable `x4ps1start`  
+3. Get a frequency count of the variable, but this time only observations that have negative values __hint__: use filter()  
+4. Create a new version of the variable `x4ps1start_na` that replaces negative values with NAs and use `summarise_at()` to get the min and max value.  
+
+
+
+### One-way descriptive stats student exercise solutions
+\medskip
+
+1. Using the object `hsls`, identify variable type, variable class, and check the variable vakyes and value labels of `x4ps1start`
+```{r}
+typeof(hsls$x4ps1start)
+class(hsls$x4ps1start)
+
+hsls %>% select(x4ps1start) %>% var_label()
+
+hsls %>% select(x4ps1start) %>% val_labels()
+```
+
+### One-way descriptive stats student exercise solutions  
+2. Get a frequency count of the variable `x4ps1start` 
+```{r}
+hsls %>%
+  count(x4ps1start)
+```
+
+### One-way descriptive stats student exercise solutions
+3. Get a frequency count of the variable, but this time only observations that have negative values __hint__: use filter()  
+```{r}
+hsls %>% 
+  filter(x4ps1start<0) %>% 
+  count(x4ps1start)
+```
+
+### One-way descriptive stats student exercise solutions
+4. Create a new version `x4ps1start_na` of the variable `x4ps1start` that replaces negative values with NAs and use `summarise_at()` to get the min and max value.
+```{r}
+hsls %>% mutate(x4ps1start_na=ifelse(x4ps1start<0,NA,x4ps1start)) %>%
+  summarise_at(
+    .vars = vars(x4ps1start_na),
+    .funs = funs(min, max, .args=list(na.rm=TRUE))
+  )
+```
+
+### One-way descriptive stats for discrete/categorical vars, Tidyverse approach
+
+Use `count()` to investigate values of discreet or categorical variables
+
+For variables where `class==labelled`
+```{r, results="hide"}
+class(hsls_small$s3classes)
+#show counts of variable values
+hsls_small %>% count(s3classes)
+#show counts of value labels
+hsls_small %>% count(s3classes) %>% as_factor()
+```
+
+- I like `count()` because the default setting is to show `NA` values too!
+```{r, results="hide"}
+hsls_small %>% mutate(s3classes_na=ifelse(s3classes<0,NA,s3classes)) %>% 
+  count(s3classes_na)
+```
+
+Simultaneously show both values and value labels on count tables for `class==labelled`
+
+- requires some concepts/functions we haven't introduced
+```{r, results="hide"}
+x <- hsls_small %>% count(s3classes)
+y <- hsls_small %>% count(s3classes) %>% as_factor()
+bind_cols(x[,1], y)
+```
+
+### One-way descriptive stats for factor vars [OPTIONAL/SKIP]
+
+For variables where `class==factor`
+
+- Note: data frame object `hsls_f` created in previous section
+
+```{r, results="hide"}
+#use variable from the hsls data frame where vars are factors
+typeof(hsls_f$s3classes)
+class(hsls_f$s3classes)
+attributes(hsls_f$s3classes)
+
+#show frequency table
+hsls_f %>% count(s3classes)
+
+#Create VAR that converts different types of missing to NA and then create frequency table
+
+#note: within ifelse() used levels(s3classes)[s3classes]) rather than s3classes  to show attribute levels not values
+hsls_f %>% mutate(s3classes_f=ifelse(s3classes %in% c("Missing","Unit non-response"),NA,levels(s3classes)[s3classes])) %>% 
+  count(s3classes_f)
+```
+
+
+### Relationship between variables, categorical by categorical
+
+Two-way frequency table, called "cross tabulation", important for data quality
+
+- When you create categorical analysis var from single categorical "input" var  
+    - Two-way tables show us whether we did this correctly  
+- Two-way tables helpful for understanding skip patterns in surveys
+
+__key to syntax__
+
+- `group_by(var1) %>% count(var2)`
+- play around with which variable is `var1` and which variable is `var2`
+
+__Task__: 
+
+- Create a two-way table between `s3classes` and `s3clglvl`
+```{r, results="hide"}
+hsls_small %>% select(s3classes,s3clglvl) %>% var_label()
+
+hsls_small %>% group_by(s3classes) %>% count(s3clglvl) # show values
+hsls_small %>% group_by(s3classes) %>% count(s3clglvl) %>% as_factor() # show value labels
+```
+
+### Relationship between variables, categorical by categorical
+
+Two-way frequency table, also called "cross tabulation"
+
+What if one of the variables has `NAs`?
+
+- Table created by `group_by()` and `count()` shows `NAs`!
+
+__Task__: 
+
+- Create a version of `s3classes` called `s3classes_na` that changes negative values to `NA`
+- Create a two-way table between `s3classes_na` and `s3clglvl`
+```{r, results="hide"}
+hsls_small %>% 
+  mutate(s3classes_na=ifelse(s3classes<0,NA,s3classes)) %>%
+  group_by(s3classes_na) %>% count(s3clglvl)
+
+#example where we create some NA obs in the second variable
+hsls_small %>% 
+  mutate(s3classes_na=ifelse(s3classes<0,NA,s3classes),
+         s3clglvl_na=ifelse(s3clglvl==-7,NA,s3clglvl)) %>%
+  group_by(s3classes_na) %>% count(s3clglvl_na)
+```
+### Relationship between variables, categorical by categorical [SKIP]
+
+Tables above are pretty ugly
+
+Use the `spread()` function from `tidyr` package to create table with one variable as columns and the other variable as rows
+
+- The variable you place in `spread()` will be columns
+- We learn `spread()` function next week
+
+```{r, results="hide"}
+hsls_small %>% group_by(s3classes) %>% count(s3clglvl) %>% 
+  spread(s3classes, n)
+
+hsls_small %>% group_by(s3classes) %>% count(s3clglvl) %>% 
+  as_factor() %>%  spread(s3classes, n)
+hsls_small %>% group_by(s3classes) %>% count(s3clglvl) %>% 
+  as_factor() %>%  spread(s3clglvl, n)
+```
+
+### Relationship between variables, categorical by continuous
+
+Investigating relationship between multiple variables is a little tougher when at least one of the variables is continuous
+
+__Conditional mean__ (like regression with continuous Y and one categorical X):
+
+- Shows average values of continous variables within groups
+- Groups are defined by your categorical variable(s)
+
+__key to syntax__
+
+- `group_by(categorical_var) %>% summarise_at(.vars = vars(continuous_var)`
+
+__Task__
+
+- Calculate mean math score, `x2txmtscor`, for each value of parental education, `x2paredu`
+
+```{r, results="hide"}
+#first, investigate parental education
+hsls_small %>% count(x2paredu)
+hsls_small %>% count(x2paredu) %>% as_factor
+
+# using dplyr to get average math score by parental education level
+hsls_small %>% group_by(x2paredu) %>%
+    summarise_at(.vars = vars(x2txmtscor),
+                 .funs = funs(mean, .args = list(na.rm = TRUE))) %>%
+    as_factor()
+```
+
+### Relationship between variables, categorical by continuous
+
+__Task__
+
+- Calculate mean math score, `x2txmtscor`, for each value of `x2paredu`
+
+For checking data quality, helpful to calculate other stats besides mean
+```{r, results="hide"}
+hsls_small %>% group_by(x2paredu) %>%
+    summarise_at(.vars = vars(x2txmtscor),
+                 .funs = funs(mean, min, max, .args = list(na.rm = TRUE))) %>%
+    as_factor()
+
+```
+Always Investigate presence of missing/skip values
+```{r, results="hide"}
+hsls_small %>% filter(x2paredu<0) %>% count(x2paredu)
+hsls_small %>% filter(x2txmtscor<0) %>% count(x2txmtscor)
+```
+
+Replace `-8` with `NA` and re-calculate conditional stats
+```{r, results="hide"}
+hsls_small %>% 
+  mutate(x2paredu_na=ifelse(x2paredu<0,NA,x2paredu),
+         x2txmtscor_na=ifelse(x2txmtscor<0,NA,x2txmtscor)) %>% 
+  group_by(x2paredu_na) %>%
+  summarise_at(.vars = vars(x2txmtscor_na),
+               .funs = funs(mean, min, max, .args = list(na.rm = TRUE))) %>%
+  as_factor()
+```
+### Student exercise
+
+Can use same approach to calculate conditional mean by multiple `group_by()` variables
+
+- Just add additional variables within `group_by()`
+
+1. Calculate mean math test score (`x2txmtscor`), for each combination of parental education (`x2paredu`) and sex (`x2sex`).  
+
+
+### Student exercise solution  
+1. Calculate mean math test score (`x2txmtscor`), for each combination of parental education (`x2paredu`) and sex (`x2sex`)
+```{r, results="hide"}
+#hsls_small %>% count(x2sex)
+
+hsls_small %>%
+  group_by(x2paredu,x2sex) %>%
+  summarise_at(.vars = vars(x2txmtscor),
+               .funs = funs(mean, .args = list(na.rm = TRUE))) %>%
+  as_factor()
+```
+
+## Guidelines for EDA
+
+### Guidelines for "EDA for data quality"
+
+Assme that your goal in "EDA for data quality" is to investigate "input" data sources and create "analysis variables"
+
+- Usually, your analysis dataset will incorporate multiple sources of input data, including data you collect (primary data) and/or data collected by others (secondary data)
+
+While this is not a linear process, these are the broad steps I follow 
+
+1. Understand how input data sources were created
+    - e.g., when working with survey data, have survey questionnaire and codebooks on hand
+1. For each input data source, identify the "unit of analysis" and which combination of variables uniquely identify observations
+1. Investigate patterns in input variables
+1. Create analysis variable from input variable(s)
+1. Verify that analysis variable is created correctly through descriptive statistics that compare values of input variable(s) against values of the analysis variable
+
+__Always be aware of missing values__
+
+- They will not always be coded as `NA` in input variables
+
+### "Unit of analysis" and which variables uniquely identify observations
+
+"Unit of analysis" refers to "what does each observation represent" in an input data source
+
+- If each obs represents a student, you have "student level data"
+- If each obs represents a student-course, you have "student-course level data"
+- If each obs represents a school, you have "school-level data"
+- If each obs represents a school-year, you have "school-year level data"
+
+How to identify unit of analysis
+
+- data documentation
+- investigating the data set
+
+We will go over syntax for identifying unit of analysis in subsequent weeks
+
+### Rules for variable creation
+
+Rules I follow for variable creation
+
+1. \medskip Never modify "input variable"; instead create new variable based on input variable(s)
+    - Always keep input variables used to create new variables
+1. Investigate input variable(s) and relationship between input variables
+1. Developing a plan for creation of analysis variable
+    - e.g., for each possible value of input variables, what should value of analysis variable be?
+1. Write code to create analysis variable
+1. Run descriptive checks to verify new variables are constructed correctly
+    - Can "comment out" these checks, but don't delete them
+1. Document new variables with notes and labels
+
+### Rules for variable creation
+
+__Task__: 
+
+- Create analysis for variable ses qunitile called `sesq5` based on `x4x2sesq5` that converts negative values to `NAs`
+
+```{r, results="hide"}
+#investigate input variable
+hsls_small %>% select(x4x2sesq5) %>% var_label()
+hsls_small %>% select(x4x2sesq5) %>% val_labels()
+hsls_small %>% select(x4x2sesq5) %>% count(x4x2sesq5)
+hsls_small %>% select(x4x2sesq5) %>% count(x4x2sesq5) %>% as_factor()
+
+#create analysis variable
+hsls_small_temp <- hsls_small %>% 
+  mutate(sesq5=ifelse(x4x2sesq5==-8,NA,x4x2sesq5)) # approach 1
+hsls_small_temp <- hsls_small %>% 
+  mutate(sesq5=ifelse(x4x2sesq5<0,NA,x4x2sesq5)) # approach 2
+
+#verify
+hsls_small_temp %>% group_by(x4x2sesq5) %>% count(sesq5)
+```
+
+### Overview of problem set due next week
+
+__Assignment__: 
+
+- create GPA from postsecondary transcript student-course level data
+
+__Data source__: [National Longitudinal Study of 1972 (NLS72)](https://nces.ed.gov/surveys/nls72/)
+
+- Follows 12th graders from 1972
+    - Base year: 1972
+    - Follow-up surveys in:  1973, 1974, 1976, 1979, 1986
+    - Postsecondary transcripts collected in 1984
+
+__Why use such an old survey for this assignment?__
+
+- NLS72 predates data privacy agreements; transcript data publicly available
+
+__What we do to make assignment more manageable__
+
+- we give you code for investigation of variables
+- we give you some hints/guidelines
+- but you are responsible for developing plan to create GPA vars and for executing plan (rather than us giving you step-by-step quations)
+
+__Why this assignment?__
+
+1. Give you more practice investigating data, cleaning data, creating variables that require processing across rows
+1. Sometimes social justice is creating student GPA from course-level data
+
+
+## Skip patterns in survey data
+
+### What are skip patterns
+
+Pretty easy to create an analysis variable based on a single input variable
+
+Harder to create analysis variables based on multiple input variables
+
+- When working with survey data, even seemingly simple analysis variables require multiple input variables due to "skip patterns"
+
+What are "skip patterns"? 
+
+- Response on a particular survey item determines whether respondent answers some set of subsequent questions
+- What are some examples of this?
+
+Key to working with skip patterns
+
+- Have the survey questionnaire on hand
+- Sometimes it appears that analysis variable requires only one input variable, but really depends on several input variables because of skip patterns
+    - Don't just blindly turn "missing" and "skips" from survey data to `NAs` in your analysis variable
+    - Rather, trace why these "missing" and "skips" appear and decide how they should be coded in your analysis variable
+
+
+### Creating analysis variables in the presence of skip patterns
+
+Task: Create a measure  of "level" of postsecondary institution attended in 2013 from HSLS:09 survey data
+
+- "level" is highest award-level of the postsecondary institution
+    - e.g., if highest award is associate's degree (a two-year degree), then `level==2'
+- The measure, `pselev2013`, should have following [non-missing] values:
+    1. Not attending postsecondary education institution
+    2. Attending a 2-year or less-than-2-year institution
+    3. Attending 4-year or greater-than-4year institution
+
+Background info:
+
+- In "2013 Update" of HSLS:09, students asked about college attendance
+    - Variables from student responses to "2013 Update" have prefix `s3`
+- Survey questionnaire for 2013 update can be found [HERE](https://nces.ed.gov/surveys/hsls09/pdf/2013_Student_Parent_Questionnaire.pdf)
+- The "online codebook" website [HERE](https://nces.ed.gov/onlinecodebook) has info about specific variables
+- Measure has 3 input variables [usually must figure this out yourself]:
+    1. `x3sqstat`: "X3 Student questionnaire status"
+    1. `s3classes`: "S3 B01A Taking postsecondary classes as of Nov 1 2013"
+    1. `s3clglvl`: "S3 Enrolled college IPEDS level"
+
+```{r, results="hide"}
+hsls_small %>% select(x3sqstat,s3classes,s3clglvl) %>% var_label()
+```
+You won't have time to complete this task, but develop a plan for the task and get as far as you can
+
+### Creating analysis variables in the presence of skip patterns
+
+Step 1a: Investigate each input variable separately
+```{r, results="hide"}
+#variable labels
+hsls_small %>% select(x3sqstat,s3classes,s3clglvl) %>% var_label()
+
+hsls_small %>% count(x3sqstat)
+hsls_small %>% count(x3sqstat) %>% as_factor()
+
+hsls_small %>% count(s3classes)
+hsls_small %>% count(s3classes) %>% as_factor()
+
+hsls_small %>% count(s3clglvl)
+hsls_small %>% count(s3clglvl) %>% as_factor()
+
+```
+### Creating analysis variables in the presence of skip patterns
+
+Step 1b: Investigate relationship between input variables
+```{r, results="hide"}
+#x3sqstate and s3classes
+hsls_small %>% group_by(x3sqstat) %>% count(s3classes) 
+hsls_small %>% group_by(x3sqstat) %>% count(s3classes) %>% as_factor()
+
+hsls_small %>% filter(x3sqstat==8) %>% count(s3classes)
+hsls_small %>% filter(x3sqstat==8) %>% count(s3classes==-8)
+hsls_small %>% filter(x3sqstat !=8) %>% count(s3classes)
+
+#x3sqstate, s3classes and s3clglvl
+hsls_small %>% group_by(s3classes) %>% count(s3clglvl) 
+hsls_small %>% group_by(s3classes) %>% count(s3clglvl) %>% as_factor()
+
+#add filter for whether student did not respond to X3 questionnaire
+hsls_small %>% filter(x3sqstat==8) %>% group_by(s3classes) %>% count(s3clglvl) 
+hsls_small %>% filter(x3sqstat !=8) %>% group_by(s3classes) %>% count(s3clglvl)
+
+#continued on the next page
+```
+
+
+### Creating analysis variables in the presence of skip patterns
+
+Step 1b: Investigate relationship between input variables continued...
+```{r}
+#add filter for s3classes is "missing" [-9]
+hsls_small %>% filter(x3sqstat !=8,s3classes==-9) %>% group_by(s3classes) %>%
+  count(s3clglvl)
+hsls_small %>% filter(x3sqstat !=8,s3classes!=-9) %>% group_by(s3classes) %>%
+  count(s3clglvl)
+
+#add filter for s3classes equal to "no" or "don't know"
+hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes %in% c(2,3)) %>%
+  group_by(s3classes) %>% count(s3clglvl)
+hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes %in% c(2,3)) %>% 
+  group_by(s3classes) %>% count(s3clglvl) %>% as_factor()
+
+hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes==1) %>% 
+  group_by(s3classes) %>% count(s3clglvl)
+hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes==1) %>% 
+  group_by(s3classes) %>% count(s3clglvl) %>% as_factor()
+```
+
+# Appendix. Creating factor variables
+
+### Create factors [from string variables]
+
+To create a factor variable from string variable
+
+1. create a character vector containing underlying data
+1. create a vector containing valid levels
+3. Attach levels to the data using the `factor()` function
+
+```{r}
+#underlying data: months my fam is born
+x1 <- c("Jan", "Aug", "Apr", "Mar")
+#create vector with valid levels
+month_levels <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+#attach levels to data
+x2 <- factor(x1, levels = month_levels)
+```
+Note how attributes differ
+```{r}
+str(x1)
+str(x2)
+```
+Sorting differs
+```{r}
+sort(x1)
+sort(x2)
+```
+
+### Create factors [from string variables]
+
+Let's create a character version of variable `hs_state` and then turn it into a factor
 
 ```{r, eval=FALSE}
+#wwlist %>%
+#  count(hs_state)
+#Subset obs to West Coast states 
+wwlist_temp <- wwlist %>%
+  filter(hs_state %in% c("CA", "OR", "WA"))
 
-#this code doesn't do what we want it to
-totfrl %>% 
-  gather(tot_2000,tot_2010,tot_2011,tot_2012,frl_2000,frl_2010,frl_2011,frl_2012, 
-         key = year, value = total_students)
+#Create character version of high school state for West Coast states only
+wwlist_temp$hs_state_char <- as.character(wwlist_temp$hs_state)
+
+#investigate character variable
+str(wwlist_temp$hs_state_char)
+table(wwlist_temp$hs_state_char)
+
+#create new variable that assigns levels
+wwlist_temp$hs_state_fac <- factor(wwlist_temp$hs_state_char, levels = c("CA","OR","WA"))
+str(wwlist_temp$hs_state_fac)
+
+#wwlist_temp %>%
+#  count(hs_state_fac)
+rm(wwlist_temp)
+
 ```
 
+### Create factors [from string variables]
+How the `levels` argument works when underlying data is character
 
+- Matches value of underlying data to value of the level attribute
+- Converts underlying data to integer, with level attribute attached
 
-## Tidying data: spreading
+\medskip See chapter 15 of Wickham for more on factors (e.g., modifying factor order, modifying factor levels)
 
-The second important and common cause of untidy data:
+### Creating factors [from integer vectors]
 
-- is when an observation is scattered across multiple rows with one column identifies variable type and another column contains the values for each variable.
-- `table2` is an example of this sort of problem
+Factors are just integer vectors with level attributes attached to them. So, to create a factor:
+
+1. create a vector for the underlying data
+1. create a vector that has level attributes
+3. Attach levels to the data using the `factor()` function
 
 ```{r}
-table2
+a1 <- c(1,1,1,0,1,1,0) #a vector of data
+a2 <- c("zero","one") #a vector of labels
+
+#attach labels to values
+a3 <- factor(a1, labels = a2)
+a3
+str(a3)
+
 ```
 
-As my R guru Ben Skinner says, this sort of data structure is __very__ common "in the wild"
+Note: By default, `factor()` function attached "zero" to the lowest value of vector `a1` because "zero" was the first element of vector `a2`
 
-- often the data you download have this structure
-- it is up to you to tidy before analyses
+### Creating factors [from integer vectors]
 
-The solution to this problem is to transform the untidy rows (which represent different variables) into columns
+Let's turn an integer variable into a factor variable in the `wwlist` data frame
 
-- In the tidyverse, this process is called "spreading" (we spread observations across multiple columns); spreading is the opposite of gathering
-- Outside the tidyverse, this process is called "reshaping" from "long" to "wide"
+Create integer version of `receive_year`
+```{r}
+#typeof(wwlist_temp$receive_year)
+wwlist$receive_year_int <- as.integer(wwlist$receive_year)
+str(wwlist$receive_year_int)
+typeof(wwlist$receive_year_int)
 
-Goal: we want to transform `table2` so it looks like `table1`
+```
+
+
+Assign levels to values of integer variable
 ```{r, eval=FALSE}
-table2
-table1
-```
+wwlist$receive_year_fac <- factor(wwlist$receive_year_int, labels=c("Twenty-sixteen","Twenty-seventeen","Twenty-eighteen"))
+str(wwlist$receive_year_fac)
+str(wwlist$receive_year)
 
-We spread observations into columns using the `spread()` function from the`tidyr` package. 
-```{r, eval=FALSE}
-?spread
-```
+#Check variable
+wwlist %>%
+  count(receive_year_fac)
 
-Helpful to look at `table2` while we introduce `spread()` function
-```{r}
-table2 %>% head(n=8)
-```
-
-Spreading requires knowing two parameters, which are the parameters of `spread()`:
-
-1. __key column__. Column name in the untidy data whose values will become variable names in the tidy data
-    - this column name exists as a variable in the untidy data
-    - in `table2` the key column is `type`; the values of `type`, `cases` and `population`, will become variable names in the tidy data 
-
-1. __value column__. Column name in untidy data that contains values for the new variables that will be created in the tidy data
-    - this is a varname that exists in the untidy data
-    - in `table2` the value column is `count`; the values of `count` will become the values of the new variables `cases` and `population` in the tidy data
-
-```{r}
-table2
-table2 %>%
-    spread(key = type, value = count)
-#compare to table 1
-table1
-```
-
-### Student exercise: real-world example of spreading
-
-[In the task I present below, fine to just work through solution I have created or try doing on your own before you look at solution]
-
-<br>
-The Integrated Postsecondary Education Data System (IPEDS) collects data on colleges and universities
-
-- Below we load IPEDS data on 12-month enrollment headcount for 2015-16 academic year
-```{r}
-#load these libraries if you haven't already
-#library(haven)
-#library(labelled)
-ipeds_hc_all <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/ipeds/effy/ey15-16_hc.dta", encoding=NULL)
-```
-
-Create smaller version of dataset
-```{r}
-#ipeds_hc <- ipeds_hc_all %>% select(instnm,unitid,lstudy,efytotlt,efytotlm,efytotlw)
-ipeds_hc <- ipeds_hc_all %>% select(instnm,unitid,lstudy,efytotlt)
-```
-
-Get to know data
-```{r}
-head(ipeds_hc)
-str(ipeds_hc)
-
-#Variable labels
-ipeds_hc %>% var_label()
-
-#Only the variable lstudy has value labels
-ipeds_hc %>% select(lstudy) %>% val_labels()
+wwlist %>%
+  count(receive_year)
 ```
 
 
 
-__Student Task__: 
 
-1. Diagnose the problem with the data frame `ipeds_hc` (why is it untidy?)
-2. Sketch out what the tidy data should look like    
-3. Transform untidy to tidy
-
-<br>
-__Solution to student task__:
-
-__1. Diagnose the problem with the data frame__
-    - First, let's investigate the data
-```{r}
-ipeds_hc <- ipeds_hc %>% arrange(unitid, lstudy)
-head(ipeds_hc, n=20)
-
-#code to investigate what each observation represents
-  #I'll break this code down next week when we talk about joining data frames
-ipeds_hc %>% group_by(unitid,lstudy) %>% # group_by our candidate
-  mutate(n_per_id=n()) %>% # calculate number of obs per group
-  ungroup() %>% # ungroup the data
-  count(n_per_id==1) # count "true that only one obs per group"
-
-```
-Summary of problems with the data frame:
-
-- In the untidy data frame, each row represents college-level_of_study
-    - there are separate rows for each value of level of study (`undergraduate`, `graduate`, `generated total`)
-    - so three rows for each college
-- the values of the column `lstudy` represent different attributes (`undergraduate`, `graduate`, `generated total`)
-    - each of these attributes should be its own variable
-
-    
-__2. Sketch out what the tidy data should look like__ (sketch out on your own)
-
-- What tidy data should look like:
-    - Each observation (row) should be a college
-    - There should be separate variables for each level of study, with each variable containing enrollment for that level of study
-
-__3. Transform untidy to tidy__
-
-- __key column__. Column name in the untidy data whose values will become variable names in the tidy data
-that contains variable names
-    - this variable name exists in the untidy data
-    - in `ipeds_hc` the key column is `lstudy`; the values of `lstudy`, will become variable names in the tidy data 
-
-- __value column__. Column name in untidy data that contains values for the new variables that will be created in the tidy data
-    - this is a varname that exists in the untidy data
-    - in `ipeds_hc` the value column is `efytotlt`; the values of `efytotlt` will become the values of the new variables in the tidy data
-    
-```{r}
-ipeds_hc %>% 
-    spread(key = lstudy, value = efytotlt)
-```
-
-__Alternative solution__
-
-Helpful to create a character version of variable lstudy prior to spreading
-```{r}
-ipeds_hc %>% select(lstudy) %>% val_labels()
-str(ipeds_hc$lstudy)
-
-ipeds_hcv2 <- ipeds_hc %>% 
-  mutate(level = recode(as.integer(lstudy),
-    `1` = "ug",
-    `3` = "grad",
-    `999` = "all")
-  ) %>% select(-lstudy) # drop variable lstudy
-
-head(ipeds_hcv2)
-
-ipeds_hcv2 %>% select(instnm,unitid,level,efytotlt) %>%
-    spread(key = level, value = efytotlt)
-```
-
-
-
-### spreading with multiple value variables
-
-What if we want to spread a dataset that contains multiple __value__ variables?
-
-Create dataset that has total enrollment, enrollment "men", and enrollment "women" [IPEDS terms]
-```{r}
-ipeds_hc_multi_val <- ipeds_hc_all %>%
-  select(unitid,lstudy,efytotlt,efytotlm,efytotlw)
-
-ipeds_hc_multi_val %>% head(n=10)
-```
-Unfortunately, `spread()` function not set up to deal with multipel __value__ variables
-
-- completing this task would require alternative approaches/additional programming concepts
-- You can google this, but not required for homework
-
-
-# Missing values
-
-## Explicit and implicit missing values
-
-This section deals with missing variables and tidying data.
-
-But first, it is helpful to create a new version of the IPEDS enrollment dataset as follows:
-
-- keeps observations for for-profit colleges
-- keeps the following enrollment variables: 
-    - total enrollment
-    - enrollment of students who identify as "Black or African American"
-```{r}
-ipeds_hc_na <- ipeds_hc_all %>% filter(sector %in% c(3,6,9)) %>% #keep only for-profit colleges
-  select(instnm,unitid,lstudy,efytotlt,efybkaam) %>% 
-  mutate(level = recode(as.integer(lstudy), # create recoded version of lstudy
-    `1` = "ug",
-    `3` = "grad",
-    `999` = "all")
-  ) %>% select(instnm,unitid,level,efytotlt,efybkaam) %>% 
-  arrange(unitid,desc(level))
-```
-
-Now, let's print some rows
-
-- There is one row for each college-level_of_study
-- Some colleges have three rows of data (ug, grad, all)
-- Colleges that don't have any undergraduates or don't have any graduate students only have two rows of data
-```{r}
-ipeds_hc_na
-```
-
-Now let's create new versions of the enrollment variables, that replace `0` with `NA`
-```{r}
-ipeds_hc_na <- ipeds_hc_na %>% 
-  mutate(
-    efytotltv2 = ifelse(efytotlt == 0, NA, efytotlt),
-    efybkaamv2 = ifelse(efybkaam == 0, NA, efybkaam)
-  ) %>% select(instnm,unitid,level,efytotlt,efytotltv2,efybkaam,efybkaamv2)
-
-ipeds_hc_na %>% select(unitid,level,efytotlt,efytotltv2,efybkaam,efybkaamv2)
-```
-
-Create dataset that drops the original enrollment variables, keeps enrollment vars that replace `0` with `NA`
-```{r}
-ipeds_hc_nav2 <- ipeds_hc_na %>% select(-efytotlt,-efybkaam)
-```
-Now we can introduce the concepts of _explicit_ and _implicit_ missing values
-
-There are two types of missing values:
-
-- __Explicit missing values__: variable has the value `NA` for a parcitular row
-- __Implicit missing values__: the row is simply not present in the data
-
-Let's print data for the first two colleges
-```{r}
-ipeds_hc_nav2 %>% head(, n=5)
-```
-`South University-Montgomery` has three rows:
-
-- variable `efytotltv2` has `0` explicit missing values and `0` implicit missing values
-- variable `efybkaamv2` has `0` explicit missing values and `0` implicit missing values
-
-`New Beginning College of Cosmetology` has two rows (because they have no graduate students):
-
-- variable `efytotltv2` has `0` explicit missing values and `1` implicit missing values (no row for grad students)
-- variable `efybkaamv2` has `2` explicit missing values and `1` implicit missing values (no row for grad students)
-
-Let's look at another dataset called `stocks`, which shows stock `return` for each year and quarter for some hypothetical company. 
-
-- Wickham uses this dataset to introduce explicit and implicit missing values
-
-```{r}
-stocks <- tibble(
-  year   = c(2015, 2015, 2015, 2015, 2016, 2016, 2016),
-  qtr    = c(   1,    2,    3,    4,    2,    3,    4),
-  return = c(1.88, 0.59, 0.35,   NA, 0.92, 0.17, 2.66)
-)
-stocks # note: this data is already tidy
-```
-The variable `return` has:
-
-- `1` _explicit_ missing value in `year==2015` and `qtr==4`
-- `1` _implicit_ missing value in `year==2016` and `qtr==1`; this row of data simply does not exist
-
-
-```{r}
-stocks %>% 
-  complete(year, qtr)
-```
-## Making implicit missing values explicit
-
-An _Implicit_ missing value is the result of a row not existing. If you want to make an an implicit missing value explicit, then make the non-existant row exist.
-
-The `complete()` function within the `tidyr` package turns implicit missing values into explicit missing values
-
-- Basically, you specificy the object (i.e., data frame) and a list of variables; 
-- `complete()` returns an object that has all unique combinations of those variables, including those not found in the original data frame
-- I'll skip additinoal options and complications
-
-```{r}
-stocks
-stocks %>% complete(year, qtr)
-```
-Note that we now have a row for `year==2016` and `qtr==1` that has an _explicit_ missing value for `return`
-
-Let's apply `complete()` to our IPEDS dataset
-
-```{r}
-ipeds_hc_nav2
-
-ipeds_complete <- ipeds_hc_nav2 %>% select(unitid,level,efytotltv2,efybkaamv2) %>%
-  complete(unitid, level)
-
-ipeds_complete
-
-#Confirm that the "complete" dataset always has three observations per unitid
-ipeds_complete %>% group_by(unitid) %>% summarise(n=n()) %>% count(n)
-
-#Note that previous dataset did not
-ipeds_hc_nav2 %>% group_by(unitid) %>% summarise(n=n()) %>% count(n)
-```
-
-Should you make _implicit_ missing values _explicit_?
-
-- No clear-cut answer; depends on many context-specific things about your project
-- The important thing is to be aware of the presence of implicit missing values (both in the "input" datasets you read-in and the datasets you create from this inputs) and be purposeful about how you deal with implicit missing values
-    - This is the sort of thing sloppy researchers forget/ignore
-- My recommendation for the stage of creating analysis datasets from input data:
-    - If you feel unsure about making implicit values explicit, then I recommend making them explicit
-    - This forces you to be more fully aware of patterns of missing data; helps you avoid careless mistakes down the road
-    - After making implicit missing values explicit, you can drop these rows once you are sure you don't need them
-
-## Spreading and explicit/implicit missing values
-
-We use `spread()` to transform rows into columns; outside the tidyverse, referred to as reshaping from "long" to "wide"
-
-Let's look at two datasets that have similar structure. Which one of these is in need of tidying?
-```{r}
-stocks
-
-ipeds_hc_nav2 %>% select (instnm,unitid,level,efytotltv2) %>% head(n=5)
-```
-
-Let's use `spread()` to tidy the IPEDS dataset, focusing on the total enrollment variable which has implicit missing values but no explicit missing values
-```{r}
-ipeds_hc_nav2 %>% select (instnm,unitid,level,efytotltv2) %>%
-  spread(key = level, value = efytotltv2) %>% 
-  arrange(unitid) %>% head(n=5)
-```
-
-The resulting dataset has explicint missing values (i.e,. `NAs`) for rows that had implicit missing values in the input data.
-
-Let's use `spread()` the IPEDS dataset again, this time focusing on the Black enrollment variable which has both explicit and implicit missing values
-```{r}
-ipeds_hc_nav2 %>% select (instnm,unitid,level,efybkaamv2) %>% head(n=5)
-
-ipeds_hc_nav2 %>% select (instnm,unitid,level,efybkaamv2) %>%
-  spread(key = level, value = efybkaamv2) %>% 
-  arrange(unitid) %>% head(n=5)
-```
-
-The resulting dataset has explicit missing values (i.e,. `NAs`) for rows that had implicit missing values in the input data and for rows that has explicit missing values in the data.
-
-What if we spread a dataset that has explicit missing values and no implicit missing values?
-
-- Resulting dataset has explicit missing values (i.e,. `NAs`) for rows that were explicit missing values in the input data.
-    
-```{r}
-ipeds_complete %>% select(unitid,level,efybkaamv2) %>%
-  spread(key = level, value = efybkaamv2) %>% 
-  arrange(unitid) %>% head(n=5)
-```
-
-__Takeways about `spread()` and missing values__
-
-- Explicit missing values in the input data become explicit missing values in the resulting dataset
-- Implicit missing values in the input data become explicit missing values in the resulting dataset
-
-Therefore, no need to make implicit missing values explicit (using `complete()`) prior to spreading
-
-## Gathering and explicit/implicit missing values [SKIP]
-
-We use `gather()` to transform columns into rows; outside the tidyverse, referred to as reshaping from "wide" to "long"
-
-Let's create a dataset in need of gathering
-
-- start w/ IPEDS dataset that has enrollment for Black students
-- create a fictitious 2017 enrollment variable equal to 2016 enrollment + 20
-- rename the enrollment vars `2016` and `2017`
-
-```{r}
-ipeds_gather <- ipeds_hc_nav2 %>% select (instnm,unitid,level,efybkaamv2) 
-
-
-ipeds_gather <- ipeds_hc_nav2 %>% select (instnm,unitid,level,efybkaamv2) %>%
-  mutate(
-    efybkaamv2_2017= ifelse(!is.na(efybkaamv2),efybkaamv2+20,20)
-  ) %>%
-  rename("2016"=efybkaamv2,"2017"=efybkaamv2_2017)
-
-ipeds_gather %>% head(n=10)
-
-```
-- The variable `2016` has both implicit and explicit missing values
-- The variable `2017` has implicit but no explicit missing values
-
-Let's use `gather()` to transform the columns `2016` and `2017` into rows
-```{r}
-ipeds_gatherv2 <- ipeds_gather %>% 
-  gather(`2016`,`2017`,key = year, value = efybkaam) %>%
-  arrange(unitid,desc(level),year) 
-
-ipeds_gatherv2 %>% head(n=10)
-```
-
-Before looking at missing values, let's investigate data structure
-```{r}
-#number of rows after gathering is exactly 2X number of rows in input dataset
-nrow(ipeds_gather)
-nrow(ipeds_gatherv2)
-nrow(ipeds_gatherv2)==nrow(ipeds_gather)*2
-
-#How many observations for each combination of unitid and level? 
-  #always 2: one for 2016 and one for 2017
-ipeds_gatherv2 %>% group_by(unitid,level) %>% 
-  summarise(n_per_unitid_level=n()) %>% ungroup %>% count(n_per_unitid_level)
-
-#How many observations for each unitid? 
-  # 4 observations for colleges that had two rows in the input dataset
-  # 6 observations for colleges that had three rows in the input dataset
-ipeds_gatherv2 %>% group_by(unitid) %>% 
-  summarise(n_per_unitid=n()) %>% ungroup %>% count(n_per_unitid)
-
-```
-
-Let's compare the data before and after gathering for one college
-```{r}
-#before gathering
-ipeds_gather %>% filter(unitid==101277)
-#after gathering
-ipeds_gatherv2 %>% filter(unitid==101277)
-```
-__Takeaways about gathering and explicit/implicit missing values__
-
-- Explicit missing values from the input dataset become explicit missing values in the resulting dataset after gathering
-- Implicit missing values from the input dataset are implicit missing values the resulting dataset after gathering. Why:
-    - In the input dataset, no row existed for these implicit missing values
-    - For each existing row in the input dataset, `gather()` creates new rows
-    - `gather()` does nothing to rows that do not exist in the input dataset
-
-Therefore, if you want to make implicit values explicit after gathering, then prior to gathering you should use `complete()` to make missing values explicit
-
-# Tidying data: separating and uniting [SKIP]
-
-```{r}
-table5
-```
-- "Separating" is for dealing with the problem in the `rate` column
-- "Uniting" is for dealing with the problem in the `century` and `year` columns
-
-Read about this in section 12.4 of Wickham text, but no homework questions on separating and uniting
