@@ -10,23 +10,23 @@ geometry: margin=1in
 
 title: "EDUC 263: Introduction to Data Management Using R"
 author: Ozan Jaquette
-date: "Fall 2018"
+date: "Fall 2019"
 
 instructor: "Ozan Jaquette"
 pronouns: "he/him/his"
 email: "ozanj@ucla.edu"
-officehours: Tues 3-4PM; and by appt
+officehours: Tues 2:30-4PM; and by appt
 office: "Moore Hall 3038"
 
 web: "ozanj.github.io/rclass/"
-discuss: "piazza.com/class/jlo6477nzqo2j0"
-classroom: "Moore Hall 2120"
+discuss: "piazza.com/ucla/fall2019/educ263/home"
+classroom: "Moore Hall 3027"
 classhours: "Fridays 12 - 4 pm"
 
-ta: "Patricia Martín"
+ta: "Xin Li"
 tapronouns: "she/her/hers"
-taemail: "pmarti@g.ucla.edu"
-taofficehours: Wed 12-1PM; Thur 1:30-2:30PM
+taemail: "lixin12171217@gmail.com"
+taofficehours: Mon 4-5PM; Wed 4-5PM;
 location: "Moore Hall 3120 (computer lab)"
 
   
@@ -42,7 +42,7 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
 ```
 
 ```{r, eval=FALSE}
-fri <- as.Date("2018-09-24")
+fri <- as.Date("2019-09-23")
 
 
 advdate <- function(obj, adv) {
@@ -63,7 +63,7 @@ advdate(fri, 11)
 
 
 ```{r}
-fri <- as.Date("2018-09-24")
+fri <- as.Date("2019-09-23")
 
 advdate <- function(obj, adv) {
  tmon <- obj + 7*(adv-1)
@@ -75,10 +75,10 @@ advdate <- function(obj, adv) {
  #print(str(zadv))
  if(adv == 11) {
    tmp <- paste("Finals Week",sep='',", ",tfri)
- } else if (adv==8) {
+ } else if (adv==9) {
    tmp <- paste("Thanksgiving",sep='',", ", tfri)
    
- } else if (adv<8) {
+ } else if (adv<9) {
    lec=adv+1
    tmp <- paste("Lecture ",lec,sep='',", ", tfri)
  } else {
@@ -117,17 +117,14 @@ Students will become proficient in data manipulation tasks through weekly “pro
 1. Manipulate the organizational structure of datasets
     - summarize and collapse by group
     - Tidy untidy data
-1. Automate iterative tasks
-    - Write your own functions
-    - Write loops
-1. Learn habits of mind and practical strategies for cleaning dirty data and avoiding errors when creating analysis variables variables
+1. Learn guidelines practical strategies for ensuring data quality when cleaning data and creating analysis variables variables
 
 # Prerequisite Requirements 
 
 1.	Students must have taken at least a one-semester introductory statistics course.  
 1.	Students should have some very basic experience using statistical programming software (e.g., SPSS, Stata, R, SAS) 
 1.	[General computer skills] Students should be able to download files from the internet, rename these files, save them to a folder of your choosing, and open this folder.  
-    - During this course we will often be downloading datasets, opening .Rmd files and .R scripts, changing directories to the folder where we stored the data, and then opening the dataset we just downloaded.  Therefore, it is important that students feel comfortable doing these tasks. 
+    - During this course we will often be downloading datasets, opening .Rmd files and .R scripts, changing directories to the folder where we stored the data, and then opening the dataset we just downloaded.
 
 
 # Course Readings
@@ -157,60 +154,60 @@ Please install the following software on your laptop
 
 Course Website can be found [here](https://ozanj.github.io/rclass/). We wil use this website to download course materials such as lecture slides in pdf and .Rmd formats, data, weekly problem sets, and other class resources.  
 
-We are using Piazza as our class discussion forum. Piazza is a learning forum where folks can customize questions/comments to share with instructors or the entire class. Folks have the option to insert code, images, videos, tables, links, and text to their Q&A posts. Additionally, posts can be configured to be annonymous. We strongly encourage all questions related to course content to be posted on the Piazza discussion forum.  
+We are using Piazza as our class discussion forum. Piazza is a learning forum where folks can customize questions/comments to share with instructors or the entire class. Folks have the option to insert code, images, videos, tables, links, and text to their Q&A posts. Additionally, posts can be configured to be annonymous. We encourage all questions related to course content to be posted on the Piazza discussion forum.  
 
-Piazza website can be found [here](https://piazza.com/class/jlo6477nzqo2j0)
+Piazza website can be found [here](https://piazza.com/ucla/fall2019/educ263/home)
 
 
 # Communication with Instructor and Teaching Assistant
 
-Use Piazza discussion forums for all questions related to course content.  All students can then benefit from my response. We will aim to respond within 24 hours of your post Monday through Friday and 48 hours on Saturday and Sunday. Email me directly if you have a question regarding any personal issue 
+Use Piazza discussion forums for all questions related to course content.  All students can then benefit from my response. We will aim to respond within 24 hours of your post Monday through Friday and 48 hours on Saturday and Sunday. We may not be able to respond to questions asked after Thursday at 12PM (problem sets due Friday at 12PM)
 
 I encourage students to answer questions your classmates post on Piazza discussion forums.  Writing out explanations to student questions will improve your own knowledge and will benefit your classmates.
+
+Email me directly if you have a question regarding any personal issue 
 
 # Assignments & Grading  
 
 Your final grade will be based on the following components:
 
--	Weekly problem sets (80 percent of total grade)
--	Your homework group leads a discussion about how you completed the problem set (10 percent of total grade)
+-	Weekly problem sets (90 percent of total grade)
 -	Attendance and participation (10 percent of total grade)
 
 ## Weekly problem sets
 
-Students will complete 10 problem sets.  Problem sets are due by 12PM each Friday (right before the class meeting).  Late submissions will not receive points because we will discuss solutions during class.  The lowest grade will be dropped from the calculation of your final grade.  
+Students will complete 10 problem sets [REVISE?].  Problem sets are due by 12PM each Friday (right before the class meeting).  Late submissions will not receive points because we will discuss solutions during class [REVISE?]. 
+
+The lowest grade will be dropped from the calculation of your final grade.  
 
 In general, each problem set will give your practice using the skills and concepts introduced during the previous lecture.  For example, after the lecture on joining (merging) datasets, the problem set for that week will require that students complete several different tasks involving merging data.  Additionally, the weekly problem sets will require you to use data manipulation skills you learned in previous weeks.  
 
-Students will work on problem sets in groups of three people (groups assigned in week 2; same group throughout the semester).  However, each student will submit their own assignment.  You are encouraged to share ideas and get help from your group. However, it is important that you understand how to do the problem set on your own, rather than copying the solution developed by group members.  If I find compelling evidence that a student merely copied solutions from a classmate, I will consider this a violation of academic integrity and that student will receive a zero for the homework assignment.
+Students will work on problem sets in groups of three people (groups assigned in week 2; same group throughout the semester).  However, each student will submit their own assignment.  You are encouraged to share ideas and get help from your group. However, it is important that you understand how to do the problem set on your own, rather than copying the solution developed by group members.  If I find compelling evidence that a student merely copied solutions from a classmate, I will consider this a violation of academic integrity and that student will receive a zero for the homework assignment. [REVISE?]
 
 A general strategy I recommend for completing the problem sets is as follows: (1) after lecture, do the reading associated with that lecture; (2) try doing the problem set on your own; (3) meet with your group to work through the problem set, with a particular focus on areas group members find challenging.  
 
-## Group led discussion about problem set (10 percent of total grade)
-
-Each week a student group (groups of three) will lead a discussion on the problem set. Groups have a lot of autonomy in how they want to approach this discussion (e.g., can have slides, handouts, or neither). However, my preference is that this is more of an open discussion than a presentation. In terms of topics to cover, the group can invite class members to share what challenges/problems they encountered while completing the homework, how they were able to overcome these problems, alternative ways to overcome data manipulation challenges, and what concepts or tasks remain confusing.  
-
-For now, we'll allot 40 minutes (at beginning of class) for these discussions. But this allotted time may increase to 50 minutes or decrease to 30 minutes.
-
 ## Attendance and Participation (10 percent of total grade)
+
+Students are expected to participate in the weekly class meetings by being attentive, supportive, by asking questions, or by answering questions posed by others. Additionally, students can receive strong participation grades by asking questions and answering questions on Piazza. 
 
 Students are required to attend the weekly class meetings.  Each unexcused absence results in a loss of 20% from your attendance/participation grade.  Three or more unexcused absences will result in a failing grade for the course. 
 
 An excused absence is a professional opportunity that you discuss with me beforehand or a medical, or family emergency.  Excused absences will not result in a loss of attendance points.  However, you will be responsible for all material covered in that class and you will be expected to turn in homework assignments on time.
 
-Students are expected to participate in the weekly class meetings by being attentive, by asking questions, by answering questions posed by classmates and by the professor. In addition to participation during class meetings, students can receive strong participation grades by asking questions and answering questions on Piazza. 
 
 # Course Policies  
 
 ## Classroom environment
 
-We all have a responsibility to ensure that every member of the class feels valued, safe, and included. 
+With respect to the course material, learning programming and the essential skills of data manipulation is hard! This stuff feels overwhelming to me all the time. So it is important that we all create an environment where students feel comfortable asking questions and talking about what they did not understand.
 
-With respect to the course material, learning programming and the essential skills of data manipulation is hard! This stuff feels overwhelming to me all the time. So it is important that we all create an environment where students feel comfortable asking questions and talking about what they did not understand. 
+With respect to classroom environment, let's work together to create an environment that is relaxed, supportive, and where students feel comfortable voicing any concerns they have. Be mindful that words and body language affect people. Express your thoughts in a way that doesn’t make people feel excluded and does not disparaging generalizations about a group.  As an instructor, I am responsible for setting an example through my own conduct.
 
-With respect to creatin an inclusive environment, be mindful that what you say affects other people. So express your thoughts in a way that doesn’t make people feel excluded and does not disparaging generalizations about a group.
+```{r, eval=FALSE, include=FALSE}
+#I will endeavor to present materials that are respectful of diversity: race, color, ethnicity, gender, age, disability, religious beliefs, political preference, sexual orientation, gender identity, citizenship, or national origin among other personal characteristics. The diversity of student experiences and perspectives is essential to the deepening of knowledge in a course. Any suggestions that you have about other ways to include the value of diversity in this course are welcome. During the quarter, I will also create forums where students can voice concerns anonymously.
 
-As an instructor, I am responsible for setting an example through my own conduct. I hope to create an environment where students feel comfortable voicing concerns about the classroom environment. I will endeavor to present materials that are respectful of diversity: race, color, ethnicity, gender, age, disability, religious beliefs, political preference, sexual orientation, gender identity, citizenship, or national origin among other personal characteristics. The diversity of student experiences and perspectives is essential to the deepening of knowledge in a course. Any suggestions that you have about other ways to include the value of diversity in this course are welcome. During the quarter, I will also create forums where students can voice concerns anonymously.
+```
+
 
 ## Online Collaboration/Netiquette
 
@@ -226,14 +223,47 @@ Students needing academic accommodations based on a disability should contact th
 
 ## Academic Honesty: 
 
-UCLA is a community of scholars. In this community, all members including faculty, staff and students alike are responsible for maintaining standards of academic honesty. As a student and member of the University community, you are here to get an education and are, therefore, expected to demonstrate integrity in your academic endeavors. You are evaluated on your own merits. Cheating, plagiarism, collaborative work, multiple submissions without the permission of the professor, or other kinds of academic dishonesty are considered unacceptable behavior and will result in formal disciplinary proceedings usually resulting in suspension or dismissal.
+UCLA is a community of scholars. In this community, all members including faculty, staff and students alike are responsible for maintaining standards of academic honesty. As a student and member of the University community, you are here to get an education and are, therefore, expected to demonstrate integrity in your academic endeavors. You are evaluated on your own merits. Cheating, plagiarism, collaborative work, multiple submissions without the permission of the professor, or other kinds of academic dishonesty are considered unacceptable behavior and will result in formal disciplinary proceedings.
+
+# Reading
+
+Weekly required and optional reading will be posted on the "resources" page of the github course website [here](https://ozanj.github.io/rclass/resources/)
+
+Please do the reading! I have worked hard to keep required reading load light, focusing only on essentials, because weekly problem sets will be time consuming.
+
+The reading schedule works as follows: I lecture on a topic in class, and then you do the reading about that topic and are required to complete a problem set about that topic. However, if you would prefer to the reading about a topic __prior__ to me lecturing about that topic, feel free to do so.
 
 
-# Course Schedule and Required Reading
+# Course Schedule
 
-All reading is required reading. I have worked hard to keep reading load light, focusing only on essentials, because weekly problem sets will be time consuming.
+Course schedule is subject to change at the discretion of the instructor. If there are any changes, it will be to go slower and cut subsequent topics.
 
-In the below schedule, I lecture on a topic, and then you do the reading about that topic and are required to complete a problem set about that topic. However, if you would prefer to the reading about a topic __prior__ to me lecturing about that topic, feel free to do so.
+- `r advdate(fri, 0)`: Introduction; objects in R
+
+- `r advdate(fri, 1)`: Investigating objects and data patterns
+
+- `r advdate(fri, 2)`: Investigating data patterns using Base R
+
+- `r advdate(fri, 3)`: Pipes and variable creation
+
+- `r advdate(fri, 4)`: Processing across rows
+
+- `r advdate(fri, 5)`: Augmented vectors, working with survey data
+
+- `r advdate(fri, 6)`: Exploratory data analysis and guidelines for data quality
+
+- `r advdate(fri, 7)`: Tidy data [ASHE CONFERENCE]
+
+- `r advdate(fri, 8)`: Joining multiple datasets
+
+- `r advdate(fri, 9)`: No class
+
+- `r advdate(fri, 10)`: Acquiring data
+
+- `r advdate(fri, 11)`: No class, but problem set due
+
+
+```{r, include=FALSE, eval=FALSE}
 
 ## `r advdate(fri, 0)`: Course introduction; objects in R
 
@@ -309,6 +339,9 @@ In the below schedule, I lecture on a topic, and then you do the reading about t
 ## `r advdate(fri, 11)`: No class
 
 - Problem set due: Yes
+
+```
+
 
 # Campus Resources  
 **Counseling and Psychological Services (CAPS)**  

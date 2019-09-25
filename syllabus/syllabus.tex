@@ -35,7 +35,7 @@
 \renewcommand{\footrulewidth}{0.0pt} 
 \lhead{}
 \chead{}
-\rhead{\footnotesize EDUC 263: Introduction to Data Management Using R -- Fall 2018}
+\rhead{\footnotesize EDUC 263: Introduction to Data Management Using R -- Fall 2019}
 \lfoot{}
 \cfoot{\small \thepage/\pageref*{LastPage}}
 \rfoot{}
@@ -94,7 +94,7 @@
 
 \title{EDUC 263: Introduction to Data Management Using R}
 \author{Ozan Jaquette}
-\date{Fall 2018}
+\date{Fall 2019}
 
 
 \begin{document}  
@@ -110,14 +110,14 @@
 	\noindent \begin{tabular*}{\textwidth}{ @{\extracolsep{\fill}} lr @{\extracolsep{\fill}}}
 
 
-Instructor: \texttt{Ozan Jaquette} & Teaching Assistant: \texttt{Patricia Martín} \\
+Instructor: \texttt{Ozan Jaquette} & Teaching Assistant: \texttt{Xin Li} \\
 Pronouns: \texttt{he/him/his} & Pronouns: \texttt{she/her/hers} \\
-E-mail: \texttt{\href{mailto:ozanj@ucla.edu}{\nolinkurl{ozanj@ucla.edu}}} & E-mail: \texttt{\href{mailto:pmarti@g.ucla.edu}{\nolinkurl{pmarti@g.ucla.edu}}} \\ 
-Office Hours: Tues 3-4PM; and by appt  & Office Hours: \texttt{Wed 12-1PM; Thur 1:30-2:30PM} \\
+E-mail: \texttt{\href{mailto:ozanj@ucla.edu}{\nolinkurl{ozanj@ucla.edu}}} & E-mail: \texttt{\href{mailto:lixin12171217@gmail.com}{\nolinkurl{lixin12171217@gmail.com}}} \\ 
+Office Hours: Tues 2:30-4PM; and by appt  & Office Hours: \texttt{Mon 4-5PM; Wed 4-5PM;} \\
 Office: Moore Hall 3038 & Location: \texttt{Moore Hall 3120 (computer lab)} \\
 \\ *
-Class Room: Moore Hall 2120 & Class Hours: Fridays 12 - 4 pm\\
-Class Website: \href{http://ozanj.github.io/rclass/}{\tt ozanj.github.io/rclass/} & Class Discussion: \href{http://piazza.com/class/jlo6477nzqo2j0}{\tt piazza.com/class/jlo6477nzqo2j0}\\
+Class Room: Moore Hall 3027 & Class Hours: Fridays 12 - 4 pm\\
+Class Website: \href{http://ozanj.github.io/rclass/}{\tt ozanj.github.io/rclass/} & Class Discussion: \href{http://piazza.com/ucla/fall2019/educ263/home}{\tt piazza.com/ucla/fall2019/educ263/home}\\
 	&  \\
 	\hline
 	\end{tabular*}
@@ -231,18 +231,8 @@ their own computers.
     Tidy untidy data
   \end{itemize}
 \item
-  Automate iterative tasks
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Write your own functions
-  \item
-    Write loops
-  \end{itemize}
-\item
-  Learn habits of mind and practical strategies for cleaning dirty data
-  and avoiding errors when creating analysis variables variables
+  Learn guidelines practical strategies for ensuring data quality when
+  cleaning data and creating analysis variables variables
 \end{enumerate}
 
 \section{Prerequisite Requirements}\label{prerequisite-requirements}
@@ -267,8 +257,6 @@ their own computers.
     During this course we will often be downloading datasets, opening
     .Rmd files and .R scripts, changing directories to the folder where
     we stored the data, and then opening the dataset we just downloaded.
-    Therefore, it is important that students feel comfortable doing
-    these tasks.
   \end{itemize}
 \end{enumerate}
 
@@ -327,12 +315,12 @@ We are using Piazza as our class discussion forum. Piazza is a learning
 forum where folks can customize questions/comments to share with
 instructors or the entire class. Folks have the option to insert code,
 images, videos, tables, links, and text to their Q\&A posts.
-Additionally, posts can be configured to be annonymous. We strongly
-encourage all questions related to course content to be posted on the
-Piazza discussion forum.
+Additionally, posts can be configured to be annonymous. We encourage all
+questions related to course content to be posted on the Piazza
+discussion forum.
 
 Piazza website can be found
-\href{https://piazza.com/class/jlo6477nzqo2j0}{here}
+\href{https://piazza.com/ucla/fall2019/educ263/home}{here}
 
 \section{Communication with Instructor and Teaching
 Assistant}\label{communication-with-instructor-and-teaching-assistant}
@@ -340,12 +328,14 @@ Assistant}\label{communication-with-instructor-and-teaching-assistant}
 Use Piazza discussion forums for all questions related to course
 content. All students can then benefit from my response. We will aim to
 respond within 24 hours of your post Monday through Friday and 48 hours
-on Saturday and Sunday. Email me directly if you have a question
-regarding any personal issue
+on Saturday and Sunday. We may not be able to respond to questions asked
+after Thursday at 12PM (problem sets due Friday at 12PM)
 
 I encourage students to answer questions your classmates post on Piazza
 discussion forums. Writing out explanations to student questions will
 improve your own knowledge and will benefit your classmates.
+
+Email me directly if you have a question regarding any personal issue
 
 \section{Assignments \& Grading}\label{assignments-grading}
 
@@ -354,20 +344,20 @@ Your final grade will be based on the following components:
 \begin{itemize}
 \tightlist
 \item
-  Weekly problem sets (80 percent of total grade)
-\item
-  Your homework group leads a discussion about how you completed the
-  problem set (10 percent of total grade)
+  Weekly problem sets (90 percent of total grade)
 \item
   Attendance and participation (10 percent of total grade)
 \end{itemize}
 
 \subsection{Weekly problem sets}\label{weekly-problem-sets}
 
-Students will complete 10 problem sets. Problem sets are due by 12PM
-each Friday (right before the class meeting). Late submissions will not
-receive points because we will discuss solutions during class. The
-lowest grade will be dropped from the calculation of your final grade.
+Students will complete 10 problem sets {[}REVISE?{]}. Problem sets are
+due by 12PM each Friday (right before the class meeting). Late
+submissions will not receive points because we will discuss solutions
+during class {[}REVISE?{]}.
+
+The lowest grade will be dropped from the calculation of your final
+grade.
 
 In general, each problem set will give your practice using the skills
 and concepts introduced during the previous lecture. For example, after
@@ -384,7 +374,7 @@ understand how to do the problem set on your own, rather than copying
 the solution developed by group members. If I find compelling evidence
 that a student merely copied solutions from a classmate, I will consider
 this a violation of academic integrity and that student will receive a
-zero for the homework assignment.
+zero for the homework assignment. {[}REVISE?{]}
 
 A general strategy I recommend for completing the problem sets is as
 follows: (1) after lecture, do the reading associated with that lecture;
@@ -392,25 +382,14 @@ follows: (1) after lecture, do the reading associated with that lecture;
 work through the problem set, with a particular focus on areas group
 members find challenging.
 
-\subsection{Group led discussion about problem set (10 percent of total
-grade)}\label{group-led-discussion-about-problem-set-10-percent-of-total-grade}
-
-Each week a student group (groups of three) will lead a discussion on
-the problem set. Groups have a lot of autonomy in how they want to
-approach this discussion (e.g., can have slides, handouts, or neither).
-However, my preference is that this is more of an open discussion than a
-presentation. In terms of topics to cover, the group can invite class
-members to share what challenges/problems they encountered while
-completing the homework, how they were able to overcome these problems,
-alternative ways to overcome data manipulation challenges, and what
-concepts or tasks remain confusing.
-
-For now, we'll allot 40 minutes (at beginning of class) for these
-discussions. But this allotted time may increase to 50 minutes or
-decrease to 30 minutes.
-
 \subsection{Attendance and Participation (10 percent of total
 grade)}\label{attendance-and-participation-10-percent-of-total-grade}
+
+Students are expected to participate in the weekly class meetings by
+being attentive, supportive, by asking questions, or by answering
+questions posed by others. Additionally, students can receive strong
+participation grades by asking questions and answering questions on
+Piazza.
 
 Students are required to attend the weekly class meetings. Each
 unexcused absence results in a loss of 20\% from your
@@ -423,18 +402,9 @@ not result in a loss of attendance points. However, you will be
 responsible for all material covered in that class and you will be
 expected to turn in homework assignments on time.
 
-Students are expected to participate in the weekly class meetings by
-being attentive, by asking questions, by answering questions posed by
-classmates and by the professor. In addition to participation during
-class meetings, students can receive strong participation grades by
-asking questions and answering questions on Piazza.
-
 \section{Course Policies}\label{course-policies}
 
 \subsection{Classroom environment}\label{classroom-environment}
-
-We all have a responsibility to ensure that every member of the class
-feels valued, safe, and included.
 
 With respect to the course material, learning programming and the
 essential skills of data manipulation is hard! This stuff feels
@@ -442,23 +412,13 @@ overwhelming to me all the time. So it is important that we all create
 an environment where students feel comfortable asking questions and
 talking about what they did not understand.
 
-With respect to creatin an inclusive environment, be mindful that what
-you say affects other people. So express your thoughts in a way that
-doesn't make people feel excluded and does not disparaging
-generalizations about a group.
-
-As an instructor, I am responsible for setting an example through my own
-conduct. I hope to create an environment where students feel comfortable
-voicing concerns about the classroom environment. I will endeavor to
-present materials that are respectful of diversity: race, color,
-ethnicity, gender, age, disability, religious beliefs, political
-preference, sexual orientation, gender identity, citizenship, or
-national origin among other personal characteristics. The diversity of
-student experiences and perspectives is essential to the deepening of
-knowledge in a course. Any suggestions that you have about other ways to
-include the value of diversity in this course are welcome. During the
-quarter, I will also create forums where students can voice concerns
-anonymously.
+With respect to classroom environment, let's work together to create an
+environment that is relaxed, supportive, and where students feel
+comfortable voicing any concerns they have. Be mindful that words and
+body language affect people. Express your thoughts in a way that doesn't
+make people feel excluded and does not disparaging generalizations about
+a group. As an instructor, I am responsible for setting an example
+through my own conduct.
 
 \subsection{Online
 Collaboration/Netiquette}\label{online-collaborationnetiquette}
@@ -503,233 +463,57 @@ therefore, expected to demonstrate integrity in your academic endeavors.
 You are evaluated on your own merits. Cheating, plagiarism,
 collaborative work, multiple submissions without the permission of the
 professor, or other kinds of academic dishonesty are considered
-unacceptable behavior and will result in formal disciplinary proceedings
-usually resulting in suspension or dismissal.
+unacceptable behavior and will result in formal disciplinary
+proceedings.
 
-\section{Course Schedule and Required
-Reading}\label{course-schedule-and-required-reading}
+\section{Reading}\label{reading}
 
-All reading is required reading. I have worked hard to keep reading load
+Weekly required and optional reading will be posted on the ``resources''
+page of the github course website
+\href{https://ozanj.github.io/rclass/resources/}{here}
+
+Please do the reading! I have worked hard to keep required reading load
 light, focusing only on essentials, because weekly problem sets will be
 time consuming.
 
-In the below schedule, I lecture on a topic, and then you do the reading
-about that topic and are required to complete a problem set about that
-topic. However, if you would prefer to the reading about a topic
-\textbf{prior} to me lecturing about that topic, feel free to do so.
+The reading schedule works as follows: I lecture on a topic in class,
+and then you do the reading about that topic and are required to
+complete a problem set about that topic. However, if you would prefer to
+the reading about a topic \textbf{prior} to me lecturing about that
+topic, feel free to do so.
 
-\subsection{Lecture 1, 09/28: Course introduction; objects in
-R}\label{lecture-1-0928-course-introduction-objects-in-r}
+\section{Course Schedule}\label{course-schedule}
 
-\begin{itemize}
-\tightlist
-\item
-  Reading (after class): Grolemund and Wickham (GW) 1; GW 2; GW 4; GW
-  20.1 - 20.3
-\end{itemize}
-
-\subsection{Lecture 2, 10/05: Investigating data
-patterns}\label{lecture-2-1005-investigating-data-patterns}
+Course schedule is subject to change at the discretion of the
+instructor. If there are any changes, it will be to go slower and cut
+subsequent topics.
 
 \begin{itemize}
-\tightlist
 \item
-  Problem set due (before class): Yes
+  Lecture 1, 09/27: Introduction; objects in R
 \item
-  Reading (after class):
-
-  \begin{itemize}
-  \tightlist
-  \item
-    GW 5.1 - 5.4
-  \item
-    Xie, Allaire \& Grolemund (XAG) 3.1
-    \href{https://bookdown.org/yihui/rmarkdown/html-document.html}{LINK
-    HERE}
-  \item
-    Spend 15 minutes studying the ``R Markdown Reference Guide''
-    \href{https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf}{LINK
-    HERE}
-  \end{itemize}
-\end{itemize}
-
-\subsection{Lecture 3, 10/12: Pipes and variable
-creation}\label{lecture-3-1012-pipes-and-variable-creation}
-
-\begin{itemize}
-\tightlist
+  Lecture 2, 10/04: Investigating objects and data patterns
 \item
-  Problem set due (before class): Yes
+  Lecture 3, 10/11: Investigating data patterns using Base R
 \item
-  Reading (after class):
-
-  \begin{itemize}
-  \tightlist
-  \item
-    GW 5.5 (creating variables)
-  \item
-    XAG 3.3 (R Markdown, creating PDF documents)
-    \href{https://bookdown.org/yihui/rmarkdown/pdf-document.html}{LINK
-    HERE}
-
-    \begin{itemize}
-    \tightlist
-    \item
-      note: sections 3.3.5 through 3.3.8 will feel somewhat cryptic and
-      are not required for this course; so just do the best you can with
-      those
-    \end{itemize}
-  \end{itemize}
-\end{itemize}
-
-\subsection{Lecture 4, 10/19: Processing across
-rows}\label{lecture-4-1019-processing-across-rows}
-
-\begin{itemize}
-\tightlist
+  Lecture 4, 10/18: Pipes and variable creation
 \item
-  Problem set due (before class): Yes
+  Lecture 5, 10/25: Processing across rows
 \item
-  Reading (after class):
-
-  \begin{itemize}
-  \tightlist
-  \item
-    GW 5.6 - 5.7 (grouped summaries and mutates)
-  \item
-    XAG 4.1 (R Markdown, ioslides presentations)
-    \href{https://bookdown.org/yihui/rmarkdown/ioslides-presentation.html}{LINK
-    HERE} and 4.3 (R Markdown, Beamer presentations)
-    \href{https://bookdown.org/yihui/rmarkdown/beamer-presentation.html}{LINK
-    HERE}
-  \end{itemize}
-\end{itemize}
-
-\subsection{Lecture 5, 10/26: Augmented vectors, Survey data, and
-exploratory data
-analysis}\label{lecture-5-1026-augmented-vectors-survey-data-and-exploratory-data-analysis}
-
-\begin{itemize}
-\tightlist
+  Lecture 6, 11/01: Augmented vectors, working with survey data
 \item
-  Problem set due (before class): Yes
+  Lecture 7, 11/08: Exploratory data analysis and guidelines for data
+  quality
 \item
-  Reading (after class):
-
-  \begin{itemize}
-  \tightlist
-  \item
-    GW 15.1 - 15.2 (factors) {[}this is like 2-3 pages{]}
-  \item
-    {[}OPTIONAL{]} GW 15.3 - 15.5 (remainder of ``factors'' chapter)
-  \item
-    {[}OPTIONAL{]} GW 20.6 - 20.7 (attributes and augmented vectors)
-  \item
-    {[}OPTIONAL{]} GW 10 (tibbles)
-  \end{itemize}
-\end{itemize}
-
-\subsection{Lecture 6, 11/02: Tidy data}\label{lecture-6-1102-tidy-data}
-
-\begin{itemize}
-\tightlist
+  Lecture 8, 11/15: Tidy data {[}ASHE CONFERENCE{]}
 \item
-  Problem set due (before class): Yes
+  Lecture 9, 11/22: Joining multiple datasets
 \item
-  Reading (after class):
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Work through slides we from lecture 6 that we don't get to in class
-
-    \begin{itemize}
-    \tightlist
-    \item
-      {[}REQUIRED{]} slides from section 4 ``Tidying data''
-    \item
-      {[}OPTIONAL{]} slides from section 5 ``Missing data''
-    \end{itemize}
-  \item
-    {[}OPTIONAL{]} GW chapter 12 (tidy data)
-
-    \begin{itemize}
-    \tightlist
-    \item
-      Lecture 6 covers this material pretty closely, so read chapter if
-      you can, but I get it if you don't have time
-    \end{itemize}
-  \item
-    {[}OPTIONAL{]} Wickham, H. (2014). Tidy Data. \emph{Journal of
-    Statistical Software}, 59(10), 1-23. \url{doi:10.18637/jss.v059.i10}
-
-    \begin{itemize}
-    \tightlist
-    \item
-      This is the journal article that introduced the data concepts
-      covered in GW chapter 12 and created the packages related to
-      tidying data
-    \item
-      Link to article here:
-      \href{https://www.jstatsoft.org/article/view/v059i10}{LINK}
-    \end{itemize}
-  \end{itemize}
-\end{itemize}
-
-\subsection{Lecture 7, 11/09: Joining multiple
-datasets}\label{lecture-7-1109-joining-multiple-datasets}
-
-\begin{itemize}
-\tightlist
+  Thanksgiving, 11/29: No class
 \item
-  Problem set due (before class): Yes
+  Lecture 10, 12/06: Acquiring data
 \item
-  Reading (after class): GW 13
-\end{itemize}
-
-\subsection{Lecture 8, 11/16: Acquiring
-data}\label{lecture-8-1116-acquiring-data}
-
-\begin{itemize}
-\tightlist
-\item
-  Problem set due (before class): Yes
-\item
-  Reading (after class): GW 11
-\end{itemize}
-
-\subsection{Thanksgiving, 11/23: No
-class}\label{thanksgiving-1123-no-class}
-
-\subsection{Lecture 9, 11/30: Writing
-functions}\label{lecture-9-1130-writing-functions}
-
-\begin{itemize}
-\tightlist
-\item
-  Problem set due (before class): Yes
-\item
-  Reading (after class): GW 19
-\end{itemize}
-
-\subsection{Lecture 10, 12/07: Accessing object elements and
-looping}\label{lecture-10-1207-accessing-object-elements-and-looping}
-
-\begin{itemize}
-\tightlist
-\item
-  Problem set due (before class): Yes
-\item
-  Reading (after class): GW 20.4 - 20.5; 21.1 - 21.3
-\end{itemize}
-
-\subsection{Finals Week, 12/14: No
-class}\label{finals-week-1214-no-class}
-
-\begin{itemize}
-\tightlist
-\item
-  Problem set due: Yes
+  Finals Week, 12/13: No class, but problem set due
 \end{itemize}
 
 \section{Campus Resources}\label{campus-resources}
