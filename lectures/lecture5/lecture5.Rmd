@@ -1,7 +1,7 @@
 ---
-title: "Lecture 4: Processing across rows" # potentially push to header
-subtitle:  "EDUC 263: Managing and Manipulating Data Using R"
-author: Ozan Jaquette
+title: "Lecture 5: Processing across rows" # potentially push to header
+subtitle:  "Managing and Manipulating Data Using R"
+author: 
 date: 
 fontsize: 8pt
 classoption: dvipsnames  # for colors
@@ -300,6 +300,8 @@ sum_object <- df_event %>% summarise(num_events=n()) # using pipes
 df_event %>% summarise(num_events=n()) # using pipes
 ```
 
+
+
 ### Investigate objects created by `summarise()`
 
 __Example__: Count total number of events
@@ -309,15 +311,15 @@ df_event %>% summarise(num_events=n()) %>% str()
 ```
 __Example__: What is max value of `med_inc` across all events
 ```{r, results="hide"}
-df_event %>% summarise(mean_inc=max(med_inc, na.rm = TRUE))
-df_event %>% summarise(mean_inc=max(med_inc, na.rm = TRUE)) %>% str()
+df_event %>% summarise(max_inc=max(med_inc, na.rm = TRUE))
+df_event %>% summarise(max_inc=max(med_inc, na.rm = TRUE)) %>% str()
 ```
 __Example__: Count total number of events AND max value of median income
 ```{r, results="hide"}
 df_event %>% summarise(num_events=n(), 
-                       mean_inc=max(med_inc, na.rm = TRUE))
+                       max_inc=max(med_inc, na.rm = TRUE))
 df_event %>% summarise(num_events=n(), 
-                       mean_inc=max(med_inc, na.rm = TRUE)) %>% str()
+                       max_inc=max(med_inc, na.rm = TRUE)) %>% str()
 ```
 __Takeaway__
 
@@ -336,6 +338,8 @@ rm(event_temp)
 ### `summarise()` student exercise
 
 1. What is the min value of `med_inc` across all events?  
+    - Hint: Use min()
+
 1. What is the mean value of `fr_lunch` across all events?  
     - Hint: Use mean()
     
@@ -434,7 +438,7 @@ event_berk <- df_event %>% filter(univ_id == 110635)
 event_berk %>% count(event_type)
 ```
 
-The 0/1 variable `event_inst` equals 1 if event is in same state as the university
+The "char" variable `event_inst` equals "In-State" if event is in same state as the university
 ```{r}
 event_berk %>% arrange(event_date) %>% 
   select(pid, event_date, event_type, event_state, event_inst) %>%
@@ -497,19 +501,19 @@ event_berk %>% group_by(event_type) %>%
   )
 ```
 
-### `summarise()` and count student exercises  
+### `summarise()` and count student exercise 
 
 Use one code chunk for this exercise. You could tackle this a step at a time and run the entire code chunk when you have answered all parts of this question. Create your own variable names.  
 
 
 1. Using the `event_berk` object, filter observations where `event_state` is VA and group by `event_type`.  
     1. Using the summarise function to create a variable that represents the count for each `event_type`.  
-    1. Now get the sum of missing obs for `med_inc`.  
-    1. Now get the sum of non-missing obs for `med_inc`.  
+    1. Create a variable that represents the sum of missing obs for `med_inc`.  
+    1. create a variable that represents the sum of non-missing obs for `med_inc`.  
     1. **Bonus**: Arrange variable you created representing the count of each `event_type` in descending order. 
 
 
-### `summarise()` and count student exercises  
+### `summarise()` and count student exercise SOLUTION
 1. Using the `event_berk` object filter observations where `event_state` is VA and group by `event_type`.  
     1. Using the summarise function, create a variable that represents the count for each `event_type`.  
     1. Now get the sum of missing obs for `med_inc`.  
@@ -620,7 +624,7 @@ __Task__: Using object `event_berk`, create object `gt50p_lat_bl` with the follo
 
 - count of number of rows for each group
 - count of rows non-missing for both `pct_black_zip` and `pct_hispanic_zip`
-- count of number of visits to communities where the sum of Black and Latinx people comprise more than 50% of the total population
+- count of number of visits to communities where the `sum` of Black and Latinx people comprise more than 50% of the total population
 
 
 ```{r, results="hide"}
