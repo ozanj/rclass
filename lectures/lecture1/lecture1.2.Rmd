@@ -1,6 +1,6 @@
 ---
-title: "Lecture 1: Objects in R"
-subtitle:  "EDUC 263: Managing and Manipulating Data Using R"
+title: "Lecture 1.2: Objects in R"
+subtitle:  "DUC 263: Introduction to Programming and Data Management Using R"
 author: Ozan Jaquette
 date: 
 classoption: dvipsnames  # for colors
@@ -94,6 +94,14 @@ b
 
 # Classification of objects
 
+### Preview of lecture on objects
+
+- The remainder of lecture 1.2 is a conceptual and practical introduction to "objects" in R
+- This lecture is a broad overview that introduces some general programming and applies some of these concepts to data
+- **Important**: the goal is to begin to develop familiarity with concepts that we will introduce in more detail in later weeks
+    - Therefore, I don't expect you to understand or retain all this information perfectly
+    - So just focus on understanding as much as you can and please interrupt me to ask questions if you have them!
+
 ### Objects
 
 Most statistical software (e.g., SPSS, Stata) operates on datasets, which consist of rows of observations and columns of variables
@@ -122,7 +130,7 @@ b
     - a dataset is an object with a particular type and class
 - There is no limit to the number of objects R can hold (except memory)
 - R "functions" do different things to different types/classes of objects
-    e.g., date functions are meant to process objects with type=numeric and class=date; these functions don't work on objects with type=character (e.g., "yay!")
+    - e.g., date functions are meant to process objects with type=numeric and class=date; these functions don't work on objects with type=character (e.g., "yay!")
 
 
 ### Vectors
@@ -138,13 +146,13 @@ Below we use the combine function `c()` to create a numeric vector that contains
 - Help file says that `c()` "combines values into a vector or list"
 ```{r}
 ?c
-x <- c(4, 7, 9)
-x
+x <- c(4, 7, 9) # create object called x, which is a vector with three elements (each an integer)
+x # print object x
 ```
 
 Vector where the elements are characters
 ```{r}
-animals <- c("lions", "tigers", "bears", "oh my")
+animals <- c("lions", "tigers", "bears", "oh my") # create object called animals
 animals
 ```
 ### Student task (do with the person next to you)

@@ -8,7 +8,7 @@ output:
     template: svm-r-markdown-template.tex
 geometry: margin=1in
 
-title: "EDUC 263: Introduction to Data Management Using R"
+title: "EDUC 263: Introduction to Programming and Data Management Using R"
 author: Ozan Jaquette
 date: "Fall 2019"
 
