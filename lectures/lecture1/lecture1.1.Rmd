@@ -14,7 +14,7 @@ output:
     theme: default # AnnArbor # push to header?
     #colortheme: "dolphin" # push to header?
     #fonttheme: "structurebold"
-    highlight: default # Supported styles include "default", "tango", "pygments", "kate", "monochrome", "espresso", "zenburn", and "haddock" (specify null to prevent syntax highlighting); push to header
+    highlight: default # Supported styles include "default", "tango", "pygments", "kate", "monochrome", "Aespresso", "zenburn", and "haddock" (specify null to prevent syntax highlighting); push to header
     df_print: tibble # push to header?    
     latex_engine: xelatex #  Available engines are pdflatex [default], xelatex, and lualatex; The main reasons you may want to use xelatex or lualatex are: (1) They support Unicode better; (2) It is easier to make use of system fonts.
     includes:
@@ -33,10 +33,42 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 What we want to know about you
 
 1. Preferred name
-1. Preferred pronouns
-1. Enrolled in course or auditing?
+1. Pronouns
 1. Academic program (and how far along) and/or job
-1. Tell us about your name (e.g., what is the origin story?)
+1. What's something that you have observed or think is important that people in your field aren't paying attention to?
+
+# About your instructors
+
+### Ozan Jaquette, instructor
+
+My background in data management/statistical analysis
+
+- Started with SAS [ugh]
+    - administrative data on welfare records
+    - student-level data on English "further education colleges"
+    - created single analysis dataset from high school longitudinal surveys from seniors in 1972, 1982, 1992, 2004
+- Moved to Stata
+    - Used loops and user-defined functions to create longitudinal datasets of university characteristics/behaviors from 1969 to present
+- served on several federal committees tasked with making recommendations about changes to what data the federal govt collected
+
+I thought I was pretty hot stuff!
+
+- But the game changed on me
+
+### Recruiting research program and "data science"
+
+Got sick of the limitations of survey data
+
+- didn't ask questions I was interested in
+- I didn't believe the survey responses
+
+Wanted to figure out ways to collect data on university recruiting behavior
+
+- we realized "data science" methods could create concrete data from publicly available data sources
+
+The off-campus recruiting project
+
+- [LINK HERE](https://emraresearch.org/)
 
 # What is R
 
@@ -171,43 +203,7 @@ This class is for anyone who wants to work with data, that is peiple who want to
 - journalists who create interactive data visualizations
 - "Data scientists"
 
-# About your instructors
 
-### Patricia Martin, teaching assistant
-
-
-### Ozan Jaquette, instructor
-
-A middle aged man trying to learn new tricks
-
-My background in data management/statistical analysis
-
-- Started with SAS [ugh]
-    - administrative data on welfare records
-    - student-level data on English "further education colleges"
-    - created single analysis dataset from high school longitudinal surveys from seniors in 1972, 1982, 1992, 2004
-- Moved to Stata
-    - Used loops and user-defined functions to create longitudinal datasets of university characteristics/behaviors from 1969 to present
-- served on several federal committees tasked with making recommendations about changes to what data the federal govt collected
-
-I thought I was pretty hot stuff!
-
-- But the game changed on me
-
-### Recruiting research program and "data science"
-
-Got sick of the limitations of survey data
-
-- didn't ask questions I was interested in
-- I didn't believe the survey responses
-
-Wanted to figure out ways to collect data on university recruiting behavior
-
-- we realized "data science" methods could create concrete data from publicly available data sources
-
-The off-campus recruiting project
-
-- [LINK HERE](https://emraresearch.org/)
     
 
 
@@ -216,6 +212,65 @@ The off-campus recruiting project
 ### Course logistics
 
 - follow the syllabus
+
+# Directories and filepaths 
+
+### Working directory
+
+__(Current) Working directory__
+
+- the folder/directory in which you are currently working
+- this is where R looks for files
+- Files located in your current working directory can be accessed without specifying a filepath because R automatically looks in this folder
+
+Function `getwd()` shows current working directory
+```{r}
+getwd()
+```
+Command `list.files()` lists all files located in working directory
+```{r, results="hide"}
+list.files()
+```
+
+### Working directory, "Code chunks" vs. "console" and "R scripts"
+
+When you run __code chunks__ in RMarkdown files (.Rmd), the working directory is set to the filepath where the .Rmd file is stored
+
+```{r}
+getwd()
+
+```
+
+```{r, results="hide"}
+list.files()
+```
+
+When you run code from the __R Console__ or an __R Script__, the working directory is:
+
+- if you are working on an R "Project", the working director is the main directory for the project
+
+
+```{r, results="hide"}
+getwd()
+```
+
+### Absolute vs. relative filepath  
+**Absolute file path**:  The absolute file path is the complete list of directories needed to locate a file or folder.  
+`setwd("/Users/pm/Desktop/rclass/lectures/lecture2")`
+
+
+**Relative file path**:  The relative file path is the path relative to your current location/directory. Assuming your current working directory is in the "lecture2" folder and you want to change your directory to the data folder, your relative file path would look something like this:  
+`setwd("../../data")`  
+
+            File path shortcuts
+
+| **Key** | **Description** |
+| ------ | -------- |
+| ~    | tilde is a shortcut for user's home directory (mine is my name pm)   |
+| ../    | moves up a level   |
+| ../../    | moves up two level   |
+
+
 
 # Create "R project" and directory structure
 
@@ -234,24 +289,23 @@ Why are we asking you to create R project and download a specific directory stru
 
 ### Follow these steps to create "R project" and directory structure
 
-1. In RStudio, click on "File" >> "New Project" >> "New Directory" >> "New Project"
-    - In "Directory name", type "rclass"
-        - this will be the folder where you save all files related to this class
-    - In "Create project as subdirectory of":
-        - You decide where you want to save the folder "rclass"; choose somewhere easy to find
-2. Download this zip folder: [LINK HERE](https://github.com/ozanj/rclass/raw/master/rclass_directory.zip)
-3. Place zip folder in the "rclass" folder you created in Step 1
-4. Unzip zip folder. you should have the following file-paths
-    - "rclass/lectures"
-    - "rclass/data"
-5. Save the following files in "rclass/lectures/lecture1"
+1. Download this zip folder: [LINK HERE](https://github.com/ozanj/rclass/raw/master/rclass.zip)
+    - this zip file contains the shell file directory you should use for this class
+    - Unzip the folder
+        - contains folder named "rclass"; this is the folder that will contain all materials for this course
+        - ?SAME FOR MAC USERS?
+    - Move "rclass" folder to your preferred location (e.g, documents, desktop, dropbox, etc)
+2. In RStudio, click on "File" >> "New Project" >> "Existing Directory" >> "New Project"
+    - "Browse" to find "rclass" folder you just saved
+    - Then click on Create Project
+3. Save the following files in "rclass/lectures/lecture1"
     - lecture1.1.Rmd
     - lecture1.1.pdf
     - lecture1.2.Rmd
     - lecture1.2.Pdf
     - lecture1.2.R
 
-### After you follow these steps
+### Next,you follow these steps
 
 - you can add any additional sub-folders you want to the "rclass" folder
     - e.g., "syllabus", "resources"
