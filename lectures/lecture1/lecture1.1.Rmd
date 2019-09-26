@@ -30,26 +30,34 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 
 ### Student introductions
 
-What we want to know about you
+What we want to know about you:
+
+\vspace{1mm}
 
 1. Preferred name
 1. Pronouns
 1. Academic program (and how far along) and/or job
-1. What's something that you have observed or think is important that people in your field aren't paying attention to?
+1. And answer one of these two questions:
+    - What's something you would eventually like to learn how to do in R?
+    - What's something that you have observed or think is important that people in your field aren't paying attention to?
 
 # About your instructors
 
+### Xin Li, teaching assistant
+
+  XIN ADDS TEXT
+  
 ### Ozan Jaquette, instructor
 
 My background in data management/statistical analysis
 
 - Started with SAS [ugh]
-    - administrative data on welfare records
+    - After college, reseearch analyst using administrative data on welfare records (I was awful for 12 months!)
     - student-level data on English "further education colleges"
     - created single analysis dataset from high school longitudinal surveys from seniors in 1972, 1982, 1992, 2004
 - Moved to Stata
     - Used loops and user-defined functions to create longitudinal datasets of university characteristics/behaviors from 1969 to present
-- served on several federal committees tasked with making recommendations about changes to what data the federal govt collected
+
 
 I thought I was pretty hot stuff!
 
@@ -64,13 +72,17 @@ Got sick of the limitations of survey data
 
 Wanted to figure out ways to collect data on university recruiting behavior
 
-- we realized "data science" methods could create concrete data from publicly available data sources
+- Karina Salazar and I realized "data science" methods could create concrete data about recruiting behavior from publicly available data sources
 
 The off-campus recruiting project
 
-- [LINK HERE](https://emraresearch.org/)
+- Used programming language Python to scrape data about off-campus recruiting visits by universities from university admissions websites
+    - We could have done all the web-scraping in R
+- Used R for most analyses (e.g., descriptive statistics, regression models, interactive maps)
+- [Link to project website](https://emraresearch.org/)
+- [Link to 2018 New York Times op-ed](https://www.nytimes.com/interactive/2018/04/13/opinion/college-recruitment-rich-white.html)
 
-# What is R
+# Why R?
 
 ### What is R
 
@@ -117,19 +129,27 @@ library(tidyverse)
 
 - We will be using R Markdown for lectures and homeworks.
 
-### Why R? Capabilities of R
-- [Graphs](https://ggplot2.tidyverse.org/)
-- [Presentation](https://bookdown.org/yihui/rmarkdown/presentations.html)
-- [Websites](https://bookdown.org/yihui/rmarkdown/websites.html)
-- [Journals](https://bookdown.org/yihui/rmarkdown/journals.html) 
-- [Interactive tutorials](https://rstudio.github.io/learnr/)
-- [Web apps](http://shiny.rstudio.com/)
-- [Dashbaords](https://rmarkdown.rstudio.com/flexdashboard/)
-- [Books](https://bookdown.org/)  
-- [Web scraping](https://www.analyticsvidhya.com/blog/2017/03/beginners-guide-on-web-scraping-in-r-using-rvest-with-hands-on-knowledge/)
-- [Maps](http://pierreroudier.github.io/teaching/20170626-Pedometrics/20170626-soil-data.html)
+### Why learn R? R can do a lot of stuff!
 
-For more info [visit](https://bookdown.org/yihui/rmarkdown/)
+How we have used R+RStudio+RMarkdown in our research team
+
+- Stuff traditional statistical software (e.g., SPSS, Stata) can do
+    - Data manipulation, creating analysis datasets
+    - [Descriptive statistics and statistical models](https://ozanj.github.io/soc_of_ed_presentation/#/slide-15)
+    - Graphs
+    
+- Stuff traditional statistical software cannot do
+    - [Static policy reports](https://emraresearch.org/sites/default/files/2019-03/joyce_report.pdf)
+    - Static presentations
+        - All lectures for this class written in RMarkdown
+    - [Interactive presentations](https://ozanj.github.io/joyce_report/#/title)
+    - [Interactive maps](https://ozanj.github.io/joyce_report/#/4)
+    - [Interactive dashboards](https://jkcf.shinyapps.io/dashboard/)
+    - Interactive graphs
+
+Some of the other stuff R can create/do:
+
+- [Websites](https://bookdown.org/yihui/rmarkdown/websites.html); [journals](https://bookdown.org/yihui/rmarkdown/journals.html); [books](https://bookdown.org/); [web- scraping](https://www.analyticsvidhya.com/blog/2017/03/beginners-guide-on-web-scraping-in-r-using-rvest-with-hands-on-knowledge/); network analysis; machine learning/artificial intelligence
 
 ### Graphs 
 - Create graphs with [ggplot2](https://ggplot2.tidyverse.org/) package 
@@ -159,18 +179,6 @@ gg <- ggplot(midwest, aes(x=area, y=poptotal)) +
 plot(gg)
 ```
 
-### Journal articles
-- Journal articls with [rticles](https://github.com/rstudio/rticles) package
-![](rticles.png)
-
-### Interactive web apps
-- Interactive web apps with [shiny](http://shiny.rstudio.com/) package
-![](shiny.png)
-
-### Mapping 
-- Mapping with [sf](http://strimas.com/r/tidy-sf/) package & ggplot
-![](sf.png)
-
 # What is this course about?
 
 ### What is data management?
@@ -195,25 +203,27 @@ Learn to walk before you can run!
 
 ### Who is this class for?
 
-This class is for anyone who wants to work with data, that is peiple who want to be:
+This class is for anyone who wants to work with data, that is people who want to be:
 
 - researchers working with survey data and doing traditional statistical analyses
-- researchers who want to do "data science" oreinted research involving 
-- analysts working at think tanks or non-profits
+- researchers who want to do "data science" oreinted research 
+- analysts working at think tanks/non-profits or as institutional researchers
 - journalists who create interactive data visualizations
-- "Data scientists"
 
 
-    
+# Syllabus/logistics
 
-
-# Course logistics
-
-### Course logistics
+### Syllabus and course logistics
 
 - follow the syllabus
 
 # Directories and filepaths 
+
+### Directories and filepaths
+
+- Give you a very brief overview of "directories" (i.e., folders) and "filepaths" (tells you where folder is located) in R
+- Why? After this overview we will ask you to create the directory structure you will use for all files related to this class
+- Later in quarter, we will spend more time learning about directories and filepaths
 
 ### Working directory
 
