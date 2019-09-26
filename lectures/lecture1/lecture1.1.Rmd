@@ -215,7 +215,13 @@ This class is for anyone who wants to work with data, that is people who want to
 
 ### Syllabus and course logistics
 
-- follow the syllabus
+FOLLOW ALONG ON SYLLABUS
+
+Course links:
+
+- Link to syllabus: https://github.com/ozanj/rclass/raw/master/syllabus/syllabus.pdf 
+- Link to resources page of course website: https://ozanj.github.io/rclass/resources/ 
+- Link to Piazza website, which we will use for online discussion/questions: https://piazza.com/ucla/fall2019/educ263/home 
 
 # Directories and filepaths 
 
@@ -223,7 +229,7 @@ This class is for anyone who wants to work with data, that is people who want to
 
 - Give you a very brief overview of "directories" (i.e., folders) and "filepaths" (tells you where folder is located) in R
 - Why? After this overview we will ask you to create the directory structure you will use for all files related to this class
-- Later in quarter, we will spend more time learning about directories and filepaths
+- Your problem set due before class next Friday will give you more practice with filepaths and we have created a short document that may be helpful in working through this problem set [LINK](https://github.com/ozanj/rclass/raw/master/lectures/problemset_resources.pdf) [XIN - UPDATE THIS RESOURCE AND/OR CHANGE LINK IF NECESSARY]
 
 ### Working directory
 
