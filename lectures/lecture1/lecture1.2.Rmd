@@ -146,7 +146,8 @@ Below we use the combine function `c()` to create a numeric vector that contains
 - Help file says that `c()` "combines values into a vector or list"
 ```{r}
 ?c
-x <- c(4, 7, 9) # create object called x, which is a vector with three elements (each an integer)
+x <- c(4, 7, 9) # create object called x, which is a vector with three elements 
+# (each an integer)
 x # print object x
 ```
 
@@ -162,6 +163,30 @@ Either in the R console or within the R markdown file, do the following:
 1. Create a vector called `v1` with three elements, where all the elements are numbers. Then print the values.
 1. Create a vector called `v2` with four elements, where all the elements are characters (i.e., enclosed in single '' or double "" quotes). Then print the values.
 1. Create a vector called `v3` with five elements, where some elements are numeric and some elements are characters. Then print the values.
+
+### Solution to student task 
+```{r}
+v1 <- c(1, 2, 3) 
+# create a vector called v1 with three elements
+# all the elements are numbers
+v1 # print value
+```
+
+```{r}
+v2 <- c("a", "b", "c", "d") 
+# create a vector called v2 with four elements
+# all the elements are characters
+v2 # print value
+```
+
+```{r}
+v3 <- c(1, 2, 3, "a", "b") 
+# create a vector called v3 with five element
+# some elements are numeric and some elements are characters
+v3 # print value
+```
+
+Note: the data in a vector must be only one type or mode (numeric, character, or logical). You can’t mix modes in the same vector.
 
 ### Formal classification of vectors in R
 
@@ -187,7 +212,7 @@ One difference between atomic vectors and lists: __homogeneous__ vs. __heterogen
 
 Here is a link to a visual representation of the Grolemund and Wickham classification
 
-- [LINK HERE](https://ozanj.github.io//rclass//lectures//lecture1//data-structures-overview.png)
+- [LINK HERE](https://github.com/ozanj/rclass/raw/master/lectures/lecture1/data-structures-overview.png)
 
 
 
@@ -343,7 +368,10 @@ Atomic vector types from simplest to most complex:
 
 ```{r}
 typeof(c(TRUE,TRUE,NA))
-typeof(c(TRUE,TRUE,NA,1L)) # recall L after an integer forces type to be integer rather than double
+
+# recall L after an integer forces type to be integer 
+# rather than double
+typeof(c(TRUE,TRUE,NA,1L)) 
 typeof(c(TRUE,TRUE,NA,1.5))
 typeof(c(TRUE,TRUE,NA,1.5,"howdy!"))
 ```
@@ -381,7 +409,6 @@ s
 length(s)
 ```
 Creating sequences using `seq()` function
-
 - basic syntax [with default values]: 
 ```{r, eval=FALSE}
 seq(from = 1, to = 1, by = 1)
