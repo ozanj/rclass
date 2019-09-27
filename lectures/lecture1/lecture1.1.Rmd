@@ -45,7 +45,24 @@ What we want to know about you:
 
 ### Xin Li, teaching assistant
 
-  XIN ADDS TEXT
+
+Programming
+
+- Started with Stata, Eviews, SPSS
+    - survey data
+  
+  
+- Moving to R, Python
+    - data management
+    - web-scraping, parsing
+  
+Research 
+
+- Heterogeneous returns to education
+    - migration, professional programs, school-student mismatch 
+
+- Education policy evaluation
+    - university application reform (parallel mechanism, submission timing)
   
 ### Ozan Jaquette, instructor
 
@@ -229,7 +246,7 @@ Course links:
 
 - Give you a very brief overview of "directories" (i.e., folders) and "filepaths" (tells you where folder is located) in R
 - Why? After this overview we will ask you to create the directory structure you will use for all files related to this class
-- Your problem set due before class next Friday will give you more practice with filepaths and we have created a short document that may be helpful in working through this problem set [LINK](https://github.com/ozanj/rclass/raw/master/lectures/problemset_resources.pdf) [XIN - UPDATE THIS RESOURCE AND/OR CHANGE LINK IF NECESSARY]
+- Your problem set due before class next Friday will give you more practice with filepaths and we have created a short document that may be helpful in working through this problem set [LINK](https://github.com/ozanj/rclass/raw/master/lectures/problemset_resources.pdf) 
 
 ### Working directory
 
@@ -309,7 +326,7 @@ Why are we asking you to create R project and download a specific directory stru
     - this zip file contains the shell file directory you should use for this class
     - Unzip the folder
         - contains folder named "rclass"; this is the folder that will contain all materials for this course
-        - ?SAME FOR MAC USERS?
+        - "rclass" contains two folders: "data" and "lectures"
     - Move "rclass" folder to your preferred location (e.g, documents, desktop, dropbox, etc)
 2. In RStudio, click on "File" >> "New Project" >> "Existing Directory" >> "New Project"
     - "Browse" to find "rclass" folder you just saved
