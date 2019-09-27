@@ -275,7 +275,6 @@ R stores numbers as doubles by default.
 ```{r}
 x
 typeof(x)
-
 ```
 
 To make an integer, place an `L` after the number:
@@ -454,6 +453,7 @@ length(b)
 str(b) # 3 elements, each element is a numeric vector w/ length=1
 ```
 
+Each element of a list can be a vector of different length (i.e., different number of elements)
 ```{r}
 c <- list(c(3,4),c(-5,1,3))
 typeof(c)
@@ -483,12 +483,8 @@ str(a)
 
 ```{r}
 x1 <- list(c(1,2), list("apple", "orange"), list(1, 2, 3))
-typeof(x1)
-length(x1)
 str(x1)
 ```
-
-Note that:
 
 - first element of list is a numeric vector with length=2
 - second element is a list with length=2
@@ -538,7 +534,7 @@ str(x2$c)
 ```
 
 
-### A dataset is just a list!
+### A DATASET IS JUST A LIST!!!!!
 
 \medskip A data frame is a list with the following characteristics:
 
