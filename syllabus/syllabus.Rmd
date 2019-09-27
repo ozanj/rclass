@@ -117,7 +117,7 @@ Students will become proficient in data manipulation tasks through weekly “pro
 1. Manipulate the organizational structure of datasets
     - summarize and collapse observations by group
     - Reshape and "tidy" untidy data
-1. Learn guidelines practical strategies for ensuring data quality when cleaning data and creating analysis variables variables
+1. Learn guidelines practical strategies for ensuring data quality when cleaning data and creating analysis variables
 
 # Prerequisite Requirements 
 
@@ -197,7 +197,7 @@ Students will complete 10 problem sets (the last one due during finals weeek). P
 
 Late submissions will lose 20% (i.e., max grade becomes 80%). Problem sets not submitted by 12PM the following Monday will not receive points because at that point we will post solutions on the course website. The lowest problem-set grade will be dropped from the calculation of your final grade. 
 
-Your will not lose points for late submission ff you cannot submit a problem set due to an unexpected emergency. But please contact the instructor by email as soon as you can so we can work out a plan.
+Your will not lose points for late submission if you cannot submit a problem set due to an unexpected emergency. But please contact the instructor by email as soon as you can so we can work out a plan.
 
 In general, each problem set will give your practice using the skills and concepts introduced during the previous lecture.  For example, after the lecture on joining (merging) datasets, the problem set for that week will require that students complete several different tasks involving merging data.  Additionally, the weekly problem sets will require you to use data manipulation skills you learned in previous weeks.  
 
