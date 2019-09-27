@@ -1,6 +1,6 @@
 ---
-title: "Problem Set #1"
-author: ""
+title: "Problem Set 1"
+author: "insert your name here"
 date: "9/27/2019"
 output: pdf_document
 ---
@@ -9,10 +9,12 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Problem set 1  
+Welcome to Data Management and Manipulation Using R!
 
-***  
-Note: Change author to your name & date to current date
+In this problem set, you will load data from url, or absolute/relative filepath.
+
+    - Note: Change author to your name & date to current date 
+
 
 ### Step 1:
 
