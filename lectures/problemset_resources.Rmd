@@ -1,6 +1,6 @@
 ---
-title: "Problem Set Resources"
-date: "10/5/2018"
+title: "Problem Set Resources and Guideline"
+date: "9/27/2019"
 output: pdf_document
 urlcolor: blue
 ---
@@ -44,12 +44,38 @@ setwd("lecture2")
 - Select the link and submit both .Rmd and pdf/html files  
 - Make sure to use this naming convention "lastname_firstname_ps#" 
 
-## **7.** Problem sets  
+## **6.** Problem sets  
 
 - All problem sets are worth the same. The lowest problem set grade will be dropped from the calculate of your final grade. 
 
-## **8.** Homework Groups  
+- Submit problem sets on Piazza. Link to Piazza: https://piazza.com/ucla/fall2019/educ263/home
+
+    - Select "Q&A" at the top
+    
+    - Select "New Post" tab on the left corner
+    
+    - Post Type: Note
+    
+    - Post to: Individual Student(s) / Instructor(s), and enter "Xin Li" (Be sure NOT post to the entire class)
+    
+    - Select Folder(s): ps_submit_1
+    
+    - Summary: using this naming convention "lastname_firstname_ps1"
+    
+    - Details: insert lastname_firstname_ps1.Rmd & lastname_firstname_ps1.pdf file
+    
+    - At the bottom, you can preview your post before posting
+    
+    - Once you are ready, you can post your note
+    
+    - TA will give feedback to your post
+    
+
+## **7.** Homework Groups  
 - \textcolor{red}{\textbf{Clarification:}} Each student is responsible for turning in their own problem set (as opposed to turning in one problem set per group). We, however, strongly encourage you all to work in your homework groups on the problem sets. We recommend that you attempt to work through the problem sets prior to meeting with your group, but that is only a recommendation, not a requirement.
 
 
-## **9.** If you do not have a homework group, please contact Ozan and Patricia. 
+## If you do not have a homework group, please contact Ozan and Patricia. 
+
+
+
