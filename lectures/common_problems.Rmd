@@ -1,5 +1,5 @@
 ---
-title: "Common Problems in Knitting Rmd to PDF"
+title: "Software Installation and Knitting Problems"
 author: ""
 date: "9/30/2019"
 output: pdf_document
@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::include_graphics("ly1enc_error.png")
 ```
 
-- solution: run "tinytex::tlmgr_install('ly1')"
+- Solution: run "tinytex::tlmgr_install('ly1')"
 
 
 reference: [Link](https://stackoverflow.com/questions/56219404/rmarkdown-does-not-work-with-raleway-latex-package)
@@ -32,6 +32,6 @@ reference: [Link](https://stackoverflow.com/questions/56219404/rmarkdown-does-no
 knitr::include_graphics("picture_error.png")
 ```
 
-- solution: download "Images" file from [Link](https://ozanj.github.io/rclass/lectures/lecture1/images.zip); unzip and save these files in the same folder you saved the lectures 
+- Solution: download "Images" file from [Link](https://ozanj.github.io/rclass/lectures/lecture1/images.zip); unzip and save these files in the same folder you saved the lectures 
  
 
