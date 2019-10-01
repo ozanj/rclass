@@ -4,7 +4,11 @@ author: "INSERT YOUR NAME HERE"
 date: "INSERT DATE"
 urlcolor: blue
 output: 
-  pdf_document
+  pdf_document:
+    toc: true # delete from problem set
+    toc_depth: 2 # delete from problem set
+    number_sections: false # delete from problem set
+    df_print: tibble # delete from problem set
 ---
 
 ```{r setup, include=FALSE}
@@ -104,34 +108,43 @@ df_school_all %>% count(school_type) # frequency count of school_type
 1. Using `mutate()` with `ifelse()` create a 0/1 indicator called `ca_school` that indicates whether the high school is in California and then use `count()` to create a frequency table for the values of `ca_school` (you don't need to assign/retain the new variable)
 
 ```{r}
-
+str(df_school_all$state_code)
+df_school_all %>% mutate(ca_school = ifelse(state_code=="CA",1,0)) %>%
+  count(ca_school)
 ```
 
 
 2. Using `mutate()` with `ifelse()` create a 0/1 indicator called `ca_pub_school` that indicates whether the school is a public high school in California and then use `count()` to create a frequency table for the values of `ca_pub_school` (you don't need to assign/retain the new variable)
 
 ```{r}
-
+str(df_school_all$state_code)
+str(df_school_all$school_type)
+df_school_all %>% 
+  mutate(ca_pub_school = ifelse(state_code=="CA" & school_type == "public",1,0)) %>%
+  count(ca_pub_school)
 ```
 
 
 3. By combining the `is.na()` function with the `filter()` function, identify the number of observations that have missing values for the following variables:
     - `pct_black`, `pct_hispanic`, `pct_amerindian`
 ```{r}
-
+df_school_all %>% filter(is.na(pct_black)) %>% count() 
+df_school_all %>% filter(is.na(pct_hispanic)) %>% count() 
+df_school_all %>% filter(is.na(pct_amerindian)) %>% count() 
 ```
 
 
 4. Create a new variable `pct_bl_hisp_ai` that represents the percent of students at the school that identify as black, hispanic, or american indian (hint: just sum all the pct vars for each race/ethnicity). Retain this variable by assigning it to the object `df_school_all`
 ```{r}
-
+df_school_all <- df_school_all %>% mutate(pct_bl_hisp_nat = pct_black + pct_hispanic + pct_amerindian)
 ```
 
 
 5. Using `mutate()` with `ifelse()`, create a new 0/1 indicator variable `gt50pct_bl_hisp_ai` that identifies whether more than 50% of students identify as black, hispanic, or american indian and create a frequency count of this variable (no need to retain this variable)
 
 ```{r}
-
+df_school_all %>% mutate(gt50pct_bl_hisp_nat = ifelse(pct_bl_hisp_nat>50,1,0)) %>%
+  count(gt50pct_bl_hisp_nat)
 ```
 
 
@@ -140,7 +153,16 @@ df_school_all %>% count(school_type) # frequency count of school_type
     - Variable `miss_prof_math` for whether the school has missing values for the variable `num_prof_math`
     - Variable `miss_took_or_prof_math` for whether the school has missing values for the variable `num_took_math` OR `num_prof_math`
 ```{r}
+df_school_all <- df_school_all %>% 
+  mutate(
+    miss_took_math = ifelse(is.na(num_took_math),1,0),
+    miss_prof_math = ifelse(is.na(num_prof_math),1,0),
+    miss_took_or_prof_math = ifelse(is.na(num_took_math) | is.na(num_prof_math),1,0)                     
+  )
 
+df_school_all %>% count(miss_took_math)
+df_school_all %>% count(miss_prof_math)
+df_school_all %>% count(miss_took_or_prof_math)
 ```
 
 
@@ -163,7 +185,11 @@ load(url("https://github.com/ozanj/rclass/raw/master/data/prospect_list/wwlist_m
     - `state`
     - `for_country`
 ```{r}
+str(wwlist$state)
+wwlist %>% count(state)
 
+str(wwlist$for_country)
+wwlist %>% count(for_country)
 ```
 
 
@@ -171,25 +197,26 @@ load(url("https://github.com/ozanj/rclass/raw/master/data/prospect_list/wwlist_m
     - count how many missing observations (`NAs`) the variable `state` has
     - count how many missing observations the variable `for_country` has
 ```{r}
-
+wwlist %>% filter(is.na(state)) %>% count()
+wwlist %>% filter(is.na(for_country)) %>% count()
 ```
     
     
 4. Create a frequency count for the variable `for_country` for the observations where `state` equals `NA` (hint: use the `is.na()`) function
 ```{r}
-
+wwlist %>% filter(is.na(state)) %>% count(for_country)
 ```
 
 
 5. Create a frequency count for the variable `for_country` for the observations where `state` does not equal `NA` (hint: use  `!is.na()`) function
 ```{r}
-
+wwlist %>% filter(!is.na(state)) %>% count(for_country)
 ```
 
 
 6. Count the number of observations that have the value "No Response" for the variable `for_country`
 ```{r}
-
+wwlist %>% filter(for_country == "No Response") %>% count()
 ```
 
 
@@ -198,12 +225,39 @@ load(url("https://github.com/ozanj/rclass/raw/master/data/prospect_list/wwlist_m
 - This variable should have the value `NA` for observations where `for_country=="No Response"`
 - Retain this variable (assign to object `wwlist`) and create a frequency count of this variable
 ```{r}
+wwlist <- wwlist %>% 
+  mutate(residency=
+    case_when(
+      state == "WA" ~ "in_state",
+      state != "WA" & (!is.na(state)) ~ "out_state_us",
+      (is.na(state)) & for_country != "No Response" ~ "not_in_us"
+    )
+  )
 
+wwlist %>% count(residency)
 ```
 
 # **THIS IS A BONUS QUESTION**
 
 BONUS QUESTION: Complete questions 4 and 5 in Step 3 using base R syntax (without the tidyverse `mutate()` function). To create frequency counts, you can still use the `count()` function __after__ you've created the new variables via base R (see slides 62 & 64 on Lecture 4 presentation)
+
+4. Create a new variable `pct_bl_hisp_ai` that represents the percent of students at the school that identify as black, hispanic, or american indian (hint: just sum all the pct vars for each race/ethnicity). Retain this variable by assigning it to the object `df_school_all`
+```{r}
+df_school_all$pct_bl_hisp_nat_V2 <- NA
+df_school_all$pct_bl_hisp_nat_V2 <- df_school_all$pct_black + df_school_all$pct_hispanic + df_school_all$pct_amerindian
+```
+
+
+5. Create a new 0/1 indicator variable `gt50pct_bl_hisp_ai` that identifies whether more than 50% of students identify as black, hispanic, or american indian and create a frequency count of this variable (no need to retain this variable)
+
+```{r}
+df_school_all$gt50pct_bl_hisp_nat_V2 <-NA 
+df_school_all$gt50pct_bl_hisp_nat_V2[df_school_all$pct_bl_hisp_nat_V2>50] <-1 
+df_school_all$gt50pct_bl_hisp_nat_V2[df_school_all$pct_bl_hisp_nat_V2<=50] <-0 
+
+
+count(df_school_all, gt50pct_bl_hisp_nat_V2)
+```
 
 
 Once finished, knit to (pdf) and upload both .Rmd and PDF files to class website under the week 3 tab  
