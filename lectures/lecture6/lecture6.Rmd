@@ -1,5 +1,5 @@
 ---
-title: "Lecture 5: Augmented vectors and factor variables"
+title: "Lecture 6: Augmented vectors,  Factor + Labelled Variables"
 subtitle:  ""
 author: 
 date: 
@@ -50,7 +50,6 @@ if(!file.exists('data-structures-overview.png')){
 
 __Reading to do before next class:__
 
-- Work through slides from lecture 5 that we don't get to in class
 - GW 15.1 - 15.2 (factors) [this is like 2-3 pages]
 - [OPTIONAL] GW 15.3 - 15.5 (remainder of "factors" chapter)
 - [OPTIONAL] GW 20.6 - 20.7 (attributes and augmented vectors)
