@@ -50,6 +50,7 @@ if(!file.exists('data-structures-overview.png')){
 
 __Reading to do before next class:__
 
+- Work through slides from lecture 5 that we didn't get to in class (attaching aggregate measures)
 - GW 15.1 - 15.2 (factors) [this is like 2-3 pages]
 - [OPTIONAL] GW 15.3 - 15.5 (remainder of "factors" chapter)
 - [OPTIONAL] GW 20.6 - 20.7 (attributes and augmented vectors)
@@ -819,7 +820,7 @@ hsls_f %>% filter(s3classes=="Yes") %>% count(s3classes)
 ```
 
 
-# Appendix. Creating factor variables
+# Creating factor variables
 
 ### Create factors [from string variables]
 
