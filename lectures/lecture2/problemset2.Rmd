@@ -70,7 +70,7 @@ length(df_school_all)
 \newline  
 
 2. In the below code chunk, use the `str()` function to describe the contents of `df_school_all` and then answer the following questions in text above the code chunk.  
-    + What does each element of the object `df_school_all` represent?  (hint Lecture 1.2, Slide 34)
+    + What does each element of the object `df_school_all` represent?  (hint Lecture 1.2)
     
     + Are the individual elements within `df_school_all` lists or vectors?  
     
