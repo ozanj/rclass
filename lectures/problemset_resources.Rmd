@@ -5,6 +5,10 @@ output: pdf_document
 urlcolor: blue
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
 # Resources 
 ## **1.** Re-watch these videos on working with relative and absolute paths  
 
@@ -56,7 +60,7 @@ setwd("lecture2")
     
     - Post Type: Note
     
-    - Post to: Instructor(s), and enter "Xin Li" (Be sure NOT post to the entire class)
+    - Post to: select "Instructor(s)", delete the "Instructors" tag and enter "Xin Li" (Be sure NOT post to the entire class but just TA)
     
     - Select Folder(s): ps_submit_1
     
@@ -70,7 +74,7 @@ setwd("lecture2")
     
     - TA will give feedback to your post
     
-
+    
 ## **7.** Homework Groups  
 - \textcolor{red}{\textbf{Clarification:}} Each student is responsible for turning in their own problem set (as opposed to turning in one problem set per group). We, however, strongly encourage you all to work in your homework groups on the problem sets. We recommend that you attempt to work through the problem sets prior to meeting with your group, but that is only a recommendation, not a requirement.
 
