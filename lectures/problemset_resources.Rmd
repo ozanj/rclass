@@ -56,7 +56,7 @@ setwd("lecture2")
     
     - Post Type: Note
     
-    - Post to: Individual Student(s) / Instructor(s), and enter "Xin Li" (Be sure NOT post to the entire class)
+    - Post to: Instructor(s), and enter "Xin Li" (Be sure NOT post to the entire class)
     
     - Select Folder(s): ps_submit_1
     
