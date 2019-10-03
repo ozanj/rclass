@@ -84,13 +84,16 @@ if(!file.exists("fp2.JPG")) {
 
 ### What we'll do to choose homework groups
 
-- Meet new people (10-15 minutes of speed-dating!)
-    - find someone in class you don't know and talk to them for three minutes about whatever!
+- Meet new people (10 minutes of speed-dating!)
+    - find someone in class you don't know and talk to them for two minutes about anything
         - e.g., where you from, what program, what are research interests, what you like doing outside of school, work
-- We'll spend 10-15 minutes where enrolled students choose homework groups
+- Enrolled students choose homework groups (10 minutes)
+    - one side of room for students who want to work collaboratively on problem sets
+    - one side of room for students who want to work mostly on their own (e.g,. due to full work/family schedule);
     - must be groups of 3
     - cannot have more than 2 people from same academic program (e.g., HEOC, HDP)
 - Auditors not part of "official" homework groups of 3, but they are welcome to join any homework group or form their own homework group
 
-Use Zoom for group meetings!
+Recommendation: **Use Zoom for group meetings!**
+
 - https://ucla.zoom.us/ 
