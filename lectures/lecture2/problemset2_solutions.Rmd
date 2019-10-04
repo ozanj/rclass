@@ -1,7 +1,7 @@
 ---
 title: "Problem Set #2 Solutions"
 author: "INSERT YOUR NAME HERE"
-date: "9/28/2018"
+date: "10/4/2019"
 output: 
   html_document:
     toc: true
@@ -16,7 +16,9 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 ```
 <span style="color:red">Grade: /20</span>  
 
-# Make changes to YAML header  
+In this problem set, you will investigate objects and data patterns. 
+
+# Step 1: Make changes to YAML header  
 <span style="color:red">(/1)</span>
 
 Recommend reading R Markdown: The Definative Guide section 3.1 ([LINK HERE](https://bookdown.org/yihui/rmarkdown/html-document.html)) before answering these questions
@@ -25,7 +27,6 @@ Recommend reading R Markdown: The Definative Guide section 3.1 ([LINK HERE](http
 1. table of contents should have "depth" of 2
 1. table of contents should "float"
 1. add section numbering to headers
-
 
 
 Load tidyverse package  
@@ -48,7 +49,7 @@ df_school_all %>% count(total_visits)
 ```
 
 
-# Investigating objects, Base R approach
+# Step 2: Investigating objects, Base R approach
 
 1. Answer the following questions about the object `df_school_all` by running the appropriate R command within text (as opposed to in an R code chunk) and writing any substantive response required by the question. The first question will be answered for you to show how it works  
 <span style="color:red">(/2)</span>  
@@ -178,6 +179,7 @@ count(filter(df_school_all, visits_by_100751 >= 1, school_type == "public", stat
 ```
 
 
-Once finished, knit to (HTML) and upload both .Rmd and HTML files to class website under the week 2 tab  
+Once finished, knit to (HTML) and upload both .Rmd and HTML files to ps_submit_2 on Piazza
+
 *Remember to use this naming convention "lastname_firstname_ps2"*
 

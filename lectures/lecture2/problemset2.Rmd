@@ -1,7 +1,7 @@
 ---
-title: "Lecture 2 problem set"
+title: "Lecture 2 Problem Set"
 author: "INSERT YOUR NAME HERE"
-date: "9/28/2018"
+date: "10/4/2019"
 output: 
   html_document
 ---
@@ -15,7 +15,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
   #comment = "#>" makes it so results from a code chunk start with "#>"; default is "##"
 ```
 
-XIN - PLEASE WRITE A SHORT PARAGRAPH THAT PROVIDES AN OVERVIEW OF WHAT THIS PROBLEM SET IS ABOUT
+In this problem set, you will investigate objects and data patterns. 
 
 # Step 1: Make changes to YAML header
 
@@ -171,8 +171,7 @@ For the questions below, imagine that you have been asked by a major news outlet
 
 
 
-Once finished, knit to (HTML) and upload both .Rmd and HTML files 
+Once finished, knit to (HTML) and upload both .Rmd and HTML files to ps_submit_2 on Piazza
 
-
-
+*Remember to use this naming convention "lastname_firstname_ps2"*
 
