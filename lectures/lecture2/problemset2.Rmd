@@ -15,6 +15,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
   #comment = "#>" makes it so results from a code chunk start with "#>"; default is "##"
 ```
 
+XIN - PLEASE WRITE A SHORT PARAGRAPH THAT PROVIDES AN OVERVIEW OF WHAT THIS PROBLEM SET IS ABOUT
 
 # Step 1: Make changes to YAML header
 
@@ -57,13 +58,10 @@ df_school_all %>% count(total_visits)
         
 ```{r}
 #type of df_school_all 
-typeof(df_school_all)
 
 #length of df_school_all 
-length(df_school_all)
 
 #num of rows in df_school_all
-
 ```
         
         
@@ -83,12 +81,15 @@ length(df_school_all)
 
 \newline
 
-3. These questions refer to the variable `school_type` within the object `df_school_all`. Run the appropriate R commands within the chunk below and write substantive responses below each question.
+3. These questions refer to the variable `school_type` within the object `df_school_all`. Run the appropriate R commands in the chunk below and write substantive responses below each question.
 
-    + What is the data "type" of `school_type`?
-
-    + What is the "length" of `school_type`? What does this specific value of length refer to?
-
+    - What is the data "type" of `school_type`?
+    
+          - __ANSWER__:
+    - What is the "length" of `school_type`? What does this specific value of length refer to?
+    
+          - __ANSWER__:
+          
 ```{r}
 
 ```

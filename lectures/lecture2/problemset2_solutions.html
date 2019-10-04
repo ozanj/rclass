@@ -1525,18 +1525,18 @@ div.tocify {
 <span style="color:red">(/0.5)</span></p>
 <pre class="r"><code>#install.packages(&quot;tidyverse&quot;) #install if you do not have tidyverse installed
 library(tidyverse)
-#&gt; ── Attaching packages ─────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
-#&gt; ✔ ggplot2 3.2.1     ✔ purrr   0.3.2
-#&gt; ✔ tibble  2.1.3     ✔ dplyr   0.8.3
-#&gt; ✔ tidyr   0.8.3     ✔ stringr 1.4.0
-#&gt; ✔ readr   1.3.1     ✔ forcats 0.4.0
-#&gt; ── Conflicts ────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-#&gt; ✖ dplyr::filter() masks stats::filter()
-#&gt; ✖ dplyr::lag()    masks stats::lag()</code></pre>
+#&gt; -- Attaching packages --------------------------------------------------- tidyverse 1.2.1 --
+#&gt; v ggplot2 3.2.1     v purrr   0.3.2
+#&gt; v tibble  2.1.3     v dplyr   0.8.3
+#&gt; v tidyr   1.0.0     v stringr 1.4.0
+#&gt; v readr   1.3.1     v forcats 0.4.0
+#&gt; -- Conflicts ------------------------------------------------------ tidyverse_conflicts() --
+#&gt; x dplyr::filter() masks stats::filter()
+#&gt; x dplyr::lag()    masks stats::lag()</code></pre>
 <p>Load data frame objects</p>
 <pre class="r"><code>rm(list = ls()) # remove all objects
 getwd()
-#&gt; [1] &quot;/Users/Karina/rclass/lectures/lecture2&quot;
+#&gt; [1] &quot;C:/Users/ozanj/Documents/rclass/lectures/lecture2&quot;
 
 #glimpse(df_school)
 load(url(&quot;https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_school_allvars.RData&quot;))
@@ -1556,7 +1556,7 @@ df_school_all %&gt;% count(total_visits)
 #&gt;  8            7   107
 #&gt;  9            8    89
 #&gt; 10            9    57
-#&gt; # … with 15 more rows</code></pre>
+#&gt; # ... with 15 more rows</code></pre>
 </div>
 <div id="investigating-objects-base-r-approach" class="section level1">
 <h1><span class="header-section-number">2</span> Investigating objects, Base R approach</h1>
@@ -1610,11 +1610,11 @@ nrow(df_school_all)
 </ul></li>
 </ol>
 <pre class="r"><code>str(df_school_all)
-#&gt; Classes 'tbl_df', 'tbl' and 'data.frame':    21301 obs. of  55 variables:
+#&gt; Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    21301 obs. of  55 variables:
 #&gt;  $ state_code        : chr  &quot;AK&quot; &quot;AK&quot; &quot;AK&quot; &quot;AK&quot; ...
 #&gt;  $ school_type       : chr  &quot;public&quot; &quot;public&quot; &quot;public&quot; &quot;public&quot; ...
 #&gt;  $ ncessch           : chr  &quot;020000100208&quot; &quot;020000100211&quot; &quot;020000100212&quot; &quot;020000100213&quot; ...
-#&gt;  $ name              : chr  &quot;Bethel Regional High School&quot; &quot;Ayagina'ar Elitnaurvik&quot; &quot;Kwigillingok School&quot; &quot;Nelson Island Area School&quot; ...
+#&gt;  $ name              : chr  &quot;Bethel Regional High School&quot; &quot;Ayagina&#39;ar Elitnaurvik&quot; &quot;Kwigillingok School&quot; &quot;Nelson Island Area School&quot; ...
 #&gt;  $ address           : chr  &quot;1006 Ron Edwards Memorial Dr&quot; &quot;106 Village Road&quot; &quot;108 Village Road&quot; &quot;118 Village Road&quot; ...
 #&gt;  $ city              : chr  &quot;Bethel&quot; &quot;Kongiganak&quot; &quot;Kwigillingok&quot; &quot;Toksook Bay&quot; ...
 #&gt;  $ zip_code          : chr  &quot;99559&quot; &quot;99559&quot; &quot;99622&quot; &quot;99637&quot; ...
@@ -1630,7 +1630,7 @@ nrow(df_school_all)
 #&gt;  $ num_prof_math     : num  24.8 1.7 3.5 3 2.8 ...
 #&gt;  $ num_took_rla      : num  147 17 14 30 28 24 62 22 23 19 ...
 #&gt;  $ num_prof_rla      : num  25 1.7 3.5 3 2.8 ...
-#&gt;  $ avgmedian_inc_2564: num  76160 76160 NA 57656 37552 ...
+#&gt;  $ avgmedian_inc_2564: num  76160 76160 NA 57657 37553 ...
 #&gt;  $ latitude          : num  60.8 60 59.9 60.5 62.7 ...
 #&gt;  $ longitude         : num  -162 -163 -163 -165 -165 ...
 #&gt;  $ visits_by_196097  : int  0 0 0 0 0 0 0 0 0 0 ...
@@ -1756,7 +1756,7 @@ table(df_school_all$school_type, useNA = &quot;always&quot;)
 <ul>
 <li>Note: You will need to use <code>filter</code> and the <code>count</code> function<br />
 </li>
-<li>Use commas to separate varibles for this questions (e.g. <code>filer(dataframe, variable == something, variable == something)</code>)</li>
+<li>Use commas to separate varibles for this questions (e.g. <code>filer(dataframe, variable == something, variable == something)</code>)</li>
 <li>You can do this in one step by wrapping the <code>count</code> function around the <code>filter</code> function ; or you can do this in two steps by creating a new data frame first</li>
 </ul></li>
 </ol>

@@ -538,7 +538,7 @@ str(df_event$med_inc)
 
 ### Variable names
 
-Recall that object `df_school` has one obs per high school
+The object `df_school` has one obs per high school
 
 - variable `visits_by_100751` shows number of visits by University of Alabama to each high school
 - like all variables in a data frame, the var `visits_by_100751` is just a vector
@@ -586,7 +586,7 @@ head(df_event, n=5)
 
 \medskip Examples:
 
-- Print first five rows
+- Print first five rows, all vars
 ```{r results="hide"}
 df_event[1:5, ]
 ```
@@ -704,32 +704,34 @@ What does "contagious" mean?
 2*c(0,1,2,NA)
 NA*c(0,1,2,NA)
 ```
-###  Function and missing values, the `table()` function
+###  Functions and missing values example, `table()`
 
-`table()` function useful for investigating categorical variables
+`table()` function is useful for investigating categorical variables
 ```{r}
-table(df_event$g12offered)
+str(df_event$event_type)
+table(df_event$event_type)
 ```
+###  Functions and missing values example, `table()`
 
 By default `table()` ignores `NA` values
+```{r}
+#?table
+str(df_event$school_type_pri)
+table(df_event$school_type_pri)
+```
 
-- `useNA` argument determines whether to include `NA` values
-    - "allowed values correspond to never ("no"); only if count is positive ("ifany"); and even for zero counts ("always")"
+`useNA` argument controls if table includes counts of `NA`s. Allowed values:
+
+- never ("no") [DEFAULT VALUE]
+- only if count is positive ("ifany");
+- even for zero counts ("always")"
 ```{r}
 nrow(df_event)
-table(df_event$g12offered, useNA="always")
+table(df_event$school_type_pri, useNA="always")
 ```
-Broader point:
+Broader point: Most functions that create descriptive statistics have options about how to treat missing values`
 
-- Most functions that create descriptive statistics have options about how to treat missing values
 - When investigating data, good practice to _always_ show missing values
-
-Tip: 
-
-- command `str(df_event)` shows which variables have missing values
-```{r results="hide", echo=FALSE}
-str(df_event)
-```
 
 
 # Find homework groups
@@ -758,7 +760,7 @@ Recommendation: **Use Zoom for group meetings!**
 
 - Wickham describes functions within `dplyr` as a set of "verbs" that fall in the broader categories of __subsetting__, __sorting__, and __transforming__
 
-Today | Next two weeks
+Today | Upcoming weeks
 ------------- | -------------
 __Subsetting data__ | __Transforming data__
 - `select()` variables  | - `mutate()` creates new variables
@@ -784,8 +786,9 @@ Printing observations is key to investigating data, but datasets often have hund
 - first argument is the name of data frame object
 - remaining arguments are variable names, which are separated by commas and without quotes
 
-Without __assignment__, `select()` function by itself simply prints selected vars
+Without __assignment__ (`<-`), `select()` by itself simply prints selected vars
 ```{r}
+#?select
 select(df_event,instnm,event_date,event_type,event_state,med_inc)
 ```
 
@@ -798,33 +801,46 @@ Recall that all `dplyr` functions (e.g., `select()`) return a new data frame obj
 
 ```{r}
 typeof(select(df_event,instnm,event_date,event_type,event_state,med_inc))
-
 length(select(df_event,instnm,event_date,event_type,event_state,med_inc))
 ```
-`glimpse()` function -- a tidyverse function for viewing data frames -- is a cross between `str()` and simply printing data
+`glimpse()`: tidyverse function for viewing data frames
+
+- a cross between `str()` and simply printing data
+```{r, eval=FALSE}
+?glimpse
+glimpse(df_event)
+```
+
+`glimpse()` a `select()` set of variables
 ```{r}
-#?glimpse
 glimpse(select(df_event,instnm,event_date,event_type,event_state,med_inc))
 ```
 
 ### Select variables using `select()` function
 
-With __assignment__, `select()` creates a new object containing only the variables you specify
+With __assignment__ (`<-`), `select()` creates a new object containing only the variables you specify
 
 ```{r}
 event_small <- select(df_event,instnm,event_date,event_type,event_state,med_inc)
+
 glimpse(event_small)
 ```
 
 ### Select
 
 `select()` can use "helper functions" `starts_with()`, `contains()`, and `ends_with()` to choose columns 
+```{r, eval=FALSE}
+?select()
+```
 
 Example:
 ```{r}
 #names(df_event)
+
 select(df_event,instnm,starts_with("event"))
 ```
+
+<!--
 
 ### Exercise
 
@@ -835,6 +851,10 @@ names(df_school)
 ```
 1. Use `select()` to familiarize yourself with variables in the data frame
 1. Practice using the `contains()` and `ends_with()` helper functions to to choose variables
+
+
+-->
+
 
 ### Rename variables
 
@@ -873,7 +893,11 @@ rm(rename_event)
 - What is the result of a `filter()` command?
     - `filter()` returns a data frame consisting of rows where the condition is `TRUE`
 
-\medskip Example using data frame object `df_school`, where each observation is a high school
+```{r, eval=FALSE}
+?filter
+```
+
+Example from data frame object `df_school`, each obs is a high school
 
 - Show all obs where the high school received 1 visit from UC Berkeley (110635) [output omitted]
 ```{r results="hide"}
@@ -886,46 +910,31 @@ nrow(df_school)
 nrow(filter(df_school,visits_by_110635 == 1))
 ```
 
-### Exercise
-
-Task
-
-- Create a filter to identify all the high schools that recieved 1 visit from UC Berkeley (110635) AND 1 visit from CU Boulder (126614)[output omitted]
-
-### Solution
-
-```{r, results="hide"}
-filter(df_school,visits_by_110635 == 1, visits_by_126614==1)
-
-nrow(filter(df_school,visits_by_110635 == 1, visits_by_126614==1))
-count(filter(df_school,visits_by_110635 == 1, visits_by_126614==1))
-```
-
-
-- Must __assign__ to create new object based on filter
-```{r results="hide"}
-berk_boulder <- filter(df_school,visits_by_110635 == 1, visits_by_126614==1)
-count(berk_boulder)
-```
 ### Filter, character variables
 
 Use single quotes `''` or double quotes `""` to refer to values of character variables
+```{r}
+glimpse(select(df_school, school_type,state_code))
+```
+Identify all private high schools in CA that got 1 visit by particular universities
 
-Below, we identify all private high schools in CA that got visit by particular universities
+- UC-Berkeley (ID=110635)
 ```{r results="hide"}
-glimpse(df_school)
-#Berkeley
 filter(df_school,visits_by_110635 == 1, school_type == "private", 
        state_code == "CA")
-#Bama
+```
+
+- University of Alabama (ID=100751)
+```{r results="hide"}
 filter(df_school,visits_by_100751 == 1, school_type == "private", 
        state_code == "CA") 
+```
 
-#Berkeley and Bama
+- Visited once by Berkeley and University of Alabama
+```{r results="hide"}
 filter(df_school,visits_by_100751 == 1, visits_by_110635 == 1, 
        school_type == "private", state_code == "CA") 
 ```
-
 
 ### Logical operators for comparisons
 
@@ -1010,7 +1019,7 @@ Select the private high schools that got either 2 or 3 visits from Bama
 ```{r}
 count(filter(df_school, visits_by_100751 %in% 2:3, school_type == "private"))
 ```
-### Identifying data type and possible values of variable is helpful for filtering
+### Identifying data type and possible values helpful for filtering
 
 - `class()` and `str()` shows data type of a variable 
 - `table()` to show potential values of categorical variables
@@ -1018,11 +1027,9 @@ count(filter(df_school, visits_by_100751 %in% 2:3, school_type == "private"))
 ```{r}
 class(df_event$event_type)
 str(df_event$event_type)
-table(df_event$event_type)
-
+table(df_event$event_type, useNA="always")
 class(df_event$event_state)
 str(df_event$event_state) # double quotes indicate character
-
 class(df_event$med_inc)
 str(df_event$med_inc)
 ```
@@ -1034,6 +1041,46 @@ count(filter(df_event, event_type == "public hs", event_state =="CA"))
 #count(filter(df_event, event_type == public hs, event_state ==CA))
 ```
 
+### Filtering and missing values
+
+Wickham (2018) states:
+
+- "`filter()` only includes rows where condition is TRUE; it excludes both `FALSE` and `NA` values. To preserve missing values, ask for them explicitly:"
+
+\medskip Investigate var `df_event$fr_lunch`, number of free/reduced lunch students
+
+- only available for visits to public high schools
+
+```{r}
+#visits to public HS with less than 50 students on free/reduced lunch
+count(filter(df_event,event_type == "public hs", fr_lunch<50))
+#visits to public HS, where free/reduced lunch missing
+count(filter(df_event,event_type == "public hs", is.na(fr_lunch)))
+#visits to public HS, where free/reduced is less than 50 OR is missing
+count(filter(df_event,event_type == "public hs", fr_lunch<50 | is.na(fr_lunch)))
+```
+
+### Exercise
+
+Task
+
+- Create a filter to identify all the high schools that recieved 1 visit from UC Berkeley (110635) AND 1 visit from CU Boulder (126614)[output omitted]
+
+### Solution
+
+```{r, results="hide"}
+filter(df_school,visits_by_110635 == 1, visits_by_126614==1)
+
+nrow(filter(df_school,visits_by_110635 == 1, visits_by_126614==1))
+count(filter(df_school,visits_by_110635 == 1, visits_by_126614==1))
+```
+
+
+- Must __assign__ to create new object based on filter
+```{r results="hide"}
+berk_boulder <- filter(df_school,visits_by_110635 == 1, visits_by_126614==1)
+count(berk_boulder)
+```
 
 ### Exercises
 
@@ -1056,6 +1103,8 @@ count(filter(df_event, univ_id == 215293))
 
 2. Count the number of recruiting events by Pitt at public or private high schools 
 ```{r }
+str(df_event$event_type)
+table(df_event$event_type, useNA = "always")
 count(filter(df_event, univ_id == 215293, event_type == "private hs" |
                event_type == "public hs"))
 ```
@@ -1086,26 +1135,6 @@ count(filter(df_event, univ_id == 215293, event_type == "public hs",
 count(filter(df_event, univ_id == 215293, event_state != "PA", 
              (event_type == "public hs" & med_inc >= 100000) |
                event_type == "private hs"))
-```
-
-
-### Filtering and missing values
-
-Wickham (2018) states:
-
-- "`filter()` only includes rows where condition is TRUE; it excludes both `FALSE` and `NA` values. To preserve missing values, ask for them explicitly:"
-
-\medskip Investigate var `df_event$fr_lunch`, number of free/reduced lunch students
-
-- only available for visits to public high schools
-
-```{r}
-#visits to public HS with less than 50 students on free/reduced lunch
-count(filter(df_event,event_type == "public hs", fr_lunch<50))
-#visits to public HS, where free/reduced lunch missing
-count(filter(df_event,event_type == "public hs", is.na(fr_lunch)))
-#visits to public HS, where free/reduced is less than 50 OR is missing
-count(filter(df_event,event_type == "public hs", fr_lunch<50 | is.na(fr_lunch)))
 ```
 
 ## Arrange rows
