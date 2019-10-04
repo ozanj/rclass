@@ -231,7 +231,6 @@ How you will learn R Markdown
 
 ### Directory structure for this class
 
-[XIN - PLEASE REVISE/EDIT THIS SLIDE]
 In order to be able to "knit" entire lectures [rather than just run specific code chunks] make sure that you have the following directory structure:
 
 - rclass
@@ -251,7 +250,7 @@ What is beamer_header.tex?
       in_header: ../beamer_header.tex
 ```
 - This runs beamer_header.tex; assumes that beamer_header.tex is located one level up from your current directory
-- If you don't have beamer_header.tex saved to appropriate place, you can download it here [XIN ADD LINK TO FILE]
+- If you don't have beamer_header.tex saved to appropriate place, you can download it here [LINK](https://github.com/ozanj/rclass/raw/master/lectures/beamer_header.tex)
 - Note: we may revise beamer_header.tex as we work out formatting bugs
 
 
