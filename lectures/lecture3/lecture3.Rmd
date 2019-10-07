@@ -554,9 +554,9 @@ nrow(df_school_tv)
 
 __base R__ using subsetting operators
 ```{r}
-df_school_br1 <- df_school[df_school$state_code != "CA" & df_school$school_type == "public" 
+df_school_br1 <- df_school[which(df_school$state_code != "CA" & df_school$school_type == "public" 
                   & df_school$pct_hispanic >= 50 
-                  & df_school$visits_by_110635 >=1, ]
+                  & df_school$visits_by_110635 >=1), ]
 nrow(df_school_br1)
 ```
 
