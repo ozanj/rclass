@@ -385,6 +385,35 @@ nrow(df_CA)
 ```
 
 
+### Subsetting Data Frames with [] and $, NA Observations
+
+- When extracting observations via subsetting operators, resulting dataframe will include rows where condition is `TRUE`; __as well as__ `NA` values. 
+
+- To remove missing values, ask for values that only evaluate to `TRUE` explicitly via  `which()`
+
+- Task: Show all public high schools with at least $50k median household incomes 
+
+__tidyverse__
+```{r, results="hide"}
+df_tv <- filter(df_event, event_type == "public hs" & med_inc>=50000)
+nrow(df_tv) #9,941 obs
+
+```
+
+__base R without `which()`__
+```{r, results="hide"}
+df_b1 <- df_event[df_event$event_type == "public hs" & df_event$med_inc>=50000, ]
+nrow(df_b1) #10,016 obs
+view(df_b1) #NAs sorted at the end of column
+```
+
+
+__base R with `which()`__
+```{r, results="hide"}
+df_b2 <- df_event[which(df_event$event_type == "public hs" & df_event$med_inc>=50000), ]
+nrow(df_b2) #9,941 obs, same as tidyverse way
+```
+
 
 ## Subsetting using the subset function
 
