@@ -1,7 +1,7 @@
 ---
-title: "Secondary Data Cleaning"
+title: "Data Cleaning Guidelines"
 author: ""
-date: "9/25/2019"
+date: "10/08/2019"
 output: pdf_document
 ---
 
@@ -134,7 +134,9 @@ nls_crs %>% var_label() # variable labels
 
 - Check Codebook
 
-  - [NLS-72 Postsecondary Education Transcript Files Supplementary Addendum](https://nces.ed.gov/training/datauser/SLSD_03/assets/1992001.pdf)
+  - [NLS-72 Postsecondary Education Transcript Study Data File User's Manual](https://github.com/ozanj/rclass/blob/master/data/nls72/NLS72_codebook.pdf)
+
+  - [NLS-72 Postsecondary Education Transcript Files Supplementary Addendum](https://github.com/ozanj/rclass/blob/master/data/nls72/NLS72_suppaddendum.pdf)
 
 
 - Sort, select, and order
