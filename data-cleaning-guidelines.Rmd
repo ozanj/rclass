@@ -15,7 +15,7 @@ The purpose of this document is to provide you with guidelines for investigating
 
 # 1. Criteria for Data Quality:
 
-This document will provide a step-by-step process for performing quality checks. But what are these steps trying to accomplish? What is data quality and how do we measure it? High-quality data need to pass the following set of quality criteria:   
+This document will provide a step-by-step process for performing quality checks. But what are these steps trying to accomplish? What is data quality and how do we measure it? High-quality data need to pass the following set of quality criteria: validity, accuracy, completeness, consistency, and uniformity.   
 
 
 ## 1.1 Validity: 
@@ -50,7 +50,6 @@ The degree to which the data is consistent, within the same data set or across m
 
 ## 1.5 Uniformity: 
 The degree to which the data is specified using the same unit of measurement (e.g., distance in miles or kilometers)
-
 
 
 # 2. Workflow for Producing High-Quality Data
@@ -107,50 +106,46 @@ nls_crs <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/nls72/
 ```
 
 ## 2.2 Investigate Data
-Investigating data is time-consuming and requires using many different methods to detect unexpected, incorrect, and inconsistent data. Here is an outline of general steps to take when investigating data. We provide syntax examples of each step below. 
+Investigating data is time-consuming and requires using many different methods to detect unexpected, incorrect, and inconsistent data. While this is not a linear process, here is an outline of general steps to take when first investigating data. We provide syntax examples of each step below. 
 
-1. Investigate your dataframe
+1. Investigate the dataframe
+
+2. Sort, select, and order data to make it easier to view the dataframe
 
 2. Check codebook/documentation
 
-3. Data profiling:
-    - duplicates in rows or columns
-    - standard pattern: string or number
-    - summary statistics: For _numerical_: mean, sd, range, quantiles, distribution, outliers, errors. For _categorical_: labels, frequencies, errors
-    - missing values: skip values or true missing? NA, unknown (may not be missing), out-of-range, 0 (missing or true value?)
-    - relationship of multiple columns in the same row or across datasets
+3. Preliminary variable investigations:
+    - check for missing observations across all variables
+    - identify the "unit of analysis" and which combination of variables uniquely identify observations
+    - investigate different variable types: numeric, factor, character, labelled, etc.
+    - run some summary statistics. For _numerical_ variables: mean, sd, range, quantiles, distribution, outliers, errors. For _categorical_ variables: labels, frequencies. 
 
-### Example of workflow using NLS72
+### Example of Investigating Data Using NLS72
 
-- Investigate of data frame
+- Investigate the data frame
 
 ```{r,eval=FALSE}
+str(nls_crs) # structure of the data frame
+
+nrow(nls_crs) #num of rows (obs)
+ncol(nls_crs) #num of columns
+dim(nls_crs) #rows by columns
+
 names(nls_crs) # variable names 
 glimpse(nls_crs) # prints all columns + type 
-str(nls_crs) # structure of the data frame
-head(nls_crs) # prints first 6 obs
 nls_crs %>% var_label() # variable labels
+
+head(nls_crs) # prints first 6 obs
 ```
-
-- Check Codebook
-
-  - [NLS-72 Postsecondary Education Transcript Study Data File User's Manual](https://github.com/ozanj/rclass/blob/master/data/nls72/NLS72_codebook.pdf)
-
-  - [NLS-72 Postsecondary Education Transcript Files Supplementary Addendum](https://github.com/ozanj/rclass/blob/master/data/nls72/NLS72_suppaddendum.pdf)
-
 
 - Sort, select, and order
 
 ```{r,eval=FALSE}
-#Investigate of variable names, variable label
-names(nls_crs)  # variable name 
-var_label(nls_crs)  # variable label 
-
-# Sort observations so transcript number, term number, and course name are in ascending order and assign to new object
+# Sort observations so transcript number, term number, and course name are in ascending order
 nls_crs_v2 <- nls_crs %>% arrange(id, transnum, termnum, crsename) 
 
-# Select order variables, drop var cname
-nls_crs_v2 <- nls_crs_v2 %>% select(id, transnum, termnum, crsecred, gradtype, crsgrada, crsgradb, crsecip, crsename,-cname) 
+# Select order variables 
+nls_crs_v2 <- nls_crs_v2 %>% select(id, transnum, termnum, crsecred, gradtype, crsgrada, crsgradb, crsecip, crsename,cname) 
 ```	
 
 
@@ -161,9 +156,11 @@ nls_crs_v2 <- nls_crs_v2 %>% select(id, transnum, termnum, crsecred, gradtype, c
 ```{r,eval=FALSE}
 #Investigate variable course credits 
 class(nls_crs_v2$crsecred) #  variable class (numeric)
-nls_crs_v2%>% select(crsecred) %>% var_label() #variable labels
-options(tibble.print_min=50)
-nls_crs_v2%>% count(crsecred) # frequency
+attributes(nls_crs_v2$crsecred)
+
+
+nls_crs_v2%>% select(crsecred) %>% var_label() #variable label
+nls_crs_v2%>% count(crsecred) # frequency count
 
 #Run some descriptive stats: range, mean, sd
 nls_crs_v2 %>% 
@@ -175,7 +172,7 @@ nls_crs_v2 %>%
 #investigate high values of crsecred
 nls_crs_v2%>% filter(crsecred>=100) %>% count(crsecred) # frequency table of crsecred no less than 100
 nls_crs_v2%>% filter(crsecred==999) # printing some observations for specific values of crsecred
-nls_crs_v2%>% filter(crsecred>=999) %>% count(crsecred) # frequency table of crsecred no less than 999
+nls_crs_v2%>% filter(crsecred>=999) %>% count(crsecred) # frequency table of crsecred greater than or equal to 999
 ```
 
 2. categorical- nominal variable
@@ -183,10 +180,14 @@ nls_crs_v2%>% filter(crsecred>=999) %>% count(crsecred) # frequency table of crs
 ```{r,eval=FALSE}
 #Investigate varible type of grade 
 class(nls_crs_v2$gradtype) # variable class (labelled)
-#glimpse(nls_crs_v2)
-nls_crs_v2%>% select(gradtype) %>% var_label() # variable labels
-nls_crs_v2%>% select(gradtype) %>% val_labels() # value labels 
+nls_crs_v2%>% select(gradtype) %>% var_label() #variable label
+attributes(nls_crs_v2$gradtype)
+
+
+nls_crs_v2 %>% select(gradtype) %>% val_labels() #value labels 
 nls_crs_v2 %>% count(gradtype) #freq count of values
+
+
 nls_crs_v2 %>% count(gradtype) %>% as_factor() #freq count with value labels
 nls_crs_v2%>% filter(gradtype %in% c("9")) #printing some observations for specific values
 ```
@@ -196,6 +197,8 @@ nls_crs_v2%>% filter(gradtype %in% c("9")) #printing some observations for speci
 ```{r,eval=FALSE}
 #Investigate variable transcript number 
 class(nls_crs_v2$transnum) # variable class (numeric)
+attributes(nls_crs_v2$transnum) # variable class (numeric)
+
 nls_crs_v2%>% select(transnum) %>% var_label() #variable labels
 nls_crs_v2%>% count(transnum) # frequency 
 
@@ -206,6 +209,56 @@ nls_crs_v2 %>%
   ungroup() %>% #ungroup
   mutate(total_obs = sum(count_transum)) #Get the sum of count to check that it equals the number of observations in the dataset
 ```
+
+
+
+- Check Codebook 
+
+  - [NLS-72 Postsecondary Education Transcript Study Data File User's Manual](https://github.com/ozanj/rclass/blob/master/data/nls72/NLS72_codebook.pdf)
+
+  - [NLS-72 Postsecondary Education Transcript Files Supplementary Addendum](https://github.com/ozanj/rclass/blob/master/data/nls72/NLS72_suppaddendum.pdf)
+
+
+
+## 2.3 Cleaning Data Via Creating New Variables: 
+Remove, correct, or impute anomalies.
+
+**Steps of creating new variables:**
+
+  - Investigate input variable(s) 
+  - Keep input variables the same
+  - Create a new variable 
+  - Add variable labels, definitions, value labels
+  - Run summary statistics for input and new variables, compare and check
+
+**Cleaning rules:**
+
+_Irrelevant data_: data (column-wise or row-wise) that are not actually needed, and don’t fit under the context of the problem we’re trying to solve. Solution: drop it only if it is unimportant for sure.
+
+_Duplicates_: data points that are repeated in your dataset. Reason: e.g., combination of different data sources; multiple submissions, etc. Solution: remove it if complete duplicate. 
+
+_Type conversion_: numerical or categorical values can be converted into each other: encode categorical values as numbers, or convert numerical values into categories. Caution: the failure of a conversion indicates incorrect value. 
+_Syntax errors_: 
+a. Remove white spaces: Extra white spaces at the beginning or the end of a string should be removed. 
+b. Pad strings: Strings can be padded with spaces or other characters to a certain width. For example, some numerical codes are often represented with prepending zeros to ensure they always have the same number of digits.
+c. Fix typos: Strings can be entered in many different ways, e.g., fem, female, feml, but only female is expected. Solution: map each value to the unique expected value; use pattern matching; use fuzzy matching.
+
+_Standardize_: put each value in the same standardized format. E.g., Strings: all values are either in lower or upper case; numerical values: all values have a certain measurement unit.
+
+_Scaling / Transformation_: scaling: transform the data to fit within a specific scale. E.g., percentage 0-100, GPA 0-5; use log, square root or inverse to reduce skewness  
+  
+_Normalization_: transform the data to normally distribution. E.g., normalization of test scores using mean and sd.
+
+_Missing values_: Solutions: 
+a. flag (avoid losing information): treat them as null or investigate further looking at the codebook and investigating the data. Missing data is informative in itself especially if not at random. E.g., a specific group refuses to answer a certain question. Caution: 0 might be missing numeric data. Unknown may not be missing.
+b. Impute (may yield unexpected or biased results): calculate the missing value based on other observations, e.g., using statistical values (mean when data is not skewed, median when data is skewed); generating random number (normally distributed data, random missing); using linear regression to predict.
+
+
+_Outliers_: values that are significantly different from all other observations: lies more than 1.5 * interquartile range away from the Q1 and Q3. Caution: investigating and giving a reason before removing weird, suspicious values, or leave them.
+
+_In-record & cross-datasets errors_: contradict values between columns or across different datasets. 
+
+### Sample Code (NLS72)
 
 - Investigate the relationship between pairs of variables
 
@@ -244,48 +297,7 @@ nls_crs_v2 %>% group_by(crsgrada) %>% filter(crsgrada %in% c("A+", "A", "A-")) %
 
 ```
 
-## 2.3 Cleaning: 
-Remove, correct, or impute anomalies.
 
-**Steps of creating new variables:**
-
-Keep input variables the same
-
-Create a new variable based on the following rules
-  
-Add variable labels, definitions, value labels
-
-Run summary statistics for input and new variables, compare and check
-(https://cran.r-project.org/web/packages/assertthat/assertthat.pdf)
-
-**Cleaning rules:**
-
-_Irrelevant data_: data (column-wise or row-wise) that are not actually needed, and don’t fit under the context of the problem we’re trying to solve. Solution: drop it only if it is unimportant for sure.
-
-_Duplicates_: data points that are repeated in your dataset. Reason: e.g., combination of different data sources; multiple submissions, etc. Solution: remove it if complete duplicate. 
-
-_Type conversion_: numerical or categorical values can be converted into each other: encode categorical values as numbers, or convert numerical values into categories. Caution: the failure of a conversion indicates incorrect value. 
-_Syntax errors_: 
-a. Remove white spaces: Extra white spaces at the beginning or the end of a string should be removed. 
-b. Pad strings: Strings can be padded with spaces or other characters to a certain width. For example, some numerical codes are often represented with prepending zeros to ensure they always have the same number of digits.
-c. Fix typos: Strings can be entered in many different ways, e.g., fem, female, feml, but only female is expected. Solution: map each value to the unique expected value; use pattern matching; use fuzzy matching.
-
-_Standardize_: put each value in the same standardized format. E.g., Strings: all values are either in lower or upper case; numerical values: all values have a certain measurement unit.
-
-_Scaling / Transformation_: scaling: transform the data to fit within a specific scale. E.g., percentage 0-100, GPA 0-5; use log, square root or inverse to reduce skewness  
-  
-_Normalization_: transform the data to normally distribution. E.g., normalization of test scores using mean and sd.
-
-_Missing values_: Solutions: 
-a. flag (avoid losing information): treat them as null or investigate further looking at the codebook and investigating the data. Missing data is informative in itself especially if not at random. E.g., a specific group refuses to answer a certain question. Caution: 0 might be missing numeric data. Unknown may not be missing.
-b. Impute (may yield unexpected or biased results): calculate the missing value based on other observations, e.g., using statistical values (mean when data is not skewed, median when data is skewed); generating random number (normally distributed data, random missing); using linear regression to predict.
-
-
-_Outliers_: values that are significantly different from all other observations: lies more than 1.5 * interquartile range away from the Q1 and Q3. Caution: investigating and giving a reason before removing weird, suspicious values, or leave them.
-
-_In-record & cross-datasets errors_: contradict values between columns or across different datasets. 
-
-### Sample Code (NLS72)
 
 - Missing values 
 
