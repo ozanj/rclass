@@ -36,7 +36,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 \tableofcontents
 
 
-### Libraries we will use today
+### Libraries 
 
 "Load" the package we will use today (output omitted)
 
@@ -57,7 +57,8 @@ Note: when we load package, name of package is not in quotes; but when we instal
 - `library(tidyverse)`
 
 
-# Data we will use today
+### Data 
+
 Use `read_dta()` function from `haven` to import Stata dataset into R
 ```{r, results="hide"}
 hsls <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/hsls/hsls_stu_small.dta")
@@ -77,11 +78,7 @@ typeof(hsls$s3classes)
 class(hsls$s3classes)
 ```
 
-Load wwlist data too
-```{r}
-load(url("https://github.com/ozanj/rclass/raw/master/data/prospect_list/wwlist_merged.RData"))
-
-```
+Download the HSLS Codebook: https://nces.ed.gov/pubs2014/2014361_AppendixI.pdf
 
 # Exploratory data analysis (EDA)
 
@@ -109,7 +106,6 @@ Will teach exploratory data analysis (EDA) in two sub-sections:
 
 1. Introduce "Tools of EDA": 
     - Demonstrate code to investigate variables and relatioship between variables
-    - I'll focus on the __tidyverse__ approach rather than __base R__    
     - Most of these tools are just the application of programming skills you have already learned
 1. Provide "Guidelines for EDA"
     - Less about coding, more about practices you should follow and mentality necessary to ensure high data quality
@@ -217,7 +213,7 @@ Use `summarise_at()`, a variation of `summarise()`, to make descriptive stats
 __Task__:
 
 - calculate descriptive stats for `x2txmtscor`, math test score
-```{r, results}
+```{r, warning=FALSE}
 #?summarise_at
 hsls_small %>% select(x2txmtscor) %>% var_label()
 hsls_small %>% 
@@ -292,7 +288,7 @@ hsls_small %>% filter(s3clglvl<0) %>%
 
 ### One-way descriptive stats student exercise
 
-1. Using the object `hsls`, identify variable type, variable class, and check the variable vakyes and value labels of `x4ps1start`
+1. Using the object `hsls`, identify variable type, variable class, and check the variable values and value labels of `x4ps1start`
     - variable `x4ps1start` identifies month and year student first started postsecondary education
     - **Note**: This variable is a bit counterintuitive.
         - e.g., the value `201105` refers to May 2011
@@ -342,13 +338,13 @@ hsls %>% mutate(x4ps1start_na=ifelse(x4ps1start<0,NA,x4ps1start)) %>%
 
 ### One-way descriptive stats for discrete/categorical vars, Tidyverse approach
 
-Use `count()` to investigate values of discreet or categorical variables
+Use `count()` to investigate values of discrete or categorical variables
 
 For variables where `class==labelled`
 ```{r, results="hide"}
 class(hsls_small$s3classes)
 #show counts of variable values
-hsls_small %>% count(s3classes)
+hsls_small %>% count(s3classes) #print in console to show both
 #show counts of value labels
 hsls_small %>% count(s3classes) %>% as_factor()
 ```
@@ -365,7 +361,7 @@ Simultaneously show both values and value labels on count tables for `class==lab
 ```{r, results="hide"}
 x <- hsls_small %>% count(s3classes)
 y <- hsls_small %>% count(s3classes) %>% as_factor()
-bind_cols(x[,1], y)
+bind_cols(x[,1], y) #wont show in updated R
 ```
 
 ### One-way descriptive stats for factor vars [OPTIONAL/SKIP]
@@ -374,7 +370,7 @@ For variables where `class==factor`
 
 - Create object with some or all `labelled` vars converted to `factor`
 ```{r}
-hsls_f <- as_factor(hsls,only_labelled = TRUE)
+hsls_f <- as_factor(hsls)
 ```
 
 
@@ -409,14 +405,21 @@ __key to syntax__
 - `group_by(var1) %>% count(var2)`
 - play around with which variable is `var1` and which variable is `var2`
 
+
+### Relationship between variables, categorical by categorical
+
+
 __Task__: 
 
 - Create a two-way table between `s3classes` and `s3clglvl`
 ```{r, results="hide"}
 hsls_small %>% select(s3classes,s3clglvl) %>% var_label()
+hsls_small %>% select(s3classes,s3clglvl) %>% val_labels()
+```
 
+```{r}
 hsls_small %>% group_by(s3classes) %>% count(s3clglvl) # show values
-hsls_small %>% group_by(s3classes) %>% count(s3clglvl) %>% as_factor() # show value labels
+#hsls_small %>% group_by(s3classes) %>% count(s3clglvl) %>% as_factor() # show value labels
 ```
 
 ### Relationship between variables, categorical by categorical
@@ -474,20 +477,22 @@ __key to syntax__
 
 - `group_by(categorical_var) %>% summarise_at(.vars = vars(continuous_var)`
 
+### Relationship between variables, categorical by continuous
+
 __Task__
 
 - Calculate mean math score, `x2txmtscor`, for each value of parental education, `x2paredu`
 
 ```{r, results="hide"}
-#first, investigate parental education
-hsls_small %>% count(x2paredu)
-hsls_small %>% count(x2paredu) %>% as_factor
+#first, investigate parental education [print in console]
+hsls_small %>% count(x2paredu) 
+```
 
-# using dplyr to get average math score by parental education level
+```{r}
+# using dplyr to get average math score by parental education level [print in console]
 hsls_small %>% group_by(x2paredu) %>%
     summarise_at(.vars = vars(x2txmtscor),
-                 .funs = funs(mean, .args = list(na.rm = TRUE))) %>%
-    as_factor()
+                 .funs = funs(mean, .args = list(na.rm = TRUE))) 
 ```
 
 ### Relationship between variables, categorical by continuous
@@ -498,10 +503,9 @@ __Task__
 
 For checking data quality, helpful to calculate other stats besides mean
 ```{r, results="hide"}
-hsls_small %>% group_by(x2paredu) %>%
+hsls_small %>% group_by(x2paredu) %>% #[print in console]
     summarise_at(.vars = vars(x2txmtscor),
-                 .funs = funs(mean, min, max, .args = list(na.rm = TRUE))) %>%
-    as_factor()
+                 .funs = funs(mean, min, max, .args = list(na.rm = TRUE)))
 
 ```
 Always Investigate presence of missing/skip values
@@ -634,14 +638,14 @@ __Why use such an old survey for this assignment?__
 
 __What we do to make assignment more manageable__
 
-- we give you code for investigation of variables
+- last week's problem set created the input var: numgrade
 - we give you some hints/guidelines
 - but you are responsible for developing plan to create GPA vars and for executing plan (rather than us giving you step-by-step quations)
 
 __Why this assignment?__
 
 1. Give you more practice investigating data, cleaning data, creating variables that require processing across rows
-1. Sometimes social justice is creating student GPA from course-level data
+1. Real world example of "simple" task with complex data management needs
 
 
 ## Skip patterns in survey data
@@ -755,121 +759,6 @@ hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes==1) %>%
   group_by(s3classes) %>% count(s3clglvl)
 hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes==1) %>% 
   group_by(s3classes) %>% count(s3clglvl) %>% as_factor()
-```
-
-# Appendix. Creating factor variables
-
-### Create factors [from string variables]
-
-To create a factor variable from string variable
-
-1. create a character vector containing underlying data
-1. create a vector containing valid levels
-3. Attach levels to the data using the `factor()` function
-
-```{r}
-#underlying data: months my fam is born
-x1 <- c("Jan", "Aug", "Apr", "Mar")
-#create vector with valid levels
-month_levels <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
-#attach levels to data
-x2 <- factor(x1, levels = month_levels)
-```
-Note how attributes differ
-```{r}
-str(x1)
-str(x2)
-```
-Sorting differs
-```{r}
-sort(x1)
-sort(x2)
-```
-
-### Create factors [from string variables]
-
-Let's create a character version of variable `hs_state` and then turn it into a factor
-
-```{r, eval=FALSE}
-#wwlist %>%
-#  count(hs_state)
-#Subset obs to West Coast states 
-wwlist_temp <- wwlist %>%
-  filter(hs_state %in% c("CA", "OR", "WA"))
-
-#Create character version of high school state for West Coast states only
-wwlist_temp$hs_state_char <- as.character(wwlist_temp$hs_state)
-
-#investigate character variable
-str(wwlist_temp$hs_state_char)
-table(wwlist_temp$hs_state_char)
-
-#create new variable that assigns levels
-wwlist_temp$hs_state_fac <- factor(wwlist_temp$hs_state_char, levels = c("CA","OR","WA"))
-str(wwlist_temp$hs_state_fac)
-
-#wwlist_temp %>%
-#  count(hs_state_fac)
-rm(wwlist_temp)
-
-```
-
-### Create factors [from string variables]
-How the `levels` argument works when underlying data is character
-
-- Matches value of underlying data to value of the level attribute
-- Converts underlying data to integer, with level attribute attached
-
-\medskip See chapter 15 of Wickham for more on factors (e.g., modifying factor order, modifying factor levels)
-
-### Creating factors [from integer vectors]
-
-Factors are just integer vectors with level attributes attached to them. So, to create a factor:
-
-1. create a vector for the underlying data
-1. create a vector that has level attributes
-3. Attach levels to the data using the `factor()` function
-
-```{r}
-a1 <- c(1,1,1,0,1,1,0) #a vector of data
-a2 <- c("zero","one") #a vector of labels
-
-#attach labels to values
-a3 <- factor(a1, labels = a2)
-a3
-str(a3)
-
-```
-
-Note: By default, `factor()` function attached "zero" to the lowest value of vector `a1` because "zero" was the first element of vector `a2`
-
-### Creating factors [from integer vectors]
-
-Let's turn an integer variable into a factor variable in the `wwlist` data frame
-
-Create integer version of `receive_year`
-```{r}
-#typeof(wwlist_temp$receive_year)
-wwlist$receive_year_int <- as.integer(wwlist$receive_year)
-str(wwlist$receive_year_int)
-typeof(wwlist$receive_year_int)
-
-```
-
-
-Assign levels to values of integer variable
-```{r, eval=FALSE}
-wwlist$receive_year_fac <- factor(wwlist$receive_year_int, labels=c("Twenty-sixteen","Twenty-seventeen","Twenty-eighteen"))
-str(wwlist$receive_year_fac)
-str(wwlist$receive_year)
-
-#Check variable
-wwlist %>%
-  count(receive_year_fac)
-
-wwlist %>%
-  count(receive_year)
 ```
 
 
