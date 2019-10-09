@@ -507,6 +507,7 @@ When object is data frame, refer to specific variables using this syntax:
 - __This approach to isolating variables very useful for investigating data__
 
 ```{r}
+#df_event$instnm
 typeof(df_event$instnm)
 typeof(df_event$med_inc)
 ```
@@ -829,7 +830,7 @@ glimpse(event_small)
 
 `select()` can use "helper functions" `starts_with()`, `contains()`, and `ends_with()` to choose columns 
 ```{r, eval=FALSE}
-?select()
+?select
 ```
 
 Example:
