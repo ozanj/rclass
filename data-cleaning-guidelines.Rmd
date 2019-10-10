@@ -9,7 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-The purpose of this document is to provide you with guidelines for investigating and cleaning data from secondary sources (e.g., National Center for Education Statistics datasets).  Data cleaning refers to the process of ensuring that your data is correct, consistent, and useable for analyses by identifying any errors or missing values in the data and either correcting or deleting them. 
+The purpose of this document is to provide you with guidelines for investigating and cleaning data from secondary sources (e.g., National Center for Education Statistics datasets).  Data cleaning refers to the process of ensuring that your data is correct, consistent, and usable for analyses by identifying any errors or missing values in the data and either correcting or deleting them. 
 
 
 
@@ -38,9 +38,9 @@ _Regular expression patterns_: text fields that have to be in a certain pattern 
 _Cross-field validation_: certain conditions that span across multiple fields must hold (e.g., a student's graduation date cannot be earlier than their enrollment date).
 
 ## 1.2 Accuracy: 
-The degree to which the data is close to the true values of what we are attempting to measure. while defining all valid values allows us to easily identify invalid values, it does not mean values are accurate. For example, a students's grade level may be a valid value, 12th grade, but may not be accurate (student is in 10th grade).
+The degree to which the data is close to the true values of what we are attempting to measure. while defining all valid values allows us to easily identify invalid values, it does not mean values are accurate. For example, a student's grade level may be a valid value, 12th grade, but may not be accurate (student is in 10th grade).
 
-Sometimes, achieving accuracy requires accessing an external source containing the true value. For example, the recruiting database queries the google maps API to ensure the web-scraped street addresses of recruiting events actually exist and/or to exract more accurate addresses. 
+Sometimes, achieving accuracy requires accessing an external source containing the true value. For example, the recruiting database queries the Google maps API to ensure the web-scraped street addresses of recruiting events actually exist and/or to extract more accurate addresses. 
 
 ## 1.3 Completeness: 
 The degree to which all required data is known. Missing data happens for many reasons. "Fixing" missing data will nearly always require you to return to data documentation by the original source.
@@ -151,7 +151,7 @@ nls_crs_v2 <- nls_crs_v2 %>% select(id, transnum, termnum, crsecred, gradtype, c
 
 - Preliminary investigation of variables
 
-1. continuous varible
+1. continuous variable
 
 ```{r,eval=FALSE}
 #Investigate variable course credits 
@@ -224,7 +224,7 @@ nls_crs_v2 %>%
 Data cleaning involves removing, correcting, or imputing anomalies. This process usually involves the creation of new variables (i.e., analysis variables). To create new variables, you should: 
 
 1. Investigate input variable(s) 
-    - keep survey quiestionnaire and codebooks on hand to understand how input variables were created
+    - keep survey questionnaire and codebooks on hand to understand how input variables were created
     - explore one-way investigations of input variables
     - explore relationships between input variables
 2. Keep input variable(s) the same
@@ -238,12 +238,12 @@ _Irrelevant data_: data (column-wise or row-wise) that are not actually needed, 
 
 _Duplicates_: data points that are repeated in your data due to a combination of different data sources, multiple submissions, etc. 
 
-_Type conversion_: data that needs to be converted into a differnt type/class in order to be stored corectly. For example, a date variable should be stored as a date object or a categorical variable should be converted from a string type to a factor class.
+_Type conversion_: data that needs to be converted into a different type/class in order to be stored correctly. For example, a date variable should be stored as a date object or a categorical variable should be converted from a string type to a factor class.
 
 _Syntax errors_: character data that needs some string manipulation in order to be correct or be used in analyses. Such as:
 
   - Removing white spaces: Extra white spaces at the beginning or the end of a string should be removed. 
-  - Pading strings: Strings can be padded with spaces or other characters to a certain width. For example, some numerical codes are often represented with leading or trailing zeros to ensure they always have the same number of digits (e.g., ID variables).
+  - Padding strings: Strings can be padded with spaces or other characters to a certain width. For example, some numerical codes are often represented with leading or trailing zeros to ensure they always have the same number of digits (e.g., ID variables).
   - Fixing typos: strings can be entered in many different ways (e.g., fem, female, f). This can often lead to errors. These inconsistencies can be fixed by mapping each value to the unique expected value via pattern matching or fuzzy matching (i.e., regular expressions).
 
 _Standardize_: data points that are equivalent but do not have the same standardized format. For example, strings should all either be in lower or upper case or numerical values should all have a certain measurement unit.
@@ -254,8 +254,8 @@ _Normalization_: data that need to be rescaled into a range from 0 to 1 in order
 
 _Missing values_: data that have missing observations. Missing data are a common problem across data sources. Ignoring missing data or treating them incorrectly due to not understanding rationale(s behind missing data is a fatal error! Missing data are generally treated in three ways:
 
-  - Drop missing observations if occuring at random: If missing values for a variable rarely occur and occur at random, sometimes it's easiest to drop missing observations. While this may reduce the total number of observations in your dataset this is sometimes useful when conducting statistical analyses where "filling" missing observations could bias your results.
-  - Flagged to avoid losing information: sometimes missing data do not occur at random. If so,  we usually do not want to drop these observation because the missing data is informative in itself (For example, on a campus climate survey question, all missing values are the result of people from the same race/ethnic group refusing to answer the question). Missing observations for numeric data can be converted to `NA` and can be ignored when calculating any statistical computation or plotting distributions. For categorical data, you can create a seperate "Missing" category and assign this category to all missing observations. 
+  - Drop missing observations if occurring at random: If missing values for a variable rarely occur and occur at random, sometimes it's easiest to drop missing observations. While this may reduce the total number of observations in your dataset this is sometimes useful when conducting statistical analyses where "filling" missing observations could bias your results.
+  - Flagged to avoid losing information: sometimes missing data do not occur at random. If so,  we usually do not want to drop these observation because the missing data is informative in itself (For example, on a campus climate survey question, all missing values are the result of people from the same race/ethnic group refusing to answer the question). Missing observations for numeric data can be converted to `NA` and can be ignored when calculating any statistical computation or plotting distributions. For categorical data, you can create a separate "Missing" category and assign this category to all missing observations. 
   - Impute missing data: replace missing data  by calculating values based on other observations. For example, you can replace all missing observations with statistical values (e.g., mean, median), or generate random values within 1 or 2 standard deviations of the mean if the data is normally distributed data and randomly missing, or using linear regression to predict the value of the missing observation based on relationships with other variables. Keep in mind these imputations may yield unexpected or biased results. 
 
 
@@ -264,7 +264,7 @@ _Outliers_: observations in the data that deviate substantially from all other o
 _In-record & cross-datasets errors_: these are data observations that contradict values between columns or across different datasets. For example a student's grade level value is 1st grade but marital status is divorced.
 
 
-### Example of Cleaning Data and Creating Varibales Using NLS72
+### Example of Cleaning Data and Creating Variables Using NLS72
 Task: Create a numerical grade variable based on input variables `crsgrada`, `crsgradb`, `gradtype`, and `crsecred_v2.`
 
 __Investigate input variable(s): One Way Investigations__
@@ -498,7 +498,7 @@ __Create new numeric grade variable based on letter grade (when type of grade is
   #add variable label
   nls_crs_v2 <- nls_crs_v2 %>%
   set_variable_labels(
-    numgrade = "new numberic grade"
+    numgrade = "new numeric grade"
   )
 
 #check 
