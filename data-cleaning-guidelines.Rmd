@@ -267,8 +267,7 @@ _In-record & cross-datasets errors_: these are data observations that contradict
 ### Example of Cleaning Data and Creating Varibales Using NLS72
 Task: Create a numerical grade variable based on input variables `crsgrada`, `crsgradb`, `gradtype`, and `crsecred_v2.`
 
-1. Investigate input variable(s)
-
+__Investigate input variable(s): One Way Investigations__
 
 ```{r, eval=FALSE}
 # crsgrada
@@ -280,7 +279,7 @@ Task: Create a numerical grade variable based on input variables `crsgrada`, `cr
   
   #one-way investigation
   nls_crs_v2%>% count(crsgrada) #frequency count
-  nls_crs_v2%>% filter(crsgrada %in% c("99", "AU", "CR", "I", "NO", "P", "S", "U", "W", "WP")) #printing some observations for specific values of crsgrada
+  nls_crs_v2%>% filter(crsgrada %in% c("99", "AU", "CR", "I", "NO", "P", "S", "U", "W", "WP")) #printing some obs for specific values o
   
   #missing values
   nls_crs_v2%>% count(crsgrada) #per supp addendum doc p.16, value 99 is "unknown" or "missing"
@@ -305,20 +304,48 @@ Task: Create a numerical grade variable based on input variables `crsgrada`, `cr
 
   
 
-typeof(nls_crs_v2$gradtype)
-class(nls_crs_v2$gradtype)
-attributes(nls_crs_v2$gradtype)
+# gradtype
+  
+  #investigate type, class, and attributes
+  typeof(nls_crs_v2$gradtype)
+  class(nls_crs_v2$gradtype)
+  attributes(nls_crs_v2$gradtype)
 
-typeof(nls_crs_v2$crsecred)
-class(nls_crs_v2$crsecred)
-attributes(nls_crs_v2$crsecred)
+  #one-way investigation
+  nls_crs_v2%>% count(gradtype) #frequency count
+  nls_crs_v2%>% filter(gradtype %in% c(1, 2)) #printing some obs for specific values 
 
+  #missing values
+  nls_crs_v2%>% filter(gradtype %in% c(9)) #per codebook, pg.58 definition, pg. 523 true categories, value 9 is "missing"
+
+ 
+  
+# crsecred 
+  
+  #investigate type, class, and attributes
+  typeof(nls_crs_v2$crsecred)
+  class(nls_crs_v2$crsecred)
+  attributes(nls_crs_v2$crsecred)
+  
+  
+  #one-way investigation
+  nls_crs_v2 %>% #run some descriptive stats 
+  summarise_at(
+    .vars = vars(crsgradb),
+    .funs = funs(min, max, mean, .args=list(na.rm=TRUE))
+  )
+
+  #missing values
+  nls_crs_v2 %>% filter(crsgradb>4) %>% count(crsgradb) 
+  #per codebook pg. 49: 70% of numeric grades were reported on a scale of 0 to 4
+  # the remaining were recorded on different scales (e.g., 0-100)
+  # no attempts were made to place numeric grades on a common metric
 
 ```
 
 
 
- Investigate the relationship between pairs of variables
+__Investigate input variable(s): Two Way Investigations__
 
 ```{r, eval=FALSE}
 options(tibble.print_min=50)
@@ -357,9 +384,7 @@ nls_crs_v2 %>% group_by(crsgrada) %>% filter(crsgrada %in% c("A+", "A", "A-")) %
 
 
 
-- Missing values 
-
-1. treat anomalies as NA
+__Keep Input Variable(s), Create Analysis Variables, Treat Missing Values__ 
 
 ```{r, eval=FALSE}
 #Create measure of course credits attempted that replaces 999 and 999.999 with missing
@@ -386,7 +411,7 @@ nls_crs_v2<- nls_crs_v2%>%
 2.treat missing as NA
 
 ```{r, eval=FALSE}
-#type of grade: replace 9 with missing
+#Create measure of grade scale that replaces 9 with missing
 
 #investigate
 nls_crs_v2%>% count(gradtype) %>% as_factor()
@@ -415,9 +440,7 @@ nls_crs_v2<- nls_crs_v2%>%
   nls_crs_v2 %>% filter(gradtype==9) %>% group_by(gradtype) %>% count(gradtypev2) # two-way frequency table
 ```
 
-- Create new variable 
-
-1. create new numeric grade variable when type of grade is numeric & course credit not missing
+__Create new numeric grade variable when type of grade is numeric & course credit not missing__
 
 ```{r, eval=FALSE}
 
@@ -442,7 +465,7 @@ nls_crs_v2<- nls_crs_v2%>%
     nls_crs_v2%>% filter(crsgradb<=4, gradtype==2, (!is.na(crsecredv2))) %>% mutate(assert=crsgradb==crsgradbv2) %>% count(assert)
 ```  
 
-2. Create new numeic grade variable based on letter grade (when type of grade is letter) & numeric grade (when type of grade is numeric)
+__Create new numeric grade variable based on letter grade (when type of grade is letter) & numeric grade (when type of grade is numeric)__
 
 ```{r, eval=FALSE}
 # investigate
@@ -489,66 +512,6 @@ nls_crs_v2<- nls_crs_v2%>%
   nls_crs_v2%>% filter(crsgradb>4, gradtype==2, !is.na(crsecredv2)) %>% group_by(crsgradb) %>% count(numgrade) # course credit is missing
 ```  
 
-3. Create quality points variable based on the relation: quality points = credits attempted * numeric grade
-
-```{r, eval=FALSE}
-#create new variable
-  nls_crs_v2<- nls_crs_v2%>% mutate(qualpts=numgrade*crsecredv2) 
-
-    #add variable label
-  nls_crs_v2 <- nls_crs_v2 %>%
-  set_variable_labels(
-    qualpts = "quality points"
-  )
-  
-#check
-  nls_crs_v2 %>%
-    count(qualpts)#freq count of new variable 
-  nls_crs_v2 %>%
-    select(id, transnum, numgrade, crsecredv2, qualpts)
-  nls_crs_v2%>% filter(is.na(numgrade)) %>% count(qualpts) # missing when numgrade==NA
-  nls_crs_v2%>% group_by(numgrade, crsecredv2) %>% count(qualpts) #group by input variables and get a count of new var
-  nls_crs_v2%>% filter(numgrade==0 & qualpts!=0) %>% select(numgrade,crsecredv2,qualpts) #If variable was calculated correctly, any numgrade with the value 0 multipled by crsecredv2 will result in qualpts being 0, otherwise there is a problem with the calculation
-  nls_crs_v2%>% filter(crsecredv2==0 & qualpts!=0) %>% select(numgrade,crsecredv2,qualpts) #same logic
-```  
-  
-4. Create institution-level GPA variable based on the relation: institution-level GPA = sum of quality points / sum of total credits 
-
-```{r, eval=FALSE}
-
-# Create institution-level GPA variable and save as a new object
-
-    nls_crs_trans <- nls_crs_v2%>% group_by(id,transnum) %>% 
-      summarise(
-        cred_trans=sum(crsecredv3, na.rm=TRUE), # sum total credits attempted where grade is known
-        qualpts_trans=sum(qualpts, na.rm=TRUE) # sum of quality points where grade is known
-      ) %>% 
-      mutate(gpa_trans=qualpts_trans/cred_trans) 
-    
-    nls_crs_trans
-    #options(tibble.print_min=400)
-      
-    #add variable label
-  nls_crs_trans <- nls_crs_trans %>%
-  set_variable_labels(
-    gpa_trans = "institution-level GPA"
-  )
-  
-# check
-  nls_crs_trans %>%
-    count(gpa_trans) #freq count of new variable 
-  nls_crs_trans %>%
-    filter(is.na(gpa_trans)) #view NA for new variable
-  nls_crs_trans %>%
-    filter(cred_trans==0 & qualpts_trans!=0) #checking to see if cred_trans equals 0 and qualpts_trans equals something else, returns 0
-  nls_crs_trans %>%
-    filter(cred_trans==0 & !is.na(gpa_trans)) #checking to see if cred_trans equals 0 and gpa_trans does not equal NA, returns 0
-  nls_crs_trans %>%
-    filter((qualpts_trans/cred_trans) != gpa_trans) 
-  nls_crs_trans %>%
-    count(gpa_trans) %>%
-    filter(n > 1)
-```
     
 ## 2.4 Reshape and/or merge data: 
 
@@ -598,26 +561,3 @@ Export to CVS
 ```{r, eval=FALSE}
 write_csv(hsls, path = "../../data/hsls/hsls_sch_small.dta")
 ```
-
-##2.6 Report: 
-A report about the changes made and the quality of the currently stored data is recorded.
-
-location: arithmetic mean, median, mode, interquartile mean
-
-spread: standard deviation, variance range, interquartile range, absolute deviation, mean absolute difference, distance standard deviation
-
-shape: skewness, kurtosis distribution
-
-dependence: correlation coefficient, distance correlation
-
-cross tabulation, compare means (t-test), ANOVA, correlation
-
-visualizations: histogram, frequency distribution table, box plot, bar char, pie chart, scatter plot
-
-```{r, eval=FALSE}
-
-```
-
-##questions:
-create R data dataframe?
-rename variable? standardize names?
