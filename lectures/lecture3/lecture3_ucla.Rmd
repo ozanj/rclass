@@ -226,54 +226,74 @@ head(df_school_v2, n=5)
 nrow(df_school_v2)
 ```
 
-### Compare tidyverse to subset() from base R, extracting columns (variables)
+### Student Exercises
 
-XIN - CREATE EXERCISES [AND SOLUTIONS] FOR STUDENTS BASED ON subset(). FOR EACH QUESTION, ASK STUDENTS TO PERFORM THE SAME TASK USING subset() and filter(). USE BELOW TWO SLIDES TO GET YOU STARTED [BUT GOOD TO THINK OF A COUPLE ADDITIONAL QUESTIONS]. YOU CAN REMOVE STUFF ABOUT SUB-SETTING OPERATORS BECAUSE WE HAVEN'T GOTTEN TO THOSE YET IN THE LECTURE.
+Compare tidyverse to subset() from base R in extracting columns (variables), observations:
 
--Create a new dataframe by extracting the columns `instnm`, `event_date`, `event_type` from df_event. Use the `names()` function to show what columns/variables are in the newly created dataframe.
+1. Use both base R and tidyverse to create a new dataframe by extracting the columns `instnm`, `event_date`, `event_type` from df_event. And show what columns (variables) are in the newly created dataframe. 
 
-__tidyverse__
+2. Use both base R and tidyverse to create a new dataframe from df_school that includes out-of-state public high schools with 50%+ Latinx student enrollment that received at least one visit by the University of California Berkeley (var= visits_by_110635). And count the number of observations.
+
+3. Use both base R and tidyverse to count the number of public schools from CA, FL or MA that received one or two visits from UC Berkeley from df_school.
+
+4. Use base R to subset all public out-of-state high schools visited by University of California Berkeley that enroll at least 50% Black students, and only keep variables "state_code", "name" and "zip_code" .
+
+### Solution to Student Exercises 
+
+Solution to 1 
+
+__base R__ using `subset()` function
+```{r}
+df_event_br <- subset(df_event, select=c(instnm, event_date, event_type))
+names(df_event_br)
+```
+
+__tidyverse__ using `select()` function
 ```{r}
 df_event_tv <- select(df_event, instnm, event_date, event_type)
 names(df_event_tv)
 ```
 
-__base R__ using subsetting operators
-```{r}
-df_event_br1 <- df_event[, c("instnm", "event_date", "event_type")]
-names(df_event_br1)
-```
+Solution to 2
 
 __base R__ using `subset()` function
 ```{r}
-df_event_br2 <- subset(df_event, select=c(instnm, event_date, event_type))
-names(df_event_br2)
+df_school_br <- subset(df_school, state_code != "CA" & school_type == "public" 
+                        & pct_hispanic >= 50 & visits_by_110635 >=1 )
+nrow(df_school_br)
 ```
 
-### Compare tidyverse to subset() from base R, extracting observations
-
--Create a new dataframe from df_schools that includes out-of-state public high schools with 50%+ Latinx student enrollment that received at least one visit by the University of California Berkeley.
-
-__tidyverse__
+__tidyverse__ using `filter()` function
 ```{r}
-df_school_tv <- filter(df_school, state_code != "CA" & school_type == "public" & pct_hispanic >= 50 & visits_by_110635 >=1 )
+df_school_tv <- filter(df_school, state_code != "CA" & school_type == "public" 
+                       & pct_hispanic >= 50 & visits_by_110635 >=1 )
 nrow(df_school_tv)
 ```
 
-__base R__ using subsetting operators
-```{r}
-df_school_br1 <- df_school[which(df_school$state_code != "CA" & df_school$school_type == "public" 
-                  & df_school$pct_hispanic >= 50 
-                  & df_school$visits_by_110635 >=1), ]
-nrow(df_school_br1)
-```
+### Solution to Student Exercises 
+
+Solution to 3
 
 __base R__ using `subset()` function
 ```{r}
-df_school_br2 <- subset(df_school, state_code != "CA" & school_type == "public" & pct_hispanic >= 50 & visits_by_110635 >=1 )
-nrow(df_school_br2)
+count(subset(df_school, state_code %in% c("CA", "FL", "MA")  
+             & school_type == "public" & visits_by_110635 %in% c(1,2) ))
 ```
 
+__tidyverse__ using `filter()` function
+```{r}
+count(filter(df_school, state_code %in% c("CA", "FL", "MA")  
+             & school_type == "public" & visits_by_110635 %in% c(1,2) ))
+```
+
+Solution to 4
+
+__base R__ using `subset()` function
+```{r}
+subset(df_school, school_type == "public" & state_code != "CA" 
+       & visits_by_100751 >= 1 & pct_hispanic >= 50, 
+       select = c(state_code, name, zip_code))
+```
 
 # Subsetting using subsetting operators
 
@@ -570,9 +590,35 @@ df_event[c("instnm", "univ_id", "event_state")]
 ```{r}
 df_event[1:5, c("instnm", "event_state", "event_type")] 
 ```
+
 ### Student exercises
 
-XIN - CAN YOU MAKE A SHORT SET OF EXERCISES [AND SOLUTIONS] BASED ON SUBSETTING DATA FRAMES USING []
+Use subsetting operators from base R in extracting columns (variables), observations:
+
+1. Use both "single index" and "double index" in subsetting to create a new dataframe by extracting the columns `instnm`, `event_date`, `event_type` from df_event. And show what columns (variables) are in the newly created dataframe. 
+
+2. Use subsetting to return rows 1-5 of columns `state_code`, `name`, `address` from df_school.
+
+
+### Solution to Student Exercises
+
+Solution to 1
+
+__base R__ using subsetting operators
+```{r}
+# single index
+df_event_br <- df_event[c("instnm", "event_date", "event_type")]
+#double index
+df_event_br <- df_event[, c("instnm", "event_date", "event_type")]
+names(df_event_br)
+```
+
+Solution to 2
+
+__base R__ using subsetting operators
+```{r}
+df_school[1:5, c("state_code", "name", "address")]
+```
 
 ## Subsetting lists/data frames using [[]] and $
 
@@ -796,23 +842,70 @@ nrow(df_event[which(df_event$event_type == "public hs"
   & df_event$med_inc>=50000), ])
 ```
 
-### Subsetting Data Frames with [] and $/STUDENT EXERCISES
+### Student Exercises
 
-XIN - CREATE STUDENT EXERCISES. CAN USE THIS SLIDE FOR ONE OF EXERCISES AND MAKE ONE OR TWO  MORE. FOR EACH QUESTION, ASK STUDENTS TO ACCOMPLISH USING (1) [] COMBINED WITH $; (2) FILTER(); AND (3) SUBSET()
+Subsetting Data Frames with (1) [] and $; (2) subset() and filter():
 
-- Show all public high schools with at least 50% Latinx (hispanic in data) student enrollment 
+1. Show how many public high schools in California with at least 50% Latinx (hispanic in data) student enrollment from df_school. 
 
+2. Show how many out-state events at public high schools with more than $30K median from df_event (do not forget to exclude missing values).
+
+### Solution to Student Exercises
+
+Solution to 1
+
+__base R__ using [] and $ 
 ```{r}
-#public high schools with at least 50% Latinx student enrollment 
-df_CA<- df_school[df_school$school_type == "public" 
+df_school_br1<- df_school[df_school$school_type == "public" 
                   & df_school$pct_hispanic >= 50 
                   & df_school$state_code == "CA", ]
-
-head(df_CA, n=3)
-nrow(df_CA)
+nrow(df_school_br1)
 ```
 
+__base R__ using `subset()` function
+```{r}
+df_school_br2 <- subset(df_school, school_type == "public" 
+                  & pct_hispanic >= 50 
+                  & state_code == "CA" )
+nrow(df_school_br2)
+```
 
+__tidyverse__ using `filter()` function
+```{r}
+df_school_tv <- df_school %>% filter(school_type == "public" 
+                  & pct_hispanic >= 50 
+                  & state_code == "CA" )
+nrow(df_school_tv)
+```
+
+### Solution to Student Exercises
+
+Solution to 2:
+
+__base R__ using [] and $ (NA included)
+```{r}
+# use is.na to exclude NA
+nrow(df_event[df_event$event_type == "public hs" & df_event$event_inst =="Out-State" 
+              & df_event$med_inc > 30000 & is.na(df_event$med_inc) ==0, ])
+
+# use which to exclude NA
+nrow(df_event[which(df_event$event_type == "public hs" & df_event$event_inst =="Out-State" 
+              & df_event$med_inc > 30000 ), ])
+```
+
+__base R__ using `subset()` function (NA excluded)
+```{r}
+nrow(subset(df_event, event_type == "public hs" 
+                        & event_inst =="Out-State"& df_event$med_inc > 30000 ))
+```
+
+__tidyverse__ using `filter()` function (NA excluded)
+```{r}
+count(filter(df_event, event_type == "public hs" 
+                        & event_inst =="Out-State" & df_event$med_inc > 30000 ))
+```
+
+ 
 # Sorting data 
 
 ### Base R `sort()` for vectors 
