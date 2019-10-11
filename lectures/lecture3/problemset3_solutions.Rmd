@@ -1,7 +1,7 @@
 ---
 title: "Lecture 3 problem set"
 author: "INSERT YOUR NAME HERE"
-date: "9/18/2019"
+date: "10/11/2019"
 output:
   pdf_document: default
   html_document: default
