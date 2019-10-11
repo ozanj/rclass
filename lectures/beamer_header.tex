@@ -5,6 +5,8 @@
 \usepackage{hyperref}
 
 \usepackage{tikz} % used for text highlighting, amongst others
+\usepackage{comment}
+
 %title slide stuff
 %\institute{Department of Education}
 %\title{Managing and Manipulating Data Using R}
@@ -35,6 +37,13 @@
 %, inner sep=0.3mm
 %highlight text with very light grey and use font associated with code
 \newcommand*{\hlgc}[1]{\texttt{\hlg{#1}}}
+
+%modifying back ticks to add grey background
+\let\OldTexttt\texttt
+\renewcommand{\texttt}[1]{\OldTexttt{\hlg{#1}}}
+
+
+\begin{comment}
 
 % Font
 \usepackage[defaultfam,light,tabular,lining]{montserrat}
@@ -82,6 +91,4 @@
     \endgroup
 }
 
-%modifying back ticks to add grey background
-\let\OldTexttt\texttt
-\renewcommand{\texttt}[1]{\OldTexttt{\hlg{#1}}}
+\end{comment}

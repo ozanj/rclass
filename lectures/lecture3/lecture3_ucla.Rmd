@@ -286,6 +286,8 @@ count(filter(df_school, state_code %in% c("CA", "FL", "MA")
              & school_type == "public" & visits_by_110635 %in% c(1,2) ))
 ```
 
+### Solution to Student Exercises 
+
 Solution to 4
 
 __base R__ using `subset()` function
@@ -802,9 +804,11 @@ Base R filter using `subset()` excludes rows with `NA` for condition
 #num obs event_type=="public hs" and med_inc is missing
 nrow(subset(df_event, event_type == "public hs" & is.na(med_inc)==1))
 #num obs event_type=="public hs" & med_inc is not NA & med_inc >= $50,000
-nrow(subset(df_event, event_type == "public hs" & is.na(med_inc)==0 & med_inc>=50000))
+nrow(subset(df_event, event_type == "public hs" & is.na(med_inc)==0 
+  & med_inc>=50000))
 #num obs event_type=="public hs" & med_inc >= $50,000
-nrow(subset(df_event, event_type == "public hs" & med_inc>=50000))
+nrow(subset(df_event, event_type == "public hs" 
+  & med_inc>=50000))
 ```
 Tidyverse `filter()` excludes rows with `NA` for condition. 
 ```{r}
