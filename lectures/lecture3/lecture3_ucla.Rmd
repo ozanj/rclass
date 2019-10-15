@@ -286,6 +286,8 @@ count(filter(df_school, state_code %in% c("CA", "FL", "MA")
              & school_type == "public" & visits_by_110635 %in% c(1,2) ))
 ```
 
+### Solution to Student Exercises 
+
 Solution to 4
 
 __base R__ using `subset()` function
@@ -392,6 +394,7 @@ Use negative integers to exclude elements based on element position
 ```{r}
 x[-1] # exclude 1st element
 
+x[c(3,1)] # 3rd and 1st element
 x[-c(3,1)] # exclude 3rd and 1st element
 ```
 
@@ -416,6 +419,7 @@ Recycling rules:
 
 ```{r}
 length(c(TRUE,FALSE))
+x
 x[c(TRUE,FALSE)]
 ```
 
@@ -434,6 +438,7 @@ x[c(TRUE, FALSE, NA, TRUE, NA)]
 
 Return all elements of object `x` where element is greater than 3
 ```{r}
+x
 x[x>3]
 ```
 
@@ -471,7 +476,6 @@ Create vector `y` that has values of vector `x` but each element is named
 x
 
 (y <- c(a=1.1, b=2.2, c=3.3, d=4.4, e=5.5))
-  
 
 ```
 Return elements of vector based on name of element
@@ -535,6 +539,7 @@ names(df_event)
 df_event[1:4]
 df_event[c(1,2,3,4)]
 
+str(df_event[1:4])
 #extract columns 13 and 7
 df_event[c(13,7)]
 ```
@@ -581,6 +586,7 @@ Selecting columns from a data frame by subsetting with `[]` and list of element 
 "single index" approach extracts specific variables, all rows (output omittted)
 ```{r, results="hide"}
 df_event[c("instnm", "univ_id", "event_state")] 
+select(df_event,instnm,univ_id,event_state) # same same
 ```
 
 "Double index" approach extracts specific variables and specific rows
@@ -595,11 +601,7 @@ df_event[1:5, c("instnm", "event_state", "event_type")]
 
 Use subsetting operators from base R in extracting columns (variables), observations:
 
-1. Use subsetting to create a new dataframe by extracting the columns `instnm`, `event_date`, `event_type` from df_event. And show what columns (variables) are in the newly created dataframe. 
-
-- 1a. use single index approach
-
-- 1b. use double index approach
+1. Use both "single index" and "double index" in subsetting to create a new dataframe by extracting the columns `instnm`, `event_date`, `event_type` from df_event. And show what columns (variables) are in the newly created dataframe. 
 
 2. Use subsetting to return rows 1-5 of columns `state_code`, `name`, `address` from df_school.
 
@@ -611,11 +613,10 @@ Solution to 1
 __base R__ using subsetting operators
 ```{r}
 # single index
-df_event_br1 <- df_event[c("instnm", "event_date", "event_type")]
-names(df_event_br1)
-# double index
-df_event_br2 <- df_event[, c("instnm", "event_date", "event_type")]
-names(df_event_br2)
+df_event_br <- df_event[c("instnm", "event_date", "event_type")]
+#double index
+df_event_br <- df_event[, c("instnm", "event_date", "event_type")]
+names(df_event_br)
 ```
 
 Solution to 2
@@ -638,7 +639,7 @@ So far we have used `[]` to excract elements from an object
 
 - Applying `[[]]` gives same result as `[]`; that is, an atomic vector with element you request
 ```{r}
-x <- c(1.1, 2.2, 3.3, 4.4, 5.5)
+(x <- c(1.1, 2.2, 3.3, 4.4, 5.5))
 str(x[3])
 str(x[[3]])
 ```
@@ -646,6 +647,7 @@ str(x[[3]])
 - Applying `[[]]` to list gives the "contents" of the list, rather than list itself
 ```{r}
 list_a <- list(1:3, "a", 4:6)
+str(list_a)
 str(list_a[1])
 str(list_a[[1]])
 ```
@@ -765,6 +767,10 @@ Count obs where high schools received at least 1 visit by Bama (100751) and at l
 count(df_school[df_school$visits_by_110635 >= 1
   & df_school$visits_by_100751 >= 1, ])
 
+count(df_school[df_school[["visits_by_110635"]] >= 1
+  & df_school[["visits_by_100751"]] >= 1, ])
+
+df_school[]
 #filter() approach
 nrow(filter(df_school, visits_by_110635 >= 1, visits_by_100751 >= 1))
 
@@ -807,9 +813,11 @@ Base R filter using `subset()` excludes rows with `NA` for condition
 #num obs event_type=="public hs" and med_inc is missing
 nrow(subset(df_event, event_type == "public hs" & is.na(med_inc)==1))
 #num obs event_type=="public hs" & med_inc is not NA & med_inc >= $50,000
-nrow(subset(df_event, event_type == "public hs" & is.na(med_inc)==0 & med_inc>=50000))
+nrow(subset(df_event, event_type == "public hs" & is.na(med_inc)==0 
+  & med_inc>=50000))
 #num obs event_type=="public hs" & med_inc >= $50,000
-nrow(subset(df_event, event_type == "public hs" & med_inc>=50000))
+nrow(subset(df_event, event_type == "public hs" 
+  & med_inc>=50000))
 ```
 Tidyverse `filter()` excludes rows with `NA` for condition. 
 ```{r}
