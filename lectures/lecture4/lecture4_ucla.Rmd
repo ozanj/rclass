@@ -247,7 +247,7 @@ wwlist %>% filter(firstgen == "Y") %>% str()
 wwlist %>% filter(firstgen == "Y") %>% select(state, hs_city, sex) %>% str()
 ```
 
-### Aside: the `count()` function  [students work on their own]
+### Aside: `count()` function
 
 \medskip `count()` function from `dplyr` package counts the number of obs by group
 ```{r, eval=FALSE, echo=FALSE}
@@ -271,12 +271,13 @@ count(wwlist)
 wwlist %>% count()
 ```
 - With vars in `...` argument, counts number of obs per variable value
+    - This is the best way to create frequency table, better than `table()`
     - note: by default, `count()` always shows `NAs` [this is good!]
 ```{r, results="hide"}
 count(wwlist,school_category)
 wwlist %>% count(school_category)
 ```
-### Aside: pipe operators and new lines
+### pipe operators and new lines
 
 \medskip Often want to insert line breaks to make long line of code more readable
 
@@ -303,8 +304,81 @@ wwlist %>% filter(firstgen == "Y")
   %>% count(sex)
 ```
 
+### The power of pipes
 
-### Do task with and without pipes
+You might be thinking, "what's the big deal?"
+
+__TasK__:
+
+- in one line of code, modify `wwlist` and create bar chart that counts number of prospects purchased by race/ethnicity, separately for in-state vs. out-of-state
+```{r, eval=FALSE}
+wwlist %>%  filter(is.na(state)==0) %>% # drop obs where variable state missing
+  mutate( # create out-of-state indicator; create recoded ethnicity var
+    out_state = as_factor(if_else(state != "WA", "out-of-state", "in-state")),
+    ethn_race = recode(ethn_code,
+      "american indian or alaska native" = "nativeam",
+      "asian or native hawaiian or other pacific islander" = "api",
+      "black or african american" = "black",
+      "cuban" = "latinx",
+      "mexican/mexican american" = "latinx",
+      "not reported" = "not_reported",
+      "other-2 or more" = "multirace",
+      "other spanish/hispanic" = "latinx",
+      "puerto rican" = "latinx",
+      "white" = "white")) %>% 
+    group_by(out_state) %>% # group_by "in-state" vs. "out-of-state"
+    count(ethn_race) %>% # count of number of prospects purchased by race
+    ggplot(aes(x=ethn_race, y=n)) +  # plot
+    ylab("number of prospects") + xlab("race/ethnicity") +
+    geom_col() +  coord_flip() + facet_wrap(~ out_state) 
+```
+
+### The power of pipes
+
+__TasK__:
+
+- in one line of code, modify `wwlist` and create bar chart of median income (in zip-code) of prospects purchased by race/ethnicity, separately for in-state vs. out-of-state
+```{r, eval=FALSE}
+wwlist %>%  filter(is.na(state)==0) %>% # drop obs where variable state missing
+  mutate( # create out-of-state indicator; create recoded ethnicity var
+    out_state = as_factor(if_else(state != "WA", "out-of-state", "in-state")),
+    ethn_race = recode(ethn_code,
+      "american indian or alaska native" = "nativeam",
+      "asian or native hawaiian or other pacific islander" = "api",
+      "black or african american" = "black",
+      "cuban" = "latinx",
+      "mexican/mexican american" = "latinx",
+      "not reported" = "not_reported",
+      "other-2 or more" = "multirace",
+      "other spanish/hispanic" = "latinx",
+      "puerto rican" = "latinx",
+      "white" = "white")) %>% 
+    group_by(out_state, ethn_race) %>% # group_by "out-state" and ethnicity
+    summarize(avg_inc_zip = mean(med_inc_zip, na.rm = TRUE)) %>% # calculate avg. inc
+    ggplot(aes(x=out_state, y=avg_inc_zip)) + 
+    ylab("avg. income in zip code") + xlab("") +
+    geom_col() +  coord_flip() + facet_wrap(~ ethn_race) # plot
+```
+
+### The power of pipes
+
+Example R script from Ben Skinner, which creates analysis data for [Skinner (2018)](https://link.springer.com/article/10.1007%2Fs11162-018-9507-1)
+
+- [Link to R script](https://github.com/btskinner/colchoice_rep/blob/master/scripts/makedata.r)
+
+\medskip
+
+Other relevant links
+
+- [Link to Github repository for Skinner (2018)](https://github.com/btskinner/colchoice_rep)
+- [Link to published paper](https://link.springer.com/article/10.1007%2Fs11162-018-9507-1)
+- [Link to Skinner's Github page](https://github.com/btskinner)
+    - A lot of cool stuff here
+- [Link to Skinner's personal website](https://www.btskinner.io/)
+    - A lot of cool stuff here
+
+
+### Do task with and without pipes [STUDENTS WORK ON THEIR OWN]
 
 Task: 
 
@@ -320,7 +394,7 @@ With pipes
 wwlist %>% filter(firstgen == "Y", state == "WA") %>% count()
 ```
 
-### Do task with and without pipes
+### Do task with and without pipes [STUDENTS WORK ON THEIR OWN]
 
 __Task__: frequency table of `school_type` for non first-gen prospects from WA
 
@@ -415,11 +489,11 @@ names(df_school_all)
 ```
 ### Create new data frame based on `df_school_all`
 
-Let's create new version of this data frame, called `school_v2`, which we'll use to introduce how to create new variables
+Create new version of data frame, called `school_v2`, which we'll use to introduce how to create new variables
 ```{r, results='hide'}
 school_v2 <- df_school_all %>% 
   select(-contains("inst_")) %>% # remove vars that start with "inst_"
-  rename(
+  rename( # rename selected variables
     visits_by_berkeley = visits_by_110635,
     visits_by_boulder = visits_by_126614,
     visits_by_bama = visits_by_100751,
@@ -438,9 +512,10 @@ school_v2 <- df_school_all %>%
     visits_by_umass = visits_by_166629,
     num_took_read = num_took_rla,
     num_prof_read = num_prof_rla,
-    med_inc = avgmedian_inc_2564)
+    med_inc = avgmedian_inc_2564
+  )
 
-names(school_v2)
+glimpse(school_v2)
 ```
 
 ## Introduce mutate() function 
@@ -459,17 +534,21 @@ __Task__:
 
 - Using data frame `school_v2` create new variable that measures the pct of students on free/reduced lunch (output omitted)
 ```{r, results='hide'}
-school_sml <- school_v2 %>% # create new dataset with fewer vars; not necessary to do this
+# create new dataset with fewer vars; not necessary to do this
+school_sml <- school_v2 %>% 
   select(ncessch, school_type, num_fr_lunch, total_students)
 
+# create new var
 school_sml %>% 
-  mutate(pct_fr_lunch = num_fr_lunch/total_students) # create new var
+  mutate(pct_fr_lunch = num_fr_lunch/total_students) 
 
-rm(school_sml)
+# remove data frame object
+rm(school_sml) 
 ```
-### Syntax for `mutate()`
 
-Let's spend a couple minutes looking at help file for `mutate()`
+### Investigate `mutate()` syntax
+
+
 ```{r, eval=FALSE, echo=FALSE}
 ?mutate
 ```
@@ -484,33 +563,70 @@ __Arguments__
     - if using `mutate()` after pipe operator `%>%`, then this argument can be omitted
         - Why? Because data frame object to left of `%>%` "piped in" to first argument of `mutate()`
 - `...`: expressions used to create new variables
-    - Can create multiple variables at once
+    - "Name-value pairs of expressions"
+    - "The name of each argument will be the name of a new variable, and the value will be its corresponding value." 
+    - "Use a `NULL` value in mutate to drop a variable." 
+    - "New variables overwrite existing variables of the same name"
+
 
 __Value__
 
-- returns an object that contains the original input data frame and new variables that were created by `mutate()`
+- returns a (data frame) object that contains the original input data frame and new variables that were created by `mutate()`
 
-__Useful functions (i.e., "helper functions")__
+### Investigate `mutate()` syntax
+
+
+```{r, eval=FALSE, echo=FALSE}
+?mutate
+```
+
+__Can create variables using standard mathematical or logical operators__  [output omitted]
+
+```{r, results="hide"}
+#glimpse(school_v2)
+school_v2 %>% 
+  select(state_code,school_type,ncessch,med_inc,num_fr_lunch,total_students,num_took_math) %>%
+  mutate( # each argument creates a new variable, name of argument is name of variable
+    one = 1,
+    med_inc000 = med_inc/1000,
+    pct_fr_lunch = num_fr_lunch/total_students*100,
+    took_math_na = is.na(num_took_math)==1
+  ) %>%
+  select(state_code,school_type,ncessch,one,med_inc,med_inc000,num_fr_lunch,total_students,pct_fr_lunch,num_took_math,took_math_na)
+```
+
+
+__Can create variables using "helper functions" called within `mutate()`__ [output omitted]
 
 - These are standalone functions can be called *within* `mutate()`
     - e.g., `if_else()`, `recode()`, `case_when()`
 - will show examples of this in subsequent slides
 
+```{r, results="hide"}
+school_v2 %>% 
+  select(state_code,ncessch,name,school_type) %>%
+  mutate(public = if_else(school_type == "public", 1, 0))
+```
+
 ### Introduce `mutate()` function
 
 New variable not retained unless we __assign__ `<-` it to an object (existing or new)
 
-\medskip __`mutate()` without assignment__
+\medskip 
+
+- __`mutate()` without assignment__
 ```{r, results='hide'}
 school_v2 %>% mutate(pct_fr_lunch = num_fr_lunch/total_students)
 
 names(school_v2)
 ```
 
-__`mutate()` with assignment__
+\medskip 
+
+- __`mutate()` with assignment__
 ```{r, results="hide"}
 school_v2_temp <- school_v2 %>% 
-  mutate(pct_fr_lunch = num_fr_lunch/total_students) 
+  mutate(pct_fr_lunch = num_fr_lunch/total_students)
 
 names(school_v2_temp)
 rm(school_v2_temp)
@@ -543,7 +659,9 @@ school_v2 %>%
 
 2. Now using the code for question 1, filter schools where at least 50% of students are proficient in math **&** reading.  
 
-3. If you have time, count the number of schools from question 2.
+3. Count the number of schools from question 2.
+
+4. Using `school_v2`, using `mutate()` combined with `is.na()` create a dichotomous indicator variable `med_inc_na` that identifies whether `med_inc` is missing (`NA`) or not. And then use syntax `count(var_name)` to create frequency table of variable `med_inc_na`. How many observations are missing? [XIN - YOU WILL NEED TO CREATE SOLUTION FOR THIS SLIDE]
 
 
 ### Solutions for exercise using mutate()
@@ -568,7 +686,7 @@ school_v2 %>%
 ```
 
 ### Solutions for exercise using mutate()
-3. If you have time, count the number of schools from question 2.
+3. Count the number of schools from question 2.
 ```{r}
 school_v2 %>%
   select(num_prof_math, num_took_math, num_prof_read, num_took_read) %>%
@@ -578,17 +696,28 @@ school_v2 %>%
   count()
 ```
 
+### Solutions for exercise using mutate()
+4. Using `school_v2`, using `mutate()` combined with `is.na()` create a dichotomous indicator variable `med_inc_na` that identifies whether `med_inc` is missing (`NA`) or not. And then use syntax `count(var_name)` to create frequency table of variable `med_inc_na`. How many observations are missing? [XIN - YOU WILL NEED TO CREATE SOLUTION FOR THIS SLIDE]
+
+XIN - PLEASE EDIT/MODIFY THIS SLIDE AS NECESSARY
+
+```{r}
+school_v2 %>% 
+  mutate(med_inc_na = is.na(med_inc)==1) %>%
+  count(med_inc_na)
+```
 
 ## Using ifelse() function within mutate()
 
 ### Using `ifelse()` function within `mutate()`
-```{r, eval=FALSE}
+
+```{r, eval=FALSE, echo=FALSE}
 ?if_else
 ```
 
 __Description__
 
-- if `condition` `TRUE`, assign a value; if `condition` `FALSE` assign a value
+- if `logical condition` `TRUE`, assign a value; if `logical condition` `FALSE` assign a value
 
 __Usage (i.e., syntax)__
 
@@ -599,11 +728,14 @@ __Arguments__
 - `logical condition`: a condition that evaluates to `TRUE` or `FALSE`
 - `true`: value to assign if condition `TRUE`
 - `false`: value to assign if condition `FALSE`
+- `missing`: value to assign to rows that have value `NA` for condition
+    - default is `missing = NULL`; means that if condition is `NA`, then new_var == `NA`
+    - But can assign different values to `NA`s, e.g., `missing = -9`
 
 __Value__
 
 - "Where condition is TRUE, the matching value from true, where it's FALSE, the matching value from false, otherwise NA."
-- missing values from "input" var are assigned missing values in "output var", unless you specify otherwise
+- Unless otherwise specified, `NA`s in "input" var(s) assigned `NA` in "output var"
 
 __Example__: Create 0/1 indicator of whether got at least one visit from Berkeley
 ```{r, results="hide"}
@@ -642,6 +774,31 @@ school_v2 %>% select(med_inc) %>%
   count(inc_gt_100k) # note how NA values of med_inc treated
 ```
 
+### Using `ifelse()` within `mutate()`
+
+__Task__: Create 0/1 indicator if school has median income greater than $100,000. This time, let's experiment with the `missing` argument of `if_else()`
+
+XIN - WHY ISN'T THIS WORKING? ALSO, CAN YOU INVESTIGATE HOW I CAN MODIFY CODE SUCH THAT OBS WHERE CONDITION IS MISSING HAVE A VALUE OF (JUST FOR EXAMPLE) -9 IN THE NEW VARIABLE?
+
+- manually write out the default value for `missing`
+```{r, eval=FALSE}
+school_v2 %>% select(med_inc) %>% 
+  mutate(inc_gt_100k= ifelse(med_inc>100000,1,0, missing = NULL)) %>%
+  count(inc_gt_100k) # note how NA values of med_inc treated
+
+school_v2 %>% select(med_inc) %>% 
+  mutate(inc_gt_100k= ifelse(med_inc>100000,1,0, NA_integer_)) %>%
+  count(inc_gt_100k) # note how NA values of med_inc treated
+```
+
+OWN EXPERIMENTATION W/ IF_ELSE. WORKS HERE [ALTHOUGH IT IS SENSITIVE]
+```{r}
+x <- c(-5:5, NA)
+x
+if_else(x < 0, -x, x)
+if_else(x < 0, "negative", "positive", "missing")
+if_else(x < 0, -x, x, as.integer(-9))
+```
 
 ### Using `ifelse()` function within `mutate()`
 
@@ -688,9 +845,11 @@ school_v2 %>% mutate(in_state_berkeley=ifelse(state_code=="CA",1,0)) %>%
 school_v2 %>% select(visits_by_berkeley, visits_by_irvine) %>% str() 
 school_v2 %>% filter(is.na(visits_by_berkeley)) %>% count()
 school_v2 %>% filter(is.na(visits_by_irvine)) %>% count()
+
 #create variable
 school_v2 %>% 
-  mutate(berkeley_and_irvine=ifelse(visits_by_berkeley>0 & visits_by_irvine>0,1,0)) %>%
+  mutate(berkeley_and_irvine=ifelse(visits_by_berkeley>0 
+    & visits_by_irvine>0,1,0)) %>%
   count(berkeley_and_irvine)
 ```
 
@@ -732,8 +891,8 @@ wwlist_temp <- wwlist %>% select(school_type) %>%
   mutate(public_school = recode(school_type,"public" = 1, "private" = 0))
 
 wwlist_temp %>% head(n=10)
-str(wwlist_temp$public_school)
-wwlist_temp %>% count(public_school)
+str(wwlist_temp$public_school) # note: numeric variable
+wwlist_temp %>% count(public_school) # note the NAs
 rm(wwlist_temp)
 ```
 ### Using `recode()` function within `mutate()`
@@ -748,8 +907,8 @@ __Task__: Create `school_catv2` based on `school_category` with these categories
 
 Investigate input var
 ```{r, results="hide"}
-str(wwlist$school_category)
-wwlist %>% count(school_category)
+str(wwlist$school_category) # character variable
+wwlist %>% count(school_category) 
 ```
 Recode
 ```{r, results="hide"}
@@ -763,12 +922,11 @@ wwlist_temp <- wwlist %>% select(school_category) %>%
     "Special program emphasis" = "special",
     "Vocational Education School" = "vocational")
   )
-str(wwlist_temp$school_catv2)
+str(wwlist_temp$school_catv2) # character variable created
 wwlist_temp %>% count(school_catv2)
-wwlist %>% count(school_category)
 rm(wwlist_temp)
 ```
-### Using `recode()` within `mutate()` [do in pairs/groups]
+### Using `recode()` within `mutate()`
 
 __Task__: Create `school_catv2` based on `school_category` with these categories:
 
@@ -833,7 +991,7 @@ wwlist_temp <- wwlist %>% select(school_category) %>%
     "Special program emphasis" = 3,
     "Vocational Education School" = 4)
   )
-str(wwlist_temp$school_catv2)
+str(wwlist_temp$school_catv2) # note: numeric variable now
 wwlist_temp %>% count(school_catv2)
 wwlist %>% count(school_category)
 rm(wwlist_temp)
@@ -845,7 +1003,7 @@ load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_eve
 names(df_event)
 ```
 
-1. Using object `df_event`, assign new object `df_event_temp` and create `event_typev2` based on `event_type` with these categories: 
+1. Using object `df_event`, assign new object `df_event_temp` and a numeric variable create `event_typev2` based on `event_type` with these categories: 
     - `1` for "2yr college"; `2` for "4yr college"; `3` for "other"; `4` for "private hs"; `5` for "public hs" 
 
 2. This time use the `.default` argument to assign the value `5` for "public hs"
@@ -859,7 +1017,7 @@ df_event %>% count(event_type)
 ```
 
 ### Exercise using `recode()` within `mutate()` solutions 
-1. Using object `df_event`, assign new object `df_event_temp` and create `event_typev2` based on `event_type` with these categories: 
+1. Using object `df_event`, assign new object `df_event_temp` and create a numeric variable `event_typev2` based on `event_type` with these categories: 
     - `1` for "2yr college"; `2` for "4yr college"; `3` for "other"; `4` for "private hs"; `5` for "public hs"   
 
 ```{r results="hide"}
@@ -879,9 +1037,9 @@ df_event %>% count(event_type)
 
 ### Exercise using `recode()` within `mutate()` solutions  
 
-2. This time use the `.default` argument to assign the value `5` for "public hs"
+2. This time assign the value use the `.default` argument to assign the value `5` for "public hs"
 ```{r, results="hide"}
-df_event %>% select(event_type) %>% 
+df_event_temp <- df_event %>% select(event_type) %>% 
   mutate(event_typev2 = recode(event_type,
     "2yr college" = 1,
     "4yr college" = 2,
