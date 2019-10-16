@@ -1,7 +1,7 @@
 ---
-title: "Lecture 6: Tidy data"
+title: "Lecture 8: Tidy data"
 subtitle:  "EDUC 263: Managing and Manipulating Data Using R"
-author: Ozan Jaquette
+author:
 date: 
 urlcolor: blue
 output: 
@@ -31,7 +31,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 
 <br>
 
-### Using `html_document` rather than `beamer_presentation` output for the next two lectures (lecture 6 and 7)
+### Using `html_document` rather than `beamer_presentation` output for the next two lectures 
 
 - What this means is that the lecture won't have "slides"; rather, I'll just scroll down
 - Should be easier for you to "knit" entire lecture [Try it!] because doesn't rely on latex
@@ -47,16 +47,26 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 
 ### Reading to do before next class
 
-- Work through slides we from lecture 6 that we don't get to in class
-    - [REQUIRED] slides from section 4 "Tidying data"
-    - [OPTIONAL] slides from section 5 "Missing data"
+- Work through slides we from lecture 8 that we don't get to in class
+    - [REQUIRED] slides from section "Tidying data"
+    - [OPTIONAL] slides from section "Missing data"
+- [REQUIRED] R developer blog on Pivoting
+    - [LINK](https://tidyr.tidyverse.org/dev/articles/pivot.html#many-variables-in-column-names)
 - [OPTIONAL] GW chapter 12 (tidy data)
-    - Lecture 6 covers this material pretty closely, so read chapter if you can, but I get it if you don't have time
+    - Lecture covers this material pretty closely
+    - Chapter functions for tidying data are limiting and outdated: `gather()` and `spread()`
 - [OPTIONAL] Wickham, H. (2014). Tidy Data. _Journal of Statistical Software_, 59(10), 1-23. doi:10.18637/jss.v059.i10
     - This is the journal article that introduced the data concepts covered in GW chapter 12 and created the packages related to tidying data
     - Link to article here: [LINK](https://www.jstatsoft.org/article/view/v059i10)
 
 ### Libraries we will use today 
+
+Functions we will use today are new and still under development, so you need to install the development version of tidyr
+```{r}
+#install.packages("devtools")
+#devtools::install_github("tidyverse/tidyr")
+```
+
 
 You must run this R code chunk (install packages first if you don't have them)
 ```{r}
@@ -106,7 +116,7 @@ table3
 
 # Data "structure" vs data "concepts"
 
-Before we define "tidy data", we will spend significant time defining and discussing the some core terms/concepts about datasets. 
+Before we define "tidy data", we will spend significant time defining and discussing  some core terms/concepts about datasets. 
 
 This discussion draws from the 2014 article [Tidy Data](https://www.jstatsoft.org/article/view/v059i10) by Hadley Wickham.
 
@@ -187,7 +197,7 @@ ipeds_hc_temp %>% head(n=10) %>% as_factor()
 ```
 ### Which variable(s) uniquely identify rows in a data frame
 
-Identifying which combination of variables uniquely identifies rows in a data frame helps you understand the "structure" of your dataset
+Identifying which combination of variables uniquely identifies rows in a data frame helps you identify the "unit of analysis" and understand the "structure" of your dataset
 
 - Said differently: for each value of this variable (or combination of variables), there is only one row
 - Very important for reshaping/tidying data (this week) and very important for joining/merging data frames (next week)
@@ -404,10 +414,10 @@ Answers to these questions:
     - if not, how does the dataset violate this principle? __"cases" and "population" should be two different variables because they are different attributes, but in `table2` these two attributes are recorded in the column "type" and the associated value for each type is recorded in the column "count"__
     - what _should_ the variables be? __country, year, cases, population__
 1. Does each observation have its own row? __No__
-    - if not, how does the dataset violate this principle? __there is one observation for each country-year-type. But the values of type (population, cases) represent attributes of a unit, which should be represented by distint variables rather than rows. So `table2` has two rows per observation but it should have one row per observation__
+    - if not, how does the dataset violate this principle? __there is one observation for each country-year-type. But the values of type (population, cases) represent attributes of a unit, which should be represented by distinct variables rather than rows. So `table2` has two rows per observation but it should have one row per observation__
     - what does each row represent _actually_ represent? __country-year-type__
     - what _should_ each row represent? __country-year__
-1. Does each value  have its own cell." Yes.
+1. Does each value  have its own cell." __Yes__.
     - if not, how does the dataset violate this principle?
 
 ## Student exercise:
@@ -570,7 +580,7 @@ Prior to Wickham (2014) and the creation of the "tidyverse," the concepts of "ti
 
 Instead, researchers would "reshape" (verb) data from "long" (adjective) to "wide" (adjective) and vice-versa
 
-Think "wide" and "long" as alternative presentations of the exact same 
+Think "wide" and "long" as alternative presentations of the exact same data.ß
 
 __"wide" data__ represented with fewer rows and more columns  
 __"long" data__ represented with more rows and fewer columns
@@ -583,18 +593,33 @@ Example, Table 204.10 of the Digest for Education Statistics shows changer over 
 load(url("https://github.com/ozanj/rclass/raw/master/data/nces_digest/nces_digest_table_204_10.RData"))
 table204_10
 ```
-- Long form display of data: 
+__Task__: Reshape `table204_10`from wide to long
+
+`gather()` from G&W can't deal with complex variable names and can't reshape multiple columns (will discuss this shortly): 
 ```{r}
 total <- table204_10 %>%
   select(state,tot_2000,tot_2010,tot_2011,tot_2012) #subset and assign to new object
 names(total)<-c("state","2000","2010","2011","2012") #change names for year "tot_2010" -> "2010"
 
 total_long <- total %>% 
-  gather(`2000`,`2010`,`2011`,`2012`,key=year,value=total_students) %>% #will discuss this function shortly
+  gather(`2000`,`2010`,`2011`,`2012`,key=year,value=total_students) %>% 
   arrange(state, year) #arrange by state and year
 
 head(total_long, n=10) #view 10 obs
 ```
+
+`pivot_longer` can do the same task, but it can handle reshaping multiple columns and complex patterns at the same time (although, you won't be able handle complicated patterns until you learn regular expressions)
+```{r}
+
+total %>%
+  pivot_longer(
+    cols = (c("2000","2010", "2011", "2012")),
+    names_to = "year",
+    values_to = "total_students"
+  )
+```
+
+
 
 Note that the concepts "wide" vs. "long" are relative rather than absolute
 
@@ -651,7 +676,7 @@ table5
 ```
 
 
-## Tidying data: gathering
+## Tidying data: reshape "wide' to "long" (gathering)
 
 As discussed above, the first common reason for untidy data is that some of the column names are not names of variables, but values of a variable (e.g., `table4a`, `table4b`)
 ```{r}
@@ -661,16 +686,16 @@ table4a
 The solution to this problem is to transform the untidy columns (which represent variable values) into rows
 
 - In the tidyverse, this process is called "gathering"
-- Outside the tidyverse, this process is called "reshaping" from "wide" to "long"
+- Outside the tidyverse (and in future updated tidyverse), this process is called "reshaping" from "wide" to "long"
 
 In the above example, we want to transform `table4a` into something that looks like this:
 ```{r}
 table1 %>% select(country, year, cases)
 ```
 
-We gather using the `gather()` function from the`tidyr` package. 
+We could use `gather()` but going to get you in the habit of using `pivot_longer` that can handle simple to complex reshaping 
 ```{r}
-#?gather
+?pivot_longer
 ```
 
 Gathering requires knowing three parameters:
@@ -678,25 +703,97 @@ Gathering requires knowing three parameters:
 1. names of the set of columns that represent values, not variables in your untidy data 
     - These are existing columns of the untidy data
     - in table 4a these are the columns `1999` and `2000`
-2. __key variable__ : variable name you will assign to columns you are gathering from the untidy data
+2. __names_to__ : variable name(s) you will assign to columns you are gathering from the untidy data
     - This var doesn't yet exist in untidy data, but will be a variable name in the tidy data
     - For the `table4a` example, we'll call this variable `year` because the values of this variable will be years
-    - Said different: the "key" is the variable you will create whose values will be the column names from the untidy data. 
-3. __value variable__: The name of the variable that will contain values in the tidy dataset you create and whose values are spread across multiple columns in the untidy dataset
+    - Said different: the variable(s) you will create whose values will be the column names from the untidy data. 
+    - In using `gather()` this is the "key" variable
+3. __values to__: The name of the variable that will contain values in the tidy dataset you create and whose values are spread across multiple columns in the untidy dataset
     - This var doesn't yet exist in untidy data, but will be a variable name in the tidy data
     - in the `table4a` example, we'll call the "value variable" `cases` because the values refer to number of cases
     
 ```{r}
-table4a %>% gather(`1999`, `2000`, key = "year", value = "cases")
-#Note that we write `1999` rather than 1999 because the column name starts with a number
+table4a %>%
+  pivot_longer(
+    cols = (c("1999", "2000")),
+    names_to = "year",
+    values_to = "cases"
+  )
 
-#This would not work
-#table4a %>% gather(1999, 2000, key = "year", value = "cases")
 
-#But giving different names to the key variable and the value variable is fine
-table4a %>% gather(`1999`, `2000`, key = "yr", value = "num_cases")
+#giving different names to the key variable and the value variable is fine
+table4a %>%
+  pivot_longer(
+    cols = (c("1999", "2000")),
+    names_to = "yr",
+    values_to = "cases"
+  )
 ```
-### Student exercise: Real-world example of gathering
+
+### `pivot_longer` can deal with more complex data patterns
+```{r}
+?pivot_longer
+```
+
+
+Example 1: Complex variable names. Enrollment variables in table204_10 have more information than we really need to transform from untidy to tidy data (this is why we renamed the variable names before the `gather()` example above). We're going to use the `names_prefix()` argument to match and remove the part of the variable names that are not useful for reshaping wide to long. 
+
+Here we are still using the three core parameters: `cols`, `names_to`, `values_to()` 
+```{r}
+
+total1 <- table204_10 %>%
+  select(state,tot_2000,tot_2010,tot_2011,tot_2012)
+
+total1 %>%
+  pivot_longer(
+    cols = c("tot_2000","tot_2010","tot_2011","tot_2012"),
+    names_to = "year",
+    names_prefix = ("tot_"),
+    values_to = "total_students"
+  )
+
+#another way to indicate cols
+total1 %>%
+  pivot_longer(
+    cols = starts_with("tot_"),
+    names_to = "year",
+    names_prefix = ("tot_"),
+    values_to = "total_students"
+  )
+```
+
+### `pivot_longer` can deal with more complex multiple columns
+
+Example 2: Complex variable names and multiple variables need to be reshaped. In this case, we have two pieces of information for each state-year observation: total enrollment and students on free/reduced lunch. So not only do we need to reshape the data from wide to long so our observational-level is state-year, we also need to save total enrollment and students on free/reduced lunch into separate columns.
+
+-Note the special name `.value` and `names_sep()` argument. By specifying all variables (besides state) are seperated by an underscore this tells pivot_longer that that first part of the variable name before the seperator specify the "value" being measured and will be the new variables in the output
+```{r}
+total2 <- table204_10 %>%
+  select(state,tot_2000,tot_2010,tot_2011,tot_2012, frl_2000,frl_2010,frl_2011,frl_2012)
+
+#multiple variables (when patterns are consistent)
+total2 %>%
+  pivot_longer(
+    -state, 
+    names_to = c(".value", "year"), # special name .value
+    names_sep = "_"
+  )
+
+#what happens if we switch order of .value and year? 
+total2 %>%
+  pivot_longer(
+    -state, 
+    names_to = c("year", ".value"), # special name .value
+    names_sep = "_"
+  )
+
+```
+
+
+
+
+
+### Student exercise: Real-world example of long to wide
 
 [In the task I present below, fine to just work through solution I have created or try doing on your own before you look at solution]
 
@@ -710,7 +807,7 @@ glimpse(table204_10)
 
 #Create smaller version of data frame for purpose of student exercise
 total<- table204_10 %>% 
-  select(state,tot_2000,tot_2010,tot_2011,tot_2012)
+  select(state,p_frl_2000,p_frl_2010,p_frl_2011,p_frl_2012)
 head(total)
 ```
 
@@ -718,99 +815,37 @@ __Task (using the data frame `total`)__:
 
 1. Diagnose the problem with the data frame `total`
 2. Sketch out what the tidy data should look like    
-3. Transform untidy to tidy
+3. Transform untidy to tidy. hint: use `names_prefix`
 
 __Solution to student exercise__
 
 1. Diagnose the problem with the data frame `total`
-    - Column names `tot_2000`, `tot_2010`, etc. are not variables; rather they refer to values of the variable `year`
-    - Currently each observation represents a state with separate enrollment variables for each year. 
-    - Each observation _should_ be a state-year, with only one variable for enrollment
+    - Column names `p_frl_2000`, `p_frl_2010`, etc. are not variables; rather they refer to values of the variable `year`
+    - Currently each observation represents a state with separate number of students on FRL variables for each year. 
+    - Each observation _should_ be a state-year, with only one variable for FRL
 2. Sketch out what the tidy data should look like    
 3. Transform untidy to tidy
     - __names__ of the set of columns that represent values, not variables in your untidy data 
-        - `tot_2000,tot_2010,tot_2011,tot_2012`
-    - __key variable__ : variable name you will assign to columns you are gathering from the untidy data
+        - `p_frl_2000,p_frl_2010,p_frl_2011,p_frl_2012`
+    - __names_to__ : variable name you will assign to columns you are gathering from the untidy data
         - This var doesn't yet exist in untidy data, but will be a variable name in the tidy data
-        - In this example, __key__ var is year 
-    - __value variable__: The name of the variable that will contain values in the tidy dataset you create and whose values are spread across multiple columns in the untidy dataset
+        - In this example, it's year 
+    - __values_to__: The name of the variable that will contain values in the tidy dataset you create and whose values are spread across multiple columns in the untidy dataset
         - This var doesn't yet exist in untidy data, but will be a variable name in the tidy data
-        - in this example, __value__ var is total_students
+        - in this example, the value variable is frl_students
     
 ```{r}
-total_tidy <- total %>% 
-  gather(tot_2000,tot_2010,tot_2011,tot_2012, key = year, value = total_students)
-
-#sort data (optional)
-total_tidy<- total_tidy %>%
-  arrange(state,year)
-
-#examine data
-head(total_tidy, n=10)
-```
-__Alternative solution to student exercise__
-
-- __Note__: often helpful to rename columns of untidy data -- removing characters -- prior to gathering
-```{r}
-#create smaller version of data frame; same as before
-
-totalv2 <- table204_10 %>% 
-  select(state,tot_2000,tot_2010,tot_2011,tot_2012)
-
-#rename columns that represent values so that the column names are numbers
-  #(e.g., rename tot_2000 to 2000)
-names(totalv2)<- c("state","2000","2010","2011","2012")
-head(totalv2)
-
-#create tidy dataset by gathering, same as before
-total_tidyv2 <- totalv2 %>% 
-  gather(`2000`,`2010`,`2011`,`2012`, key = year, value = total_students)
-
-#sort data (optional)
-total_tidyv2<- total_tidyv2 %>%
-  arrange(state,year)
-
-head(total_tidyv2, n=10)
-```
-
-### Gathering with multiple value variables
-
-Working with data from same data frame `table204_10`, but this time we have variables for total enrollment __and__ variables for total number of students on free/reduced lunch
-```{r}
-totfrl <- table204_10 %>% 
-  select(state,tot_2000,tot_2010,tot_2011,tot_2012,frl_2000,frl_2010,frl_2011,frl_2012)
-
-#names(totalv2)<-c("state","2000","2010","2011","2012")
-head(totfrl)
-
-```
-
-__Task__: Tidy the dataset `totfrl` by converting columns to rows. Basically, we want to create "long" dataset with a `year` variable, a `total_students` variable, and a `frlunch_students` variable
-
-
-- __names__ of the set of columns that represent values, not variables in your untidy data 
-    - `tot_2000,tot_2010,tot_2011,tot_2012,frl_2000,frl_2010,frl_2011,frl_2012`
-- __key variable__ : variable name you will assign to columns you are gathering from the untidy data
-    - This var doesn't yet exist in untidy data, but will be a variable name in the tidy data
-    - In this example, __key__ var is year 
-- __value variable__: The name of the variable that will contain values in the tidy dataset you create and whose values are spread across multiple columns in the untidy dataset
-    - in this example, there would be two __value__ variables is `total_students` and `frlunch_students`
-
-Unfortunately, `gather()` function not set up to work with multiple __value__ variables, so we cannot do this task with our existing tools. 
-
-- but you could find several approaches through Googling
-
-```{r, eval=FALSE}
-
-#this code doesn't do what we want it to
-totfrl %>% 
-  gather(tot_2000,tot_2010,tot_2011,tot_2012,frl_2000,frl_2010,frl_2011,frl_2012, 
-         key = year, value = total_students)
+total %>%
+  pivot_longer(
+    cols = starts_with("p_frl_"),
+    names_to = "year",
+    names_prefix = ("p_frl_"),
+    values_to = "pct_frl"
+  )
 ```
 
 
-
-## Tidying data: spreading
+## Tidying data: "long" to "wide" (spreading)
 
 The second important and common cause of untidy data:
 
@@ -829,7 +864,7 @@ As my R guru Ben Skinner says, this sort of data structure is __very__ common "i
 The solution to this problem is to transform the untidy rows (which represent different variables) into columns
 
 - In the tidyverse, this process is called "spreading" (we spread observations across multiple columns); spreading is the opposite of gathering
-- Outside the tidyverse, this process is called "reshaping" from "long" to "wide"
+- Outside the tidyverse (and in future updated tidyverse), this process is called "reshaping" from "long" to "wide"
 
 Goal: we want to transform `table2` so it looks like `table1`
 ```{r, eval=FALSE}
@@ -837,35 +872,35 @@ table2
 table1
 ```
 
-We spread observations into columns using the `spread()` function from the`tidyr` package. 
+We reshape long to wide by using the `pivot_wider()` function from the`tidyr` package. 
 ```{r, eval=FALSE}
-?spread
+?pivot_wider
 ```
 
-Helpful to look at `table2` while we introduce `spread()` function
+Helpful to look at `table2` while we introduce `pivot_wider()` function
 ```{r}
 table2 %>% head(n=8)
 ```
 
 Spreading requires knowing two parameters, which are the parameters of `spread()`:
 
-1. __key column__. Column name in the untidy data whose values will become variable names in the tidy data
+1. __names_from__. Column name(s) in the untidy data whose values will become variable names in the tidy data
     - this column name exists as a variable in the untidy data
-    - in `table2` the key column is `type`; the values of `type`, `cases` and `population`, will become variable names in the tidy data 
+    - in `table2` this is the `type` column; the values of `type`, `cases` and `population`, will become variable names in the tidy data 
 
-1. __value column__. Column name in untidy data that contains values for the new variables that will be created in the tidy data
+1. __values_from__. Column name(s) in untidy data that contains values for the new variables that will be created in the tidy data
     - this is a varname that exists in the untidy data
     - in `table2` the value column is `count`; the values of `count` will become the values of the new variables `cases` and `population` in the tidy data
 
 ```{r}
 table2
 table2 %>%
-    spread(key = type, value = count)
+    pivot_wider(names_from = type, values_from = count)
 #compare to table 1
 table1
 ```
 
-### Student exercise: real-world example of spreading
+### Student exercise: real-world example of reshaping long to wide
 
 [In the task I present below, fine to just work through solution I have created or try doing on your own before you look at solution]
 
@@ -940,18 +975,18 @@ __2. Sketch out what the tidy data should look like__ (sketch out on your own)
 
 __3. Transform untidy to tidy__
 
-- __key column__. Column name in the untidy data whose values will become variable names in the tidy data
+- __names_from__. Column name in the untidy data whose values will become variable names in the tidy data
 that contains variable names
     - this variable name exists in the untidy data
     - in `ipeds_hc` the key column is `lstudy`; the values of `lstudy`, will become variable names in the tidy data 
 
-- __value column__. Column name in untidy data that contains values for the new variables that will be created in the tidy data
+- __values_from__. Column name in untidy data that contains values for the new variables that will be created in the tidy data
     - this is a varname that exists in the untidy data
     - in `ipeds_hc` the value column is `efytotlt`; the values of `efytotlt` will become the values of the new variables in the tidy data
     
 ```{r}
 ipeds_hc %>% 
-    spread(key = lstudy, value = efytotlt)
+    pivot_wider(names_from = lstudy, values_from = efytotlt) #notice it uses the underlying data not labels
 ```
 
 __Alternative solution__
@@ -971,7 +1006,7 @@ ipeds_hcv2 <- ipeds_hc %>%
 head(ipeds_hcv2)
 
 ipeds_hcv2 %>% select(instnm,unitid,level,efytotlt) %>%
-    spread(key = level, value = efytotlt)
+    pivot_wider(names_from = level, values_from = efytotlt) #nicer!
 ```
 
 
@@ -985,12 +1020,20 @@ Create dataset that has total enrollment, enrollment "men", and enrollment "wome
 ipeds_hc_multi_val <- ipeds_hc_all %>%
   select(unitid,lstudy,efytotlt,efytotlm,efytotlw)
 
-ipeds_hc_multi_val %>% head(n=10)
-```
-Unfortunately, `spread()` function not set up to deal with multipel __value__ variables
+ipeds_hc_multi_val <- ipeds_hc_multi_val %>% 
+  mutate(level = recode(as.integer(lstudy),
+    `1` = "ug",
+    `3` = "grad",
+    `999` = "all")
+  ) %>% select(-lstudy) # drop variable lstudy
 
-- completing this task would require alternative approaches/additional programming concepts
-- You can google this, but not required for homework
+head(ipeds_hc_multi_val)
+
+ipeds_hc_multi_val  %>% 
+    pivot_wider(names_from = level, values_from = c(efytotlt, efytotlm, efytotlw))
+
+```
+
 
 
 # Missing values
