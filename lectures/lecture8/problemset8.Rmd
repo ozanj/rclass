@@ -22,9 +22,8 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 ##  Required reading before next class
 
 - Work through slides from lecture 6 that we don't get to in class
-    - [REQUIRED] slides from section 5 "Missing data"
-- [REQUIRED] R Pivot Blog
-    - https://tidyr.tidyverse.org/dev/articles/pivot.html
+    - [REQUIRED] slides from section 4 "Tidying data", particularly 4.2 "gathering"
+    - [OPTIONAL] slides from section 5 "Missing data"
 - [OPTIONAL] GW chapter 12 (tidy data)
     - Lecture 6 covers this material pretty closely, so read chapter if you can, but I get it if you don't have time
 - [OPTIONAL] Wickham, H. (2014). Tidy Data. _Journal of Statistical Software_, 59(10), 1-23. doi:10.18637/jss.v059.i10
