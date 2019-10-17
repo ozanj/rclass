@@ -1059,9 +1059,7 @@ df_event %>% count(event_type)
 ```{r, eval=FALSE, echo=FALSE}
 ?case_when
 ```
-__Description__ Useful when the variable you want to create is more complicated than variables that can be created using `ifelse()` or `recode()`
-
-- Useful when new variable is a function of multiple "input" variables
+`case_when()` useful for creating variable that is a function of multiple "input" variables
 
 __Usage (i.e., syntax)__: `case_when(...)`
 
@@ -1092,16 +1090,17 @@ wwlist_temp %>% count(state_gen)
 
 ### Using `case_when()` function within `mutate()` 
 
-__Task__: Using data frame `wwlist` and input vars `state` and `firstgen`, create a 4-category var with following categories:
-
-- "instate_firstgen"; "instate_nonfirstgen"; "outstate_firstgen"; "outstate_nonfirstgen"
+__Task__: Using data frame `wwlist` and input vars `state` and `firstgen`, create a 4-category var
 
 Let's take a closer look at how values of inputs are coded into values of outputs
 ```{r, results="hide"}
 wwlist %>% select(state,firstgen) %>% str()
 count(wwlist,state)
 count(wwlist,firstgen)
+```
 
+Create variable
+```{r, results="hide"}
 wwlist_temp <- wwlist %>% select(state,firstgen) %>%
   mutate(state_gen = case_when(
     state == "WA" & firstgen =="Y" ~ "instate_firstgen",
@@ -1109,11 +1108,15 @@ wwlist_temp <- wwlist %>% select(state,firstgen) %>%
     state != "WA" & firstgen =="Y" ~ "outstate_firstgen",
     state != "WA" & firstgen =="N" ~ "outstate_nonfirstgen")
   )
+```
 
+Compare values of input vars to value of output var
+```{r, results="hide"}
 wwlist_temp %>% count(state_gen)
 wwlist_temp %>% filter(is.na(state)) %>% count(state_gen)
 wwlist_temp %>% filter(is.na(firstgen)) %>% count(state_gen)
 ```
+
 __Take-away__: by default var created by `case_when()` equals `NA` for obs where one of the inputs equals `NA`
 
 ### Student exercise using `case_when()` within `mutate()`
@@ -1158,14 +1161,14 @@ school_v2_temp %>% count(state_type)
 
 ### Base R approach to creating new variables
 
-Subsetting operators `[]` and `$` are used to create new variables and set conditions of the input variables 
+Create new variables using assignment operator `<-` and subsetting operators `[]` and `$` to create new variables and set conditions of the input variables 
 
 \medskip
 
-If creating new variable based on calculation of input variables, basically the tidyverse equivalent of `mutate()` __without__ `ifelse()` or `recode()`
+Pseudo syntax: `df$newvar <- ...` 
 
-- Sudo syntax: `df$newvar <- ...` 
-- where ... argument is expression(s)/calculation(s) used to create new variables 
+- where `...` argument is expression(s)/calculation(s) used to create new variables
+    - expressions can include subsetting operators and/or other base R functions
 
 \medskip
 
@@ -1175,7 +1178,11 @@ __base R approach__
 ```{r}
 school_v2_temp<- school_v2 #create copy of dataset; not necessary
 school_v2_temp$pct_fr_lunch <- 
-   school_v2_temp$num_fr_lunch/school_v2_temp$total_students 
+   school_v2_temp$num_fr_lunch/school_v2_temp$total_students
+
+#investigate variable you created
+str(school_v2_temp$pct_fr_lunch)
+school_v2_temp$pct_fr_lunch[1:5] # print first 5 obs
 ```
 
 __tidyverse approach (with pipes)__
@@ -1190,10 +1197,8 @@ If creating new variable based on the condition/values of input variables, basic
 
 \medskip
 
-- Sudo syntax: `df$newvar[logical condition]<- new value` 
+- Pseudo syntax: `df$newvar[logical condition]<- new value` 
 - `logical condition`: a condition that evaluates to `TRUE` or `FALSE`
-
-
 
 ###  Base R approach to creating new variables
 
@@ -1237,19 +1242,21 @@ wwlist_temp %>% count(state_gen)
 
 ### Base R approach to creating new variables 
 
-__Task__: Using data frame `wwlist` and input vars `state` and `firstgen`, create a 4-category var with following categories:
-
-- "instate_firstgen"; "instate_nonfirstgen"; "outstate_firstgen"; "outstate_nonfirstgen"
+__Task__: Using  `wwlist` and input vars `state` and `firstgen`, create a 4-category var
 
 __base R approach__
 ```{r}
 wwlist_temp <- wwlist 
 
 wwlist_temp$state_gen <- NA
-wwlist_temp$state_gen[wwlist_temp$state == "WA" & wwlist_temp$firstgen =="Y"] <- "instate_firstgen"
-wwlist_temp$state_gen[wwlist_temp$state == "WA" & wwlist_temp$firstgen =="N"] <- "instate_nonfirstgen"
-wwlist_temp$state_gen[wwlist_temp$state != "WA" & wwlist_temp$firstgen =="Y"] <- "outstate_firstgen"
-wwlist_temp$state_gen[wwlist_temp$state != "WA" & wwlist_temp$firstgen =="N"] <- "outstate_nonfirstgen"
+wwlist_temp$state_gen[wwlist_temp$state == "WA" 
+  & wwlist_temp$firstgen =="Y"] <- "instate_firstgen"
+wwlist_temp$state_gen[wwlist_temp$state == "WA" 
+  & wwlist_temp$firstgen =="N"] <- "instate_nonfirstgen"
+wwlist_temp$state_gen[wwlist_temp$state != "WA" 
+  & wwlist_temp$firstgen =="Y"] <- "outstate_firstgen"
+wwlist_temp$state_gen[wwlist_temp$state != "WA" 
+  & wwlist_temp$firstgen =="N"] <- "outstate_nonfirstgen"
 
 str(wwlist_temp$state_gen)
 count(wwlist_temp, state_gen)
