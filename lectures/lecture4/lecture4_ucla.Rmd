@@ -600,7 +600,7 @@ __Can create variables using "helper functions" called within `mutate()`__ [outp
 
 - These are standalone functions can be called *within* `mutate()`
     - e.g., `if_else()`, `recode()`, `case_when()`
-- will show examples of this in subsequent slides
+- will walk through helper functions in more detail in subsequent sections of lecture
 
 ```{r, results="hide"}
 school_v2 %>% 
@@ -651,6 +651,45 @@ school_v2 %>%
   select(num_fr_lunch, total_students, num_prof_math, num_took_math) %>%
   mutate(pct_fr_lunch = num_fr_lunch/total_students,
          pct_prof_math= num_prof_math/num_took_math) 
+```
+
+`mutate()` can use variables previously created within `mutate()`
+```{r, results="hide"}
+school_v2 %>% 
+  select(num_prof_math, num_took_math, num_took_read,num_prof_read) %>%
+  mutate(pct_prof_math = num_prof_math/num_took_math,
+         pct_prof_read = num_prof_read/num_took_read,
+         avg_pct_prof_math_read = (pct_prof_math + pct_prof_read)/2) 
+```
+### `mutate()`, removing variables created by `mutate()`
+
+Within `mutate()` use syntax `var_name = NULL` to remove variable from data frame
+
+- note: Variable not permanently removed from data frame unless you use assignment `<-` to create new data frame or overwrite existing data frame
+```{r, results='hide'}
+ncol(school_v2)
+school_v2 %>% 
+  select(num_prof_math, num_took_math, num_took_read,num_prof_read) %>% glimpse()
+
+school_v2 %>% 
+  select(num_prof_math, num_took_math, num_took_read,num_prof_read) %>% 
+  mutate(num_prof_math = NULL, num_took_math = NULL) %>% glimpse()
+#But variables not permanently removed because we didn't use assignment
+ncol(school_v2)
+```
+Why would we remove variables within `mutate()` rather `select()`?
+
+- remove temporary "work" variables used to create desired variable
+- Example: measure of average of pct who passed math and pct who passed reading
+```{r, results='hide'}
+school_v2 %>% 
+  select(num_prof_math, num_took_math, num_took_read,num_prof_read) %>%
+  mutate(pct_prof_math = num_prof_math/num_took_math, # create work var
+         pct_prof_read = num_prof_read/num_took_read, # create work var
+         avg_pct_prof_math_read = (pct_prof_math + pct_prof_read)/2, #create analysis var
+         pct_prof_math = NULL, # remove work var
+         pct_prof_read = NULL) %>% # remove work var
+  glimpse()
 ```
 
 ### Student exercise using mutate()
