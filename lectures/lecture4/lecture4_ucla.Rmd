@@ -813,23 +813,32 @@ school_v2 %>% select(med_inc) %>%
 
 ### Using `if_else()` within `mutate()`
 
-__Task__: Create 0/1 indicator if school has median income greater than $100,000. This time, let's experiment with the `missing` argument of `if_else()`
+__Task__: 
 
-- manually write out the default value for `missing`
+- Create 0/1 indicator if school has median income greater than $100,000. 
+
+This time, let's experiment with the `missing` argument of `if_else()`
 ```{r, eval=FALSE}
+#what we wrote before
+school_v2 %>% select(med_inc) %>% 
+  mutate(inc_gt_100k= ifelse(med_inc>100000,1,0)) %>%
+  count(inc_gt_100k)
+
+#manually write out the default value for `missing`
 school_v2 %>% select(med_inc) %>% 
   mutate(inc_gt_100k= if_else(med_inc>100000,1,0, missing = NULL)) %>%
   count(inc_gt_100k) # note how NA values of med_inc treated
 
 school_v2 %>% select(med_inc) %>% 
-  mutate(inc_gt_100k= if_else(med_inc>100000,1,0, NA_real_)) %>%
+  mutate(inc_gt_100k= if_else(med_inc>100000,1,0, missing = NA_real_)) %>%
   count(inc_gt_100k) # note how NA values of med_inc treated
 # NA can be coerced to any other vector type except raw: 
 # NA_integer_, NA_real_, NA_complex_ and NA_character_
 
+# Here we give missing values in condition the value of -9 in new variable
 school_v2 %>% select(med_inc) %>% 
-  mutate(inc_gt_100k= if_else(med_inc>100000,1,0, -9)) %>%
-  count(inc_gt_100k) # note how NA values of med_inc treated
+  mutate(inc_gt_100k= if_else(med_inc>100000,1,0, missing = -9)) %>%
+  count(inc_gt_100k) 
 ```
 
 ### Using `ifelse()` function within `mutate()`
