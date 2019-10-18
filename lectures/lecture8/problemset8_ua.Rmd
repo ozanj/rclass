@@ -21,7 +21,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 
 ##  Required reading before next class
 
-- Work through slides from lecture 6 that we don't get to in class
+- Work through slides from lecture 8 that we don't get to in class
     - [REQUIRED] slides from section 5 "Missing data"
 - [REQUIRED] R Pivot Blog
     - https://tidyr.tidyverse.org/dev/articles/pivot.html
