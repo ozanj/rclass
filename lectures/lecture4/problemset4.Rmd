@@ -1,7 +1,7 @@
 ---
 title: "Lecture 3 problem set"
 author: "INSERT YOUR NAME HERE"
-date: "October 11, 2018"
+date: "October 18, 2019"
 urlcolor: blue
 output: 
   pdf_document
@@ -15,14 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 ```
 
-# Required reading and instructions
-
-## Required reading
-
-- Grolemund and Wickham 5.5 (Add new variables with `mutate()`)
-- Xie, Allaire, and Grolemund (XAG) section 3.3 (R Markdown, PDF document) [LINK HERE](https://bookdown.org/yihui/rmarkdown/pdf-document.html)
-
-## General instructions
+# General instructions
 
 In this homework, you will specify `pdf_document` as the output format. You must have LaTeX installed in order to create pdf documents. 
 
@@ -217,9 +210,7 @@ df_school_all %>% count(school_type) # frequency count of school_type
 
 ```
 
-# **THIS IS A BONUS QUESTION**
-
-# case_when() question
+# Using case_when() function within mutate()
 
 For this set of questions, you will work with the data frame `wwlist` which has one observation for each prospective student purchased by Western Washington University from the College Board. 
 

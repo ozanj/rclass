@@ -700,7 +700,7 @@ school_v2 %>%
 
 3. Count the number of schools from question 2.
 
-4. Using `school_v2`, using `mutate()` combined with `is.na()` create a dichotomous indicator variable `med_inc_na` that identifies whether `med_inc` is missing (`NA`) or not. And then use syntax `count(var_name)` to create frequency table of variable `med_inc_na`. How many observations are missing? [XIN - YOU WILL NEED TO CREATE SOLUTION FOR THIS SLIDE]
+4. Using `school_v2`, using `mutate()` combined with `is.na()` create a dichotomous indicator variable `med_inc_na` that identifies whether `med_inc` is missing (`NA`) or not. And then use syntax `count(var_name)` to create frequency table of variable `med_inc_na`. How many observations are missing? 
 
 
 ### Solutions for exercise using mutate()
@@ -736,13 +736,11 @@ school_v2 %>%
 ```
 
 ### Solutions for exercise using mutate()
-4. Using `school_v2`, using `mutate()` combined with `is.na()` create a dichotomous indicator variable `med_inc_na` that identifies whether `med_inc` is missing (`NA`) or not. And then use syntax `count(var_name)` to create frequency table of variable `med_inc_na`. How many observations are missing? [XIN - YOU WILL NEED TO CREATE SOLUTION FOR THIS SLIDE]
-
-XIN - PLEASE EDIT/MODIFY THIS SLIDE AS NECESSARY
+4. Using `school_v2`, using `mutate()` combined with `is.na()` create a dichotomous indicator variable `med_inc_na` that identifies whether `med_inc` is missing (`NA`) or not. And then use syntax `count(var_name)` to create frequency table of variable `med_inc_na`. How many observations are missing? 
 
 ```{r}
 school_v2 %>% 
-  mutate(med_inc_na = is.na(med_inc)==1) %>%
+  mutate(med_inc_na = is.na(med_inc)) %>%
   count(med_inc_na)
 ```
 
@@ -813,30 +811,25 @@ school_v2 %>% select(med_inc) %>%
   count(inc_gt_100k) # note how NA values of med_inc treated
 ```
 
-### Using `ifelse()` within `mutate()`
+### Using `if_else()` within `mutate()`
 
 __Task__: Create 0/1 indicator if school has median income greater than $100,000. This time, let's experiment with the `missing` argument of `if_else()`
-
-XIN - WHY ISN'T THIS WORKING? ALSO, CAN YOU INVESTIGATE HOW I CAN MODIFY CODE SUCH THAT OBS WHERE CONDITION IS MISSING HAVE A VALUE OF (JUST FOR EXAMPLE) -9 IN THE NEW VARIABLE?
 
 - manually write out the default value for `missing`
 ```{r, eval=FALSE}
 school_v2 %>% select(med_inc) %>% 
-  mutate(inc_gt_100k= ifelse(med_inc>100000,1,0, missing = NULL)) %>%
+  mutate(inc_gt_100k= if_else(med_inc>100000,1,0, missing = NULL)) %>%
   count(inc_gt_100k) # note how NA values of med_inc treated
 
 school_v2 %>% select(med_inc) %>% 
-  mutate(inc_gt_100k= ifelse(med_inc>100000,1,0, NA_integer_)) %>%
+  mutate(inc_gt_100k= if_else(med_inc>100000,1,0, NA_real_)) %>%
   count(inc_gt_100k) # note how NA values of med_inc treated
-```
+# NA can be coerced to any other vector type except raw: 
+# NA_integer_, NA_real_, NA_complex_ and NA_character_
 
-OWN EXPERIMENTATION W/ IF_ELSE. WORKS HERE [ALTHOUGH IT IS SENSITIVE]
-```{r}
-x <- c(-5:5, NA)
-x
-if_else(x < 0, -x, x)
-if_else(x < 0, "negative", "positive", "missing")
-if_else(x < 0, -x, x, as.integer(-9))
+school_v2 %>% select(med_inc) %>% 
+  mutate(inc_gt_100k= if_else(med_inc>100000,1,0, -9)) %>%
+  count(inc_gt_100k) # note how NA values of med_inc treated
 ```
 
 ### Using `ifelse()` function within `mutate()`
