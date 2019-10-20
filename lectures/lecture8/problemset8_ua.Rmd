@@ -193,16 +193,16 @@ Using code from previous question as a guide, confirm that the object `agegroup1
 - What changes need to be made to `age_all` to make it tidy?
     - YOUR ANSWER HERE:  
     
-- With respect to "reshaping long to wide" to tidy a dataset, define the "names_to" parameter.
+- With respect to "reshaping long to wide" to tidy a dataset, define the "names_from" parameter.
     - YOUR ANSWER HERE: 
 
 - What should the "names_to" column be in the data frame `agegroup1_obs`?
     - YOUR ANSWER HERE: 
     
-- With respect to "reshaping long to wide" to tidy a dataset, define the  "values_to" paramenter.
+- With respect to "reshaping long to wide" to tidy a dataset, define the  "values_from" paramenter.
     - YOUR ANSWER HERE: 
     
-- What should the "value_to" column be in the data frame `agegroup1_obs`?
+- What should the "value_from" column be in the data frame `agegroup1_obs`?
     - YOUR ANSWER HERE: 
     
 Tidy the data frame `agegroup1_obs` and create a new object `agegroup1_obs_tidy`, then print a few observations
