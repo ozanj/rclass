@@ -1,5 +1,5 @@
 ---
-title: "Lecture 3 problem set"
+title: "Lecture 4 problem set"
 author: "INSERT YOUR NAME HERE"
 date: "October 18, 2019"
 urlcolor: blue
