@@ -1,7 +1,7 @@
 ---
-title: "Lecture 7: Joining multiple datasets"
-subtitle: "EDUC 263: Managing and Manipulating Data Using R" 
-author: Ozan Jaquette
+title: "Lecture 9: Joining multiple datasets"
+subtitle: "Managing and Manipulating Data Using R" 
+author: 
 date: 
 urlcolor: blue
 output: 
@@ -67,11 +67,11 @@ if(!file.exists('lecture1.2.R')){
 
 ### Reading
 
-- Work through slides we from lecture 7 that we don't get to in class
+- Work through slides we from lecture 9 that we don't get to in class
     - [REQUIRED] slides through the section on "Join problems"
     - [OPTIONAL] section on "Appending/stacking data"
 - [RECOMMENDED] GW chapter 13 (Relational data)
-    - Lecture 7 covers this material pretty closely. Please read chapter if you can, but I get it if you don't have time
+    - Lecture 9 covers this material pretty closely. Please read chapter if you can, but I get it if you don't have time
 
 ### Problem set
 
@@ -95,10 +95,11 @@ An R script is just a text file full of R commands
 
 Some of the constructive criticism
 
-- Improve time management
-    - Last half of class feels rushed
-- Unfair to ask students to work through lecture material assessed in problem set on their own
-- Some problem sets (e.g., Lecture 5 problem set on GPA) too long, confusing instructions
+- Time on in-class practice problems
+    - 50% indicated time is about right, 37.5% not enough time, 12.5% too much time
+- More real-world problem sets like GPA assignment or bonus questions that incorporate skills across different weeks
+- Lecture is too long, possibly reviewing lectures as reading assignments, spend class time on key points/questions
+  - Future format will be online/in-person hybrid-- lectures will be recorded, students view on their own, 1 hr per week lab sessions
 
 ## Lecture overview
 
@@ -138,7 +139,7 @@ Today's lecture will utilize several datasets from the National Longitudinal Sur
 - Student-transcript-term level dataset
 - Student-transcript-term-course level dataset
 
-These datasets good for teaching "joining" because you get practice joining data sources with different "observational levels" (e.g., join student level and student-transcript level data)
+These datasets are good for teaching "joining" because you get practice joining data sources with different "observational levels" (e.g., join student level and student-transcript level data)
 
 ### Read in NLS72 data frames
 
@@ -250,6 +251,7 @@ __Real-world examples of relational databases__
 - Interactive maps typically have relational databases running in the background
     - Clicking on some part of the map triggers a join of tables and you see the result of some analysis based on that join
     - e.g., our [off-campus recruiting map](https://map.emraresearch.org/)
+    - [show SQL tables NaviCat/SequelPro]
 
 Should you think of combining data-frames in R as "merging" flat-files or "joining" tables of a relational database?
 
