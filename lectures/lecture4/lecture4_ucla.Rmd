@@ -269,6 +269,7 @@ Examples of using `count()`
 ```{r, results="hide"}
 count(wwlist)
 wwlist %>% count()
+wwlist %>% count() %>% str()
 ```
 - With vars in `...` argument, counts number of obs per variable value
     - This is the best way to create frequency table, better than `table()`
@@ -276,6 +277,7 @@ wwlist %>% count()
 ```{r, results="hide"}
 count(wwlist,school_category)
 wwlist %>% count(school_category)
+wwlist %>% count(school_category) %>% str()
 ```
 ### pipe operators and new lines
 
@@ -327,7 +329,7 @@ wwlist %>%  filter(is.na(state)==0) %>% # drop obs where variable state missing
       "puerto rican" = "latinx",
       "white" = "white")) %>% 
     group_by(out_state) %>% # group_by "in-state" vs. "out-of-state"
-    count(ethn_race) %>% # count of number of prospects purchased by race
+    count(ethn_race) %>%  # count of number of prospects purchased by race
     ggplot(aes(x=ethn_race, y=n)) +  # plot
     ylab("number of prospects") + xlab("race/ethnicity") +
     geom_col() +  coord_flip() + facet_wrap(~ out_state) 
@@ -744,9 +746,9 @@ school_v2 %>%
   count(med_inc_na)
 ```
 
-## Using ifelse() function within mutate()
+## Using if_else() function within mutate()
 
-### Using `ifelse()` function within `mutate()`
+### Using `if_else()` function within `mutate()`
 
 ```{r, eval=FALSE, echo=FALSE}
 ?if_else
@@ -777,11 +779,11 @@ __Value__
 __Example__: Create 0/1 indicator of whether got at least one visit from Berkeley
 ```{r, results="hide"}
 school_v2 %>% 
-  mutate(got_visit_berkeley = ifelse(visits_by_berkeley>0,1,0)) %>%
+  mutate(got_visit_berkeley = if_else(visits_by_berkeley>0,1,0)) %>%
   count(got_visit_berkeley)
 ```
 
-### `ifelse()` within `mutate()` to create 0/1 indicator variables
+### `if_else()` within `mutate()` to create 0/1 indicator variables
 
 We often create dichotomous (0/1) indicator variables of whether something happened (or whether something is TRUE)
 
@@ -790,7 +792,7 @@ We often create dichotomous (0/1) indicator variables of whether something happe
 - Variables that help you investigate data, check quality
     - e.g., indicator of whether an observation is missing/non-missing for a particular variable
 
-### Using `ifelse()` within `mutate()`
+### Using `if_else()` within `mutate()`
 
 __Task__
 
@@ -802,12 +804,13 @@ str(school_v2$med_inc) # investigate variable type
 school_v2 %>% count(med_inc) # frequency count, but this isn't very helpful
 
 school_v2 %>% filter(is.na(med_inc)) %>% count(med_inc) 
+school_v2 %>% filter(is.na(med_inc)) %>% count()
 # shows number of obs w/ missing med_inc
 ```
 Create variable
 ```{r}
 school_v2 %>% select(med_inc) %>% 
-  mutate(inc_gt_100k= ifelse(med_inc>100000,1,0)) %>%
+  mutate(inc_gt_100k= if_else(med_inc>100000,1,0)) %>%
   count(inc_gt_100k) # note how NA values of med_inc treated
 ```
 
@@ -821,7 +824,7 @@ This time, let's experiment with the `missing` argument of `if_else()`
 ```{r, eval=FALSE}
 #what we wrote before
 school_v2 %>% select(med_inc) %>% 
-  mutate(inc_gt_100k= ifelse(med_inc>100000,1,0)) %>%
+  mutate(inc_gt_100k= if_else(med_inc>100000,1,0)) %>%
   count(inc_gt_100k)
 
 #manually write out the default value for `missing`
@@ -841,7 +844,7 @@ school_v2 %>% select(med_inc) %>%
   count(inc_gt_100k) 
 ```
 
-### Using `ifelse()` function within `mutate()`
+### Using `if_else()` function within `mutate()`
 
 __Task__
 
@@ -857,16 +860,17 @@ school_v2 %>% filter(is.na(num_took_math)) %>% count(num_took_math) # shows numb
 Create variable
 ```{r}
 school_v2 %>% select(num_took_math) %>% 
-  mutate(nonmiss_math= ifelse(!is.na(num_took_math),1,0)) %>%
+  mutate(nonmiss_math= if_else(!is.na(num_took_math),1,0)) %>%
   count(nonmiss_math) # note how NA values treated
 ```
-### Student exercises `ifelse()`
+
+### Student exercises `if_else()`
 
 1. Using the object `school_v2`, create 0/1 indicator variable `in_state_berkeley` that equals `1` if the high school is in the same state as UC Berkeley (i.e., `state_code=="CA"`).  
 2. Create 0/1 indicator `berkeley_and_irvine` of whether a school got at least one visit from UC Berkeley __AND__ from UC Irvine.  
 3. Create 0/1 indicator `berkeley_or_irvine` of whether a school got at least one visit from UC Berkeley __OR__ from UC Irvine.
 
-### Exercise`ifelse()` solutions
+### Exercise`if_else()` solutions
 
 1. Using the object `school_v2`, create 0/1 indicator variable `in_state_berkeley` that equals `1` if the high school is in the same state as UC Berkeley (i.e., `state_code=="CA"`). 
 ```{r, results="hide"}
@@ -874,11 +878,11 @@ str(school_v2$state_code) # investigate input variable
 school_v2 %>% filter(is.na(state_code)) %>% count() # investigate input var
 
 #Create var
-school_v2 %>% mutate(in_state_berkeley=ifelse(state_code=="CA",1,0)) %>%
+school_v2 %>% mutate(in_state_berkeley=if_else(state_code=="CA",1,0)) %>%
   count(in_state_berkeley)
 ```
 
-### Exercise`ifelse()` solutions
+### Exercise`if_else()` solutions
 
 2. Create 0/1 indicator `berkeley_and_irvine` of whether a school got at least one visit from UC Berkeley __AND__ from UC Irvine.
 ```{r, results="hide"}
@@ -889,17 +893,17 @@ school_v2 %>% filter(is.na(visits_by_irvine)) %>% count()
 
 #create variable
 school_v2 %>% 
-  mutate(berkeley_and_irvine=ifelse(visits_by_berkeley>0 
+  mutate(berkeley_and_irvine=if_else(visits_by_berkeley>0 
     & visits_by_irvine>0,1,0)) %>%
   count(berkeley_and_irvine)
 ```
 
-### Exercise`ifelse()` solutions
+### Exercise`if_else()` solutions
 
 3. Create 0/1 indicator `berkeley_or_irvine` of whether a school got at least one visit from UC Berkeley __OR__ from UC Irvine.
 ```{r, results="hide"}
 school_v2 %>% 
-  mutate(berkeley_or_irvine=ifelse(visits_by_berkeley>0 | visits_by_irvine>0,1,0)) %>%
+  mutate(berkeley_or_irvine=if_else(visits_by_berkeley>0 | visits_by_irvine>0,1,0)) %>%
   count(berkeley_or_irvine)
 ```
 
@@ -951,6 +955,9 @@ Investigate input var
 str(wwlist$school_category) # character variable
 wwlist %>% count(school_category) 
 ```
+
+
+
 Recode
 ```{r, results="hide"}
 wwlist_temp <- wwlist %>% select(school_category) %>% 
@@ -1156,6 +1163,7 @@ Compare values of input vars to value of output var
 wwlist_temp %>% count(state_gen)
 wwlist_temp %>% filter(is.na(state)) %>% count(state_gen)
 wwlist_temp %>% filter(is.na(firstgen)) %>% count(state_gen)
+wwlist_temp %>% filter(is.na(firstgen) | is.na(state)) %>% count(state_gen)
 ```
 
 __Take-away__: by default var created by `case_when()` equals `NA` for obs where one of the inputs equals `NA`
@@ -1234,7 +1242,7 @@ school_v2_temp <- school_v2 %>%
 
 ### Base R approach to creating new variables
 
-If creating new variable based on the condition/values of input variables, basically the tidyverse equivalent of `mutate()` __with__ `ifelse()` or `recode()`
+If creating new variable based on the condition/values of input variables, basically the tidyverse equivalent of `mutate()` __with__ `if_else()` or `recode()`
 
 \medskip
 
@@ -1248,7 +1256,7 @@ __Task__: Create 0/1 indicator if school has median income greater than $100k
 __tidyverse approach (using pipes)__
 ```{r}
 school_v2_temp %>% select(med_inc) %>% 
-  mutate(inc_gt_100k= ifelse(med_inc>100000,1,0)) %>%
+  mutate(inc_gt_100k= if_else(med_inc>100000,1,0)) %>%
   count(inc_gt_100k) # note how NA values of med_inc treated
 ```
 
