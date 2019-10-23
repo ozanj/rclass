@@ -305,21 +305,19 @@ nls_stu %>%
 <br>
 __Often, multiple variables are required to create the key for a table__
 
-Student task: confirm that the variables `id` and `transnum` form the key for the table `nls_tran`
+Ttask: confirm that the variables `id` and `transnum` form the key for the table `nls_tran`
 ```{r}
-#ERASE THIS CODE?
 nls_tran %>% group_by(id,transnum) %>% summarise(n_per_key=n()) %>% ungroup %>% count(n_per_key)
 
 nls_tran %>% count(id,transnum) %>% filter(n>1)
 ```
 __The first step before merging a pair of tables is always to identify the key for each table__.  We have already identified the key for `nls_stu` and `nls_tran`.
 
-__Student task__: 
+__Student Task__: 
 
 - try to identify the key for `nls_stu_pets`, `nls_term` and for `nls_course`
 
 ```{r}
-#DELETE THIS CODE?
 #nls_stu_pets
 nls_stu_pets %>% group_by(id) %>% summarise(n_per_key=n()) %>% ungroup %>% count(n_per_key)
 
@@ -393,7 +391,7 @@ Personally, I find the concept __foreign key__ a little bit slippery. Here is ho
 
 __Example of foreign key__
 
-- With respect to the "focal table" `nls_tran` and the "other table" `nls_stu`, the variable `id` is the _foregn key_ because:
+- With respect to the "focal table" `nls_tran` and the "other table" `nls_stu`, the variable `id` is the _foreign key_ because:
     - `id` exists in the "focal table" `nls_trans` (though it does not uniquely identifies observations in `nls_trans`)
     - `id` exists in the "other table" `nls_stu` and `id` uniquely identifies observations in `nls_stu`
 ```{r}
@@ -541,7 +539,7 @@ I recommend these general steps when merging two datasets
         - note: not all tables have keys
     - Once you identify the primary key for one of the tables, make sure that variable (or combination of variables) exists in the other table
     - Identify key variables you will use to join the two tables
-2. Join variables
+2. Join datasets
 3. Assess/investigate quality of join
     - This is basically exploratory data analysis for the purpose of data quality
         - e.g., for obs that don't "match", investigate why (what are the patterns)
@@ -582,10 +580,12 @@ Depending on whether the key variable uniquely identifies observations in table 
 - __one-to-many__ join: key variable uniquely identifies observatiosn in table `x` and does not uniquely identify observations in table `y`
     - each observation from table `x` may match to multiple observations from table `y'
     - e.g., `inner_join(nls_stu, nls_trans, by = "id")`
+    - e.g. _one_ observation (student) in `nls_stu` has _many_ observations in `nls_trans` (transcripts)
 - __many-to-one__ join: key variable does not uniquely identify observations in table `x` and does uniquely identify observations in table `y`
     - each observation from table `y` may match to multiple observations from table `x'
     - e.g., `inner_join(nls_trans, nls_trans, by = "id")`
-- __many-to-many__ join: key variable does not uniquely identify observations in table `x' and does not uniquely identify observations in table `y`
+    - e.g., _many_ observations (transcripts) in `nls_trans` have _one_ observation in `nls_stu` (student)
+- __many-to-many__ join: key variable does not uniquely identify observations in table `x` and does not uniquely identify observations in table `y`
     - This is usually an error
 
 
@@ -653,7 +653,7 @@ nls_tran %>% group_by(id,transnum) %>% summarise(n_per_key=n()) %>% ungroup %>%
 #id uniquely identifies obs in nls_stu and id is available in nls_tran, so use id as key
 
 #merge
-nls_stu_tran <- nls_stu %>% inner_join(nls_tran, by = "id")
+nls_stu_tran <- nls_stu %>% inner_join(nls_tran, by = "id") #error warning on var labels will populate
 
 #investigate results of merge
 names(nls_stu_tran)
@@ -694,10 +694,10 @@ nrow(nls_term)
 nrow(nls_tran_term)
 
 #appears that some observations from nls_term did not merge with nls_trans
-  #we shoudl investigate this further [below]
+  #we should investigate this further [below]
 ```
 <br>
-Sometimes a key variable in one table has a different variabel name in the other table. You can specify that the variables to be matched from one table to another as follows:
+Sometimes a key variable in one table has a different variable name in the other table. You can specify that the variables to be matched from one table to another as follows:
 
 - `inner_join(x,y, by = c("keyvarx" = "keyvary"))`
 
@@ -861,7 +861,7 @@ nls_tran %>% group_by(id,transnum) %>% summarise(n_per_key=n()) %>% ungroup %>% 
 #join data frames
 nls_tran %>% inner_join(nls_course, by = c("id","transnum")) %>% count()
 
-#compare to coint of number of obs in nls_course
+#compare to count of number of obs in nls_course
 nls_course %>% count()
 
 #difficult to tell which obs from nls_tran didn't merge
@@ -917,7 +917,8 @@ anti_tran_course %>%
     - semi-join only retains columns from `x`
 - How can this semi-join be practically useful?
     - semi-join could be useful when used in conjunction with anti-join to check observations that matched and did not match for `x`  
-- Let's see how this works with a smaller dataframe:
+
+__Let's see how this works with a smaller dataframe:__
 ```{r}
 x <- tribble(
   ~key, ~val_x,
@@ -957,7 +958,8 @@ anti_join(x,y, by = "key") #Return all rows from x where there are not matching 
 
 # Join problems
 
-How to avoid join problems before they arise. How to overcome join problems when they do arise
+- How to avoid join problems before they arise. 
+- How to overcome join problems when they do arise
 
 ## Overcoming join problems before they arise
 
@@ -1051,7 +1053,7 @@ admit14_15 <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/ipe
 
 
 Appending/Stack IPEDS datasets
-```{r}
+```{r, warning=FALSE}
 admit_append <- bind_rows(admit16_17,admit15_16,admit14_15)
 #note that R complains about preserving "labelled" data; does not retain labels
 str(admit_append)
@@ -1065,3 +1067,27 @@ admit_append %>% select(unitid,endyear,admcon1,admcon2,numapplytot,numadmittot) 
 #investigate data structure: one obs per unitid-endyear
 admit_append %>% group_by(unitid,endyear) %>% summarise(n_per_key=n()) %>% ungroup %>% count(n_per_key)
 ```
+
+
+__Appending when not all columns match__ results in NA for observations where columns do not match
+
+
+```{r, warning=FALSE}
+#read 15-16 data without numapply vars
+admit15_16 <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/ipeds/ic/ic15_16_admit.dta") %>%
+  select(unitid,endyear,sector,contains("admcon"))
+
+#read 14-15 data with numapply vars
+admit14_15 <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/ipeds/ic/ic14_15_admit.dta") %>%
+  select(unitid,endyear,sector,contains("admcon"),contains("numapply"))
+
+admit_append <- bind_rows(admit15_16,admit14_15)
+
+admit_append %>% filter(endyear==2016) %>%
+  count(is.na(numapplytot)) 
+
+admit_append %>% filter(endyear==2015) %>%
+  count(is.na(numapplytot))
+
+```
+
