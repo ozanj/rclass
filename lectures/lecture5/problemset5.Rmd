@@ -1,7 +1,7 @@
 ---
 title: "Lecture 5 problem set"
 author: "INSERT YOUR NAME HERE"
-date: "October 26, 2018"
+date: "October 25, 2019"
 urlcolor: blue
 output: 
   pdf_document:
@@ -17,23 +17,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, echo=FALSE, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 ```
-# Instructions  
- 
- 
 
-## General instructions  
-
-In this homework, you will specify `pdf_document` as the output format. You must have LaTeX installed in order to create pdf documents. 
-
-If you have not yet installed MiKTeX/MacTeX, I recommend installing TinyTeX, which is much simpler to install!
-
-- Instructions for installation of TinTeX can be found [HERE](https://bookdown.org/yihui/rmarkdown/installation.html#installation)
-
-- General Instructions for Problem Sets [Here](https://github.com/ozanj/rclass/raw/master/lectures/problemset_resources.pdf)  
-
-****** 
-
-
+\newpage
 
 ## Purpose
 

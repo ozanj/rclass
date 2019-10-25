@@ -518,16 +518,20 @@ __Task__. Count number of recruiting events by institution, event_type, and whet
 
 - Note: in `group_by()`, the optional `drop` argument controls whether empty groups dropped. default is `drop = TRUE`
 
-XIN - WHY ISN'T .DROP = FALSE [BELOW] KEEPING ROWS FOR EMPTY GROUPS?
 ```{r, results="hide"}
+
 df_event %>% group_by(instnm, event_type, event_inst) %>% 
   summarize(num_events=n())
 
 df_event %>% group_by(instnm, event_type, event_inst, .drop = TRUE) %>% 
   summarize(num_events=n()) 
 
-df_event %>% group_by(instnm, event_type, event_inst, .drop = FALSE) %>% 
-  summarize(num_events=n()) 
+df_event %>% 
+  group_by(as.factor(instnm), as.factor(event_type), as.factor(event_inst),
+           .drop = FALSE) %>% summarize(num_events=n()) %>% arrange(num_events)
+# .drop=FALSE affects only grouping columns that are coded as factors
+# combinations that include non-factor grouping variables are still 
+# silently dropped even with .drop=FALSE.
 ```
 Make a graph, showing in/out state as fill color of bar
 ```{r, eval=FALSE}
