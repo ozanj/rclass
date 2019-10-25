@@ -17,16 +17,9 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, echo=FALSE, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 ```
-# Required reading and instructions  
+# Instructions  
  
  
-
-##  Required reading before next class
-
-- Grolemund and Wickham 5.6 - 5.7 (grouped summaries and mutates)
-- Xie, Allaire, and Grolemund 4.1 (R Markdown, ioslides presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/ioslides-presentation.html) and 4.3 (R Markdown, Beamer presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/beamer-presentation.html)  
-
-
 
 ## General instructions  
 
@@ -52,7 +45,9 @@ In this problem set, we are working with data from the the list of prospective s
 
 For this problem set, you are a researcher and your goal is to identify systematic racial and socioeconomic bias in student list purchases by Western Washington University. That is, do the prospects purchased by Western Washington tend to have different racial and socioeconomic characteristics than other people in their state or zip-code?
 
-Note that there is a lot of data cleaning required before conducting `group_by` and `summarise()` analyses. Much of this data cleaning involves creating prospect-level and zipcode/state-level measures of race/ethnicity that are consistent to one another. Therefore, we have answered some of the data cleaning questions for you to avoid making the problem set too long. We intentionally left our data cleaning code for you all to get a sense of the process of investigating and cleaning your data.  
+Note that there is a lot of data cleaning required before conducting `group_by` and `summarise()` analyses. Much of this data cleaning involves creating prospect-level and zipcode/state-level measures of race/ethnicity that are consistent to one another. Therefore, we have answered some of the data cleaning questions for you to avoid making the problem set too long. We intentionally left our data cleaning code for you all to get a sense of the process of investigating and cleaning your data.
+
+Note, for questions that ask you to use `summarize()` function, fine to use `summarize_all()`, `summarize_at()`, or `summarize_if()` instead as long as you get the right answer.
 
 **Caveat**
 
