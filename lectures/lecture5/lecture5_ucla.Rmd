@@ -43,8 +43,10 @@ download.file(url = 'https://raw.githubusercontent.com/ozanj/rclass/master/lectu
 __Required reading for next week:__
 
 - Grolemund and Wickham 5.6 - 5.7 (grouped summaries and mutates)
-- Xie, Allaire, and Grolemund 4.1 (R Markdown, ioslides presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/ioslides-presentation.html) and 4.3 (R Markdown, Beamer presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/beamer-presentation.html)
-    - Why? Lectures for this class are `beamer_presentation` output type.
+- Xie, Allaire, and Grolemund 4.1 (R Markdown, ioslides presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/ioslides-presentation.html) and 4.3 (R Markdown, Beamer presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/beamer-presentation.html). Why?:
+\medskip
+    - Lectures for this class are `beamer_presentation` output type.
+\medskip    
     - `ioslides_presentation` are the most basic presentation output format for RMarkdown, so learning about `ioslides` will help you understand `beamer`
 
 ### What we will do today
@@ -1044,14 +1046,50 @@ df_event %>%
 
 __Task__: 
 
-- Same task as before, but now calculate, __mean__, __standard deviation__, __min_, and __max__ of `med_inc` and `pct_white_zip` for each combination of `event_type` and `event_inst`
+- Same task as before, but now calculate __mean__, __standard deviation__, __min__, and __max__ of `med_inc` and `pct_white_zip` for each combination of `event_type` and `event_inst`
 
-```{r, results="hide"}
+\medskip
+
+```{r}
 df_event %>% 
   filter(univ_id == 215293, event_type %in% c("private hs","public hs")) %>%
   select(event_type, event_inst,med_inc,pct_white_zip) %>%
   group_by(event_type,event_inst) %>%
-  summarize_all(.funs = list(avg = mean, std = sd, low = min, high = max), na.rm = TRUE)
+  summarize_all(.funs = list(avg = mean, std = sd, low = min, high = max), 
+    na.rm = TRUE)
+```
+### summarize_all(), quosure style lambdas ~ func_name(.)
+
+Syntax: `summarize_all(.tbl, .funs, ...)`
+
+- `.funs`	specifies which function(s) to perform. Argument values:
+    - A function `fun`; a quosure style lambda `~ fun(.)`; a list (e.g., `list(mean,min)`
+
+\medskip
+__Task__: Calculate mean, number of obs, and number of non-missing obs for variables
+
+- Functions you specify within `.funs` require different options (e.g., some require `na.rm = TRUE` but others don't take arguments)
+- Within `.funs` argument, specify functions using ["quosure style lambda"](https://adv-r.hadley.nz/evaluation.html)
+    - Syntax: `.funs = list(~ func_name(., options), ~ func_name(., options))`
+
+\medskip
+
+```{r, results="hide"}
+df_event %>% 
+  filter(univ_id == 215293, event_type %in% c("private hs","public hs")) %>%
+  select(event_type, event_inst,med_inc,pop_total) %>%
+  group_by(event_type,event_inst) %>%
+  summarize_all(.funs = list(~ mean(., na.rm = TRUE), ~ n(), ~ sum(!is.na(.))))
+```
+\medskip
+Specify suffix of variable name
+```{r, results="hide"}
+df_event %>% 
+  filter(univ_id == 215293, event_type %in% c("private hs","public hs")) %>%
+  select(event_type, event_inst,med_inc,pop_total) %>%
+  group_by(event_type,event_inst) %>%
+  summarize_all(.funs = list(avg = ~ mean(., na.rm = TRUE), nrow = ~ n(), 
+    n_nonmiss = ~ sum(!is.na(.))))
 ```
 
 ### summarize_at() affects selected variables
@@ -1085,24 +1123,36 @@ df_event %>%
      .funs = list(avg = mean, low = min, high = max), na.rm = TRUE)
 ```
 
-### summarize if affects variables that satisfy "if" condition
+### summarize_if() affects variables that satisfy some condition
 
-Syntax: `summarize_at(.tbl, .vars, .funs, ...)`
+Useful if you want to apply functions to variables that are particular `type` or `class`
+
+\medskip
+
+Syntax: `summarize_if(.predicate, .tbl, .vars, .funs, ...)`
 
 - `.tbl` A tbl object (data frame)
-- `.predicate` A predicate function to be applied to the columns or a logical vector. The variables for which .predicate is or returns `TRUE` are selected. - `.funs`	specifies which function(s) to perform. Argument values:
-    - A function `fun`; a quosure style lambda ~ fun(.); a list (e.g., `list(mean,min)`
-- `...`	Additional arguments for function calls in `.funs`. These are evaluated once
+- `.predicate` A predicate function to be applied to columns or a logical vector. The variables for which .predicate is or returns `TRUE` are selected. 
+- `.funs`	specifies which function(s) to perform.
+- `...`	Additional arguments for function calls in `.funs`.
 
+\bigskip
 
-`summarize_if` useful if you want to choose variables that are numeric
+__Task__: For events by U. Pittsburgh at public and private high schools, caclulate mean and standard deviation for __numeric variables__
 
+```{r, results="hide"}
+#First, which vars are numeric
+df_event %>% 
+  select(event_type, event_inst,instnm,school_id,med_inc,pct_white_zip) %>%
+  glimpse()
 
- The _if() variants apply a predicate function (a function that
- returns TRUE or FALSE) to determine the relevant subset of
- columns. Here we apply mean() to the numeric columns:
-starwars %>%
-  summarize_if(is.numeric, mean, na.rm = TRUE)
+df_event %>% 
+  filter(univ_id == 215293, event_type %in% c("private hs","public hs")) %>%
+  select(event_type, event_inst,instnm,school_id,med_inc,pct_white_zip) %>%
+  group_by(event_type,event_inst) %>%
+  summarize_if(.predicate = is.numeric, .funs = list(avg = mean,std = sd), 
+    na.rm = TRUE)
+```
 
 # Attach aggregate measures to your data frame
 
