@@ -392,7 +392,7 @@ wwlist %>% count(ethn_code)
 
 #Create var
 wwlist <- wwlist %>% 
-  mutate(nativeam_stu = ifelse(ethn_race == "nativeam",1,0))
+  mutate(nativeam_stu = if_else(ethn_race == "nativeam",1,0))
 
 #Investigate var
 wwlist %>% count(nativeam_stu)
@@ -401,12 +401,12 @@ wwlist %>% group_by(nativeam_stu) %>% count(ethn_race)
 #Create remaining vars
 wwlist <- wwlist %>% 
   mutate(
-    api_stu = ifelse(ethn_race == "api",1,0),
-    black_stu = ifelse(ethn_race == "black",1,0),
-    latinx_stu = ifelse(ethn_race == "latinx",1,0),
-    multirace_stu = ifelse(ethn_race == "multirace",1,0),
-    white_stu = ifelse(ethn_race == "white",1,0),
-    notreported_stu = ifelse(ethn_race == "not_reported",1,0),
+    api_stu = if_else(ethn_race == "api",1,0),
+    black_stu = if_else(ethn_race == "black",1,0),
+    latinx_stu = if_else(ethn_race == "latinx",1,0),
+    multirace_stu = if_else(ethn_race == "multirace",1,0),
+    white_stu = if_else(ethn_race == "white",1,0),
+    notreported_stu = if_else(ethn_race == "not_reported",1,0),
   )
 
 #Investigate remaining vars
@@ -469,6 +469,7 @@ wwlist %>% group_by(in_state) %>%
     - `white`: a count of number of white prospects purchased, based on the input var `white_stu`
 ```{r}
 wwlist %>% count(ethn_race)
+#wwlist %>% group_by(in_state) %>% count(ethn_race)
 
 wwlist %>% group_by(in_state) %>% 
   summarise(

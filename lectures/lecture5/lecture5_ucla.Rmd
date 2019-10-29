@@ -229,6 +229,8 @@ df_event %>% group_by(univ_id, event_type) %>% count()
 df_event %>% group_by(univ_id, event_type) %>% count() %>% glimpse()
 
 df_event %>% group_by(univ_id, event_type, event_state) %>% count()
+
+#df_event %>% group_by(as_factor(univ_id), as_factor(event_type), as_factor(event_state), .drop = FALSE) %>% count()
 df_event %>% group_by(univ_id, event_type, event_state) %>% count() %>% glimpse()
 ```
 
@@ -246,6 +248,7 @@ Below, we'll use `class()` function to show whether data frame is grouped
 Grouping is not retained unless you __assign__ it
 ```{r}
 class(df_event)
+df_event %>% group_by(univ_id, event_type, event_state)
 df_event_grp <- df_event %>% group_by(univ_id, event_type, event_state) # using pipes
 class(df_event_grp)
 ```
@@ -353,6 +356,14 @@ df_event %>% summarize(num_events=n(),
                        max_inc=max(med_inc, na.rm = TRUE))
 df_event %>% summarize(num_events=n(), 
                        max_inc=max(med_inc, na.rm = TRUE)) %>% str()
+#keep object created by summarize
+df_event_temp <- df_event %>% summarize(num_events=n(), 
+                       max_inc=max(med_inc, na.rm = TRUE))
+df_event_temp
+rm(df_event_temp)
+#what if we forgot na.rm = TRUE
+df_event %>% summarize(num_events=n(), 
+                       max_inc=max(med_inc, na.rm = FALSE))
 ```
 __Takeaways__
 
@@ -361,7 +372,7 @@ __Takeaways__
     - `na.rm = FALSE` (default); don't remove `NAs` prior to calculation
         - if any obs missing, then result of calculation is `NA`
     - `na.rm = TRUE` (default); remove `NAs` prior to calculation
-
+ 
 ### Retaining objects created by `summarize()`
 
 Object created by summarize() not retained unless you __assign__ it
@@ -405,6 +416,7 @@ __Task__: create a table of descriptive statistics about variable `med_inc`
 
 - want these measures: number of non-missing obs; mean; standard deviation
 ```{r, results="hide"}
+
 df_event %>% mutate(non_miss_inc = is.na(med_inc)==0) %>%
   summarize(
     n = sum(non_miss_inc, na.rm = TRUE), #SAMPLE SIZE all
@@ -494,7 +506,7 @@ __Task__
 df_event %>% group_by(instnm, event_type) %>% summarize(num_events=n())
 
 #investigate object created
-df_event %>% group_by(instnm, event_type) %>% summarize(num_events=n()) %>% str()
+df_event %>% group_by(instnm, event_type) %>% summarize(num_events=n()) %>% glimpse()
 ```
 
 Note that data frame object created by `group_by()` and `summarize()` can be input to graph
@@ -557,7 +569,7 @@ df_event %>% group_by(instnm, event_type, event_inst) %>%
 #investigate object you created
 df_event %>% group_by(instnm, event_type, event_inst) %>% 
   summarize(num_events=n(),
-    mean_pct_white=mean(pct_white_zip, na.rm = TRUE)
+    mean_pct_white=mean(pct_white_zip, na.rm = FALSE)
   ) %>% glimpse()
 ```
 
@@ -590,8 +602,7 @@ Because counts are so important, `dplyr` package includes separate `count()` fun
 ```{r, results="hide"}
 event_berk %>% group_by(event_type, event_inst) %>% count()
 
-event_berk %>% group_by(event_type, event_inst) %>% 
-  summarize(num_events=n()) # same same
+?
 
 ```
 
@@ -1133,7 +1144,7 @@ Useful if you want to apply functions to variables that are particular `type` or
 
 \medskip
 
-Syntax: `summarize_if(.predicate, .tbl, .vars, .funs, ...)`
+Syntax: `summarize_if(.predicate, .tbl, .funs, ...)`
 
 - `.tbl` A tbl object (data frame)
 - `.predicate` A predicate function to be applied to columns or a logical vector. The variables for which .predicate is or returns `TRUE` are selected. 
