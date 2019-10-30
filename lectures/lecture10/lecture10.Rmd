@@ -1091,7 +1091,7 @@ We will be working with [High School Longitudinal Study of 2009 (HSLS:09)](https
     
 ### haven Student exercise solutions
 
-Use `read_dta` function from `haven` to import State data
+Use `read_dta` function from `haven` to import Stata data
 ```{r, results="hide"}
 hsls <- read_dta("../../data/hsls/hsls_sch_small.dta", encoding=NULL)
 
@@ -1100,7 +1100,7 @@ head(hsls)
 glimpse(hsls)
 ```
 
-Use `write_dta` function from `haven` to write State data
+Use `write_dta` function from `haven` to write Stata data
 
 `write_dta(dataframe, path = ""`
 ```{r eval=FALSE}
