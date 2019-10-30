@@ -1,7 +1,7 @@
 ---
-title: "Lecture 8: Acquiring data"
-subtitle:  "EDUC 263: Managing and Manipulating Data Using R"
-author: Patricia Martin
+title: "Lecture 10: Acquiring data"
+subtitle:  ""
+author: 
 date: 
 fontsize: 8pt
 classoption: dvipsnames  # for colors
@@ -90,15 +90,6 @@ __Reading to do before next class:__
 - [REQUIRED] GW chapter 11 (Data import)
 
 
-__No class next Friday (11/23)__  
-
-- Problem set #8 is due on Friday (11/23)  
-- Problem set #9 will be assigned the following week, Friday (11/30) and will be due on Friday (12/7)  
-
-
-__Questions on Problem set #7?__ 
-
-
 
 
 ### What we will do today
@@ -155,9 +146,9 @@ In lecture 1 we downloaded the rclass folder structure.
 
 We will not be providing links to data in this lecture. Please save data to the corresponding folders.  
 
-- First make sure to save __lecture8.Rmd__ in your lectures folder  
+- First make sure to save __lecture10.Rmd__ in your lectures folder  
     - If you do not have class folder structure, you can download it [here](https://github.com/ozanj/rclass/raw/master/rclass_directory.zip)
-- Download and unzip data folder we are using for this lecture [here](https://github.com/ozanj/rclass/raw/master/lectures/lecture8/lecture8_data.zip) 
+- Download and unzip data folder we are using for this lecture [here](https://github.com/ozanj/rclass/raw/master/lectures/lecture10/lecture10_data.zip) 
 - Save data files in the corresponding data folder  
     - `ipeds_hd_2017_small.csv` should go in the __ic__ folder inside the ipeds folder  
     - `peps300.xlsx` should go in the __fsa__ folder  
@@ -194,7 +185,7 @@ We will not be providing links to data in this lecture. Please save data to the 
             
 | **Key** | **Description** |
 | ------ | -------- |
-| ~    | tilde is a shortcut for mac user's home directory (mine is my name pm)   |
+| ~    | tilde is a shortcut for mac user's home directory   |
 | ../    | moves up a level   |
 | ../../    | moves up two level   |
 
