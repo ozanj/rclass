@@ -787,8 +787,8 @@ __Details__: The function download.file can be used to download a single file as
 __Example__: Download data from the web
 ```{r, results="hide", eval=FALSE}
 #Data from the Equality of Opportunity Project
-download.file(url = "http://www.equality-of-opportunity.org/data/race/table_1.csv",
-              destfile = "../../../../table_1.csv", mode = "wb") 
+download.file(url = "http://www.equality-of-opportunity.org/data/college/mrc_table1.csv",
+              destfile = "table_1.csv") 
 ```
 
 ### unzip files
@@ -813,17 +813,17 @@ __Arguments__
 #download file 
 #getwd()
 setwd("../../data/ipeds/ic")
-download.file("https://nces.ed.gov/ipeds/datacenter/data/IC2017_AY.zip",
-              destfile = "ic2017_ay", mode = "wb")
+download.file("https://nces.ed.gov/ipeds/datacenter/data/IC2018_AY.zip",
+              destfile = "ic2018_ay", mode = "wb")
 #unzip zip file 
-unzip(zipfile = "ic2017_ay" , unzip = "unzip")
+unzip(zipfile = "ic2018_ay" , unzip = "unzip")
 
-ic2017_ay <- read_csv("ic2017_ay.csv") %>%
+ic2018_ay <- read_csv("ic2018_ay.csv") %>%
   select(-starts_with("X"))
 
-names(ic2017_ay) <- tolower(names(ic2017_ay)) #lowercase column names
+names(ic2018_ay) <- tolower(names(ic2018_ay)) #lowercase column names
 
-#names(ic2017_ay)
+#names(ic2018_ay)
 ```
 
 
@@ -931,6 +931,7 @@ read_excel(excel_example, sheet = "quakes", na = "-20.42")
 Federal Student Aid  
 
 - Federal Student Aid Data Center provides information for federal assistance programs and is divided into four categories: 
+
       - Student Aid Data  
       - School Data  
       - Federal Family Education Loan (FFEL) Program  
@@ -1010,7 +1011,7 @@ read_excel("../../data/fsa/peps300.xlsx", n_max = 4,  na = "P")
 
 ### haven
 
-Recap from lecture 5   
+Recap from Augmented Vectors Lecture:   
     
 
 haven is part of [tidyverse](https://haven.tidyverse.org/), which enables users to import and export data from the following statistical packages:  
