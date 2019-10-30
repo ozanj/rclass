@@ -598,9 +598,11 @@ ipeds %>%
 
 
 ### readr variable and value labels student exercise  
-1. Using the codebook for hd2017 data, add variable labels for all 6 variables (unitid, instnm, stabbr, sector, iclevel, control)  
+1. Using the codebook for hd2017 data, add variable labels for all 6 variables (unitid, instnm, stabbr, sector, iclevel, control) and save to new object `ipeds_labelled`
 
-1. Add value labels for sector, iclevel, and control  
+1. Add value labels for sector, iclevel, and control for `ipeds_labelled`
+
+hint: you can do both tasks within the same piping
 
 ```{r}
 
@@ -675,7 +677,7 @@ as_factor(df, only_labelled = TRUE)
 
 Let's change class to factor
 ```{r}
-ipeds_factor <- as_factor(ipeds_labelled, only_labelled = TRUE)
+ipeds_factor <- as_factor(ipeds_labelled, only_labelled = TRUE, levels="both")
 typeof(ipeds_factor$sector)
 class(ipeds_factor$sector)
 attributes(ipeds_factor$sector)
