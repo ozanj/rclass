@@ -15,10 +15,9 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Instructions
 
+# General instructions
 
-__General instructions__
 The purpose of this problem set is to familiarize yourself with a new dataset, the National Longitudinal Study of 1972 (NLS-72). NLS is a nationally representative, longitudinal study of 12th graders in 1972 with follow-up surveys throughout their postsecondary years. You will be using the Postsecondary Education Transcript File of the NLS-72, which contains information on transcripts from NLS-72 senior cohort members who reported attending a postsecondary institution after high school. 
 
 For your homework in the subsequent week, you will use the NLS Postsecondary Education Transcript File to create college GPA variables.
@@ -110,5 +109,16 @@ nls_crs<- nls_crs %>%
 ```{r}
 
 ```
-    
-XIN - ADD A COUPLE QUESTIONS WHERE YOU ASK STUDENTS TO USE set_variable_labels() and set_value_labels() to convert variables to class=labelled. maybe one set of questions where the input variables are factor variables. and another set of questions where the input variables are simple integer variables w/ no more complicated class. you may have to create the desired input variables to do this.
+  
+7. Use 'set_variable_labels' function to set variable labels to the new variables: 'numgrade', 'crsgradb_v2', 'crsecredv2' and 'numgrade_v2'. 
+
+```{r}
+
+```
+
+8. First create a new variable named 'numgrade_v3', which equals to 1 if 'numgrade_v2' is greater than 3, and equals to 0 if 'numgrade_v2' is no greater than 3. Second use 'set_value_labels' function to add value labels to this new variables. Third change the variable into a factor variable. Investigate the class of this variable in each step. 
+
+```{r}
+
+```
+
