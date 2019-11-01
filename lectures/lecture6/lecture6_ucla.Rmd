@@ -1189,7 +1189,7 @@ hsls %>%
 ```
 
 
-## Comparing labelled class to factor class
+# Comparing labelled class to factor class
 
 ### Comparing `class==labelled` to `class==factor`
 
@@ -1199,7 +1199,15 @@ hsls %>%
 | name of value label attribute | labels | levels |
 | refer to data using | variable values | levels attribute |
 
-    
+\bigskip
+
+So should you work with `class==labelled` or `class==factor`?
+
+- no right or wrong; this is a subjective decision
+- personally, I prefer `labelled' class
+    - easier to control underlying variable value
+    - feels more suited to working with survey data variables, in which several different values that represent different kinds of "missing"
+
 ### Converting `class==labelled` to `class==factor`
 
 The `as_factor()` function from `haven` package converts variables with `class==labelled` to `class==factor`
@@ -1228,16 +1236,36 @@ hsls_f %>% select(s3classes) %>% val_labels()
 
 ### Working with `class==factor` data
 
-Showing values associated with factor levels
+Showing factor levels associated with a factor variable
 ```{r}
 hsls_f %>% count(s3classes)
 ```
 
-In code, refer `level` attribute not variable value
+Showing variable values associated with a factor variable
+```{r}
+hsls_f %>% count(as.integer(s3classes))
+```
+
+### Working with `class==factor` data
+
+When sub-setting observations (e.g., filtering), refer `level` attribute not variable value
 ```{r}
 hsls_f %>% filter(s3classes=="Yes") %>% count(s3classes)
 ```
 
+### Converting `class==factor` to `class==labelled`
+
+XIN - CAN YOU FIGURE OUT HOW TO CONVERT ALL FACTOR VARIABLES TO LABELLED VARIABLES, AND MAKE IT SO THE FACTOR LEVELS FROM FACTOR VARIABLE BECOME THE VALUE LABELS IN LABELLED VARIABLE?
+```{r, eval=FALSE}
+glimpse(hsls)
+glimpse(hsls_f)
+
+hsls_f_l <- to_labelled.factor(x = hsls_f)
+```
+
+```{r, eval=FALSE}
+glimpse(hsls_f_l)
+```
 
 # Appendix. Creating factor variables
 

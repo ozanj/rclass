@@ -24,14 +24,16 @@ __Required reading__
 - Optional: GW 10, GW 20.6-20.7,
 
 __General instructions__
-The purpose of this problem set is to familiarize yourself with a new dataset, the National Longitudinal Study of 1972 (NLS-72). NLS is a nationally representative, longitudinal study of 12th graders in 1972 with follow-up surveys throughout their postsecondary years. You will be using the Postsecondary Education Transcript File of the NLS-72, which contains information on transcripts from NLS-72 senior cohort members who reported attending a postsecondary institution after high school.
+The purpose of this problem set is to familiarize yourself with a new dataset, the National Longitudinal Study of 1972 (NLS-72). NLS is a nationally representative, longitudinal study of 12th graders in 1972 with follow-up surveys throughout their postsecondary years. You will be using the Postsecondary Education Transcript File of the NLS-72, which contains information on transcripts from NLS-72 senior cohort members who reported attending a postsecondary institution after high school. 
+
+For your homework in the subsequent week, you will use the NLS Postsecondary Education Transcript File to create college GPA variables.
 
 
 # Load library and data
 You'll need to load the `tidyverse`, `haven` and `labelled` libraries in order to load and work with the NLS data. If these packages are not yet installed, then you must install before you load. Install in "console" rather than .Rmd file
 
 - Generic syntax: `install.packages("package_name")`
-- Install "haben": `install.packages("haven")`
+- Install "haven": `install.packages("haven")`
 
 Note: when we __load__ package, name of package is not in quotes; but when we __install__ package, name of package is in quotes:
 
@@ -64,7 +66,7 @@ nls_crs<- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/nls72/n
 # Step 2: Create New Variables
 
 
-1. `crsgrada` is the variable for letter course grades. Create a factor version of the `crsgrada` variable. Hint: knowing what class the variable is currently and investigating the variable using `table()` will be helpful to creating the new factor version. Retain the new factor version variable in the nls_crs dataframe using the variable name `crsgrad_fac`. Check that this new variable is a factor class. 
+1. `crsgrada` is the variable for letter course grades. Create a factor version of the `crsgrada` variable. Hint: knowing what class the variable is currently and investigating the variable using `count()` will be helpful to creating the new factor version. Retain the new factor version variable in the nls_crs dataframe using the variable name `crsgrad_fac`. Check that this new variable is a factor class. 
 ```{r}
 
 ```
@@ -91,7 +93,8 @@ nls_crs<- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/nls72/n
   
 __ANSWER PROVIDED FOR YOU__
 ```{r, results="hide"}
-table(nls_crs$crsgradb)
+nls_crs %>% count(crsgradb)
+#table(nls_crs$crsgradb)
 
 nls_crs<- nls_crs %>% 
   mutate(crsgradb_v2= ifelse(crsgradb>4, NA, crsgradb))
@@ -113,3 +116,4 @@ nls_crs<- nls_crs %>%
 
 ```
     
+XIN - ADD A COUPLE QUESTIONS WHERE YOU ASK STUDENTS TO USE set_variable_labels() and set_value_labels() to convert variables to class=labelled. maybe one set of questions where the input variables are factor variables. and another set of questions where the input variables are simple integer variables w/ no more complicated class. you may have to create the desired input variables to do this.
