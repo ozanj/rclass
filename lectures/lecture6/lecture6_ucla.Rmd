@@ -198,10 +198,12 @@ A __data frame__ is a list with the following characteristics:
 #a regular list
 (list_d <- list(col_a = c(1,2,3), col_b = c(4,5,6), col_c = c(7,8,9)))
 typeof(list_d)
+attributes(list_d)
 
 #a data frame
 (df_a <- data.frame(col_a = c(1,2,3), col_b = c(4,5,6), col_c = c(7,8,9)))
 typeof(df_a)
+attributes(df_a)
 ```
 ## Attributes and augmented vectors
 
@@ -365,7 +367,7 @@ Arguments
 
 Using `attr()` to __set__ specific attribute of an object (output omitted)
 ```{r, results = "hide"}
-vector1 <- c(a = 1, b= 2, c= 3, d = 4)
+(vector1 <- c(a = 1, b= 2, c= 3, d = 4))
 attributes(vector1) # see all attributes
 
 attr(x=vector1, which = "greeting") <- "Hi!" # create new attribute
@@ -378,6 +380,8 @@ attr(x=vector1, which = "names") <- NULL # delete names attribute
 
 attributes(vector1) # see all attributes
 ```
+
+
 ### Applying attr() to data frames
 
 \medskip 
@@ -392,6 +396,7 @@ Get/set attribute of a data frame
 ```{r, results = "hide"}
 #get/examine names attribute
 attr(x=wwlist_small, which = "names") 
+
 str(attr(x=wwlist_small, which = "names")) # names attribute is character atomic vector, length=3
 
 #add new attribute to data frame
@@ -482,6 +487,7 @@ Many ways to identify object class
 - Simplest is `class()` function
 ```{r}
 (vector2 <- c(a = 1, b= 2, c= 3, d = 4))
+typeof(vector2)
 class(vector2)
 ```
 
@@ -515,7 +521,7 @@ Example: `sum()` applies to __numeric__, __logical__, or __complex__ class objec
 
 - Apply `sum()` to __logical__ and __numeric__ class
 ```{r}
-x <- c(TRUE,FALSE,NA,TRUE) # class = logical
+(x <- c(TRUE,FALSE,NA,TRUE)) # class = logical
 typeof(x)
 class(x)
 sum(x, na.rm = TRUE) 
@@ -542,7 +548,6 @@ Date functions can be applied to objects with a date-time class
 Example: `year()` function from `lubridate` package
 ```{r, include=FALSE, results = "hide"}
 library(lubridate)
-
 ```
 
 ```{r, eval=FALSE, include=FALSE}
@@ -661,6 +666,7 @@ class(wwlist$ethn_code)
 wwlist <- wwlist %>% mutate(ethn_code_fac = factor(ethn_code)) 
 #wwlist$ethn_code_fac <- factor(wwlist$ethn_code) # base r approach
 
+str(wwlist$ethn_code)
 str(wwlist$ethn_code_fac)
 ```
 ### Factors
@@ -690,7 +696,7 @@ Main things to note about variable `ethn_code_fac`
 - has `class=factor` because the variable has a "levels" attribute
 - Underlying data are integers but levels attribute used to display the data.
 ```{r}
-wwlist$ethn_code_fac[1:3] # print first few obs of ethn_code_fac
+wwlist$ethn_code_fac[1:5] # print first few obs of ethn_code_fac
 ```
 
 ### Working with factor variables
@@ -761,6 +767,7 @@ wwlist %>% filter(as.integer(ethn_code_fac)==7) %>% count
 
 Create a factor version of the character variable `psat_range`
 ```{r, results="hide", warning = FALSE}
+wwlist %>% count(psat_range)
 wwlist <- wwlist %>% mutate(psat_range_fac = factor(psat_range))
 wwlist %>% count(psat_range_fac)
 attributes(wwlist$psat_range_fac)
@@ -1093,6 +1100,7 @@ df <- tribble(
   5, 1, 2
 )
 df
+str(df)
 ```
 
 
@@ -1104,7 +1112,7 @@ Use `set_variable_labels` function to manually set variable labels
 
     
 ```{r}
-#str(df)
+str(df)
 class(df$sch)
 
 #set variabel labels
@@ -1152,6 +1160,8 @@ Create frequency tables with `labelled` class variables using `count()`
 - Default setting is to show variable __values__ not __value labels__
 ```{r}
 df %>% count(edu)
+
+df %>% select(edu) %>% val_labels
 ```
 
 \medskip
@@ -1317,6 +1327,7 @@ The `as_factor()` function from `haven` package converts variables with `class==
 
 - Can be used for descriptive statistics
 ```{r, results="hide"}
+hsls %>% select(s3classes) %>% count(s3classes)
 hsls %>% select(s3classes) %>% count(s3classes) %>% as_factor()
 ```
 
