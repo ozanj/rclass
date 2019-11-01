@@ -382,7 +382,7 @@ attributes(vector1) # see all attributes
 
 \medskip 
 
-Using `wwwlist`, create data frame with three variables
+Using `wwlist`, create data frame with three variables
 ```{r, results = "hide"}
 wwlist_small <- wwlist[1:25, ] %>% select(hs_state,firstgen,med_inc_zip)
 str(wwlist_small)
@@ -429,9 +429,40 @@ Example practical application: interactive dashboards
 
 ### Student exercises
 
-XIN CREATE SHORT STUDENT EXERCISES AND SOLUTIONS WHERE STUDENTS PRACTICE USING ATTRIBUTE() AND ATTR() ON DATA FRAME THAT IS A SUBSET (A FEW VARIABLES) OF THE DATA FRAME WWLIST
+1. Using "wwlist", creat data frame of 30 observations with three variables: "state", "zip5", "pop_total_zip".
 
-EXERCISES SHOULD TAKE 5-10 MINUTES TO COMPLETE
+2. Describe all attribute of the new data frame; Get the name attribute of the new data frame.
+
+3. Add a new attribute to the data frame: name: "attribute_data", content: "new attribute of data";
+  
+   then investigate the attribute and get the new name attribute of the data.
+
+4. Get the attribute of the variable pop_total_zip.
+
+5. Add a new attribute to the variable pop_total_zip: name: "attribute_variable", content: "new attribute of variable"; 
+
+   then investigate the attribute and get the new name attribute of the variable.
+
+### Solution to student exercises
+
+```{r, results = "hide"}
+wwlist_exercise <- wwlist[1:30, ] %>% select(state,zip5,pop_total_zip)
+
+attributes(wwlist_exercise)
+attr(x=wwlist_exercise, which = "names") 
+
+attr(x=wwlist_exercise, which = "attribute_data") <- "new attribute of data"
+
+attributes(wwlist_exercise)
+attr(wwlist_exercise, which ="attribute_data")
+
+attributes(wwlist_exercise$pop_total_zip)
+
+attr(wwlist_exercise$pop_total_zip, "attribute_variable") <- "new attribute of variable"
+
+attributes(wwlist_exercise$pop_total_zip)
+attr(wwlist_exercise$pop_total_zip, "attribute_variable")
+```
 
 # Object class
 
@@ -1118,7 +1149,6 @@ Now we can analyze data using tools we already introduced
 
 Create frequency tables with `labelled` class variables using `count()`
 
-XIN - BELOW FREQUENCY COUNT LOOKING ODD IN PDF. CAN YOU FIX?
 - Default setting is to show variable __values__ not __value labels__
 ```{r}
 df %>% count(edu)
@@ -1133,10 +1163,41 @@ To make frequency table show __value labels__ add `%>% as_factor()` to pipe
 df %>% count(edu) %>% as_factor()
 ```
 
+### Examples: Set Variable labels 
 
-### XIN - ADD EXAMPLE
+```{r}
+# see variable labels
+wwlist %>% select(pop_total_zip, pop_total_state) %>% var_label
 
-XIN ADD ONE OR TWO SLIDES WHERE STUDENTS APPLY SET_VARIABLE_LABEL AND SET_VALUE_LABEL TO VARIABLES FROM DATA FRAME WWLIST 
+# set variable labels
+wwlist <- wwlist %>% 
+  set_variable_labels(
+    pop_total_zip = "total population in zip",
+    pop_total_state ="total population in state"
+  )
+
+# attribute of variable
+attributes(wwlist$pop_total_zip)
+attributes(wwlist$pop_total_state)
+```
+
+
+### Examples: Set value labels 
+
+```{r}
+# see value labels
+wwlist %>% select(sex) %>% val_labels
+
+# set value labels to sex varaible
+wwlist <- wwlist %>% 
+  set_value_labels(
+    sex = c("Female" = "F",
+            "Male" = "M"
+    )
+  )
+# attribute of sex variable
+attributes(wwlist$sex)
+```
 
 ### Labelled student exercise
 
@@ -1144,8 +1205,8 @@ XIN ADD ONE OR TWO SLIDES WHERE STUDENTS APPLY SET_VARIABLE_LABEL AND SET_VALUE_
 2. Get a count of the variable showing the values and the value labels. __hint__ use factor()  
 3. Filter if value is associated with "Missing"  
 4. Filter if value is associated with "Missing" or "Unit non-response"
-
-XIN ADD ONE OR TWO EXERCISE QUESTIONS WHERE STUDENTS APPLY SET_VARIABLE_LABEL AND SET_VALUE_LABEL TO VARIABLES FROM DATA FRAME WWLIST 
+5. Add variable lable of `pop_asian_zip` &`pop_asian_state` in data frame "wwlist"
+6. Add value lable of `ethn_code` in data frame "wwlist"  
 
 ### Labelled student exercise solutions
 1. Get variable and value labels of `s3hs` 
@@ -1188,6 +1249,47 @@ hsls %>%
   count()
 ```
 
+### Labelled student exercise solutions  
+5. Add variable lable of `pop_asian_zip` &`pop_asian_state` in data frame "wwlist"
+
+```{r}
+# variable labels
+wwlist %>% select(pop_asian_zip, pop_asian_state) %>% var_label
+
+# set variable labels
+wwlist <- wwlist %>% 
+  set_variable_labels(
+    pop_asian_zip = "total asian population in zip",
+    pop_asian_state ="total asian population in state"
+  )
+
+# attribute of variable
+attributes(wwlist$pop_asian_zip)
+attributes(wwlist$pop_asian_state)
+```
+
+### Labelled student exercise solutions  
+6. Add value lable of `ethn_code` in data frame "wwlist"  
+```{r, results="hide"}
+# count
+wwlist %>% count(ethn_code)
+
+# value labels
+wwlist %>% select(ethn_code) %>% val_labels
+
+# set value labels to ethn_code varaible
+wwlist <- wwlist %>% 
+  set_value_labels(
+    ethn_code = c("asian or native hawaiian or other pacific islander" = "api",
+                  "black or african american" = "black",
+                  "cuban or mexican/mexican american or other spanish/hispanic or puerto rican" = "latinx",
+                  "other-2 or more" = "multirace",
+                  "american indian or alaska native" = "nativeam",
+                  "not reported" = "not_reported",
+                  "white" = "white"
+    )
+  )
+```
 
 # Comparing labelled class to factor class
 
@@ -1255,12 +1357,12 @@ hsls_f %>% filter(s3classes=="Yes") %>% count(s3classes)
 
 ### Converting `class==factor` to `class==labelled`
 
-XIN - CAN YOU FIGURE OUT HOW TO CONVERT ALL FACTOR VARIABLES TO LABELLED VARIABLES, AND MAKE IT SO THE FACTOR LEVELS FROM FACTOR VARIABLE BECOME THE VALUE LABELS IN LABELLED VARIABLE?
 ```{r, eval=FALSE}
 glimpse(hsls)
 glimpse(hsls_f)
 
-hsls_f_l <- to_labelled.factor(x = hsls_f)
+hsls_f_l <- to_labelled(x = hsls_f)
+to_labelled(to_factor(hsls))
 ```
 
 ```{r, eval=FALSE}
