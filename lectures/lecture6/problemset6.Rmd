@@ -15,13 +15,8 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Required reading and instructions
+# Instructions
 
-__Required reading__
-
-- GW 15.1-15.2
-- Optional: GW 15.3-15.5
-- Optional: GW 10, GW 20.6-20.7,
 
 __General instructions__
 The purpose of this problem set is to familiarize yourself with a new dataset, the National Longitudinal Study of 1972 (NLS-72). NLS is a nationally representative, longitudinal study of 12th graders in 1972 with follow-up surveys throughout their postsecondary years. You will be using the Postsecondary Education Transcript File of the NLS-72, which contains information on transcripts from NLS-72 senior cohort members who reported attending a postsecondary institution after high school. 

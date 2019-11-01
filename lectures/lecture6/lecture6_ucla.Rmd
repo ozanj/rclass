@@ -1,5 +1,5 @@
 ---
-title: "Lecture 6: Augmented vectors,  Factor + Labelled Variables"
+title: "Lecture 6: Augmented vectors,  factor + labelled class"
 subtitle:  ""
 author: 
 date: 
@@ -1186,6 +1186,7 @@ attributes(wwlist$pop_total_state)
 
 ```{r}
 # see value labels
+str(wwlist$sex)
 wwlist %>% select(sex) %>% val_labels
 
 # set value labels to sex varaible
@@ -1205,8 +1206,8 @@ attributes(wwlist$sex)
 2. Get a count of the variable showing the values and the value labels. __hint__ use factor()  
 3. Filter if value is associated with "Missing"  
 4. Filter if value is associated with "Missing" or "Unit non-response"
-5. Add variable lable of `pop_asian_zip` &`pop_asian_state` in data frame "wwlist"
-6. Add value lable of `ethn_code` in data frame "wwlist"  
+5. Add variable label of `pop_asian_zip` &`pop_asian_state` in data frame "wwlist"
+6. Add value label of `ethn_code` in data frame "wwlist"  
 
 ### Labelled student exercise solutions
 1. Get variable and value labels of `s3hs` 
@@ -1356,6 +1357,8 @@ hsls_f %>% filter(s3classes=="Yes") %>% count(s3classes)
 ```
 
 ### Converting `class==factor` to `class==labelled`
+
+I haven't figured out how to do this yet!!!
 
 ```{r, eval=FALSE}
 glimpse(hsls)
