@@ -112,7 +112,7 @@ Basic uses:
 
 - Names of files and directories
 ```{r, results='hide'}
-ipeds <- read_csv(file="../../data/ipeds/ic/ipeds_hd_2017_small.csv")
+acs_tract <- read_csv("https://raw.githubusercontent.com/ozanj/rclass/master/data/acs/tracts.csv")
 ```
 
 - Names of elements in data objects
@@ -135,8 +135,46 @@ plot(iris$Petal.Length, iris$Petal.Width, main = 'Title', sub = 'Subtitle',
 
 More advanced uses:
 
-- Dealing with identification numbers
+- Dealing with identification numbers (leading or trailing zeros)
 ```{r}
-acs_tract <- read_csv(file="../../data/ipeds/ic/ipeds_hd_2017_small.csv")
+typeof(acs_tract$fips_county_code)
+
+acs_tract <- acs_tract %>% 
+  mutate(char_county=
+  str_pad(as.character(fips_county_code), side = "left" ,3, pad="0"))
+  
+```
+
+-Regular expressions
+```{r}
+
+```
+
+
+
+### Common uses of strings
+
+-Complex reshaping (tidying) of data 
+
+  - Problem: multiple variables crammed into the column names
+    - new_ prefix = new cases
+    - sp/rel/sp/ep describe how the case was diagnosed
+    - m/f gives the gender
+    - digits are age ranges
+  
+```{r, eval=FALSE, echo=FALSE}
+# explore WHO data
+# tuberculosis cases broken down by year, country, age, gender, and diagnosis method
+View(who)
+names(who)
+```
+
+```{r, results="hide"}
+who %>% pivot_longer(
+  cols = new_sp_m014:newrel_f65,
+  names_to = c("diagnosis", "gender", "age"), 
+  names_pattern = "new_?(.*)_(.)(.*)", 
+  values_to = "count"
+)
 ```
 
