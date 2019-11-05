@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
   #comment = "#>" makes it so results from a code chunk start with "#>"; default is "##"
 ```
-
+\textcolor{red}{\textbf{/20}} 
 
 # Extracting and Sorting Data via Tidyverse and base R
 
@@ -30,6 +30,8 @@ For the following questions, you'll be asked to complete the same task multiple 
 1. Begin by removing any objects in your current R session by using `rm(list = ls())`. Then load the `tidyverse` library. Lastly, use the `load` function to open the `df_event` dataset via url link
 - The url for the `df_event` dataset is https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_somevars.RData
 - The data frame `df_event` has one observation for each recruiting event. 
+
+\textcolor{red}{\textbf{/2}} 
 
 ```{r}
 rm(list = ls()) # remove all objects
@@ -47,6 +49,8 @@ I have included rchunks below to indicate how many different ways you should be 
 
 
 2. Create a new dataframe by extracting the columns `univ_id`, `event_date`, `event_type`, `zip`, and `med_inc` from `df_event`. Use the names() function to show what columns (variables) are in the newly created dataframe. Print the first 10 observations of the newly created dataframe. 
+
+\textcolor{red}{\textbf{/5}} 
 
 __tidyverse__ 
 ```{r}
@@ -68,6 +72,8 @@ names(df2_b2)
 
 
 3. Create a new dataframe from `df_event` that includes recruiting events by the University of Massachusetts Amherst (`univ_id`==166629), that were located at in-state public high schools (`event_type` and `event_state`) where the average median household income (`med_inc`) is equal to or greater than $100,000. Use `nrow` to make sure you are extracting the same number of observations across each approach below. 
+
+\textcolor{red}{\textbf{/5}} 
 
 __tidyverse__ 
 ```{r}
@@ -97,6 +103,8 @@ nrow(df3_b2)
 
 4. Create a new dataframe from `df_event` that includes recruiting events by the University of South Carolina Columbia (`univ_id`==218663), that were located at out-of-state public high schools (`event_type` and `event_state`) where the average median household income (`med_inc`) is equal to or greater than $100,000 and the White population in the surrounding area is equal to or greater than 50% of the total population (`pct_white_zip`).  Use `nrow` to make sure you are extracting the same number of observations across each approach below. 
 
+\textcolor{red}{\textbf{/5}} 
+
 __tidyverse__ 
 ```{r}
 df4_tv <- filter(df_event, univ_id == 218663 & event_state != "SC" & event_type == "public hs" & med_inc >= 100000 & pct_white_zip>=50)
@@ -123,6 +131,8 @@ nrow(df4_b2)
 
 
 5. Create a new dataframe from df_events that sorts by ascending `univ_id`, ascending by `event_date` , ascending `event_state`, descending `pct_white_zip`, descending `med_inc`.
+
+\textcolor{red}{\textbf{/3}} 
 
 __tidyverse__ 
 ```{r}
