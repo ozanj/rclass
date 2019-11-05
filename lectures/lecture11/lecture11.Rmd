@@ -31,4 +31,112 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 
 # Introduction
 
+### Logistics
+
+__Reading__
+
+- GW chapter 14 (Strings)
+- GW chapter 16 (Dates and Times)
+
+__No class next week (11/13)__
+
+- Problem set for strings + date/times still due on 11/13
+- No problem set due on 11/20
+
+
 ### What we will do today
+
+\tableofcontents
+
+```{r, eval=FALSE, echo=FALSE}
+#Use this if you want TOC to show level 2 headings
+\tableofcontents
+#Use this if you don't want TOC to show level 2 headings
+\tableofcontents[subsectionstyle=hide/hide/hide]
+```
+
+
+### Load the packages we will use today (output omitted) 
+
+- __you must run this code chunk after installing these packages__
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(stringr)
+
+```
+__If package not yet installed__, then must install before you load. Install in "console" rather than .Rmd file
+
+- Generic syntax: `install.packages("package_name")`
+- Install "tidyverse": `install.packages("stringr")`
+
+Note: when we load package, name of package is not in quotes; but when we install package, name of package is in quotes:
+
+- `install.packages("tidyverse")`
+- `library(tidyverse)`
+
+
+
+# Working with Strings
+
+## String basics
+
+### What are strings?
+String refers to a "data type" used in programming to represent text rather than numbers (although it can include numbers)
+
+- Strings have `character`types
+```{r}
+string1<- "Apple"
+typeof(string1) #type is charater
+```
+
+
+- Create strings using `" "`
+```{r}
+string2 <- "This is a string"
+```
+
+- If string contains a quotation, use `' " " '`
+```{r}
+string3 <- 'example of a "quote" within a string'
+```
+
+- To print a string, use `writeLines()`
+```{r}
+print(string3) #will print using \ 
+writeLines(string3)
+```
+
+### Common uses of strings
+
+Basic uses: 
+
+- Names of files and directories
+```{r, results='hide'}
+ipeds <- read_csv(file="../../data/ipeds/ic/ipeds_hd_2017_small.csv")
+```
+
+- Names of elements in data objects
+```{r}
+num_vec <- 1:5
+names(num_vec) <- c('uno', 'dos', 'tres', 'cuatro', 'cinco')
+num_vec
+```
+
+### Common uses of strings
+
+- Text elements displayed in plots and graphs
+```{r}
+plot(iris$Petal.Length, iris$Petal.Width, main = 'Title', sub = 'Subtitle', 
+     xlab = 'x-axis label', ylab = 'y-axis label', col = 'red')
+```
+
+
+### Common uses of strings
+
+More advanced uses:
+
+- Dealing with identification numbers
+```{r}
+acs_tract <- read_csv(file="../../data/ipeds/ic/ipeds_hd_2017_small.csv")
+```
+
