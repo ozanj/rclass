@@ -74,6 +74,13 @@ Note: when we load package, name of package is not in quotes; but when we instal
 - `install.packages("tidyverse")`
 - `library(tidyverse)`
 
+### Load data we will use today
+
+- Western Washington University student list data
+```{r}
+load(url("https://github.com/ozanj/rclass/raw/master/data/prospect_list/wwlist_merged.RData"))
+
+```
 
 
 # Working with Strings
@@ -124,16 +131,192 @@ num_vec
 
 ### Common uses of strings
 
-- Text elements displayed in plots and graphs
+- Text elements displayed in plots, graphs, maps
 ```{r}
 plot(iris$Petal.Length, iris$Petal.Width, main = 'Title', sub = 'Subtitle', 
      xlab = 'x-axis label', ylab = 'y-axis label', col = 'red')
 ```
 
 
-### Common uses of strings
+### String basics
 
-More advanced uses:
+We will use the `stringr` library for working with strings, rather than Base R
+
+  - `stringr` functions have intuitive names and all begin with `str_`
+  - Base R functions for working with strings can be inconsistent (avoid using them)
+
+__Basic functions:__
+
+- String length using `str_length()`
+```{r}
+#example 1
+string2 <- "This is a string"
+str_length(string2)
+
+#example 2
+str_length(c("a", "strings are fun", NA))
+```
+
+### Combining strings
+
+- Combining strings using `str_c()`
+```{r}
+#example 1
+x_var <- "x"
+y_var <- "y"
+
+str_c(x_var, y_var)
+
+#example 2
+str_c("x", "y")
+```
+
+- Use `sep` argument to control how strings are seperated when combined
+```{r}
+str_c("x", "y", sep= ", ")
+```
+
+- `NA` are still contagious, if you want a string "NA" rather than `NA` use `str_replace_na()`
+```{r}
+street_dir<- c("East", "West", NA)
+str_c("Direction: ", street_dir)
+str_c("Direction: ", str_replace_na(street_dir))
+```
+
+
+
+### Subsetting strings
+
+-Extract parts of a string using `str_sub()`, which uses `start` and `end` arguments to extract the position of the substring wanted
+```{r}
+fruits<- c("Apple", "Banana", "Orange")
+
+#first three elements
+str_sub(fruits, 1, 3) #end argument in inclusive
+
+#last three elements
+str_sub(fruits, -3, -1) #neg nums count backwards from end
+
+```
+
+
+-  __Task: extract 6-digit zip code from `zip9` in `wwlist`__
+```{r, results="hide"}
+wwlist %>% mutate(
+  zip=str_sub(zip9, 1, 5)
+)
+```
+
+
+### Lower-case and Upper-case functions
+
+- Changing strings to lower or upper case
+```{r}
+str_to_lower("HELLO")
+str_to_upper("hello")
+```
+
+
+- __Task: lower-case `hs_name` in `wwlist`__
+```{r}
+wwlist %>% select(receive_date, hs_name) %>%
+  mutate(
+  hs_name_lwr=str_to_lower(hs_name),
+)
+```
+
+### Other `stringr` Functions
+
+I only highlighted a few `stringr` functions in this lecture. But there are many!
+
+- [`stringr` cheat sheet](http://edrub.in/CheatSheets/cheatSheetStringr.pdf)
+
+- Some common functions:
+
+| **Task** | **Function** |
+| ------ | -------- |
+| Detect matches    | `str_detect`, `str_which`, `str_count`, `str_locate`   |
+| Subset strings    | `str_sub`, `str_subset`, `str_extract`, `str_match`   |
+| Mutate strings    | `str_sub`,  `str_replace`, `str_to_lower`, `str_to_upper` |
+| Join or split strings    | `str_c`,  `str_dup`, `str_plit_fixed`|
+
+
+### Student Exercises
+
+1. Combine  `school_type` and `school_category` in the `wwlist` dataframe to create one school type + category varibale. Be sure to seperate type and category using a comma AND deal with contagious NAs by using string "NA" if `school_type` and/or `school_category` are `NA`. 
+
+
+1. The last four digits of `zip9` indicate the delivery route within the 5-digit zip code area. Create a new `route` variable that extracts the last four digits from `zip9`. 
+
+
+### Student Excercises (Solutions)
+
+1. Combine  `school_type` and `school_category` in the `wwlist` dataframe to create one school type + category varibale. Be sure to seperate type and category using a comma AND deal with contagious NAs by using string "NA" if `school_type` and/or `school_category` are `NA`. 
+
+```{r}
+wwlist %>% select(school_type, school_category) %>%
+  mutate(
+    type_cat= str_c(str_replace_na(school_type), str_replace_na(school_category), sep= ", ")
+  )
+```
+
+
+### Student Excercises (Solutions)
+
+1. The last four digits of `zip9` indicate the delivery route within the 5-digit zip code area. Create a new `route` variable that extracts the last four digits from `zip9`. 
+
+```{r}
+wwlist %>% select(zip9) %>%
+  mutate(
+  route=str_sub(zip9, -4, -1)
+)
+```
+
+
+## Regular Expressions 
+
+### What are regular expressions (e.g., regex)?
+
+__Regular expressions are an entirely different and consise "language" used to describe patterns in strings__
+
+  - One of the most powerful and sophisticated data science tools!
+  - They have a wide range of uses
+  - They are universal: can be used and are consistent across any programming language (e.g., R, Python, JavaScript)
+  - __BUT__ they take a while to wrap your head around and can get really complex really quickly! 
+
+
+
+__I will attempt to give an approachable introduction to regular expressions__
+
+  - I still stuggle with regular expression tasks! 
+  - My favorite tool for building, testing, debugging regular expressions: [web regex app](https://regex101.com/)
+
+
+### Basic Matches
+
+The simplest patterns match exact (sub)strings! 
+
+- `str_view()` shows the first match; `str_view_all` shows all the matches
+
+```{r}
+x <- c("apple", "banana", "pear")
+str_view(x, "an")
+```
+
+- To detect matches in a column of a dataframe, use `str_detect` and `filter()`
+  - `str_detect` determines a match and returns a logical vector the same length as the input 
+  
+__Task:__ Detect whether high school names abbreviate "high school" as "HS"?
+```{r}
+wwlist %>% 
+  select(hs_name) %>%
+  filter(str_detect(hs_name, "HS"))
+```
+
+
+### Why are string manipulations, e.g., regular expressions, useful?
+
+Some real word examples: 
 
 - Dealing with identification numbers (leading or trailing zeros)
 ```{r}
@@ -145,14 +328,14 @@ acs_tract <- acs_tract %>%
   
 ```
 
--Regular expressions
+- Matching valid street addresses
 ```{r}
 
 ```
 
 
 
-### Common uses of strings
+### Common uses for regular expressions
 
 -Complex reshaping (tidying) of data 
 
