@@ -80,6 +80,9 @@ Note: when we load package, name of package is not in quotes; but when we instal
 ```{r}
 load(url("https://github.com/ozanj/rclass/raw/master/data/prospect_list/wwlist_merged.RData"))
 
+load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_allvars.RData"))
+
+
 ```
 
 
@@ -277,7 +280,7 @@ wwlist %>% select(zip9) %>%
 
 ### What are regular expressions (e.g., regex)?
 
-__Regular expressions are an entirely different and consise "language" used to describe patterns in strings__
+__Regular expressions are an entirely different and concise "language" used to describe patterns in strings__
 
   - One of the most powerful and sophisticated data science tools!
   - They have a wide range of uses
@@ -300,7 +303,7 @@ The simplest patterns match exact (sub)strings!
 
 ```{r}
 x <- c("apple", "banana", "pear")
-str_view(x, "an")
+# str_view(x, "an") #uncomment to view outside of beamer presentation
 ```
 
 - To detect matches in a column of a dataframe, use `str_detect` and `filter()`
@@ -313,8 +316,55 @@ wwlist %>%
   filter(str_detect(hs_name, "HS"))
 ```
 
+### Basic Matches
 
-### Why are string manipulations, e.g., regular expressions, useful?
+The next step-up in complexity is using `.` which matches any character (including white space but except a newline)
+
+__Task:__ Detect whether there are any "HS" abbreviations that have _any_ character before and after the abbreviation?
+
+```{r}
+wwlist %>% 
+  select(hs_name) %>%
+  filter(str_detect(hs_name, ".HS."))
+```
+
+### Common special patterns
+
+There are other "special patterns" that will match more than one character and can be really useful.
+
+__Matching characters__
+
+- `.` matches any character
+- `\d` matches any digit (or `\D` for non-digits)
+- `\s` matches any whitespace such as space, tab, newline (or `\S` fir non-whitepsace)
+
+```{r}
+
+```
+
+
+__Matching alternates__
+
+- `[abe]` matches one of a, b, or e
+- `[^ab3]` matches anything but a, b, e
+- `[a-f]` matches range
+
+
+### Common special patterns
+
+__Task:__ 
+
+### Anchors
+
+
+### Escapes 
+
+
+### Using regular expressions to detect patterns and manipulate strings
+
+Searching for actual special charcter
+
+### Why are string manipulations and  regular expressions useful?
 
 Some real word examples: 
 
@@ -348,8 +398,8 @@ acs_tract <- acs_tract %>%
 ```{r, eval=FALSE, echo=FALSE}
 # explore WHO data
 # tuberculosis cases broken down by year, country, age, gender, and diagnosis method
-View(who)
-names(who)
+#View(who)
+#names(who)
 ```
 
 ```{r, results="hide"}
