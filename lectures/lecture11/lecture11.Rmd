@@ -62,6 +62,8 @@ __No class next week (11/13)__
 ```{r warning=FALSE, message=FALSE}
 library(tidyverse)
 library(stringr)
+library(lubridate)
+library(nycflights13)
 
 ```
 __If package not yet installed__, then must install before you load. Install in "console" rather than .Rmd file
@@ -79,9 +81,11 @@ Note: when we load package, name of package is not in quotes; but when we instal
 - Western Washington University student list data
 ```{r}
 load(url("https://github.com/ozanj/rclass/raw/master/data/prospect_list/wwlist_merged.RData"))
+```
 
-load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_event_allvars.RData"))
-
+- Jeopardy text data [Link](https://blog.cambridgespark.com/50-free-machine-learning-datasets-natural-language-processing-d88fb9c5c8da)
+```{r}
+jeopardy <- read_csv("https://raw.githubusercontent.com/ozanj/rclass/master/data/text_data/JEOPARDY_CSV.csv")
 
 ```
 
@@ -228,21 +232,6 @@ wwlist %>% select(receive_date, hs_name) %>%
 )
 ```
 
-### Other `stringr` Functions
-
-I only highlighted a few `stringr` functions in this lecture. But there are many!
-
-- [`stringr` cheat sheet](http://edrub.in/CheatSheets/cheatSheetStringr.pdf)
-
-- Some common functions:
-
-| **Task** | **Function** |
-| ------ | -------- |
-| Detect matches    | `str_detect`, `str_which`, `str_count`, `str_locate`   |
-| Subset strings    | `str_sub`, `str_subset`, `str_extract`, `str_match`   |
-| Mutate strings    | `str_sub`,  `str_replace`, `str_to_lower`, `str_to_upper` |
-| Join or split strings    | `str_c`,  `str_dup`, `str_plit_fixed`|
-
 
 ### Student Exercises
 
@@ -328,6 +317,42 @@ wwlist %>%
   filter(str_detect(hs_name, ".HS."))
 ```
 
+### Anchors
+
+Regular expressions will match any part of a string. Sometimes it's useful to _anchor_ the regular expression so that it matches from the start or the end of the string:
+
+- `^` will match the start of the string
+- `$` will match the end of the string
+
+
+```{r}
+x <- c("apple", "banana", "pear")
+str_detect(x, "^a")
+str_detect(x, "a$")
+```
+
+
+### Escapes 
+
+Regular expressions use special characters (i.e., `.`, `\`) to match patterns in strings. If you're trying to match an actual character exactly rather than use it's special behavior, you need to use an _escape_
+
+  - The double backslash `\\` is used to _escape_ special behavior for these characters 
+```{r}
+# To create the regular expression, we need \\
+dot <- "\\."
+
+# But the expression itself only contains one:
+writeLines(dot)
+
+# And this tells R to look for an explicit .
+str_detect(c("abc", "a.c", "bef"), "a\\.c")
+
+```
+  
+- for a full list of escape characters type the following into your console: `?"'" `
+
+
+
 ### Common special patterns
 
 There are other "special patterns" that will match more than one character and can be really useful.
@@ -338,10 +363,6 @@ __Matching characters__
 - `\d` matches any digit (or `\D` for non-digits)
 - `\s` matches any whitespace such as space, tab, newline (or `\S` fir non-whitepsace)
 
-```{r}
-
-```
-
 
 __Matching alternates__
 
@@ -350,23 +371,59 @@ __Matching alternates__
 - `[a-f]` matches range
 
 
-### Common special patterns
 
-__Task:__ 
+### Tools: other `stringr` Functions
 
-### Anchors
+I only highlighted a few `stringr` functions in this lecture. But there are many functions that are helpful in applying regular expressions to real data problems (i.e., determining match, finding positions of matches, extracting context of matches, replacing values based on matches)
+
+- [`stringr` cheat sheet](http://edrub.in/CheatSheets/cheatSheetStringr.pdf)
+
+- Some common functions:
+
+| **Task** | **Function** |
+| ------ | -------- |
+| Detect matches    | `str_detect`, `str_which`, `str_count`, `str_locate`   |
+| Subset strings    | `str_sub`, `str_subset`, `str_extract`, `str_match`   |
+| Mutate strings    | `str_sub`,  `str_replace`, `str_to_lower`, `str_to_upper` |
+| Join or split strings    | `str_c`,  `str_dup`, `str_plit_fixed`|
 
 
-### Escapes 
 
 
-### Using regular expressions to detect patterns and manipulate strings
+### Examples
 
-Searching for actual special charcter
+__Task:__ Look for any Jeopardy categories that begin with a digit
+```{r}
+jeopardy %>% 
+  select(Category) %>%
+  filter(str_detect(Category, "^\\d"))
+```
 
-### Why are string manipulations and  regular expressions useful?
 
-Some real word examples: 
+### Examples
+
+__Task:__ Look for any Jeopardy categories that may contain a year variable as a sequence of 4 digits. Create a new `year_category` indicator variable if the Jeopardy category involves a year.
+```{r}
+jeopardy1 <- jeopardy %>% 
+  select(Category) %>%
+  mutate(
+    year_category=str_detect(Category, "[0-9][0-9][0-9][0-9]")
+)
+```
+
+- Print some observations
+```{r}
+jeopardy1 %>% 
+  select(Category, year_category) %>%
+  filter(year_category==TRUE)
+
+rm(jeopardy1)
+```
+
+
+### Why are string manipulations and regular expressions useful?
+
+Basic examples: 
 
 - Dealing with identification numbers (leading or trailing zeros)
 ```{r}
@@ -378,16 +435,7 @@ acs_tract <- acs_tract %>%
   
 ```
 
-- Matching valid street addresses
-```{r}
-
-```
-
-
-
-### Common uses for regular expressions
-
--Complex reshaping (tidying) of data 
+- Complex reshaping (tidying) of data 
 
   - Problem: multiple variables crammed into the column names
     - new_ prefix = new cases
@@ -409,5 +457,176 @@ who %>% pivot_longer(
   names_pattern = "new_?(.*)_(.)(.*)", 
   values_to = "count"
 )
+```
+
+
+### Why are string manipulations and regular expressions useful?
+
+Advanced examples:
+
+- Web-scraping 
+  - Find and scrape all linked pages of recruiters assigned by states: (https://gobama.ua.edu/staff/)
+  - Parsing raw HTML to convert it into tabular data 
+  
+  
+- Natural Language Processing 
+  - Analyzing university president speeches for promotion of interdisciplinary research (IDR)
+  - Predict sentiment of promotion of IDR
+
+
+
+# Working with Dates and Times
+
+### Working with date/time variables
+
+Working with dates and times in data management seems simpler than it really is!
+
+- Does every year have 365 days?
+- Does every day have 24 hours?
+- Does every minute have 60 seconds?
+
+These details matter for:
+
+- Calculating changes over time
+- Analyzing longitudinal data
+- Predicting the occurance/timing of events 
+
+There are three ways you're likely to create a date/time variable:
+
+- From a string (most common)
+- From date and time individual components
+- From an existing date/time object
+
+
+## Creating Date/Times
+
+### Creating Date/Times from strings
+
+The most common way you're likely to create Date/Time variables is from primary/secondary data where dates and times are recorded and/or stores as strings.
+
+For Dates: 
+
+- Use `lubridate` "helpers" to identify the order of year/month/day
+```{r}
+ymd("2017/01/31")
+
+mdy("January 31st, 2017")
+
+dmy("31-01-2017")
+
+ymd(20170131)
+```
+
+For Dates: 
+
+- Use `lubridate` "helpers" to identify the order of year/month/day __AND__ hours/minutes/seconds
+```{r}
+ymd_hms("2017-01-31 20:11:59")
+
+mdy_hm("01/31/2017 08:01")
+```
+
+
+
+
+### Creating Date/Times from individual variables
+
+What if your dates and times are recorded across multiple columns/variables?
+
+EX: NYC flights data
+```{r}
+flights %>% 
+  select(year, month, day, hour, minute)
+```
+
+- Create a date variable using `make_date()` 
+```{r}
+flights1<- flights %>%
+  select(year, month, day) %>%
+  mutate(
+    depart= make_date(year, month, day)
+    
+  )
+
+typeof(flights1$depart)
+class(flights1$depart)
+```
+
+- Create a date variable using `make_datetime()` 
+
+```{r}
+flights1<- flights %>%
+  select(year, month, day, hour, minute) %>%
+  mutate(
+    depart= make_datetime(year, month, day, hour, minute )
+    
+  )
+
+typeof(flights1$depart)
+class(flights1$depart)
+```
+
+## Using Date/Time Variables
+
+### Time spans
+
+Arithmatic with dates works differently than with any numeric type! 
+
+There are three date/time classes that represent time spans:
+
+- Durations: represent the duration of time to an exact number of seconds
+- Periods: represent the period of time such as weeks/months/years
+- Intervals: represent a starting and end point in time 
+
+
+__Durations__
+
+When you subtract two dates, the result is a `difftime` object
+
+- A `difftime` object records time span as seconds (not intuitive)
+- Use `as.duration` to make the difftime object more intuitive (but records time span in seconds) 
+```{r}
+# How old is Karina?
+k_age <- today() - ymd(19890321)
+k_age
+
+typeof(k_age)
+class(k_age)
+
+as.duration(k_age)
+```
+
+- Durations uses "constructers"
+```{r}
+dseconds(30)
+dminutes(10)
+dweeks(3)
+dyears(1)
+```
+
+
+Because durations are recorded in seconds, this can sometimes create some odd results
+```{r}
+one_pm <- ymd_hms("2016-03-12 13:00:00", tz = "America/New_York")
+
+one_pm # 1pm
+one_pm + ddays(1) #2pm (DST)
+```
+
+
+
+### Time spans
+
+__Periods__
+
+Periods don't record time spans in exact seconds and are more intuitive to the way we think about time!
+
+```{r}
+one_pm <- ymd_hms("2016-03-12 13:00:00", tz = "America/New_York")
+
+one_pm # 1pm
+one_pm + days(1) #1pm 
+
+one_pm + years(1)
 ```
 
