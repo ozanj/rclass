@@ -33,15 +33,15 @@ _NLS72 Codebook and Supplemental Addendum_
 
 _General Instructions_
 
-- Don't make changes to "input" variables; instead, create a new variable(s)  
-- You are responsible for deciding what data investigations to conduct (e.g., conditional statements, frequency counts, etc.)  
-- Keep the data investigations you want me to see; though you might want to comment out very long lists of observations  
+
+- Don't make changes to "input" variables; instead, create a new variable(s)
+- You are responsible for deciding what data investigations to conduct (e.g., conditional statements, frequency counts, etc.)
+- Keep the data investigations you want me to see; though you might want to comment out very long lists of observations
 - Reference the NLS72 codebook and supplemental addendum when needed. Document your rationale for data decisions via comments and provide reference page numbers from codebook or addendum when useful.
-- Whenever you create a new variable, run checks to make sure variable created correctly (e.g., counts, cross-tabulations, assertions)  
+- Whenever you create a new variable, run checks to make sure variable created correctly (e.g., counts, cross-tabulations, assertions)
 - As you work towards creating the gpa variable(s) you will create several new "input" variables
-
 - Below, you will find some "header" instructions/hints in regards to important steps you should be completing in process of creating these gpa variables
-
+- Whenever relevant, you can insert code you developed from the previous problem set as part of your answers for this problem set
 
 # Load libraries and data
 
@@ -86,26 +86,24 @@ This plan should include your general conceptual definition for how to calculate
 - The plan should also describe how you plan to deal with idiosyncracies in the value of "input" variables (e.g., missing values, strange values) and your rationale for treating the variable values this way.  
 - Note: you will almost certainly update this plan as you make progress.  
 
-__Some guidelines/hints for creating gpa variable__  
+__Some guidelines/hints for creating gpa variable__  (several of these steps you did in previous problem set)
 
-- You will have to create a new version of course credit called `crsecredv2` that is missing (`NA`) for strange values of `crsecred`  
-- You will have to create a new course grade variable, call it `numgrade` that has numeric grade for each course 
-
-      - the primary input variables for `numgrade` will be `crsgrada`,`crsgradb`, `gradtype`, and your new course credit variable `crsecredv2`  
-      - Use this key to assign numeric values to letter grades from `crsgrada`
-				- A+=4; A=4; A-=3.7; B+=3.3; B=3; B-=2.7; C+=2.3; C=2; C-=1.7; D+=1.3; D=1; D-=.7; F=0; E=0; WF=0  
-				- Note: WF refers to "Withdrawal with a failing grade"  
-				- Note: other letter grades will have missing values for numeric grade
-		- your variable `numgrade` should be missing for observations where `crsecredv2` equals `NA`
-		- your variable `numgrade` should be missing if `gradtype` indicates that the grade is numeric (rather than letter) but the value of the numeric grade (`crsegradb`) is greater than `4`
-- After you create the variable `numgrade` you should create a new course credit variable `crsecredv3` that is missing (`NA`) for observations where `numgrade` is missing  
-- Calculate institutional level quality points and total credit variables by summing across observations within id and transnum.  
-- Finally, divide the institutional level quality points by insitutional total credits to generate the institutional level GPA.
-
+- You will have to create a new version of course credit called that is missing (`NA`) for strange values of `crsecred`
+- You will have to create a new course grade variable that has numeric grade for each course
+    - the primary input variables for will be `crsgrada`,`crsgradb`, `gradtype`, and your new course credit variable
+    - Use this key to assign numeric values to letter grades from `crsgrada`
+		  	- A+=4; A=4; A-=3.7; B+=3.3; B=3; B-=2.7; C+=2.3; C=2; C-=1.7; D+=1.3; D=1; D-=.7; F=0; E=0; WF=0  
+			  - Note: WF refers to "Withdrawal with a failing grade"  
+			  - Note: other letter grades will have missing values for numeric grade
+		- your new course grade variable should be missing for observations where your new course credit variable equals `NA`
+		- your new course grade variable should be missing if `gradtype` indicates that the grade is numeric (rather than letter) but the value of the numeric grade (`crsegradb`) is greater than `4`
+- After you create the variable `numgrade` you may want to create a new course credit variable that is missing (`NA`) for observations where your new numeric course grade variable is missing
+- For creating institution-level GPA variable, calculate institutional level quality points and total credit variables by summing across observations within `id` and `transnum`. Finally, divide the institutional level quality points by insitutional total credits to generate the institutional level GPA.
+- Make sure that the denominator for your GPA variable (i.e., total course credits) excludes courses where course credit is non-missing but have missing values for the new numeric course grade variable you created
 
 
 
-__Your plan here:__  
+__Write Your plan here:__  
   
     
       
