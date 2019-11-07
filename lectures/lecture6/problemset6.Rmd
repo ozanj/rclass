@@ -103,8 +103,10 @@ nls_crs<- nls_crs %>%
 ```
 
 
-6. Create a "final" numerical grade variable named `numgrade_v2` that has the numeric values below based on attribute levels from `crsgrada_fac` __when__ `gradtype` indicates letter grades were used and crsecred_v2 is not missing. Additionally, `numgrade_v2` should equal the value of `crsgradb_v2` __when__ `gradtype` indicates numeric grades were used and crsecred_v2 is not missing. Hint: use `mutate()` and `case_when()`.
-    - A+= 4; A=4; A-=3.7; B+=3.3; B=3; B-=2.7; C+=2.3; C=2; C-=1.7; D+=1.3; D=1; D-=.7; F=0; E=0; WF=0 
+6. Create a "final" numerical grade variable named `numgrade_v2` that incorporates values from observations where `gradtype==1` (i.e., "type of grade" is "letter") and incorporates values from observations where `gradtype==2` (i.e., "type of grade" is "numeric"). For, observations where `gradtype` indicates letter grades were used and `crsecred_v2` is not missing, value of `numgrade_v2` should be the value of the variable `numgrade` which you created previously. For observations where `gradtype` indicates that numeric grades were used and `crsecred_v2` is not missing, value of `numgrade_v2` should be the value of the variable `crsgradb_v2` which you created previously. Hint: use `mutate()` and `case_when()`.
+    - Note: For, observations where `gradtype` indicates letter grades, values of numeric variable `numgrade` you previously created should be as follows:
+        - A+= 4; A=4; A-=3.7; B+=3.3; B=3; B-=2.7; C+=2.3; C=2; C-=1.7; D+=1.3; D=1; D-=.7; F=0; E=0; WF=0
+        - and `numgrade` should be missing for all observations that do not have these above values.
     
 ```{r}
 
