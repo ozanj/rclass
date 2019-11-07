@@ -18,12 +18,23 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 ```
 
-# General Problem Set instructions  
+# Reading
 
-Using the NLS72 course-level dataset, your assigmnent is to create the following GPA variables:
+Your required reading is the "Data Clearning Guidelines" document
 
-- institution-level (i.e., transcript-level) GPA variable
-- term-level GPA variable
+- The goal of this document is to describe data investigation/cleaning standards for new research assistants who join our research team.
+- This is a early beta/working draft of the document. We will be revising and adding sections in the future.
+- Several examples, use NLS 72 postsecondary course transcript data, so we recommend reading this document prior to completing problem set
+- Some topics in this document (e.g., acquiring data, merging data, reshaping data) have not yet been covered in class. you can skip/skim these sections.
+
+# Problem Set instructions  
+
+_Overview_
+
+- Using the NLS72 course-level dataset, your assigmnent is to create the following GPA variables:
+    - institution-level (i.e., transcript-level) GPA variable
+    - term-level GPA variable
+- Finally, we will ask you to provide one substantive recommendation for improving our beta "Data Cleaning Guidelines" document.
 
 _NLS72 Codebook and Supplemental Addendum_
 
@@ -146,8 +157,11 @@ After you create the gpa variable, conduct some basic investigations/descriptive
 ```
 
 
+# Part VI: Provide one substantive recommendation for improving "Data Cleaning Guidelines" document
 
-Once finished, knit to (pdf) and upload both .Rmd and pdf files to class website under the week 5 tab  
+Finally, we will ask you to provide one substantive recommendation for improving our beta "Data Cleaning Guidelines" document. This could be a recommendation for revising content currently in the document or a recommendation for new content that should be added to the document. Think about what information would be helpful for new research assistants to know. Your answer need not be longer than a few sentences.
+
+Once finished, knit to (pdf) and upload both .Rmd and pdf files
 *Remeber to use this naming convention "lastname_firstname_ps5"*
 
 
