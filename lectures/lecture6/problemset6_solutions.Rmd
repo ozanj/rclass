@@ -193,3 +193,28 @@ nls_crs <- nls_crs %>%
 
 ```
 
+7. Use 'set_variable_labels' function to set variable labels to the new variables: 'numgrade', 'crsgradb_v2', 'crsecredv2' and 'numgrade_v2'. 
+
+```{r}
+nls_crs <- nls_crs %>% 
+  set_variable_labels(numgrade = "numeric grade version for 'crsgrada_fac'",
+                   crsgradb_v2 = "`crsgradb` without values greater than 4",
+                   crsecredv2 = "recode missing values for `crsecred`",
+                   numgrade_v2 = "final numerical grade")
+```
+
+8. First create a new variable named 'numgrade_v3', which equals to 1 if 'numgrade_v2' is greater than 3, and equals to 0 if 'numgrade_v2' is no greater than 3. Second use 'set_value_labels' function to add value labels to this new variables. Third change the variable into a factor variable. Investigate the class of this variable in each step. 
+
+```{r}
+nls_crs <- nls_crs %>% 
+  mutate(numgrade_v3 = ifelse(numgrade_v2>3,1,0)) 
+class(nls_crs$numgrade_v3)
+
+nls_crs <- nls_crs %>% 
+  set_value_labels(numgrade_v3 = c("greater than 3" = 1,
+                                   "no greater than 3" = 0))
+class(nls_crs$numgrade_v3)
+
+nls_crs$numgrade_v3 <-as.factor(nls_crs$numgrade_v3)
+class(nls_crs$numgrade_v3)
+```
