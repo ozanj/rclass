@@ -25,17 +25,17 @@ _Data-Type Constraints_: values in a particular column must be of a particular d
 
 _Range Constraints_: typically, numbers or dates should fall within a certain range. That is, they have minimum and/or maximum permissible values (e.g., age cannot be negative).
 
+_Set-Membership constraints_: values of a column come from a set of discrete values (e.g., a factor variable for compass directions has predefined values of North, South, East, West).
+
+_Regular expression patterns_: text fields that have to be in a certain pattern (e.g., phone number).
+
 _Mandatory Constraints_: certain columns cannot be empty (e.g., student identification number).
 
 _Unique Constraints_: a field, or a combination of fields, must be unique across a dataset (e.g., social security number).
 
-_Set-Membership constraints_: values of a column come from a set of discrete values (e.g., a factor variable for compass directions has predefined values of North, South, East, West).
+_Cross-field validation_: certain conditions that span across multiple fields must hold (e.g., a student's graduation date cannot be earlier than their enrollment date).
 
 _Foreign-key constraints_: as in relational databases, a foreign key column can’t have a value that does not exist in the referenced primary key. For example, in our recruiting events database, the "state" column is required to belong to one of the US's defined states or territories and the set of permissible states/territories is recorded in a separate States table.
-
-_Regular expression patterns_: text fields that have to be in a certain pattern (e.g., phone number).
-
-_Cross-field validation_: certain conditions that span across multiple fields must hold (e.g., a student's graduation date cannot be earlier than their enrollment date).
 
 ## 1.2 Accuracy: 
 The degree to which the data is close to the true values of what we are attempting to measure. while defining all valid values allows us to easily identify invalid values, it does not mean values are accurate. For example, a student's grade level may be a valid value, 12th grade, but may not be accurate (student is in 10th grade).
@@ -384,7 +384,7 @@ nls_crs_v2 %>% group_by(crsgrada) %>% filter(crsgrada %in% c("A+", "A", "A-")) %
 
 
 
-__Keep Input Variable(s), Create Analysis Variables, Treat Missing Values__ 
+__Keep Input Variable(s), Create Analysis Variables, Treat Missing Values as NA__ 
 
 ```{r, eval=FALSE}
 #Create measure of course credits attempted that replaces 999 and 999.999 with missing
@@ -407,8 +407,6 @@ nls_crs_v2<- nls_crs_v2%>%
   nls_crs_v2%>% filter(crsecred>900) %>% group_by(crsecred) %>% count(crsecredv2) # two-way frequency table
 
 ```
-
-2.treat missing as NA
 
 ```{r, eval=FALSE}
 #Create measure of grade scale that replaces 9 with missing
@@ -440,9 +438,8 @@ nls_crs_v2<- nls_crs_v2%>%
   nls_crs_v2 %>% filter(gradtype==9) %>% group_by(gradtype) %>% count(gradtypev2) # two-way frequency table
 ```
 
-__Create new numeric grade variable when type of grade is numeric & course credit not missing__
-
 ```{r, eval=FALSE}
+# Create new numeric grade variable when type of grade is numeric & course credit not missing
 
 #investigate values of the numeric grade when gradtype==2 and course credit not missing
 
@@ -465,9 +462,9 @@ __Create new numeric grade variable when type of grade is numeric & course credi
     nls_crs_v2%>% filter(crsgradb<=4, gradtype==2, (!is.na(crsecredv2))) %>% mutate(assert=crsgradb==crsgradbv2) %>% count(assert)
 ```  
 
-__Create new numeric grade variable based on letter grade (when type of grade is letter) & numeric grade (when type of grade is numeric)__
-
 ```{r, eval=FALSE}
+# Create new numeric grade variable based on letter grade (when type of grade is letter) & numeric grade (when type of grade is numeric)
+
 # investigate
   nls_crs_v2%>% count(gradtype)
   nls_crs_v2%>% count(gradtype) %>% haven::as_factor()
@@ -549,7 +546,8 @@ anti_test <- jkcf_opeid5_list %>%
 ## 2.5 Export:
 Save RData dataframe 
 ```{r, eval=FALSE}
-saveRDS(hsls, "hsls.rds")
+saveRDS(hsls, "hsls.rds") #  could only save 1 R object 
+save(nls_crs_v2, nls_crs_trans, file = './dataset.RData') # for saving multiple R objects
 ```
 
 Save Stata dataframe 
@@ -559,5 +557,5 @@ write_dta(hsls, path = "../../data/hsls/hsls_sch_small.dta")
 
 Export to CVS
 ```{r, eval=FALSE}
-write_csv(hsls, path = "../../data/hsls/hsls_sch_small.dta")
+write_csv(hsls, path = "../../data/hsls/hsls_sch_small.cvs")
 ```
