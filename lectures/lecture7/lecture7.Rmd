@@ -66,7 +66,10 @@ hsls <- read_dta(file="https://github.com/ozanj/rclass/raw/master/data/hsls/hsls
 
 Let's examine the data [you __must__ run this code chunk]
 ```{r, results="hide"}
-names(hsls)
+hsls %>% names()
+hsls %>% names() %>% str()
+hsls %>% names() %>% tolower() %>% str()
+
 names(hsls) <- tolower(names(hsls)) # convert names to lowercase
 names(hsls)
 
@@ -387,7 +390,9 @@ hsls_f %>% count(s3classes)
 #Create VAR that converts different types of missing to NA and then create frequency table
 
 #note: within ifelse() used levels(s3classes)[s3classes]) rather than s3classes  to show attribute levels not values
-hsls_f %>% mutate(s3classes_f=ifelse(s3classes %in% c("Missing","Unit non-response"),NA,levels(s3classes)[s3classes])) %>% 
+hsls_f %>% 
+  mutate(s3classes_f=ifelse(s3classes %in% c("Missing","Unit     
+  non-response"),NA,levels(s3classes)[s3classes])) %>% 
   count(s3classes_f)
 ```
 
@@ -402,24 +407,32 @@ Two-way frequency table, called "cross tabulation", important for data quality
 
 __key to syntax__
 
-- `group_by(var1) %>% count(var2)`
+- `df_name %>% group_by(var1) %>% count(var2)` **OR**
+- `df_name %>% count(var1,var2)`
 - play around with which variable is `var1` and which variable is `var2`
 
 
 ### Relationship between variables, categorical by categorical
 
 
-__Task__: 
+__Task__: Create a two-way table between `s3classes` and `s3clglvl`
 
-- Create a two-way table between `s3classes` and `s3clglvl`
+- Investigate variables
 ```{r, results="hide"}
 hsls_small %>% select(s3classes,s3clglvl) %>% var_label()
 hsls_small %>% select(s3classes,s3clglvl) %>% val_labels()
 ```
 
-```{r}
+- Create two-way table
+```{r, results = "hide"}
 hsls_small %>% group_by(s3classes) %>% count(s3clglvl) # show values
+hsls_small %>% count(s3classes,s3clglvl)
 #hsls_small %>% group_by(s3classes) %>% count(s3clglvl) %>% as_factor() # show value labels
+```
+- Are these objects the same?
+```{r}
+hsls_small %>% group_by(s3classes) %>% count(s3clglvl) %>% glimpse()
+hsls_small %>% count(s3classes,s3clglvl) %>% glimpse()
 ```
 
 ### Relationship between variables, categorical by categorical
@@ -559,6 +572,7 @@ While this is not a linear process, these are the broad steps I follow
     - e.g., when working with survey data, have survey questionnaire and codebooks on hand
 1. For each input data source, identify the "unit of analysis" and which combination of variables uniquely identify observations
 1. Investigate patterns in input variables
+    - **For every variable you care about, you should know whether the variable value is reasonable for over observation in data frame**
 1. Create analysis variable from input variable(s)
 1. Verify that analysis variable is created correctly through descriptive statistics that compare values of input variable(s) against values of the analysis variable
 
