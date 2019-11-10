@@ -365,7 +365,7 @@ enroll_v2 <- enroll %>%
                       `2` = "ug",
                       `4` = "grad")
   ) %>% select(-effylev) %>% # drop variable effylev
-  spread(key = level, value = efytotlt)
+  pivot_wider(names_from = level, values_from = efytotlt)
 
 names(enroll_v2)
 enroll_v2
