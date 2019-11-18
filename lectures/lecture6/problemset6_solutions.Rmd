@@ -207,7 +207,7 @@ nls_crs <- nls_crs %>%
 
 ```{r}
 nls_crs <- nls_crs %>% 
-  mutate(numgrade_v3 = ifelse(numgrade_v2>3,1,0)) 
+  mutate(numgrade_v3 = if_else(numgrade_v2>3,1,0)) 
 class(nls_crs$numgrade_v3)
 
 nls_crs <- nls_crs %>% 

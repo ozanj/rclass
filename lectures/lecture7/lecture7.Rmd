@@ -80,6 +80,12 @@ attributes(hsls$s3classes)
 typeof(hsls$s3classes)
 class(hsls$s3classes)
 ```
+```{r}
+(x <- c(A=1, B=2, C=3))
+
+names(x) <- c("apple","beta","charlie")
+x
+```
 
 Download the HSLS Codebook: https://nces.ed.gov/pubs2014/2014361_AppendixI.pdf
 
@@ -536,6 +542,8 @@ hsls_small %>%
   summarise_at(.vars = vars(x2txmtscor_na),
                .funs = funs(mean, min, max, .args = list(na.rm = TRUE))) %>%
   as_factor()
+
+hsls_small %>% count(s3classes,s3clglvl) %>% as_factor
 ```
 ### Student exercise
 
