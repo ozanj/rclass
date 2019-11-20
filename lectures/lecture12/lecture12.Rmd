@@ -1,6 +1,6 @@
 ---
 title: "Lecture 10: Accessing object elements and looping"
-subtitle:  "Data Management and Manipulation Using R"
+subtitle:  "Managing and Manipulating Data Using R"
 author:
 date: 
 fontsize: 8pt
@@ -32,28 +32,41 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", highlight = TRUE)
 
 __Course evaluations__  
 
-Please take a few minutes to complete instructor and T.A. evaluations
+Please take a few minutes to complete instructor evaluations
 
-- Complete online evaluation for Ozan  
-    - Should have received an email or log on to your MyUCLA account
-- Complete online evaluation for Patricia (TA), Link [here](https://goo.gl/forms/tnBwfR2Ot29NXR023)
+  - Should have received an email!
 
-__Problem set 10__
 
-- Due next Friday at noon; focuses on accessing vector elements and basics of looping
+\medskip __Remaining Class Sessions__  
+
+No class next week 11/27: Happy Thanksgiving!
+
+  - Problem set #12 still due
+  
+12/4 Writing Functions 
+
+  - No problem set due
+  
+12/11 Intro to GitHub + Wrap-Up
+
+  - Problem set # 13 (functions) due
+
+
+### Logistics
+
+__Problem set 12__
+
+- Due next Wednesday at noon; focuses on accessing vector elements and basics of looping
 - We give big hints; less emphasis on "figure it out on your own"
 
-__Reading:__
+\medskip __Reading:__
 
 - Grolemund and Wickham 20.4 - 20.5 (Chapter 20 is on "Vectors")
 - Grolemund and Wickham 21.1 - 21.3 (Chapter 21 is on "Iteration")
 - [OPTIONAL] Any slides from lecture we don't cover
-    - I wrote this lecture knowing we won't have time to get through all sections
+    - This lecture is written knowing we won't have time to get through all sections
     - Slides we don't cover are mainly for your future reference  
 
-__Programming courses and resources__
-
-- Link [here](https://docs.google.com/spreadsheets/d/1zF1Rkqu_T3UdtrmItj79ASN5-_cvbqFoIr7wzhaTY0M/edit#gid=0)
 
 ### What we will do today
 
@@ -243,12 +256,7 @@ is.numeric(df_event$titlei_status_pub)
     - e.g., `["a"]` refers to contents inside an element named "a"
 
 ### Subsetting elements of vector, based on position number    
-
-`[]` is the subsetting function for vectors
-
-- contents inside `[]` can refer to element number (also called "position"). 
-    - e.g., `[3]` refers to contents of 3rd element (or position 3)
-
+ 
 __Examples of referring to elements based on element position number__
 ```{r}
 x <- c("a","b","c","d","e")
@@ -550,7 +558,7 @@ attributes(df_bama[["event_date"]]) # class=date
 - Like `[[]]`, subsetting using `$` removes a level of hierarchy
 
 
-Note: we have been using this method of subsetting variables in a data frame all quarter!
+Note: we have been using this method of subsetting variables in a data frame all term!
 ```{r, results="hide"}
 str(list_a)
 
@@ -821,7 +829,7 @@ __Task__
 
 1. Create a numeric vector that has year of birth of members of your family
     - you decide who to include
-    - e.g., for my mom, dad, wife, son: `birth_years <- c(1944,1950,1981,2016)`
+    - e.g., `birth_years <- c(1944,1950,1981,2016)`
 2. Write a loop that calculates current year minus birth year and prints this number for each member of your family
     - Within this loop, you will create a new variable that calculates current year minus birth year
 
@@ -1133,19 +1141,6 @@ for (i in 1:length(vec)) {
 
 ### Approach 3: Loop over numeric indices of element position
 
-\medskip
-
-__sequence__: `for (i in 1:length(object_name))` __OR__ `for (i in seq_along(object_name))`
-
-- Sequence iterates through _position number_ of each element in the object
-
-In __body__, value of `i` equals the _position number_ of `ith` element in object
-
-- Access element contents using `object_name[i]`
-    - Same object type as `object_name`; retains attributes (e.g., _name_)
-- Access element contents using `object_name[[i]]` [RECOMMENDED]
-    - Removes level of hierarchy, thereby removing attributes
-
 __Example, object is a list__
 ```{r}
 df %>% head(n=3)
@@ -1244,7 +1239,7 @@ for (i in seq_along(df)) {
   cat("name=",name,sep="",fill=TRUE)
   
   value <- df[[i]] # value of object "value" is what we loop over in approach 1
-  cat("value=",value,"\n",sep="",fill=TRUE)
+  cat("value=",value,"\n",sep=" ",fill=TRUE)
 }
 ```
 
@@ -1343,14 +1338,13 @@ The z-score for observation _i_ is number of standard deviations from mean:
 
 $z_i = \frac{x_i - \bar{x}}{sd(x)}$
 
-We wrote a z-score function in the functions lecture; this can be basis of our z-score loop
+Task: calculate z-score for first 4 observations of `df$a`
 ```{r}
-z_score <- function(x) {
-  (x - mean(x, na.rm=TRUE))/sd(x, na.rm=TRUE)
-}
-z_score(df$a)
-z_score(df[["a"]]) # same
-z_score(df[[1]]) # same
+(df$a[1] - mean(df$a, na.rm=TRUE))/sd(df$a, na.rm=TRUE)
+(df$a[2] - mean(df$a, na.rm=TRUE))/sd(df$a, na.rm=TRUE)
+(df$a[3] - mean(df$a, na.rm=TRUE))/sd(df$a, na.rm=TRUE)
+(df$a[4] - mean(df$a, na.rm=TRUE))/sd(df$a, na.rm=TRUE)
+
 ```
 
 ### Example of modifying an object: z-score loop
@@ -1414,7 +1408,7 @@ What happens if we apply our loop to the data frame `df_bama`, which has both st
 
 \medskip
 
-Let's modify our loop so that it only calculates z-score if for non-integer, numeric variables
+Let's modify our loop so that it only calculates z-score only for non-integer, numeric variables
 ```{r, results="hide"}
 str(df_bama)
 for (i in seq_along(df_bama)) {
@@ -1469,11 +1463,11 @@ df_bama_z <- z_score(df_bama)
 df_bama; df_bama_z
 ```
 
-# When to write a loop (vs. a function); recipe for writing loops
+# When to write a loop; recipe for writing loops
 
 ### When to write a loop
 
-__Broadly, rationale for writing loop same as rationale for writing function__:
+__Broadly, rationale for writing loop__:
 
 - Do not duplicate code
 - Can make changes to code in one place rather than many
@@ -1490,7 +1484,7 @@ __Don't worry about knowing all the situations you should write a loop__
 - Rather, you'll be creating analysis dataset or analyzing data and you will notice there is some task that you are repeating over and over
 - Then you'll think "oh, I should write a loop or function for this"
 
-### When to write a loop vs a functions
+### When to write a loop vs a functions [SKIP- for next week]
 
 \medskip
 Usually obvious when you are duplicating code, but unclear whether you should write a loop or whether you should write a function.
@@ -1516,7 +1510,7 @@ __Note__
 
 ### Recipe for how to write loop
 
-The general recipe for how to write a loop is very similar to the recipe for writing a function:
+The general recipe for how to write a loop:
 
 1. Complete the task for one instance outside a loop (this is akin to writing the __body__ of the loop)
 
@@ -1630,7 +1624,7 @@ df_pubhs %>% filter(state_code==inst_218663) %>% select(visits_by_218663) %>%
   summarise(n_hs=n(),n_visit=sum(got_visit),pct_visit=sum(got_visit)/n())
 
 ```
-### How well do public universities cover in-state public high schools
+### How well do public universities cover in-state public high schools [SKIP- BASE R]
 
 \medskip __Task__: for each public research university, calculate the number and percent of public high schools in the university's home state that received a visit
 
@@ -1675,7 +1669,7 @@ typeof(pr_table); length(pr_table); str(pr_table) # named vector with 2 elements
 
 \medskip __Task__: for each public research university, calculate the number and percent of public high schools in the university's home state that received a visit
 
-Build loop [Base R approach]
+Build loop
 
 - first, loop through each value of list `instnm`
 ```{r, results="hide"}
@@ -1749,7 +1743,7 @@ for (i in seq_along(instnm)) {
 }
 ```
 
-### How well do public universities cover in-state public high schools
+### How well do public universities cover in-state public high schools [SKIP]
 
 \medskip __Task__: for each public research university, calculate the number and percent of public high schools in the university's home state that received a visit
 
