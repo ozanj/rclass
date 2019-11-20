@@ -1,7 +1,7 @@
 ---
 title: "Lecture 10: Accessing object elements and looping"
-subtitle:  "EDUC 263: Managing and Manipulating Data Using R"
-author: Ozan Jaquette
+subtitle:  "Data Management and Manipulation Using R"
+author:
 date: 
 fontsize: 8pt
 classoption: dvipsnames  # for colors
