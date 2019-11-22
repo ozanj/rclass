@@ -1,5 +1,5 @@
 ---
-title: "Problem Set #7 Instructions"
+title: "Problem Set Instructions"
 output: pdf_document
 ---
 
@@ -7,13 +7,9 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Reading for next week
-
-- [Recommended but not required] GW Chapter 13 (relational data)
-
 ## General instructions for R script
 
-In this homework, you will submit an R script. Please make sure that your R script runs without any errors before submitting.
+In this homework, you will submit an R script. we have provided an R script (on course website) that you will add to and then submit. Please make sure that your R script runs without any errors before submitting. 
 
 - Open R script with RStudio 
 - Can create "comments" by using `#`
