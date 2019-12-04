@@ -1,7 +1,7 @@
 ---
-title:  "Lecture 9: Writing functions"
-subtitle:  "EDUC 263: Managing and Manipulating Data Using R"
-author: Ozan Jaquette
+title:  "Lecture 13: Writing functions"
+subtitle:  "Managing and Manipulating Data Using R"
+author:
 date: 
 fontsize: 8pt
 classoption: dvipsnames  # for colors
@@ -47,18 +47,13 @@ load(url("https://github.com/ozanj/rclass/raw/master/data/recruiting/recruit_eve
 
 __Remaining lectures__
 
-- Lecture 9 (today): Functions
-- Lecture 10: Accessing object elements and looping
+- Lecture 12 (last week): Loops
+- Lecture 13 (today): Functions
+- Lecture 14: Intro to GitHub
 
 These topics are important, but challenging. 
 
 - __Learning goals__: Develop strong conceptual understanding of the basics; some practice applying these skills
-
-__Problem sets__
-
-- The final two problem sets will be very "scaffolded"; we walk you through process of using functions/loops to do useful things
-    - Will give big hints; less emphasis on "figure it out on your own"
-    - More about following steps, undestand "why these steps," how each step works 
 
 __Reading to do before next class:__
 
@@ -66,6 +61,10 @@ __Reading to do before next class:__
 - [OPTIONAL] Any slides from lecture we don't cover
     - I wrote this lecture knowing we won't have time to get through all sections
     - Slides we don't cover are mainly for your future reference
+
+__To do before next class:__
+
+- Set up a GitHub account
 
 ### What we will do today
 
@@ -206,9 +205,9 @@ Advantages of writing functions to complete a task compared to the copy-and-past
 - Reduce errors that are common in copy-and-paste approach (e.g., forgetting to change variable name or variable value)
 
 \medskip 
-Learning how to write functions is a requirement for anybody working on my research projects
+Learning how to write functions is a requirement for anybody working on our research projects
 
-- When the RAs move on, I need to be able to efficiently modify tasks they completed. This is only possible when they write functions.
+- When the RAs move on, we need to be able to efficiently modify tasks they completed. This is only possible when they write functions.
 
 ### Why write functions (my own experience)
 
@@ -218,13 +217,14 @@ How I use functions in my research (acquiring, processing, and analyzing data)
 
 1. __Acquiring data__. Since I often create longitudinal datasets from annual "input data," I usually write a function or loop to read-in the data and do initial processing
     - After writing a function for a specific data source, I generalize the function to read-in other data sources that share commonalities
+        - e.g., US Census Bureau ACS Data; IPEDS
 2. __Processing data__ (the big step between acquiring data and analyzing data). Write functions for data processing steps:
     - sometimes these are small/quick steps that I do over and over
         - e.g., cleaning a "string" ID variable
     - sometimes these are big/multi-step processes
         - e.g., write function that takes-in longitudinal data on number of degrees awarded by field and award-level for each university, and creates measures of "degree adoption"
 3. __Analyzing data__ (after creating analysis datasets). I __ALWAYS__ write functions to automate analyses and the creation of tables/graphs
-    - As a young research assistant, bosses were always asking me to change the variables and then recreate the regression tables
+    - As a young research assistant, bosses were always asking me to change the variables and then recreate the regression tables (same scenario for dissertation analyses + chairs, R&R manuscripts + reviewers)
     - Write functions that allow me to specify which models to run, which variables to include, etc and then "spit out" polished, publication-ready tables
 
 
@@ -262,9 +262,9 @@ Three components of a function:
 
 1. __function name__
     - specify function name before the assignment operator `<-`
-2. __function arguments__ (sometimes called "inputs")
+2. __function arguments__ (sometimes called "inputs" or "arguments")
     - Inputs that the function takes
-        - can be vectors, data frames, logical statements, etc.
+        - can be vectors, data frames, logical statements, strings, etc.
     - in above hypothetical code, the function took three inputs `x`,`y`,`z`
         - we could have written this instead: `function(Larry,Curly,Moe)`
     - In "function call," you specify values to assign to these function arguments
@@ -311,11 +311,11 @@ __First, perform task outside a function__. A few approaches we could take:
 
 1. This seems wrong because my name is not an input
 ```{r}
-"Hello! My name is Ozan Jaquette"
+"Hello! My name is Karina Salazar"
 ```
 2. Why doesn't this approach work?
 ```{r}
-x <- "Ozan Jaquette"
+x <- "Karina Salazar"
 x
 "Hello! My name is x"
 ```
@@ -360,13 +360,12 @@ __Task__: modify `print_hello` function so it also prints our name, which we spe
 __First, perform task outside a function__. 
 
 - We need to find an alternative to `print()` that can print multiple objects on the same line
-- Let's experiment with `cat()` function [I had to Google this]
+- Let's use `cat()` function [we used `cat()` in regular expressions lecture!]
 ```{r}
 #?cat
 cat("Hello! My name is ")
 cat(x)
 
-cat("Hello! My name is ",x)
 cat("Hello! My name is",x)
 ```
 Success! Now we can write a function for this task
@@ -377,7 +376,7 @@ __Task__: modify `print_hello` function so that it also prints our name
 
 __Perform task outside a function__. 
 ```{r}
-x <- "Ozan Jaquette"
+x <- "Karina Salazar"
 cat("Hello! My name is",x)
 ```
 
@@ -409,8 +408,8 @@ __Perform task outside of function__
 ```{r}
 x <- "Ozan Jaquette"
 y <- 1979
-z <- 2018 - 1979
-cat("Hello! My name is",x,". In 2018 I will turn",z,"years old")
+z <- 2019 - 1979
+cat("Hello! My name is",x,". In 2019 I will turn",z,"years old")
 ```
 
 __Improvements we could make__ (before writing function):
@@ -420,7 +419,7 @@ __Improvements we could make__ (before writing function):
     - default is `sep = " "`; change to `sep=""` and specify spaces manually
 ```{r}
 #?cat
-cat("Hello! My name is ",x,". In 2018 I will turn ",z," years old", sep="")
+cat("Hello! My name is ",x,". In 2019 I will turn ",z," years old", sep="")
 ```
 2. use __date functions__ to: 
     - specify current date (rather than manually typing "2018")
@@ -434,15 +433,15 @@ __Task__: modify `print_hello` so it takes year of birth as input and states our
 
 __Perform task outside of function__
 ```{r}
-cat("Hello! My name is ",x,". In 2018 I will turn ",z," years old", sep="")
+cat("Hello! My name is ",x,". In 2019 I will turn ",z," years old", sep="")
 ```
 
 __Create function__
 
 ```{r}
 print_hello <- function(name,birth_year) {
-  age <- 2018 - birth_year
-  cat("Hello! My name is ",x,". In 2018 I will turn ",age," years old", sep="")  
+  age <- 2019 - birth_year
+  cat("Hello! My name is ",name,". In 2019 I will turn ",age," years old", sep="")  
 }
 ```
 
@@ -450,12 +449,12 @@ print_hello <- function(name,birth_year) {
 2. __function arguments__. "inputs" to the function
     - `print_hello` function takes two arguments, `name` and `birth_year`
 3. __function body__.What function does to the inputs
-    - `age <- 2018 - birth_year`
-    - `cat("Hello! My name is",name,"and in 2018 I will turn",age,"years old")`
+    - `age <- 2019 - birth_year`
+    - `cat("Hello! My name is",name,"and in 2019 I will turn",age,"years old")`
     
 __Call function__
 ```{r}
-print_hello("Ozan Jaquette",1979)
+print_hello("Karina Salazar",1989)
 ```
 ### Recipe for writing a function
 
@@ -530,6 +529,7 @@ z_score <- function(x) {
 }
 
 #test function
+#note use of c() function to indicate individual arguments for multiple calls
 z_score(c(5,6,7,8,9,10,11,12,13,14,15))
 v=c(seq(5,15))
 z_score(v)
@@ -605,7 +605,7 @@ __Base R approach__
 
 Why learn "Base R" approach?
 
-- For some tasks, using Tidyverse functions within a user-written function or within a loop (next week) requires more advanced programming skills
+- For some tasks, using Tidyverse functions within a user-written function or within a loop requires more advanced programming skills
 
 Show how to create and delete variables using "Base R" approach
 
@@ -657,7 +657,7 @@ df$c_z <- NULL # remove variable
 
 
 
-### `z_score` function, $z_i = \frac{x_i - \bar{x}}{sd(x)}$ [STUDENTS WORK ON THEIR OWN]
+### `z_score` function, $z_i = \frac{x_i - \bar{x}}{sd(x)}$ 
 
 __Task__
 
@@ -714,10 +714,9 @@ Let's write a function for a practical data analysis task
 - Dataset `df_event`: one observation for each university-recruiting_event
 - Variable `event_type`: location type of recruiting event (e.g., public HS)
 
-__Task__: Create the following descriptive statistics tables for each university
+__Task__: Create the following descriptive statistics table for each university
 
-- __Table A__: count of number of recruiting events by event type and the average of median income at each event type
-- __Table B__: same as Table A, but separately for in-state and out-of-state
+- __Table A__: count of number of recruiting events by event type and in-state/out-of-state and the average of median income at each event type
 
 Before writing function, we perform task outside a function. 
 
@@ -739,19 +738,18 @@ df_event %>% select(instnm,univ_id) %>%
 
 __Task__: calculate number of events and avg. household income by:
 
-1. event-type (Table A)
-1. event-type and whether event is in-state/out-of-state (Table B)
+1. event-type and whether event is in-state/out-of-state 
 
-__Create "by event-type" table outside function (Table A)__
+__Create "by event-type & in-state/out-state" table outside function (Table A)__
 
 - Number of events by type
 ```{r, results="hide"}
-df_event %>% count(event_type) 
+df_event %>% count(event_inst, event_type) 
 ```
 
-- Number of events by type and avg. income for all public universities
+- Number of events by type and in-state/out-of-state and avg. income for all public universities
 ```{r, results="hide"}
-df_event %>% group_by(event_type) %>% summarise(
+df_event %>% group_by(event_inst, event_type) %>% summarise(
     n_events=n(),
     mean_inc=mean(med_inc, na.rm = TRUE))
 ```
@@ -759,57 +757,23 @@ df_event %>% group_by(event_type) %>% summarise(
 - Number of events by type and avg. income for particular university
     - e.g., U. Arkansas univ_id==106397
 ```{r, results="hide"}
-df_event %>% filter(univ_id==106397) %>% group_by(event_type) %>% 
-  summarise(
-    n_events=n(),
-    mean_inc=mean(med_inc, na.rm = TRUE))
-```
-
-### `count_events` function
-
-__Task__: calculate number of events and avg. household income by:
-
-1. event-type (Table A)
-1. event-type and whether event is in-state/out-of-state (Table B)
-
-__Create "by event-type and in/out state" table outside function (Table B)__
-
-- Number of events by type and in/out state
-```{r, results="hide"}
-df_event %>% count(event_inst,event_type) 
-```
-
-- Number of events and avg. income by type and in/out state for all universities
-```{r, results="hide"}
-df_event %>% group_by(event_inst,event_type) %>% summarise(
-    n_events=n(),
-    mean_inc=mean(med_inc, na.rm = TRUE))
-```
-
-- Number of events and avg. income by type and in/out state for particular universities
-    - e.g., U. Arkansas univ_id==106397
-```{r, results="hide"}
-df_event %>% filter(univ_id==106397) %>%
-  group_by(event_inst,event_type) %>% 
+df_event %>% filter(univ_id==106397) %>% group_by(event_inst,event_type) %>% 
   summarise(
     n_events=n(),
     mean_inc=mean(med_inc, na.rm = TRUE))
 ```
 
 
+
 ### `count_events` function
 
 __Task__: calculate number of events and avg. household income by:
 
-1. event-type (Table A)
-1. event-type and whether event is in-state/out-of-state (Table B)
+1. event-type and whether event is in-state/out-of-state (Table A)
 
 __Create function__
 ```{r}
 count_events <- function(id) {
-#by event-type
-df_event %>% filter(univ_id==id) %>% group_by(event_type) %>% 
-  summarise(n_events=n(), mean_inc=mean(med_inc, na.rm = TRUE))
 #by event-type and in/out state  
 df_event %>% filter(univ_id==id) %>% group_by(event_inst,event_type) %>% 
   summarise(n_events=n(), mean_inc=mean(med_inc, na.rm = TRUE))  
@@ -825,31 +789,6 @@ count_events(106397) # U. Arkansas
 count_events(215293) # U. of Pittsburgh
 ```
 
-### `count_events` function
-
-Success! But do we like this function? 
-```{r}
-count_events <- function(id) {
-#by event-type
-df_event %>% filter(univ_id==id) %>% group_by(event_type) %>% 
-  summarise(n_events=n(), mean_inc=mean(med_inc, na.rm = TRUE))
-#by event-type and in/out state  
-df_event %>% filter(univ_id==id) %>% group_by(event_inst,event_type) %>% 
-  summarise(n_events=n(), mean_inc=mean(med_inc, na.rm = TRUE))  
-}
-```
-I don't like that there is a lot of repeated code within function. 
-
-- Function should be able to create the `group_by(event_type)` table and/or the `group_by(event_inst,event_type)` table without repeating code
-
-What improvements should we make?
-
-1. specify `group_by()` variables in function call
-2. specify which variable(s) to calculate mean of in function call
-3. specify which statistic(s) we want to calculate (e.g., mean, median, max)
-4. A title with university name and other info to make table readable
-
-Turns out that several of these improvements require additional programming concepts that we have not introduced yet
 
 ## Student exercise
 
@@ -897,8 +836,9 @@ __Your task for student exercise__:
 __Recommended steps__:
 
 - Perform task outside of function
-    - Recommend you use "Base R" approach to counting negative values
-    - HINT: `sum(data_frame_name$var_name<0)`
+    - You use "Base R" or Tidyverse approach to counting negative values
+    - Base R HINT: `sum(data_frame_name$var_name<0)`
+    - Tidyverse HINT: `filter(var_name<0)` + `nrow()`
 - Write function
 - Apply/test function on variables
 
@@ -913,13 +853,19 @@ __Step 1__: Perform task outside of function [output omitted]
 names(df) # identify variable names
 df$age # print observations for a variable
 
+#BaseR
 sum(df$age<0) # count number of obs w/ negative values for variable "age"
+
+#Tidyverse
+df %>% 
+  filter(age<0) %>%
+  nrow() # count number of obs w/ negative values for variable "age"
+
 ```
 
 __Step 2__: Write function
 ```{r}
 num_missing <- function(x){
-
   sum(x<0)
 }
 ```
@@ -1052,6 +998,7 @@ eval_condition <- function(x) {
     "condition is not true"
   }
 }
+eval_condition(TRUE)
 eval_condition(4==4)
 eval_condition(4==3)
 eval_condition("hello")
@@ -1227,13 +1174,11 @@ filter(df_event, event_state=="CA",med_inc>100000,event_type=="public hs") %>%
 ```
 
 
-### Dot-dot-dot (`...`) example:`count_events` function revisited
+### Dot-dot-dot (`...`) example:count_events function revisited
 
-Recall our simple `count_events` function to produce descriptive tables:
+Recall our simple `count_events` function to produce descriptive table:
 ```{r, results="hide"}
 count_events <- function(id) {
-  df_event %>% filter(univ_id==id) %>% group_by(event_type) %>% 
-    summarise(n_events=n(), mean_inc=mean(med_inc, na.rm = TRUE))
   df_event %>% filter(univ_id==id) %>% group_by(event_inst,event_type) %>% 
     summarise(n_events=n(), mean_inc=mean(med_inc, na.rm = TRUE))  
 }
@@ -1249,7 +1194,7 @@ Challenge in completing this task:
 - number of `group_by()` variables indeterminate 
     - e.g., `group_by(event_type)` or `group_by(event_inst,event_type)`
 
-### Dot-dot-dot (`...`) example:`count_events` function revisited
+### Dot-dot-dot (`...`) example:count_events function revisited
 
 __Task__. Revise `count_events()` so `group_by()` vars specified at program call
 
@@ -1272,7 +1217,7 @@ Why didn't this work?
     - but our function passes `group_by_var` (Here `event_type`) as a string
 - More complete explanation [HERE](https://www.r-bloggers.com/data-frame-columns-as-arguments-to-dplyr-functions/)
 
-### Dot-dot-dot (`...`) example:`count_events` function revisited
+### Dot-dot-dot (`...`) example: count_events function revisited
 
 __Task__. As a first step, revise `count_event` function so that we specify __one__ `group_by()` variable at  program call
 
@@ -1296,7 +1241,7 @@ Note: when writing functions, this approach works for all `dplyr` functions
 - e.g., when writing function, use `summarise_()` rather than `summarise()`
 - e.g., when writing function, use `filter_()` rather than `filter()`
 
-### Dot-dot-dot (`...`) example:`count_events` function revisited
+### Dot-dot-dot (`...`) example: count_events function revisited
 
 Now, we can complete our __Task__. 
 
@@ -1441,6 +1386,8 @@ When writing "side effect" functions, which do not create object, use `invisible
 GW Example: create function that prints number of `NAs` in data frame
 ```{r, results="hide"}
 mtcars # example data frame included when you install R
+str(mtcars) 
+
 show_missings <- function(df) {
   n <- sum(is.na(df)) # var that equals sum of NAs in data frame
   cat("Missing values: ", n, "\n", sep = "")
