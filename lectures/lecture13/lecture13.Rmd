@@ -1448,3 +1448,28 @@ Ozan recommendations
     - Writing these comments help me work through each step of a problem
     - These comments help me/others understand code when I return to it after several months
     
+
+### When to write a loop vs a functions
+
+\medskip
+Usually obvious when you are duplicating code, but unclear whether you should write a loop or whether you should write a function.
+
+- Often, a repeated task can be completed with a loop or a function
+
+In my experience, loops are better for repeated tasks when the individual tasks are __very__ similar to one another
+
+- e.g., a loop that reads in data sets from individual years; each dataset you read in differs only by directory and name
+- e.g., a loop that converts negative values to `NA` for a set of variables
+
+Because functions can have many arguments, functions are better when the individual tasks differ substantially from one another 
+
+- Example: function that runs regression and creates formatted results table
+    - function allows you to specify (as function arguments): dependent variable; independent variables; what model to run, etc.
+
+__Note__
+
+- Can embed loops within functions; can call functions within loops
+- But for now, just try to understand basics of functions and loops
+
+
+
