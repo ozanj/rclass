@@ -316,7 +316,7 @@ When a table doesn't have a key, you can create one. This is called a __surrogat
 nls_course_temp <- nls_course %>% group_by(id,transnum,termnum) %>% 
   mutate(coursenum=row_number()) %>% ungroup
 
-nls_course_temp %>%  group_by(id,transnum,termnum,coursenum) %>%
+nls_course_temp %>%  group_by(id,transnum,termnum) %>%
   summarise(n_per_key=n()) %>% ungroup %>% count(n_per_key)
 
 rm(nls_course_temp)  
