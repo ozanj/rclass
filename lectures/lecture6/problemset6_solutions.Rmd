@@ -15,6 +15,8 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+\textcolor{red}{\textbf{Grade: /20}}  
+
 # Instructions
 
 __General instructions__
@@ -33,7 +35,7 @@ Note: when we __load__ package, name of package is not in quotes; but when we __
 - `library(tidyverse)`
 
 
-```{r, results="hide", message=FALSE}
+```{r, results="hide", message=FALSE, warning=FALSE}
 library(tidyverse)
 library(haven)
 library(labelled)
