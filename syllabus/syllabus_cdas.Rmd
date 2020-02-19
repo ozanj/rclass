@@ -96,7 +96,7 @@ Data management consists of acquiring, investigating, cleaning, combining, and m
 
 The course will be taught in R, a free, open-source programming language. R has become the most popular language for statistical analysis, surpassing SPSS, Stata, and SAS. What differentiates R from these other languages is the thousands of open-source “libraries” created by R users.  R is one of the most popular languages for “data science,” because R libraries have been created for web-scraping, mapping, network analysis, etc.  By learning R you can be confident that you know a programming language that can run any modeling technique you might need and has amazing capabilities for data collection and data visualization. By learning fundamentals of R in this course, you will be "one step away" from web-scraping, network analysis, interactive maps, quantitative text analysis, or whatever other data science application you are interested in.
 
-Students will become proficient in data manipulation tasks through weekly “problem sets” that you complete in groups of three. These problem sets will account for 90% of your grade for the course. This course is a hybrid in-person/online course, meaning students will be responsible for watching online modules, attending lecture, and completing weekly problem sets. Each week a short video module will be posted on the class website where students will learn new material before meeting in person for lecture. The first half of lecture will consist of reviewing topics mentioned in the video modules more deeply and the latter half of class will be more hands on application where students can get into their groups and work through code on their problem sets.
+Students will become proficient in data manipulation tasks through weekly “problem sets” that you complete in groups of three. These problem sets will account for 90% of your grade for the course. This course is a hybrid in-person/online course, meaning students will be responsible for watching online modules, attending lecture, and completing weekly problem sets. Each week a short video module will be posted on the class website where students will learn new material before meeting in person for lecture. The first half of class will be lecture based where instructors will review topics covered in the video modules more deeply and the latter half of class will be more hands on application where students can get into their groups and work through code on their problem sets.
 
 # Course Learning Goals
 
@@ -193,33 +193,33 @@ Your final grade will be based on the following components:
 
 __Undergraduate grading scale__  
 
-- A+, 95 - 100% 
-- A,	90 - 94% 
-- B,	80 - 89% 
-- C,	70 - 79% 
-- D,	60 - 69% 
-- F,	50 - 59% 
+- A+: 95 - 100% 
+- A:  90 - 94% 
+- B:  80 - 89% 
+- C:  70 - 79% 
+- D:  60 - 69% 
+- F:  50 - 59% 
 
 
 __Graduate grading scale__  
 
-- A,	90 - 100% 
-- B,	80 - 89% 
-- C,	70 - 79% 
-- D,  60 - 69% 
+- A:	90 - 100% 
+- B:	80 - 89% 
+- C:	70 - 79% 
+- D:  60 - 69% 
 
 
-## Weekly problem sets
+## Weekly problem sets  
+__NOTE ON PROBLEM SETS:__  
+
+- We believe that students learn by doing and therefore problem sets make up a majority of the grade for this class. Problem sets for both graduate and undergraduate students will cover the same topic each week. Students enrolled in the undergraduate section of this class will complete problem sets of shorter length to meet the rigor and expectations of an undergraduate course. Similarly, graduate students will be expected to complete longer problem sets each week to meet the rigor and expectations of a graduate course.
+
 
 Students will complete 10 problem sets (the last one due during finals week). Problem sets are due by 12PM each Friday, right before we start class.  
 
 Late submissions will lose 20% (i.e., max grade becomes 80%). Problem sets not submitted by 12PM the following Monday will not receive points because at that point we will post solutions on the course website. The lowest problem-set grade will be dropped from the calculation of your final grade. 
 
 You will not lose points for late submission if you cannot submit a problem set due to an unexpected emergency. But please contact the instructor by email as soon as you can so we can work out a plan.  
-
-__NOTE ON PROBLEM SETS:__  
-We believe that students learn by doing and therefore problem sets make up a majority of the grade for this class. Problem sets for both graduate and undergraduate students will cover the same topic each week. Students enrolled in the undergraduate section of this class will complete problem sets of shorter length to meet the rigor and expectations of an undergraduate course. Similarly, graduate students will be expected to complete longer problem sets each week to meet the rigor and expectations of a graduate course.
-
 
 In general, each problem set will give your practice using the skills and concepts introduced during the previous lecture.  For example, after the lecture on joining (merging) datasets, the problem set for that week will require that students complete several different tasks involving merging data.  Additionally, the weekly problem sets will require you to use data manipulation skills you learned in previous weeks.  
 
@@ -234,7 +234,7 @@ Finally, we strongly recommend using Piazza to ask questions you have about prob
 
 ## Attendance and Participation (10 percent of total grade)
 
-Students are expected to participate in the weekly class meetings by being attentive, supportive, by asking questions, or by answering questions posed by others. Additionally, students can receive strong participation grades by asking questions and answering questions on Piazza. 
+Both graduate and undergraduate students are expected to participate in the weekly class meetings by being attentive, supportive, by asking questions, or by answering questions posed by others. Additionally, students can receive strong participation grades by asking questions and answering questions on Piazza. 
 
 Students are required to attend the weekly class meetings.  Each unexcused absence results in a loss of 20% from your attendance/participation grade.  Three or more unexcused absences will result in a failing grade for the course. 
 
@@ -261,16 +261,20 @@ You will communicate with instructors and peers virtually through a variety of t
 
 -	Be professional, courteous, and respectful as you would in a physical classroom.
 -	Online communication lacks the nonverbal cues that provide much of the meaning and nuances in face-to-face conversations. Choose your words carefully, phrase your sentences clearly, and stay on topic.
--	It is expected that students may disagree with the research presented or the opinions of their fellow classmates. To disagree is fine but to disparage others’ views is unacceptable. All comments should be kept civil and thoughtful. 
+-	It is expected that students may disagree with the research presented or the opinions of their fellow classmates. To disagree is fine but to disparage others’ views is unacceptable. All comments should be kept civil and thoughtful.  
+
+## Diversity Statement  
+Note from instructors and TA’s: We consider it part of our responsibility as instructors to address the learning needs of all of the students in this course. We attempt to present materials that are respectful of diversity: race, color, ethnicity, gender, age, disability, religious beliefs, political preference, sexual orientation, gender identity, citizenship, or national origin among other personal characteristics. We also believe that the diversity of student experiences and perspectives is essential to the deepening of knowledge in a course. Any suggestions that you have about other ways to include the value of diversity in this course are welcome. In scheduling midterms and other exams, we have tried to avoid conflicts with major religious holidays. If there is a conflict with your religious observances, please let us know as soon as possible so that we can work together to make arrangements.
 
 ## Academic accomodations
 
-Students needing academic accommodations based on a disability should contact the Center for Accessible Education (CAE) at (310)825-1501 or in person at Murphy Hall A255. When possible, students should contact the CAE within the first two weeks of the term as reasonable notice is needed to coordinate accommodations. For more information visit https://www.cae.ucla.edu/.
+Students needing academic accommodations based on a disability should contact the Center for Accessible Education (CAE) at (310) 825-1501 or in person at Murphy Hall A255.  In order to ensure accommodations, students need to contact the CAE within the first two weeks of the term. For more information visit https://www.cae.ucla.edu.  
+
 
 ## Academic Honesty: 
 
 - UCLA policy
-    - UCLA is a community of scholars. In this community, all members including faculty, staff and students alike are responsible for maintaining standards of academic honesty. As a student and member of the University community, you are here to get an education and are, therefore, expected to demonstrate integrity in your academic endeavors. You are evaluated on your own merits. Cheating, plagiarism, collaborative work, multiple submissions without the permission of the professor, or other kinds of academic dishonesty are considered unacceptable behavior and will result in formal disciplinary proceedings.
+    - UCLA is a community of scholars. In this community, all members including faculty, staff and students alike are responsible for maintaining standards of academic honesty. As a student and member of the University community, you are here to get an education and are, therefore, expected to demonstrate integrity in your academic endeavors. You are evaluated on your own merits. Cheating, plagiarism, collaborative work, multiple submissions without the permission of the instructor, or other kinds of academic dishonesty are considered unacceptable behavior and will result in formal disciplinary proceedings usually resulting in suspension or dismissal. All students are responsible for understanding and complying with UCLA’s Statement on Academic Integrity.  
 - This class
     - Given that 90% of course grade is based on weekly problem sets, the primary academic honesty concern that could come up in this class is copying problem set solutions from somebody else and passing this in as your own work.
 
@@ -443,13 +447,18 @@ __`r advdate(fri, 11)`: No class__
 **Counseling and Psychological Services (CAPS)**  
 This is a multidisciplinary student mental health center for the UCLA campus. CAPS offers an array of free services including individual counseling. If you suspect you are experiencing mental health problems or just need someone to talk to, you can make an appointment at John Wooden Center West, facing Drake Stadium, second floor, 310-825-0768. http://www.counseling.ucla.edu
 
-**Report Discrimination**
+**Report Discrimination**  
 UCLA is committed to maintaining a campus community that provides the stronget possible support for the intellectual and personal growth of all its members- students, faculty, and staff. Acts intended to create a hostile climate are unacceptable. To file an online incident report, visit: https://equity.ucla.edu/report-an-incident/  
 
 **Sexual harassment**  
-Title IX prohibits gender discrimination, including sexual harassment, domestic and dating violence, sexual assault, and stalking. If you have experienced sexual harassment or sexual violence, you can receive confidential support and advocacy at the CARE Advocacy Office for Sexual and Gender-Based Violence. 1st Floor Wooden Center West, via email CARE.advocate@careprogram.ucla.edu or by phone (310) 206-2465. In addition, Counseling and Psychological Services (CAPS) provides confidential counseling to all students and can be reached 24/7 at (310) 825-0768. You can also report sexual violence or sexual harassment directly to the University's Title IX Coordinator, 2241 Murphy Hall, via email at mcato@equity.ucla.edu, or via phone at (310) 206-3417. Reports to law enforcement can be made to UCPD at (310) 825-1491. *Faculty and TAs are required under the UC Policy on Sexual Violence and Sexual Harassment to inform the Title IX Coordinator should they become aware that you or any other student has experienced sexual violence or sexual harassment.*  
+Title IX prohibits gender discrimination, including sexual harassment, domestic and dating violence, sexual assault, and stalking.  If you have experienced sexual harassment or sexual violence, there are a variety of resources to assist you.  
 
-**LGTBQ Resource Center**
+- CONFIDENTIAL RESOURCES:You can receive confidential support and advocacy at the CARE Advocacy Office for Sexual and Gender-Based Violence, A233 Murphy Hall, CAREadvocate@careprogram.ucla.edu, (310) 206-2465. Counseling and Psychological Services (CAPS) also provides confidential counseling to all students and can be reached 24/7 at (310) 825-0768.  
+- NON-CONFIDENTIAL RESOURCES: You can also report sexual violence or sexual harassment directly to the University's Title IX Coordinator, 2255 Murphy Hall, titleix@conet.ucla.edu, (310) 206-3417. Reports to law enforcement can be made to UCPD at (310) 825-1491. These offices may be required to pursue an official investigation.
+
+*Faculty and TAs are required under the UC Policy on Sexual Violence and Sexual Harassment to inform the Title IX Coordinator should they become aware that you or any other student has experienced sexual violence or sexual harassment.*  
+
+**LGBTQ Resource Center**
 This resource center provides a range of education and advocacy services supporting intersectional identity development. It fosters unity; wellness; and an open, safe, inclusive environment for lesbian, gay, bisexual, intersex, transgender, queer, asexual, questioning, and same-gender-loving students, their families, and the entire campus community. Find it in the Student Activities Center, or via email lgbt@lgbt.ucla.edu. Visit their website for more information: https://www.lgbt.ucla.edu/  
 
 **International Students**  
@@ -477,16 +486,16 @@ UCLA Students with Dependents provides support to UCLA studens who are parents, 
 - A quiet study space
 - Family friendly graduation celebration in June  
 
-For more information visit their website: https://www.deanofstudents.ucla.edu/Portals/16/Documents/studentsdependents.pdf  
+For more information visit their website: https://www.swd.ucla.edu/
 
 **Lactation Rooms**  
-[Map to lactation rooms on campus](https://map.ucla.edu/?f=5)  
+[Map to lactation rooms on campus](https://ucla.app.box.com/v/2019-lactation-map)  
 
 **Gender Inclusive restrooms**  
-[Map to gender inclusive restrooms](http://maps.ucla.edu/campus/?a_layers=flyr_restrooms)  
+[Map to gender inclusive restrooms](https://www.lgbt.ucla.edu/Portals/38/Documents/All-Gender%20Restroom%20Map_F15.pdf)  
 
 **Campus accessibility**  
-[Campus accessibility map](https://maps.ucla.edu/downloads/pdf/Access_08_21_15.pdf)
+[Campus accessibility map](http://map.ucla.edu/downloads/pdf/Access_08_21_15.pdf)
 
 
 
