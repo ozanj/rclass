@@ -25,15 +25,16 @@ knitr::opts_chunk$set(echo = TRUE)
   * Select "Download R for Windows"  
   
       * Click "install R for the first time"
-      * Click "Download R 3.6.1 for Windows"  
+      * Click "Download R 4.0.2 for Windows"  
   * Select "Download R for (Mac) OS  X"   
   
-      * Click "R-3.6.1.pkg"   
+      * Click "R-4.0.2.pkg"   
         
 ## 3. Install RStudio  
   * Go to https://www.rstudio.com/products/rstudio/download/  
-  * Select "RStudio 1.2.1335 - Windows 7+ (64-bit)" for Windows users  
-  * Select "RStudio 1.2.1335 - macOS 10.12+ (64-bit)" for Mac users  
+  * Scroll to the bottom of the page
+  * Select "RStudio-1.3.1056.exe - Windows 10/8/7" for Windows users  
+  * Select "RStudio-1.3.1056.dmg - macOS 10.13+ (64-bit)" for Mac users  
     
 ## 4. Create R Markdown file that “knits” HTML document in RStudio  
   * What do we mean by this?  
@@ -46,7 +47,7 @@ knitr::opts_chunk$set(echo = TRUE)
     * At the top left corner select “File” ->“New file” -> “R Markdown”  
     * Select “HTML”, title your markdown file (optional), and click “OK”  
     * Now select the “Knit” tab (icon with blue yarn ball) or scroll down and “Knit to HTML”  
-    * Give your file a name and save (can delete later) in place that is easy to locate (Desktop, Dowonloads, etc.)  
+    * Give your file a name and save (can delete later) in place that is easy to locate (Desktop, Downloads, etc.)  
     * You should have a saved HTML file (extension .HTML) and an R markdown file (extension .Rmd)  
     
 ## 5. Complete free R bootcamp tutorial [here](https://www.teamleada.com/courses/r-bootcamp)  
