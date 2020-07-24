@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .DS_Store
+*.DS_Store
 .Ruserdata
 *.tex
 *.md
