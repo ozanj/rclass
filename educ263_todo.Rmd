@@ -10,7 +10,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 ***
 #### Please skim through all of the instructions before getting start.  
-**Note: R bootcamp (Step 5 below) walks you through installing R and RStudio if you would like to skip to that section for Steps 2 and 3.**  
 
 
 ## 1. Create a piazza account  
