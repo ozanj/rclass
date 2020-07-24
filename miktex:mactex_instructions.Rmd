@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
   * [Here](https://www.youtube.com/watch?v=XlxiytGeWds&t=1s) is a youtube tutorial on how to install MacTeX  
 
-    1. Follow this link for MaxTeX installation [http://www.tug.org/mactex/] 
+    1. Follow this link for MaxTeX installation [http://www.tug.org/mactex/]  
     2. Select MacTeX Download  
     3. Select MacTex.pkg (This may take a while)  
     4. Once downloaded double click on package  
@@ -24,7 +24,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
   * [Here](https://www.youtube.com/watch?v=yPnfHRE_W_g&t=1s) is a youtube tutorial on how to install MikTeX (watch first 10 minutes if needed)  
 
-    1. Follow this link for MikTeX installation [https://miktex.org/download] 
+    1. Follow this link for MikTeX installation [https://miktex.org/download]  
     2. Select “Download”  
     3. This is a large file, it may take a while  
     4. Once download is complete (close browser)  
