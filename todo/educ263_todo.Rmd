@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## 1. Create a GitHub account  
   * We will be conducting all class-related discussion on this version control system instead of using CCLE.  
-  *  Follow this [link]() for instructions
+  *  Follow this [link](https://github.com/ozanj/rclass/raw/master/todo/git_instructions.pdf) for instructions on creating a GitHub account and installing Git on your local computer.
   
 ## 2. Install R 
   * Go to https://cran.r-project.org/  
