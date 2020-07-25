@@ -12,9 +12,9 @@ knitr::opts_chunk$set(echo = TRUE)
 #### Please skim through all of the instructions before getting start.  
 
 
-## 1. Create a piazza account  
-  * We will be conducting all class-related discussion on this platform instead of using CCLE.  
-  * We have added your email to the Piazza site for this class.  
+## 1. Create a [GitHub](https://github.com/) account  
+  * We will be conducting all class-related discussion on this version control system instead of using CCLE.  
+  *  
   * Course resources have not been posted. We will post more information as the quarter approaches  
   * If you did not receive an email invitation to join our class piazza page follow-up with me.
  
