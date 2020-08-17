@@ -346,14 +346,16 @@ _Work and course requirements are subject to change at the discretion of the ins
 
 ## 11/26/2020: No class (Thanksgiving)
 
-
-## Module 13, 12/3/2020: : Introduction to Git Hub & Regular Expressions
-
-- [Optional]"Reading" (after class):
-    - Code Academy Git Tutorial: https://www.codecademy.com/learn/learn-git 
+- Problem set due: No
 
 
-## Module 14, 12/10/2020: Reading Day 
+## Module 13, 12/3/2020: : Writing Functions
+
+- Problem set due (before class): No
+- Reading (after class): W&G 19
+
+
+## 12/10/2020: No class (Reading Day) 
 
 - Final Project due by 11:59pm 12/10/2020
 
