@@ -94,6 +94,15 @@ b
 
 # Classification of objects
 
+### Some Note on Objects...
+
+- The remainder of the lecture is a conceptual and practical introduction to "objects" in R
+- This lecture is a broad overview that introduces some general programming and applies some of these concepts to data
+- __IMPORTANT__: The goal is to BEGIN developing familiarity with the concepts that will be introduced in more detail in later weeks.
+  - I don't expect you to understand or retain all this information perfectly
+  - Just focus on trying to understand as much as you can...
+
+
 ### Objects
 
 Most statistical software (e.g., SPSS, Stata) operates on datasets, which consist of rows of observations and columns of variables
@@ -147,9 +156,9 @@ Vector where the elements are characters
 animals <- c("lions", "tigers", "bears", "oh my")
 animals
 ```
-### Student task (do with the person next to you)
+### Student task (10 minutes on your own)
 
-Either in the R console or within the R markdown file, do the following:
+Either in the R console:
 
 1. Create a vector called `v1` with three elements, where all the elements are numbers. Then print the values.
 1. Create a vector called `v2` with four elements, where all the elements are characters (i.e., enclosed in single '' or double "" quotes). Then print the values.
@@ -390,7 +399,6 @@ Most mathematical operations operate on each element of the vector
 1:3+.5
 (1:3)*2
 ```
-Mathematical operations involving two vectors with the same length behave differently
 
 - e.g., for addition: add element 1 of vector 1 to element 1 of vector 2, add element 2 of vector 1 to element 2 of vector 2, etc.
 ```{r}
@@ -589,18 +597,6 @@ Takeaways
     - `length()` : how many __elements__ in the object
     - `typeof()` : what __type__ of data is the object
     - `str()` : hierarchical structure of the object
-
-### Main takeaways about atomic vectors and lists
-
-Basic data stuctures
-
-1. __(Atomic) vectors__: __logical__, __integer__, __double__, __character__. 
-    - each element in vector must have same data type
-2. __Lists__: 
-    - Data type can differ across elements
-
-Takeaways
-
 - These data structures (vectors, lists) and data types (e.g., character, numeric, logical) are the basic building blocks of all object oriented programming languages
 - Application to statistical analysis
     - Datasets are just lists
