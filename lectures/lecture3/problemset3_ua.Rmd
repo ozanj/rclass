@@ -113,7 +113,7 @@ For the questions below, imagine that you have been asked by a major news outlet
 
 
 
-Once finished, knit to (HTML) and upload both .Rmd and HTML files to ps_submit_2 on Piazza
+Once finished, knit to PDF and upload both .Rmd and PDF files.
 
 *Remember to use this naming convention "lastname_firstname_ps2"*
 
