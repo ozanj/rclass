@@ -264,22 +264,23 @@ _Work and course requirements are subject to change at the discretion of the ins
 - Reading (after class): 
     - Wickham and Grolemund 2018 (W&G) 1; W&G 2; W&G 4; W&G 20.1 - 20.3
 
-## Module 2, 9/3/2020: Introduction to using tidyverse to investigate data patterns
+## Module 2, 9/3/2020: Objects in R and Missing Data [continued]
 
+## Module 3, 9/10/2020: Introduction to using tidyverse to investigate data patterns
 - Problem set due (before class): Yes
 - Reading (after class): 
     - W&G 5.1 - 5.4
     - Xie, Allaire & Grolemund (XAG) 3.1 [LINK HERE](https://bookdown.org/yihui/rmarkdown/html-document.html)
     - Spend 15 minutes studying the "R Markdown Reference Guide" [LINK HERE](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf)
 
-## Module 3, 9/10/2020: Introduction to using "base R" to investigate data patterns
+## Module 4, 9/17/2020: Introduction to using "base R" to investigate data patterns
 
 - Problem set due (before class): Yes
 - Reading (after class): 
     - Wickham, H. (2014). _Advanced R_.  Retrieved from https://adv-r.hadley.nz/: 4.1-4.3
     - Nicholls, A., Pugh, R., & Gott, A. (2015). _Sams Teach Yourself R in 24 Hours_. (pg. 236-237) [on D2L]
 
-## Module 4, 9/17/2020: Pipes and variable creation
+## Module 4, 9/24/2020: Pipes and variable creation
 
 - Problem set due (before class): Yes
 - Reading (after class): 
@@ -287,14 +288,14 @@ _Work and course requirements are subject to change at the discretion of the ins
     - XAG 3.3 (R Markdown, creating PDF documents) [LINK HERE](https://bookdown.org/yihui/rmarkdown/pdf-document.html)
         - note: sections 3.3.5 through 3.3.8 will feel somewhat cryptic and are not required for this course; so just do the best you can with those
 
-## Module 5, 9/24/2020:  Processing across rows
+## Module 5, 10/1/2020:  Processing across rows
 
 - Problem set due (before class): Yes
 - Reading (after class): 
     - W&G 5.6 - 5.7 (grouped summaries and mutates)
     - XAG 4.1 (R Markdown, ioslides presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/ioslides-presentation.html) and 4.3 (R Markdown, Beamer presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/beamer-presentation.html)
 
-## Module 6, 10/1/2020:  Augmented vectors, Survey data, and exploratory data analysis
+## Module 6, 10/8/2020:  Augmented vectors, Survey data, and exploratory data analysis
 
 - Problem set due (before class): Yes
 - Reading (after class): 
@@ -304,11 +305,11 @@ _Work and course requirements are subject to change at the discretion of the ins
     - [OPTIONAL] W&G 10 (tibbles)
 
 
-## Module 7, 10/8/2020:  Guidelines for investigating, cleaning, and creating variables
+## Module 7, 10/15/2020:  Guidelines for investigating, cleaning, and creating variables
 - Problem set due (before class): Yes
 - Reading (after class): TBD
 
-## Module 8, 10/15/2020:  Tidy Data
+## Module 8, 10/22/2020:  Tidy Data
 
 - Problem set due (before class): Yes
 - Reading (after class):
@@ -317,26 +318,20 @@ _Work and course requirements are subject to change at the discretion of the ins
         - This is the journal article that introduced the data concepts covered in W&G chapter 12 and created the packages related to tidying data
         - Link to article here: [LINK](https://www.jstatsoft.org/article/view/v059i10)
 
-## Module 9, 10/22/2020:  Joining multiple datasets
+## Module 9, 10/29/2020:  Joining multiple datasets
 
 - Problem set due (before class): Yes
 - Reading (after class): W&G 13
 
-## Module 10, 10/29/2019:  Acquiring data
+## Module 10, 11/5/2019:  Acquiring data
 
 - Problem set due (before class): Yes
 - Reading (after class): W&G 11
 
-## Module 11, 11/5/2020:  Working with Strings and Date/Time Variables
+## Module 11, 11/12/2020:  Working with Strings and Date/Time Variables
 
 - Problem set due (before class): Yes
 - Reading (after class): W&G 19
-
-
-## Module 12, 11/12/2019: Accessing object elements and looping 
-
-- Problem set due (before class): Yes
-- Reading (after class): W&G 20.4 - 20.5; 21.1 - 21.3
 
 
 ## 11/19/2020: Introduction to Final Project
@@ -344,15 +339,16 @@ _Work and course requirements are subject to change at the discretion of the ins
 - Problem set due: Yes
 
 
+
 ## 11/26/2020: No class (Thanksgiving)
 
 - Problem set due: No
 
 
-## Module 13, 12/3/2020: : Writing Functions
+## Module 12, 12/3/2019: Accessing object elements, Intro to looping and Functions
 
-- Problem set due (before class): No
-- Reading (after class): W&G 19
+- Problem set due (before class): Yes
+- Reading (after class): W&G 20.4 - 20.5; 21.1 - 21.3; W&G 19
 
 
 ## 12/10/2020: No class (Reading Day) 
