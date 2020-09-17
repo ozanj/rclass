@@ -265,6 +265,9 @@ _Work and course requirements are subject to change at the discretion of the ins
     - Wickham and Grolemund 2018 (W&G) 1; W&G 2; W&G 4; W&G 20.1 - 20.3
 
 ## Module 2, 9/3/2020: Objects in R and Missing Data [continued]
+- Problem set due (before class): Yes
+- Reading (finish): 
+    - Wickham and Grolemund 2018 (W&G) 1; W&G 2; W&G 4; W&G 20.1 - 20.3
 
 ## Module 3, 9/10/2020: Introduction to using tidyverse to investigate data patterns
 - Problem set due (before class): Yes
