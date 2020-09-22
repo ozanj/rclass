@@ -120,10 +120,19 @@ library(tidyverse)
 
 ![](pane_layout.png)
 
-### R Markdown
+### R Markdown Documents
 [R Markdown](https://rmarkdown.rstudio.com/) produces dynamic output formats in html, pdf, MS Word, dashboards, Beamer presentations, etc.
 
 - We will be using R Markdown for lectures and homeworks.
+- These files names end with `.Rmd`
+
+### R Scripts
+R Scripts are simply a text file containing all the same commands that you would enter on the command line of R. The "text" you can include in these files are in the form of comments.
+
+- We will be using R Markdown for some homework assignments.
+- These files names end with `.R`
+
+
 
 ### Why R? Capabilities of R
 - [Graphs](https://ggplot2.tidyverse.org/)
@@ -155,7 +164,7 @@ data("midwest", package = "ggplot2")
 # Scatterplot
 gg <- ggplot(midwest, aes(x=area, y=poptotal)) + 
   geom_point(aes(col=state, size=popdensity)) + 
-  geom_smooth(method="loess", se=F) + 
+  geom_smooth(method="loess", se=F, formula = 'y ~ x') + 
   xlim(c(0, 0.1)) + 
   ylim(c(0, 500000)) + 
   labs(subtitle="Area Vs Population", 
@@ -206,7 +215,7 @@ Learn to walk before you can run!
 This class is for anyone who wants to work with data, that is people who want to be:
 
 - researchers working with survey data and doing traditional statistical analyses
-- researchers who want to do "data science" oriented research involving 
+- researchers who want to do "data science" oriented research involving mapping, NLP, connecting to APIs
 - analysts working at think tanks or non-profits
 - "Data scientists"
 
@@ -233,14 +242,11 @@ Why am I asking you to create R project and download a specific directory struct
 
 ### Follow these steps to create "R project" and directory structure
 
-1. Download this zip folder: [LINK HERE](https://github.com/ozanj/rclass/raw/master/rclass_directory.zip)
+1. Download this zip folder: [LINK HERE](https://github.com/ozanj/rclass/raw/master/rclass.zip)
     - Unzip the folder: this is a shell of the file directory you should use for this class
     - Change the name to "rclass"
     - Move it to your preferred location (e.g, documents, desktop, dropbox, etc)
-2. In RStudio, click on "File" >> "New Project" >> "New Directory" >> "New Project"
-    - In "Directory name", type "rclass_project" as the title of the Rproject for the course
-    - In "Create project as subdirectory of", click browse and:
-        - save the R Project within the rclass folder (same general folder as data and lectures) 
+2. In RStudio, click on "File" >> "New Project" >> "Existing Directory" >> Select the rclass folder >> Create Directory
 3. Save the following files in "rclass/lectures/lecture1"
     - lecture1.1_ua.Rmd
     - lecture1.1_ua.pdf
@@ -307,6 +313,6 @@ getwd()
 | ------ | -------- |
 | ~    | tilde is a shortcut for user's home directory (mine is my name)   |
 | ../    | moves up a level   |
-| ../../    | moves up two level   |
+| ../../    | moves up two levels   |
 
 

@@ -104,17 +104,17 @@ How we will be using R Markdown files in this class:
 - lectures we write are .Rmd files, where we the output style will usually be `beamer_presentation`
     - this is essentially a PDF document, where each page is a slide
 
-### Creating RMarkdown documents
+<!-- ### Creating RMarkdown documents -->
 
-__Do this with a partner__
+<!-- __Do this with a partner__ -->
 
-Approach for creating a RMarkdown document. 
+<!-- Approach for creating a RMarkdown document.  -->
 
-1. Point-and-click from within RStudio
-    - Click on _File_ >> _New File_ >> _R Markdown_ >> _Document_ >> choose _HTML_ >> click _OK_
-    - save the .Rmd file [any name, anywhere you can find it]
-    - "Knit" the entire .Rmd file
-        - point-and-click OR shortcut: __Cmd/Ctrl + Shift + k__
+<!-- 1. Point-and-click from within RStudio -->
+<!--     - Click on _File_ >> _New File_ >> _R Markdown_ >> _Document_ >> choose _HTML_ >> click _OK_ -->
+<!--     - save the .Rmd file [any name, anywhere you can find it] -->
+<!--     - "Knit" the entire .Rmd file -->
+<!--         - point-and-click OR shortcut: __Cmd/Ctrl + Shift + k__ -->
 
 ```{r eval=FALSE, echo=FALSE}
 # 2. From blank text file
@@ -173,9 +173,9 @@ Common/important output types:
 
 - __html_document__: R Markdown originally designed to create HTML documents
     - Most features/code in .Rmd files were written for html_document
-    - many of these features are available in other output types
+    - Many of these features are available in other output types
     - When learning R Markdown, best to start by learning html_document
-- __pdf_document__: Requires installation of LaTeX (MiKTeX/MacTeX)
+- __pdf_document__: Requires installation of LaTeX (TinyTeX/MiKTeX/MacTeX)
     - How it works:
         - You write .Rmd code; 
         - When you compile, this .Rmd code is transformed into LaTeX code
