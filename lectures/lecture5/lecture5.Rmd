@@ -48,10 +48,10 @@ __Required reading for next week:__
     - `ioslides_presentation` are the most basic presentation output format for RMarkdown, so learning about `ioslides` will help you understand `beamer`
 - Any slides from lecture we don't cover
 
-__Explanation about `beamer_header.tex` in YAML header:__
+<!-- __Explanation about `beamer_header.tex` in YAML header:__ -->
 
-- What does it do? Why do we include this?
-- Incorporating updates to `beamer_header.tex`
+<!-- - What does it do? Why do we include this? -->
+<!-- - Incorporating updates to `beamer_header.tex` -->
 
 ### What we will do today
 
