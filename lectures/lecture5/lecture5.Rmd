@@ -444,7 +444,7 @@ event_berk %>% arrange(event_date) %>%
   select(pid, event_date, event_type, event_state, event_inst) %>%
   slice(1:8)
 ```
-## summarise() and Counts
+## summarise() and Counts (and logical vectors)
 
 ### `summarise()`: Counts
 
