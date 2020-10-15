@@ -50,7 +50,6 @@ if(!file.exists('data-structures-overview.png')){
 
 __Reading to do before next class:__
 
-- Work through slides from lecture 5 that we didn't get to in class (attaching aggregate measures)
 - GW 15.1 - 15.2 (factors) [this is like 2-3 pages]
 - [OPTIONAL] GW 15.3 - 15.5 (remainder of "factors" chapter)
 - [OPTIONAL] GW 20.6 - 20.7 (attributes and augmented vectors)
@@ -605,30 +604,30 @@ attributes(hsls$s3classes)
 hsls %>% select(s3classes) %>% var_label()
 hsls %>% select(s3classes) %>% val_labels()
 ```
-### Core concepts for understanding `labelled` class [SKIP]
+<!-- ### Core concepts for understanding `labelled` class [SKIP] -->
 
-__atomic vectors (and lists)__ the underlying data
+<!-- __atomic vectors (and lists)__ the underlying data -->
 
-- data structures: vector or list
-- data type: numeric (integer or double); character; logical
-```{r}
-typeof(hsls$s3classes)
-```
+<!-- - data structures: vector or list -->
+<!-- - data type: numeric (integer or double); character; logical -->
+<!-- ```{r} -->
+<!-- typeof(hsls$s3classes) -->
+<!-- ``` -->
 
-__augmented vectors__ are atomic vectors with __attributes__ attached
+<!-- __augmented vectors__ are atomic vectors with __attributes__ attached -->
 
-__attributes__ are "metadata" attached to an object. Examples
+<!-- __attributes__ are "metadata" attached to an object. Examples -->
 
-- __names__: names of elements of a vector or list (e.g., variable names)
-- __levels__: display output associated with values of a factor variable
-- __class__: e.g., factor, labelled
+<!-- - __names__: names of elements of a vector or list (e.g., variable names) -->
+<!-- - __levels__: display output associated with values of a factor variable -->
+<!-- - __class__: e.g., factor, labelled -->
 
-```{r, results="hide"}
-attributes(hsls$s3classes)
-```
-__class__ is an object oriented programming concept. The `class` of an object determines which functions can be applied to the object and what those functions do
+<!-- ```{r, results="hide"} -->
+<!-- attributes(hsls$s3classes) -->
+<!-- ``` -->
+<!-- __class__ is an object oriented programming concept. The `class` of an object determines which functions can be applied to the object and what those functions do -->
 
-- e.g., can't apply `sum()` to an object where `class=character`
+<!-- - e.g., can't apply `sum()` to an object where `class=character` -->
 
 ### What is `labelled` class?
 
