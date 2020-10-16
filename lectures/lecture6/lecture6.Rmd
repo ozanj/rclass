@@ -445,13 +445,13 @@ wwlist %>% count(psat_range_fac)
 attributes(wwlist$psat_range_fac)
 levels(wwlist$psat_range_fac) #starts at 1
 nlevels(wwlist$psat_range_fac) #7 levels total
-levels(wwlist$psat_range_fac)[1:3] #prints levels 1-3
+levels(wwlist$psat_range_fac)[5] #prints levels 1-3
 
 ```
 
 Once you know values associated with factor, you can filter based on values
 ```{r}
-wwlist %>% filter(as.integer(psat_range_fac)==4) %>% count()
+wwlist %>% filter(as.integer(psat_range_fac)==4 | as.integer(psat_range_fac)==5) %>% count()
 ```
 
 Or you can just filter based on value of __factor levels__
@@ -865,6 +865,7 @@ wwlist_temp$hs_state_char <- as.character(wwlist_temp$hs_state)
 
 #investigate character variable
 str(wwlist_temp$hs_state_char)
+class(wwlist_temp$hs_state_char)
 table(wwlist_temp$hs_state_char)
 
 #create new variable that assigns levels
@@ -875,6 +876,9 @@ attributes(wwlist_temp$hs_state_fac)
 #wwlist_temp %>%
 #  count(hs_state_fac)
 rm(wwlist_temp)
+
+wwlist$hs_state_fac <- as_factor(wwlist_temp$hs_state_char)
+
 
 ```
 
@@ -914,28 +918,38 @@ Let's turn an integer variable into a factor variable in the `wwlist` data frame
 Create integer version of `receive_year`
 ```{r}
 #typeof(wwlist_temp$receive_year)
-wwlist$receive_year_int <- as.integer(wwlist$receive_year)
-str(wwlist$receive_year_int)
-typeof(wwlist$receive_year_int)
 
+wwlist_temp <- wwlist %>%
+  filter(zip5 %in% c("98103", "98030", "98290"))
+
+wwlist_temp$zip_int <- as.integer(wwlist_temp$zip5)
+str(wwlist_temp$zip_int)
+typeof(wwlist_temp$zip_int)
 ```
 
 
-Assign levels to values of integer variable
-```{r, eval=FALSE}
-wwlist$receive_year_fac <- factor(wwlist$receive_year_int, 
-      labels=c("Twenty-sixteen","Twenty-seventeen","Twenty-eighteen"))
-str(wwlist$receive_year_fac)
-str(wwlist$receive_year)
+### Creating factors [from integer vectors]
+
+
+Assign levels to values of integer variable 
+```{r}
+
+# variable zip_int is coded 98103, 98030 or 98290
+# we want to attach value labels 98103=nine-eight-one-zero-three, 98030=nine-eight-zero-three-zero, 98290=nine-eight-two-nine-zero
+
+
+wwlist_temp$zip_fac <- factor(wwlist_temp$zip_int, 
+      levels = c(98103, 98030, 98290),
+      labels = c("nine-eight-one-zero-three", "nine-eight-zero-three-zero", "nine-eight-two-nine-zero"))
+
+str(wwlist_temp$zip_fac)
+str(wwlist_temp$zip5)
 
 #Check variable
-wwlist %>%
-  count(receive_year_fac)
+wwlist_temp %>%
+  count(zip_fac)
 
-wwlist %>%
-  count(receive_year)
+wwlist_temp %>%
+  count(zip_int)
 ```
-
-
-
 
