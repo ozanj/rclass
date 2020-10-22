@@ -80,12 +80,6 @@ attributes(hsls$s3classes)
 typeof(hsls$s3classes)
 class(hsls$s3classes)
 ```
-```{r}
-(x <- c(A=1, B=2, C=3))
-
-names(x) <- c("apple","beta","charlie")
-x
-```
 
 Download the HSLS Codebook: https://nces.ed.gov/pubs2014/2014361_AppendixI.pdf
 
@@ -217,7 +211,7 @@ rm(hsls_small_temp)
 
 Use `summarise_at()`, a variation of `summarise()`, to make descriptive stats
 
-- explain `.args=list(na.rm=TRUE)` on following slides
+- `.args=list(na.rm=TRUE)`= a named list of additional arguments to be added to all function calls
 
 __Task__:
 
@@ -352,6 +346,7 @@ Use `count()` to investigate values of discrete or categorical variables
 For variables where `class==labelled`
 ```{r, results="hide"}
 class(hsls_small$s3classes)
+attributes(hsls_small$s3classes)
 #show counts of variable values
 hsls_small %>% count(s3classes) #print in console to show both
 #show counts of value labels
@@ -364,43 +359,43 @@ hsls_small %>% mutate(s3classes_na=ifelse(s3classes<0,NA,s3classes)) %>%
   count(s3classes_na)
 ```
 
-Simultaneously show both values and value labels on count tables for `class==labelled`
+Simultaneously show both values and value labels on count tables for `class==labelled` if entered into console
 
-- requires some concepts/functions we haven't introduced
-```{r, results="hide"}
-x <- hsls_small %>% count(s3classes)
+- This requires some concepts/functions we haven't introduced [SKIP]
+```{r, eval=FALSE}
+ hsls_small %>% count(s3classes)
 y <- hsls_small %>% count(s3classes) %>% as_factor()
-bind_cols(x[,1], y) #wont show in updated R
+ bind_cols(x[,1], y) #wont show in updated R
 ```
 
-### One-way descriptive stats for factor vars [OPTIONAL/SKIP]
+<!-- ### One-way descriptive stats for factor vars [OPTIONAL/SKIP] -->
 
-For variables where `class==factor`
+<!-- For variables where `class==factor` -->
 
-- Create object with some or all `labelled` vars converted to `factor`
-```{r}
-hsls_f <- as_factor(hsls)
-```
+<!-- - Create object with some or all `labelled` vars converted to `factor` -->
+<!-- ```{r} -->
+<!-- hsls_f <- as_factor(hsls) -->
+<!-- ``` -->
 
 
 
-```{r, results="hide"}
-#use variable from the hsls data frame where vars are factors
-typeof(hsls_f$s3classes)
-class(hsls_f$s3classes)
-attributes(hsls_f$s3classes)
+<!-- ```{r, results="hide"} -->
+<!-- #use variable from the hsls data frame where vars are factors -->
+<!-- typeof(hsls_f$s3classes) -->
+<!-- class(hsls_f$s3classes) -->
+<!-- attributes(hsls_f$s3classes) -->
 
-#show frequency table
-hsls_f %>% count(s3classes)
+<!-- #show frequency table -->
+<!-- hsls_f %>% count(s3classes) -->
 
-#Create VAR that converts different types of missing to NA and then create frequency table
+<!-- #Create VAR that converts different types of missing to NA and then create frequency table -->
 
-#note: within ifelse() used levels(s3classes)[s3classes]) rather than s3classes  to show attribute levels not values
-hsls_f %>% 
-  mutate(s3classes_f=ifelse(s3classes %in% c("Missing","Unit     
-  non-response"),NA,levels(s3classes)[s3classes])) %>% 
-  count(s3classes_f)
-```
+<!-- #note: within ifelse() used levels(s3classes)[s3classes]) rather than s3classes  to show attribute levels not values -->
+<!-- hsls_f %>%  -->
+<!--   mutate(s3classes_f=ifelse(s3classes %in% c("Missing","Unit      -->
+<!--   non-response"),NA,levels(s3classes)[s3classes])) %>%  -->
+<!--   count(s3classes_f) -->
+<!-- ``` -->
 
 
 ### Relationship between variables, categorical by categorical
@@ -445,9 +440,9 @@ hsls_small %>% count(s3classes,s3clglvl) %>% glimpse()
 
 Two-way frequency table, also called "cross tabulation"
 
-What if one of the variables has `NAs`?
+<!-- What if one of the variables has `NAs`? -->
 
-- Table created by `group_by()` and `count()` shows `NAs`!
+<!-- - Table created by `group_by()` and `count()` shows `NAs`! -->
 
 __Task__: 
 
@@ -458,11 +453,23 @@ hsls_small %>%
   mutate(s3classes_na=ifelse(s3classes<0,NA,s3classes)) %>%
   group_by(s3classes_na) %>% count(s3clglvl)
 
+hsls_small %>% 
+  mutate(s3classes_na=ifelse(s3classes<0,NA,s3classes)) %>%
+  count(s3classes_na, s3clglvl)
+
+
 #example where we create some NA obs in the second variable
 hsls_small %>% 
   mutate(s3classes_na=ifelse(s3classes<0,NA,s3classes),
          s3clglvl_na=ifelse(s3clglvl==-7,NA,s3clglvl)) %>%
   group_by(s3classes_na) %>% count(s3clglvl_na)
+
+
+hsls_small %>% 
+  mutate(s3classes_na=ifelse(s3classes<0,NA,s3classes),
+         s3clglvl_na=ifelse(s3clglvl==-7,NA,s3clglvl)) %>%
+  count(s3classes_na, s3clglvl_na)
+
 ```
 ### Relationship between variables, categorical by categorical [SKIP]
 
@@ -580,7 +587,6 @@ While this is not a linear process, these are the broad steps I follow
     - e.g., when working with survey data, have survey questionnaire and codebooks on hand
 1. For each input data source, identify the "unit of analysis" and which combination of variables uniquely identify observations
 1. Investigate patterns in input variables
-    - **For every variable you care about, you should know whether the variable value is reasonable for over observation in data frame**
 1. Create analysis variable from input variable(s)
 1. Verify that analysis variable is created correctly through descriptive statistics that compare values of input variable(s) against values of the analysis variable
 
@@ -641,6 +647,32 @@ hsls_small_temp <- hsls_small %>%
 hsls_small_temp %>% group_by(x4x2sesq5) %>% count(sesq5)
 ```
 
+
+## Skip patterns in survey data
+
+### What are skip patterns
+
+Pretty easy to create an analysis variable based on a single input variable
+
+Harder to create analysis variables based on multiple input variables
+
+- When working with survey data, even seemingly simple analysis variables require multiple input variables due to "skip patterns"
+
+What are "skip patterns"? 
+
+- Response on a particular survey item determines whether respondent answers some set of subsequent questions
+- What are some examples of this?
+
+Key to working with skip patterns
+
+- Have the survey questionnaire on hand
+- Sometimes it appears that analysis variable requires only one input variable, but really depends on several input variables because of skip patterns
+    - Don't just blindly turn "missing" and "skips" from survey data to `NAs` in your analysis variable
+    - Rather, trace why these "missing" and "skips" appear and decide how they should be coded in your analysis variable
+
+
+# Problem Set 7 
+
 ### Overview of problem set due next week
 
 __Assignment__: 
@@ -670,117 +702,119 @@ __Why this assignment?__
 1. Real world example of "simple" task with complex data management needs
 
 
-## Skip patterns in survey data
-
-### What are skip patterns
-
-Pretty easy to create an analysis variable based on a single input variable
-
-Harder to create analysis variables based on multiple input variables
-
-- When working with survey data, even seemingly simple analysis variables require multiple input variables due to "skip patterns"
-
-What are "skip patterns"? 
-
-- Response on a particular survey item determines whether respondent answers some set of subsequent questions
-- What are some examples of this?
-
-Key to working with skip patterns
-
-- Have the survey questionnaire on hand
-- Sometimes it appears that analysis variable requires only one input variable, but really depends on several input variables because of skip patterns
-    - Don't just blindly turn "missing" and "skips" from survey data to `NAs` in your analysis variable
-    - Rather, trace why these "missing" and "skips" appear and decide how they should be coded in your analysis variable
 
 
-### Creating analysis variables in the presence of skip patterns
+<!-- ## Skip patterns in survey data -->
 
-Task: Create a measure  of "level" of postsecondary institution attended in 2013 from HSLS:09 survey data
+<!-- ### What are skip patterns -->
 
-- "level" is highest award-level of the postsecondary institution
-    - e.g., if highest award is associate's degree (a two-year degree), then `level==2'
-- The measure, `pselev2013`, should have following [non-missing] values:
-    1. Not attending postsecondary education institution
-    2. Attending a 2-year or less-than-2-year institution
-    3. Attending 4-year or greater-than-4year institution
+<!-- Pretty easy to create an analysis variable based on a single input variable -->
 
-Background info:
+<!-- Harder to create analysis variables based on multiple input variables -->
 
-- In "2013 Update" of HSLS:09, students asked about college attendance
-    - Variables from student responses to "2013 Update" have prefix `s3`
-- Survey questionnaire for 2013 update can be found [HERE](https://nces.ed.gov/surveys/hsls09/pdf/2013_Student_Parent_Questionnaire.pdf)
-- The "online codebook" website [HERE](https://nces.ed.gov/onlinecodebook) has info about specific variables
-- Measure has 3 input variables [usually must figure this out yourself]:
-    1. `x3sqstat`: "X3 Student questionnaire status"
-    1. `s3classes`: "S3 B01A Taking postsecondary classes as of Nov 1 2013"
-    1. `s3clglvl`: "S3 Enrolled college IPEDS level"
+<!-- - When working with survey data, even seemingly simple analysis variables require multiple input variables due to "skip patterns" -->
 
-```{r, results="hide"}
-hsls_small %>% select(x3sqstat,s3classes,s3clglvl) %>% var_label()
-```
-You won't have time to complete this task, but develop a plan for the task and get as far as you can
+<!-- What are "skip patterns"?  -->
 
-### Creating analysis variables in the presence of skip patterns
+<!-- - Response on a particular survey item determines whether respondent answers some set of subsequent questions -->
+<!-- - What are some examples of this? -->
 
-Step 1a: Investigate each input variable separately
-```{r, results="hide"}
-#variable labels
-hsls_small %>% select(x3sqstat,s3classes,s3clglvl) %>% var_label()
+<!-- Key to working with skip patterns -->
 
-hsls_small %>% count(x3sqstat)
-hsls_small %>% count(x3sqstat) %>% as_factor()
-
-hsls_small %>% count(s3classes)
-hsls_small %>% count(s3classes) %>% as_factor()
-
-hsls_small %>% count(s3clglvl)
-hsls_small %>% count(s3clglvl) %>% as_factor()
-
-```
-### Creating analysis variables in the presence of skip patterns
-
-Step 1b: Investigate relationship between input variables
-```{r, results="hide"}
-#x3sqstate and s3classes
-hsls_small %>% group_by(x3sqstat) %>% count(s3classes) 
-hsls_small %>% group_by(x3sqstat) %>% count(s3classes) %>% as_factor()
-
-hsls_small %>% filter(x3sqstat==8) %>% count(s3classes)
-hsls_small %>% filter(x3sqstat==8) %>% count(s3classes==-8)
-hsls_small %>% filter(x3sqstat !=8) %>% count(s3classes)
-
-#x3sqstate, s3classes and s3clglvl
-hsls_small %>% group_by(s3classes) %>% count(s3clglvl) 
-hsls_small %>% group_by(s3classes) %>% count(s3clglvl) %>% as_factor()
-
-#add filter for whether student did not respond to X3 questionnaire
-hsls_small %>% filter(x3sqstat==8) %>% group_by(s3classes) %>% count(s3clglvl) 
-hsls_small %>% filter(x3sqstat !=8) %>% group_by(s3classes) %>% count(s3clglvl)
-
-#continued on the next page
-```
+<!-- - Have the survey questionnaire on hand -->
+<!-- - Sometimes it appears that analysis variable requires only one input variable, but really depends on several input variables because of skip patterns -->
+<!--     - Don't just blindly turn "missing" and "skips" from survey data to `NAs` in your analysis variable -->
+<!--     - Rather, trace why these "missing" and "skips" appear and decide how they should be coded in your analysis variable -->
 
 
-### Creating analysis variables in the presence of skip patterns
+<!-- ### Creating analysis variables in the presence of skip patterns -->
 
-Step 1b: Investigate relationship between input variables continued...
-```{r}
-#add filter for s3classes is "missing" [-9]
-hsls_small %>% filter(x3sqstat !=8,s3classes==-9) %>% group_by(s3classes) %>%
-  count(s3clglvl)
-hsls_small %>% filter(x3sqstat !=8,s3classes!=-9) %>% group_by(s3classes) %>%
-  count(s3clglvl)
+<!-- Task: Create a measure  of "level" of postsecondary institution attended in 2013 from HSLS:09 survey data -->
 
-#add filter for s3classes equal to "no" or "don't know"
-hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes %in% c(2,3)) %>%
-  group_by(s3classes) %>% count(s3clglvl)
-hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes %in% c(2,3)) %>% 
-  group_by(s3classes) %>% count(s3clglvl) %>% as_factor()
+<!-- - "level" is highest award-level of the postsecondary institution -->
+<!--     - e.g., if highest award is associate's degree (a two-year degree), then `level==2' -->
+<!-- - The measure, `pselev2013`, should have following [non-missing] values: -->
+<!--     1. Not attending postsecondary education institution -->
+<!--     2. Attending a 2-year or less-than-2-year institution -->
+<!--     3. Attending 4-year or greater-than-4year institution -->
 
-hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes==1) %>% 
-  group_by(s3classes) %>% count(s3clglvl)
-hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes==1) %>% 
-  group_by(s3classes) %>% count(s3clglvl) %>% as_factor()
-```
+<!-- Background info: -->
+
+<!-- - In "2013 Update" of HSLS:09, students asked about college attendance -->
+<!--     - Variables from student responses to "2013 Update" have prefix `s3` -->
+<!-- - Survey questionnaire for 2013 update can be found [HERE](https://nces.ed.gov/surveys/hsls09/pdf/2013_Student_Parent_Questionnaire.pdf) -->
+<!-- - The "online codebook" website [HERE](https://nces.ed.gov/onlinecodebook) has info about specific variables -->
+<!-- - Measure has 3 input variables [usually must figure this out yourself]: -->
+<!--     1. `x3sqstat`: "X3 Student questionnaire status" -->
+<!--     1. `s3classes`: "S3 B01A Taking postsecondary classes as of Nov 1 2013" -->
+<!--     1. `s3clglvl`: "S3 Enrolled college IPEDS level" -->
+
+<!-- ```{r, results="hide"} -->
+<!-- hsls_small %>% select(x3sqstat,s3classes,s3clglvl) %>% var_label() -->
+<!-- ``` -->
+<!-- <!-- You won't have time to complete this task, but develop a plan for the task and get as far as you can --> -->
+
+<!-- ### Creating analysis variables in the presence of skip patterns -->
+
+<!-- Step 1a: Investigate each input variable separately -->
+<!-- ```{r, results="hide"} -->
+<!-- #variable labels -->
+<!-- hsls_small %>% select(x3sqstat,s3classes,s3clglvl) %>% var_label() -->
+
+<!-- hsls_small %>% count(x3sqstat) -->
+<!-- hsls_small %>% count(x3sqstat) %>% as_factor() -->
+
+<!-- hsls_small %>% count(s3classes) -->
+<!-- hsls_small %>% count(s3classes) %>% as_factor() -->
+
+<!-- hsls_small %>% count(s3clglvl) -->
+<!-- hsls_small %>% count(s3clglvl) %>% as_factor() -->
+
+<!-- ``` -->
+<!-- ### Creating analysis variables in the presence of skip patterns -->
+
+<!-- Step 1b: Investigate relationship between input variables -->
+<!-- ```{r, results="hide"} -->
+<!-- #x3sqstate and s3classes -->
+<!-- hsls_small %>% group_by(x3sqstat) %>% count(s3classes)  -->
+<!-- hsls_small %>% group_by(x3sqstat) %>% count(s3classes) %>% as_factor() -->
+
+<!-- hsls_small %>% filter(x3sqstat==8) %>% count(s3classes) -->
+<!-- hsls_small %>% filter(x3sqstat==8) %>% count(s3classes==-8) -->
+<!-- hsls_small %>% filter(x3sqstat !=8) %>% count(s3classes) -->
+
+<!-- #x3sqstate, s3classes and s3clglvl -->
+<!-- hsls_small %>% group_by(s3classes) %>% count(s3clglvl)  -->
+<!-- hsls_small %>% group_by(s3classes) %>% count(s3clglvl) %>% as_factor() -->
+
+<!-- #add filter for whether student did not respond to X3 questionnaire -->
+<!-- hsls_small %>% filter(x3sqstat==8) %>% group_by(s3classes) %>% count(s3clglvl)  -->
+<!-- hsls_small %>% filter(x3sqstat !=8) %>% group_by(s3classes) %>% count(s3clglvl) -->
+
+<!-- #continued on the next page -->
+<!-- ``` -->
+
+
+<!-- ### Creating analysis variables in the presence of skip patterns -->
+
+<!-- Step 1b: Investigate relationship between input variables continued... -->
+<!-- ```{r} -->
+<!-- #add filter for s3classes is "missing" [-9] -->
+<!-- hsls_small %>% filter(x3sqstat !=8,s3classes==-9) %>% group_by(s3classes) %>% -->
+<!--   count(s3clglvl) -->
+<!-- hsls_small %>% filter(x3sqstat !=8,s3classes!=-9) %>% group_by(s3classes) %>% -->
+<!--   count(s3clglvl) -->
+
+<!-- #add filter for s3classes equal to "no" or "don't know" -->
+<!-- hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes %in% c(2,3)) %>% -->
+<!--   group_by(s3classes) %>% count(s3clglvl) -->
+<!-- hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes %in% c(2,3)) %>%  -->
+<!--   group_by(s3classes) %>% count(s3clglvl) %>% as_factor() -->
+
+<!-- hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes==1) %>%  -->
+<!--   group_by(s3classes) %>% count(s3clglvl) -->
+<!-- hsls_small %>% filter(x3sqstat !=8,s3classes!=-9, s3classes==1) %>%  -->
+<!--   group_by(s3classes) %>% count(s3clglvl) %>% as_factor() -->
+<!-- ``` -->
 
 
