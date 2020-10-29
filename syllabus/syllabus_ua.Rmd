@@ -291,14 +291,14 @@ _Work and course requirements are subject to change at the discretion of the ins
     - XAG 3.3 (R Markdown, creating PDF documents) [LINK HERE](https://bookdown.org/yihui/rmarkdown/pdf-document.html)
         - note: sections 3.3.5 through 3.3.8 will feel somewhat cryptic and are not required for this course; so just do the best you can with those
 
-## Module 5, 10/1/2020:  Processing across rows
+## Module 5, 10/1/2020 & 10/8/2020:  Processing across rows
 
 - Problem set due (before class): Yes
 - Reading (after class): 
     - W&G 5.6 - 5.7 (grouped summaries and mutates)
     - XAG 4.1 (R Markdown, ioslides presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/ioslides-presentation.html) and 4.3 (R Markdown, Beamer presentations) [LINK HERE](https://bookdown.org/yihui/rmarkdown/beamer-presentation.html)
 
-## Module 6, 10/8/2020:  Augmented vectors, Survey data, and exploratory data analysis
+## Module 6, 10/15/2020:  Augmented vectors, Survey data, and exploratory data analysis
 
 - Problem set due (before class): Yes
 - Reading (after class): 
@@ -308,50 +308,48 @@ _Work and course requirements are subject to change at the discretion of the ins
     - [OPTIONAL] W&G 10 (tibbles)
 
 
-## Module 7, 10/15/2020:  Guidelines for investigating, cleaning, and creating variables
+## Module 7, 10/22/2020:  Guidelines for investigating, cleaning, and creating variables
 - Problem set due (before class): Yes
-- Reading (after class): TBD
+- Reading (after class): Guidelines for EDA Document
 
-## Module 8, 10/22/2020:  Tidy Data
+
+## Module 8, 10/29/2020:  Acquiring data 
 
 - Problem set due (before class): Yes
+- Reading (after class): W&G 11
+- No Problem Set for this Lecture
+
+## Module 9, 11/5/2020:  Tidy Data
+
+- Problem set due (before class): No
 - Reading (after class):
     - W&G chapter 12 (tidy data)
     - [OPTIONAL] Wickham, H. (2014). Tidy Data. _Journal of Statistical Software_, 59(10), 1-23. doi:10.18637/jss.v059.i10
         - This is the journal article that introduced the data concepts covered in W&G chapter 12 and created the packages related to tidying data
         - Link to article here: [LINK](https://www.jstatsoft.org/article/view/v059i10)
 
-## Module 9, 10/29/2020:  Joining multiple datasets
+## Module 10, 11/12/2020:  Joining multiple datasets
 
 - Problem set due (before class): Yes
 - Reading (after class): W&G 13
 
-## Module 10, 11/5/2019:  Acquiring data
 
-- Problem set due (before class): Yes
-- Reading (after class): W&G 11
-
-## Module 11, 11/12/2020:  Working with Strings and Date/Time Variables
+## Module 11, 11/19/2020:  Working with Strings and Date/Time Variables
 
 - Problem set due (before class): Yes
 - Reading (after class): W&G 19
 
 
-## 11/19/2020: Introduction to Final Project
-
-- Problem set due: Yes
-
-
-
 ## 11/26/2020: No class (Thanksgiving)
 
-- Problem set due: No
+- Problem set due (before class): Yes
 
 
 ## Module 12, 12/3/2019: Accessing object elements, Intro to looping and Functions
 
-- Problem set due (before class): Yes
+- Problem set due (before class): No
 - Reading (after class): W&G 20.4 - 20.5; 21.1 - 21.3; W&G 19
+- No Problem Set for this Lecture
 
 
 ## 12/10/2020: No class (Reading Day) 
